@@ -80,6 +80,17 @@ Example: File:"ArteFake.esp_ESlEverything.json" input only "ArteFake.esp"
 9. Run xEdit once more and run the "_ESLifyEverythingFaceGenFix.pas" script, this fixes all the FaceMesh paths inside the mesh files that ESLify Everything just outputted.
 
 
-### Extra Notes
+## Extra Notes
 
 Releases are always on GitHub before Nexus
+
+Source Code on GitHub: https://github.com/Michael-wigontherun/ESLifyEverything
+
+## Credits
+MaskedRPGFan for allowing me to copy some of his code inside ESPFE Follower - Eslify facegen and voices﻿ specifically the CreateFaceMesh procedure
+ElminsterAU and the xEdit team for SSEEdit 
+
+## Tools used
+Visual Studio 2022
+Visual Studio Code
+NotePad++
