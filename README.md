@@ -19,9 +19,66 @@ Currently Eslifies
 
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github.
 
+## Instillation
+
+1. Extract my 2 folders into the folder containing SSEEdit.exe, ensuring the file "_ESLifyEverythingFaceGenFix.pas" is inside of SSEEdit's Edit Scripts Folder.
+The "ESLifyEverything" folder doesn't exactly need to be included inside of SSEEdit's folder, but I place it there with the rest of my tools based on SSEEdit's data.
+
+2. Now open the AppSettings.json file and set value of "XEditFolderPath": "xEditFolder", to be the full path to SSEEdit's folder, NOT THE EXE. Ensure " are needed around it and the path's \ need to be doubled \\
+Example of mine: "XEditFolderPath": "C:\\Modding\\SkyrimSE\\sseedit",
+
+3. Do not change: "XEditLogFileName": "SSEEdit_log.txt", unless you want to try this with Fallout 4, I do not know what will work and what will not work for Fallout 4
+
+4. "SkyrimDataFolderPath": "Skyrim Special Edition\\Data", needs to be directed towards Skyrim's Data folder like
+Example of mine: "SkyrimDataFolderPath": "C:\\Steam\\steamapps\\common\\Skyrim Special Edition\\Data",
+
+5. Skip this step if you use something other then MO2. If you are a MO2 user you can skip using the Optional Output folder by settings "OutputToOptionalFolder": true, to false like, "OutputToOptionalFolder": false, and skip step 6. You do not need to do this if your a MO2 user but MO2 already has a Output new files to mod instead of overwrite.
+But there is a benefit to the OutputToOptionalFolder if you don't want the regenerated files to overwrite the original.
+
+6. "OptionalOutputFolder": ".\\OuputFolder" Set this to a folder in your MO2 mods if you want to use the Optional Output Folder. Or where ever you can easily access them from Vortex and NMM.
+Example of Mine: "OptionalOutputFolder": "E:\\SkyrimMods\\MO2\\mods\\ESLify Everything"
+
+### Extra Settings
+
+- "VerboseConsoleLoging": true,                                       logs everything to console
+
+- "VerboseFileLoging": true,                                          logs everything to the "ESLifyEverything_Log.txt" file
+
+- "AutoReadAllxEditSeesion": true,                                    Outputs all compacted Mod files from xEdit sessions inside of the "SSEEdit_log.txt" 
+
+- "AutoReadNewestxEditSeesion": true,                                 Outputs Compacted Mod files from only the newest xEdit session, if there are no compacted forms then it will output nothing
+
+- "DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion": true,    Will delete the "SSEEdit_log.txt" file after parsing and outputing the Compacted mods. This requires "AutoReadAllxEditSeesion" to be set to true as well to avoid the loss of data
+
+- "AutoRunESLify": true,                                              will skip the ESLify menus to and just run everything
+This can take some time depending on how many mods you have compacted and how many voice files in total, but I believe I have optimized this well enough to not hurt to much. My load order with 50ish mods does not make the program start pause its output at all
+
 ## Directions
 
-Inside of this Article found in the article sections on the Nexus page.
+1. Run xEdit and compact what ever mods you want, THAT CAN BE ESLIFIED, and set the esl flag on the plugin.
+
+2. Close xEdit, xEdit wont output the log until you close it completely.
+
+3. Run "ESLifyEverything.exe"
+
+4. If there is an error inside the config it will warn you and not continue to Eslify. If the only issue is ESLifyEverything can not locate the xEdit log it will skip the xEdit session entirely, if there are no Mod data files this will simply not do anything. 
+
+5. If you have "AutoReadAllxEditSeesion" or "AutoReadNewestxEditSeesion" set to true you can skip this step. This is a console menu that contains lets you select which session you want to read and output Compacted mod data. input the menu item number then press enter
+
+- Skip Steps 6 and 7 if you want to use "AutoRunESLify"
+
+6. This Console menu is for Voice ESLify. You have 2 options:
+   - Eslifies every mod: Eslifies every mod that has compacted mod data attached to it
+   - Single mod input menu: takes you to a new console menu 
+     - This new menu only needs you to input the plugin name and extension with compacted mod data inside of your SkyrimDatafolder\CompactedForms or OptionalOutputfolder\CompactedForms, You only need to input the plugin name with extension.
+Example: File:"ArteFake.esp_ESlEverything.json" input only "ArteFake.esp" 
+       - ArteFake does not have any voice files or FaceGen, this is just an example
+- To leave a menu or skip it enter "XXX", this is not case sensitive. 
+
+7. Is identical to step 6 but is for FaceGen ESLify
+8. Wait until ESLify Everything ends. "Press Enter to exit..." this is what you should see at the end of the code. Please verify that you did not get any errors at the end of the console.
+9. Run xEdit once more and run the "_ESLifyEverythingFaceGenFix.pas" script, this fixes all the FaceMesh paths inside the mesh files that ESLify Everything just outputted.
+
 
 ### Extra Notes
 
