@@ -12,10 +12,10 @@ ESLify Everything is a .Net 6 program that reads the data outputted by xEdit whe
 
 Currently Eslifies
 
-    -Voice Files
-    -FaceGen data
-    -SPID
-    -Dynamic Animation Conditions
+- Voice Files
+- FaceGen data
+- SPID
+- Dynamic Animation Conditions
 
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github.
 
