@@ -1,0 +1,21 @@
+# ESLifyEverything
+
+Important: I want to replace xEdit's NIF tools with Nifly or NiflySharp, if anyone knows it or knows how to iterate the texture paths, please message me, I spent hours trying to figure it out to no avail.
+
+Overview
+Many plugins do not need to be an a regular esp. The only reason they are still a esp is that the modder left and didn't open permissions, or they are required by things like DAR and SPID so no one wants to convert them. One of the exceptionally amazing ideas Bethesda had was to link Voice lines and FaceGen data to the formID of the NPC, so larger follower mods are basically never going to be Eslified when they absolutely should be. A few years ago I created separate programs to handle Eslifing Voice lines and FaceGen data but it lacked the ability to fix the texture path inside the NIF file. Then MaskedRPGFan created ESPFE Follower - Eslify facegen and voices, which worked for some and others not really at all. There is one major issue with it, it cant handle multiple files. And one minor issue is it is using entirely the xEdit scripting API, which is using a Language called Pascal. Nothing wrong with that of course, it is effective as a scripting language for xEdits needs. However it is slow and lacks many features, so expecting it to handle everything that Skyrim modding has and needs Eslified would be time consuming and sloooooooooow. 
+
+Description
+ESLify Everything is a .Net 6 program that reads the data outputted by xEdit when it compacts forms using the Right click->Compact FormIDs for ESL. 
+  Currently Eslifies
+    Voice Files
+    FaceGen data
+    SPID
+    Dynamic Animation Conditions
+
+Message me via Nexus comments on this mod, or making a new issue on this mod's Github.
+
+Directions
+Inside of this Article found in the article sections on the Nexus page.
+
+Extra Notes
