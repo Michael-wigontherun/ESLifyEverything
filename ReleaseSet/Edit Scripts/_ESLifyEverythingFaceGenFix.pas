@@ -2,7 +2,7 @@ unit _ESPFEEverythingFaceGenFix;
 
 interface
   implementation
-  uses xEditAPI, mteFunctions, _wotrFunctions, Classes, SysUtils, StrUtils, Windows;
+  uses xEditAPI, Classes, SysUtils, StrUtils, Windows;
 
 
 
