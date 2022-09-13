@@ -17,7 +17,7 @@ Currently Eslifies
 - SPID
 - Dynamic Animation Conditions
 
-Message me via Nexus comments on this mod, or making a new issue on this mod's Github.
+Message me via Nexus comments on this mod, or making a new issue on this mod's Github, for any other file mod data that needs to be eslified.
 
 ## Instillation
 
