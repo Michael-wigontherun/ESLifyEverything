@@ -14,8 +14,12 @@ Currently Eslifies
 
 - Voice Files
 - FaceGen data
-- SPID
+- SPID, Base Object Swapper, KID, FLM, Animated Object Swapper
 - Dynamic Animation Conditions
+- ENB Lights For Effect Shaders
+- AutoBody
+- Payload Interpreter
+- SKSE INI files
 
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github, for any other file mod data that needs to be eslified.
 
