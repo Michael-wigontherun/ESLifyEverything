@@ -25,7 +25,9 @@ namespace ESLifyEverything.Properties
         public string NewMod { get; set; } = "";
         public string SkipingSessionLogNotFound { get; set; } = "";
         public string ExitingFolderNotFound { get; set; } = "";
+        public string EditedFaceGen { get; set; } = "";
         public string EnterToExit { get; set; } = "";
+        public string FolderNotFoundError { get; set; } = "";
         public string DataFolderNotFound { get; set; } = "";
         public string XEditFolderNotFound { get; set; } = "";
         public string XEditFolderSetToFile { get; set; } = "";
@@ -61,5 +63,29 @@ namespace ESLifyEverything.Properties
         public string StartingSPIDESLify { get; set; } = "";
         public string SPIDFileUnchanged { get; set; } = "";
         public string SPIDFileAt { get; set; } = "";
+        public string StartingBaseObjectESLify { get; set; } = "";
+        public string BaseObjectFileUnchanged { get; set; } = "";
+        public string BaseObjectFileAt { get; set; } = "";
+        public string StartingKIDESLify { get; set; } = "";
+        public string KIDFileUnchanged { get; set; } = "";
+        public string KIDFileAt { get; set; } = "";
+        public string StartingFLMESLify { get; set; } = "";
+        public string FLMFileUnchanged { get; set; } = "";
+        public string FLMFileAt { get; set; } = "";
+        public string StartingAnimObjectESLify { get; set; } = "";
+        public string AnimObjectFileUnchanged { get; set; } = "";
+        public string AnimObjectFileAt { get; set; } = "";
+        public string StartingENBLightsForEffectShadersESLify { get; set; } = "";
+        public string ENBLightsForEffectShadersFileUnchanged { get; set; } = "";
+        public string ENBLightsForEffectShadersFileAt { get; set; } = "";
+        public string StartingAutoBodyESLify { get; set; } = "";
+        public string AutoBodyFileAt { get; set; } = "";
+        public string AutoBodyFileUnchanged { get; set; } = "";
+        public string StartingPayloadInterpreterESLify { get; set; } = "";
+        public string PayloadInterpreterFileAt { get; set; } = "";
+        public string PayloadInterpreterFileUnchanged { get; set; } = "";
+        public string StartingSKSEINIESLify { get; set; } = "";
+        public string SKSEINIFileAt { get; set; } = "";
+        public string SKSEINIFileUnchanged { get; set; } = "";
     }
 }

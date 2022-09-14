@@ -17,10 +17,12 @@ namespace ESLifyEverything
         public static StringLoggingData stringLoggingData = new StringLoggingData();
         public static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
         public static string FaceGenFileFixPath = "";
+        public static StringBuilder? AsyncConsoleStringBuilder;
+        public static StringBuilder? AsyncFileStringBuilder;
 
-        public static bool Startup(out bool onlyxEditLogFail)
+        public static bool Startup(out bool onlyxEditLogFail, string ProgramLogName)
         {
-            File.Create("ESLifyEverything_Log.txt").Close();
+            File.Create(ProgramLogName).Close();
 
             onlyxEditLogFail = false;
             bool startUp = true;
@@ -66,7 +68,6 @@ namespace ESLifyEverything
 
             if (!File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
             {
-                Console.WriteLine(File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)));
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFound);
                 onlyxEditLogFail = true;
             }
@@ -91,7 +92,6 @@ namespace ESLifyEverything
             {
                 GF.WriteLine(GF.stringLoggingData.OutputFolderDefaultWarning);
                 GF.Settings.OptionalOutputFolder = GF.Settings.SkyrimDataFolderPath;
-                Console.WriteLine(GF.Settings.OptionalOutputFolder);
             }
 
             if (!Directory.Exists(Path.Combine(GF.Settings.OptionalOutputFolder, "CompactedForms")))
@@ -132,9 +132,7 @@ namespace ESLifyEverything
                 {
                     foreach (FormHandler item in logData)
                     {
-
                         stream.WriteLine(item!.ToString());
-
                     }
                 }
             }
@@ -172,5 +170,6 @@ namespace ESLifyEverything
             }
             return Path.Combine(GF.Settings.OptionalOutputFolder, newPath);
         }
+
     }
 }

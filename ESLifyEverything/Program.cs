@@ -2,6 +2,7 @@
 using ESLifyEverything.XEdit;
 using System;
 using System.Resources;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ESLifyEverything
@@ -9,12 +10,13 @@ namespace ESLifyEverything
     public static partial class Program
     {
         public static Dictionary<string, CompactedModData> CompactedModData = new Dictionary<string, CompactedModData>();
+        public static bool EditedFaceGen = false;
 
         static void Main(string[] args)
         {
             try
             { 
-                if (GF.Startup(out bool onlyxEditLogFail))
+                if (GF.Startup(out bool onlyxEditLogFail, "ESLifyEverything_Log.txt"))
                 {
                     if (!onlyxEditLogFail)
                     {
@@ -25,7 +27,7 @@ namespace ESLifyEverything
                         GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
                     }
                     Console.WriteLine("\n\n\n\n");
-                    Console.WriteLine(GF.stringLoggingData.ImportingAllModData);
+                    GF.WriteLine(GF.stringLoggingData.ImportingAllModData);
                     ImportModData(Path.Combine(GF.Settings.SkyrimDataFolderPath, "CompactedForms"));
                     if (GF.Settings.OutputToOptionalFolder)
                     {
@@ -56,35 +58,88 @@ namespace ESLifyEverything
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingDARESLify);
-                    InumDAR();
-
+                    //Task DAR = InumDAR();
+                    Task DAR = InumDataSubfolder(Path.Combine(GF.Settings.SkyrimDataFolderPath, "meshes"), "_CustomConditions", "_conditions.txt", GF.stringLoggingData.DARFileAt, GF.stringLoggingData.ConditionsUnchanged);
+                    DAR.Wait();
+                    
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingSPIDESLify);
-                    InumSPID();
+                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_DISTR.ini", GF.stringLoggingData.SPIDFileAt, GF.stringLoggingData.SPIDFileUnchanged);
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingBaseObjectESLify);
+                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_SWAP.ini", GF.stringLoggingData.BaseObjectFileAt, GF.stringLoggingData.BaseObjectFileUnchanged);
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingKIDESLify);
+                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_KID.ini", GF.stringLoggingData.KIDFileAt, GF.stringLoggingData.KIDFileUnchanged);
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingFLMESLify);
+                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_FLM.ini", GF.stringLoggingData.FLMFileAt, GF.stringLoggingData.FLMFileUnchanged);
+                    
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingAnimObjectESLify);
+                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_ANIO.ini", GF.stringLoggingData.AnimObjectFileAt, GF.stringLoggingData.AnimObjectFileUnchanged);
+                    
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingENBLightsForEffectShadersESLify);
+                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_ENBL.ini", GF.stringLoggingData.ENBLightsForEffectShadersFileAt, GF.stringLoggingData.ENBLightsForEffectShadersFileUnchanged);
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingAutoBodyESLify);
+                    AutoBody();
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingPayloadInterpreterESLify);
+                    InumSwappers(Path.Combine(GF.Settings.SkyrimDataFolderPath, "SKSE\\PayloadInterpreter\\Config"), "*.ini", GF.stringLoggingData.PayloadInterpreterFileAt, GF.stringLoggingData.PayloadInterpreterFileUnchanged);
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingSKSEINIESLify);
+                    //Task DAR = InumDAR();
+                    Task SKSE = InumDataSubfolder(Path.Combine(GF.Settings.SkyrimDataFolderPath, "skse"), "plugins", "*.ini", GF.stringLoggingData.SKSEINIFileAt, GF.stringLoggingData.SKSEINIFileUnchanged);
+                    SKSE.Wait();
+                    
+                    Console.WriteLine("\n\n\n\n");
                 }
                 else
                 {
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.ExitingFolderNotFound);
-                    GF.WriteLine(GF.stringLoggingData.EnterToExit);
-                    Console.ReadLine();
-                    return;
                 }
-                Console.WriteLine("\n\n\n\n");
-                GF.WriteLine(GF.stringLoggingData.EnterToExit);
-                Console.ReadLine();
             }
-            catch(Exception e)
+            catch(AggregateException e)
+            {
+                GF.WriteLine("AggregateException. Please report to GitHub with log file.");
+                GF.WriteLine(e.ToString());
+                GF.WriteLine(e.Message);
+            }
+            catch (ObjectDisposedException e)
+            {
+                GF.WriteLine("ObjectDisposedException. Please report to GitHub with log file.");
+                GF.WriteLine(e.ToString());
+                GF.WriteLine(e.Message);
+            }
+            catch (Exception e)
             {
                 GF.WriteLine(e.ToString());
                 GF.WriteLine(e.Message);
-                GF.WriteLine(GF.stringLoggingData.EnterToExit);
-                Console.ReadLine();
+                
             }
+
+            if (EditedFaceGen)
+            {
+                GF.WriteLine(GF.stringLoggingData.EditedFaceGen);
+            }
+
+            GF.WriteLine(GF.stringLoggingData.EnterToExit);
+            Console.ReadLine();
         }
 
         
+        
 
+        
 
 
 
