@@ -20,6 +20,7 @@ Currently Eslifies
 - AutoBody
 - Payload Interpreter
 - SKSE INI files
+- Custom Skills Framework \ Extended Framework
 
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github, for any other file mod data that needs to be eslified.
 
