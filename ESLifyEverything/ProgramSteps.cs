@@ -81,7 +81,7 @@ namespace ESLifyEverything
                 CompactedModData mod = new CompactedModData();
                 mod.GetModData(Path.GetFileName(compactedFormsModFile).Replace("_ESlEverything.json", "").Replace("_ESlEverything", ""));
                 mod.Write();
-                CompactedModData.TryAdd(mod.ModName, mod);
+                CompactedModDataD.TryAdd(mod.ModName, mod);
             }
         }
 
@@ -117,7 +117,7 @@ namespace ESLifyEverything
 
         public static bool VoiceESLifyEverything()
         {
-            foreach (CompactedModData modData in CompactedModData.Values)
+            foreach (CompactedModData modData in CompactedModDataD.Values)
             {
                 VoiceESLifyMod(modData);
             }
@@ -134,7 +134,7 @@ namespace ESLifyEverything
                 GF.WriteLine($"{GF.stringLoggingData.SingleModInputHeader}{GF.stringLoggingData.ExamplePlugin}");
                 GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
                 input = Console.ReadLine() ?? "";
-                if (CompactedModData.TryGetValue(input, out modData!))
+                if (CompactedModDataD.TryGetValue(input, out modData!))
                 {
                     modData.Write();
                     VoiceESLifyMod(modData);
@@ -196,7 +196,7 @@ namespace ESLifyEverything
 
         public static bool FaceGenESLifyEverything()
         {
-            foreach (CompactedModData modData in CompactedModData.Values)
+            foreach (CompactedModData modData in CompactedModDataD.Values)
             {
                 FaceGenESLifyMod(modData);
             }
@@ -213,7 +213,7 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.SingleModInputHeader + GF.stringLoggingData.ExamplePlugin, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                 GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
                 input = Console.ReadLine() ?? "";
-                if (CompactedModData.TryGetValue(input, out modData!))
+                if (CompactedModDataD.TryGetValue(input, out modData!))
                 {
                     modData.Write();
                     FaceGenESLifyMod(modData);
@@ -264,10 +264,8 @@ namespace ESLifyEverything
 
         public static async Task<int> InumDataSubfolder(string subfolderStart, string directoryFilter, string fileFilter, string fileAtLogLine, string fileUnchangedLogLine)
         {
-            //string folderPath = Path.Combine(GF.Settings.SkyrimDataFolderPath, subfolderStart);
             if (Directory.Exists(subfolderStart))
             {
-                //GF.WriteLine(GF.stringLoggingData.FolderNotFoundError + subfolderStart);
                 IEnumerable<string> dataSubFolders = Directory.EnumerateDirectories(
                     subfolderStart,
                     directoryFilter,
@@ -286,16 +284,17 @@ namespace ESLifyEverything
                         GF.WriteLine(fileAtLogLine + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                         bool changed = false;
                         string[] fileLines = FormInFileReader(File.ReadAllLines(condition), out changed);
-                        if (changed == true)
-                        {
-                            string newPath = GF.FixOuputPath(condition);
-                            Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-                            File.WriteAllLines(newPath, fileLines);
-                        }
-                        else
-                        {
-                            GF.WriteLine(fileUnchangedLogLine + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                        }
+                        GF.OuputDataFileToOutputFolder(changed, condition, fileLines, fileUnchangedLogLine);
+                        //if (changed == true)
+                        //{
+                        //    string newPath = GF.FixOuputPath(condition);
+                        //    Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
+                        //    File.WriteAllLines(newPath, fileLines);
+                        //}
+                        //else
+                        //{
+                        //    GF.WriteLine(fileUnchangedLogLine + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        //}
                     }
                 }
             }
@@ -323,16 +322,17 @@ namespace ESLifyEverything
                 GF.WriteLine(fileAtLogLine + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                 bool changed = false;
                 string[] fileLines = FormInFileReader(File.ReadAllLines(condition), out changed);
-                if (changed == true)
-                {
-                    string newPath = GF.FixOuputPath(condition);
-                    Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-                    File.WriteAllLines(newPath, fileLines);
-                }
-                else
-                {
-                    GF.WriteLine(fileUnchangedLogLine + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                }
+                GF.OuputDataFileToOutputFolder(changed, condition, fileLines, fileUnchangedLogLine);
+                //if (changed == true)
+                //{
+                //    string newPath = GF.FixOuputPath(condition);
+                //    Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
+                //    File.WriteAllLines(newPath, fileLines);
+                //}
+                //else
+                //{
+                //    GF.WriteLine(fileUnchangedLogLine + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                //}
             }
 
         }
@@ -358,6 +358,58 @@ namespace ESLifyEverything
             }
         }
 
+        public static Task<int> CustomSkillsFramework()
+        {
+            string startSearchPath = Path.Combine(GF.Settings.SkyrimDataFolderPath, "NetScriptFramework\\Plugins");
+            if (Directory.Exists(startSearchPath))
+            {
+                IEnumerable<string> customSkillConfigs = Directory.EnumerateFiles(
+                    startSearchPath,
+                    "CustomSkill*config.txt",
+                    SearchOption.TopDirectoryOnly);
+                foreach (string customSkillConfig in customSkillConfigs)
+                {
+                    GF.WriteLine(GF.stringLoggingData.CustomSkillsFileAt + customSkillConfig, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    string[] customSkillConfigFile = File.ReadAllLines(customSkillConfig);
+                    string[] newCustomSkillConfigFile = new string[customSkillConfigFile.Length];
+                    string currentModName = "";
+                    CompactedModData currentMod = new CompactedModData();
+                    bool changed = false;
+                    for (int i = 0; i < customSkillConfigFile.Length; i++)
+                    {
+                        string line = customSkillConfigFile[i];
+                        foreach (string modName in CompactedModDataD.Keys)
+                        {
+                            if (customSkillConfigFile[i].Contains(modName, StringComparison.OrdinalIgnoreCase))
+                            {
+                                currentModName = modName;
+                                CompactedModDataD.TryGetValue(modName, out currentMod!);
+                                GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                            }
+                        }
+                        if (!currentModName.Equals(""))
+                        {
+                            foreach (FormHandler form in currentMod.CompactedModFormList)
+                            {
+                                if (line.Contains(form.OrigonalFormID.TrimStart('0')))
+                                {
+                                    GF.WriteLine("Old Line: " + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                    line = line.Replace(form.OrigonalFormID.TrimStart('0'), form.CompactedFormID.TrimStart('0'));
+                                    GF.WriteLine("New Line: " + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                    currentModName = "";
+                                    changed = true;
+                                }
+                            }
+                        }
+                        newCustomSkillConfigFile[i] = line;
+                    }
+                    GF.OuputDataFileToOutputFolder(changed, customSkillConfig, newCustomSkillConfigFile, GF.stringLoggingData.CustomSkillsFileUnchanged);
+                }
+
+
+            }
+            return Task.FromResult(0);
+        }
     }
 }
 

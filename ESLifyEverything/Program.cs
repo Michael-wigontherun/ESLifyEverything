@@ -9,16 +9,16 @@ namespace ESLifyEverything
 {
     public static partial class Program
     {
-        public static Dictionary<string, CompactedModData> CompactedModData = new Dictionary<string, CompactedModData>();
+        public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
         public static bool EditedFaceGen = false;
 
         static void Main(string[] args)
         {
             try
             { 
-                if (GF.Startup(out bool onlyxEditLogFail, "ESLifyEverything_Log.txt"))
+                if (GF.Startup(out int StartupError, "ESLifyEverything_Log.txt"))
                 {
-                    if (!onlyxEditLogFail)
+                    if (StartupError == 0)
                     {
                         XEditSession();
                     }
@@ -99,13 +99,27 @@ namespace ESLifyEverything
                     //Task DAR = InumDAR();
                     Task SKSE = InumDataSubfolder(Path.Combine(GF.Settings.SkyrimDataFolderPath, "skse"), "plugins", "*.ini", GF.stringLoggingData.SKSEINIFileAt, GF.stringLoggingData.SKSEINIFileUnchanged);
                     SKSE.Wait();
-                    
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
+                    Task CustomSkills = CustomSkillsFramework();
+                    CustomSkills.Wait();
+
+
                     Console.WriteLine("\n\n\n\n");
                 }
-                else
+                
+                GF.WriteLine($"Start up Error: {StartupError}");
+                switch (StartupError)
                 {
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.ExitingFolderNotFound);
+                    case 1:
+                        GF.GenerateSettingsFileError();
+                        break;
+                    default:
+                        Console.WriteLine("\n\n\n\n");
+                        GF.WriteLine(GF.stringLoggingData.ExitingFolderNotFound);
+                        break;
+
                 }
             }
             catch(AggregateException e)
@@ -135,8 +149,6 @@ namespace ESLifyEverything
             GF.WriteLine(GF.stringLoggingData.EnterToExit);
             Console.ReadLine();
         }
-
-        
         
 
         

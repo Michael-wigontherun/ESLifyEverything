@@ -13,6 +13,9 @@ namespace ESLifyEverything.Properties
     }
     public sealed class StringLoggingData
     {
+        public string SettingsFileNotFound { get; set; } = "";
+        public string GenSettingsFile { get; set; } = "";
+        public string EditYourSettings { get; set; } = "";
         public string xEditSessionLog { get; set; } = "";
         public string xEditCompactedFormLog { get; set; } = "";
         public string XEditLogFileSizeWarning { get; set; } = "";
@@ -87,5 +90,8 @@ namespace ESLifyEverything.Properties
         public string StartingSKSEINIESLify { get; set; } = "";
         public string SKSEINIFileAt { get; set; } = "";
         public string SKSEINIFileUnchanged { get; set; } = "";
+        public string StartingCustomSkillsESLify { get; set; } = "";
+        public string CustomSkillsFileAt { get; set; } = "";
+        public string CustomSkillsFileUnchanged { get; set; } = "";
     }
 }

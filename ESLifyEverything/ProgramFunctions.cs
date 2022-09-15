@@ -19,7 +19,7 @@ namespace ESLifyEverything
                 string line = fileLines[i];
                 if (line.Contains(".esp", StringComparison.OrdinalIgnoreCase) || line.Contains(".esm", StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (CompactedModData modData in CompactedModData.Values)
+                    foreach (CompactedModData modData in CompactedModDataD.Values)
                     {
                         if (line.Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
                         {

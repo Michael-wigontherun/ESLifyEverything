@@ -20,11 +20,20 @@ namespace ESLifyEverything
         public static StringBuilder? AsyncConsoleStringBuilder;
         public static StringBuilder? AsyncFileStringBuilder;
 
-        public static bool Startup(out bool onlyxEditLogFail, string ProgramLogName)
+        public static bool Startup(out int startupError, string ProgramLogName)
         {
             File.Create(ProgramLogName).Close();
 
-            onlyxEditLogFail = false;
+            startupError = 0;
+
+            if (!File.Exists("AppSettings.json"))
+            {
+                IConfiguration stringResorsConfig = new ConfigurationBuilder().AddJsonFile(".\\Properties\\StringResources.json").AddEnvironmentVariables().Build();
+                stringLoggingData = stringResorsConfig.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
+                return false;
+            }
+
+            
             bool startUp = true;
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("AppSettings.json").AddJsonFile(".\\Properties\\StringResources.json").AddEnvironmentVariables().Build();
             Settings = config.GetRequiredSection("Settings").Get<AppSettings>();
@@ -69,7 +78,7 @@ namespace ESLifyEverything
             if (!File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
             {
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFound);
-                onlyxEditLogFail = true;
+                startupError = 1;
             }
 
             if (!startUp)
@@ -160,6 +169,14 @@ namespace ESLifyEverything
             return false;
         }
 
+        internal static void GenerateSettingsFileError()
+        {
+            GF.WriteLine(GF.stringLoggingData.SettingsFileNotFound);
+            GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+            GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+            File.WriteAllText("AppSettings.json", JsonSerializer.Serialize(new AppSettings(), GF.JsonSerializerOptions));
+        }
+
         //origonalPath = Origonal path with replaced origonal FormID if it contains it
         public static string FixOuputPath(string origonalPath)
         {
@@ -171,5 +188,18 @@ namespace ESLifyEverything
             return Path.Combine(GF.Settings.OptionalOutputFolder, newPath);
         }
 
+        public static void OuputDataFileToOutputFolder(bool changed, string origonalFilePath, string[] newFileLinesArr, string unchangedLogLine)
+        {
+            if (changed == true)
+            {
+                string newPath = GF.FixOuputPath(origonalFilePath);
+                Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
+                File.WriteAllLines(newPath, newFileLinesArr);
+            }
+            else
+            {
+                GF.WriteLine(unchangedLogLine + origonalFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+            }
+        }
     }
 }

@@ -8,9 +8,9 @@ namespace ESLifyEverything.Properties
 {
     public sealed class AppSettings
     {
-        public bool VerboseConsoleLoging { get; set; } = false;
+        public bool VerboseConsoleLoging { get; set; } = true;
 
-        public bool VerboseFileLoging { get; set; } = false;
+        public bool VerboseFileLoging { get; set; } = true;
 
         public bool AutoReadNewestxEditSeesion { get; set; } = false;
 
@@ -20,14 +20,14 @@ namespace ESLifyEverything.Properties
 
         public bool AutoRunESLify { get; set; } = false;
 
-        public string XEditFolderPath { get; set; } = "";
+        public string XEditFolderPath { get; set; } = "xEditFolderPath";
 
-        public string XEditLogFileName { get; set; } = "";
+        public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
 
-        public string SkyrimDataFolderPath { get; set; } = "";
+        public string SkyrimDataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
 
-        public bool OutputToOptionalFolder { get; set; } = false;
+        public bool OutputToOptionalFolder { get; set; } = true;
 
-        public string OptionalOutputFolder { get; set; } = "";
+        public string OptionalOutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
     }
 }

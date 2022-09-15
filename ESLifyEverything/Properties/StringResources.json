@@ -4,6 +4,9 @@
     "xEditCompactedFormFilter": "Changing FormID ["
   },
   "StringLoggingData": {
+    "SettingsFileNotFound": "AppSettings.json not found.",
+    "GenSettingsFile": "Generating Default Settings file.",
+    "EditYourSettings": "Please edit settings file according to your game set up and prefferences.",
     "xEditSessionLog": "xEdit Session found: ",
     "xEditCompactedFormLog": "Compacted form found: ",
     "XEditLogFileSizeWarning": "Your xEdit Log is more then about 10mb, This could take a while with logging",
@@ -75,6 +78,9 @@
     "StartingPayloadInterpreterESLify": "Starting Payload Interpreter Eslify",
     "PayloadInterpreterFileAt": "PayloadInterpreter file found at ",
     "PayloadInterpreterFileUnchanged": "PayloadInterpreter file unchanged: ",
+    "StartingCustomSkillsESLify": "Starting Custom Skills Framework Eslify",
+    "CustomSkillsFileAt": "CustomSkills file found at ",
+    "CustomSkillsFileUnchanged": "CustomSkills file unchanged: ",
     "StartingSKSEINIESLify": "Starting SKSE INI Eslify",
     "SKSEINIFileAt": "SKSEINI file found at ",
     "SKSEINIFileUnchanged": "SKSEINI file unchanged: "
