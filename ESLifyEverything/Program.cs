@@ -112,7 +112,7 @@ namespace ESLifyEverything
                 GF.WriteLine($"Start up Error: {StartupError}");
                 switch (StartupError)
                 {
-                    case 1:
+                    case 0:
                         GF.GenerateSettingsFileError();
                         break;
                     default:

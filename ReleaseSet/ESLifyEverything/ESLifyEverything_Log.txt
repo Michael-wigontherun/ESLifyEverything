@@ -1,0 +1,5 @@
+Start up Error: 0
+AppSettings.json not found.
+Generating Default Settings file.
+Please edit settings file according to your game set up and prefferences.
+Press Enter to exit...
