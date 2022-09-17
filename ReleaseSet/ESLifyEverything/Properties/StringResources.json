@@ -31,7 +31,6 @@
     "IntendedForSSE": "xEdit folder does not contain SSEEdit.exe, This was designed for Skyrim use at your own risk on Fallout or previous Elder Scrolls games.",
     "XEditLogNotFound": "xEdit Log not found in xEdit Folder.",
     "OutputFolderWarning": "The optional folder will still need to be set as a mod for skyrim.",
-    "MOOutputFolderWarning": "If you are a MO user set OutputToOptionalFolder to false and use MO's output.",
     "OutputFolderNotFound": "Optional output folder not found.",
     "OutputFolderDefaultWarning": "Defaulting output folder to Skyrim's data folder.",
     "WithCompactedForms": "with a _ESlEverything.json attached to it inside of the CompactedForms folders.",

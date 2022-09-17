@@ -97,7 +97,6 @@ namespace ESLifyEverything
             if (GF.Settings.OutputToOptionalFolder)
             {
                 GF.WriteLine(GF.stringLoggingData.OutputFolderWarning, true, false);
-                GF.WriteLine(GF.stringLoggingData.MOOutputFolderWarning, true, false);
                 if (!Directory.Exists(GF.Settings.OptionalOutputFolder))
                 {
                     GF.WriteLine(GF.stringLoggingData.OutputFolderNotFound);

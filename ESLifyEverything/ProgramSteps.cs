@@ -90,8 +90,12 @@ namespace ESLifyEverything
         #region Plugin Specific BSA Extract
         public static async Task<int> LoadOrderBSAExtract()
         {
-            //string loadorderFilePath = "loadorder.txt";
             string loadorderFilePath = Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "loadorder.txt");
+            if (!File.Exists(loadorderFilePath))
+            {
+                loadorderFilePath = "loadorder.txt";
+            }
+
             if (File.Exists(loadorderFilePath))
             {
                 string[] loadorder = File.ReadAllLines(loadorderFilePath);

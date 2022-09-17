@@ -39,7 +39,6 @@ namespace ESLifyEverything.Properties
         public string IntendedForSSE { get; set; } = "";
         public string XEditLogNotFound { get; set; } = "";
         public string OutputFolderWarning { get; set; } = "";
-        public string MOOutputFolderWarning { get; set; } = "";
         public string OutputFolderNotFound { get; set; } = "";
         public string OutputFolderDefaultWarning { get; set; } = "";
         public string ExitCodeInput { get; set; } = "";
