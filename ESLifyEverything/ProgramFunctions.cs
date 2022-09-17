@@ -39,12 +39,12 @@ namespace ESLifyEverything
             }
             return lines;
         }
-        
-        public static void CopyFormFile(FormHandler form, string OrgFilePath, out string newPath)
+
+        public static void CopyFormFile(FormHandler form, string origonalDataStartPath, string OrgFilePath, out string newPath)
         {
             GF.WriteLine(GF.stringLoggingData.OriganalPath + OrgFilePath);
             //string newPath = GF.FixOuputPath(OrgFilePath.Replace(form.OrigonalFormID, form.CompactedFormID));
-            newPath = GF.FixOuputPath(OrgFilePath.Replace(form.OrigonalFormID, form.CompactedFormID));
+            newPath = GF.FixOuputPath(OrgFilePath.Replace(form.OrigonalFormID, form.CompactedFormID, StringComparison.OrdinalIgnoreCase), origonalDataStartPath);
             GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
             Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
             //newPath = newPath;

@@ -12,28 +12,33 @@ namespace ESLifyEverything
 {
     public static class GF
     {
+        public static readonly string ExtractedBSAModDataPath = ".\\ExtractedBSAModData";
+
         public static AppSettings Settings = new AppSettings();
         public static StringResources stringsResources = new StringResources();
         public static StringLoggingData stringLoggingData = new StringLoggingData();
         public static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+
         public static string FaceGenFileFixPath = "";
-        public static StringBuilder? AsyncConsoleStringBuilder;
-        public static StringBuilder? AsyncFileStringBuilder;
+
+        public static List<string> BSALoadOrder = new List<string>();
 
         public static bool Startup(out int startupError, string ProgramLogName)
         {
             File.Create(ProgramLogName).Close();
 
+
             startupError = 0;
 
             if (!File.Exists("AppSettings.json"))
             {
+                startupError = 1;
                 IConfiguration stringResorsConfig = new ConfigurationBuilder().AddJsonFile(".\\Properties\\StringResources.json").AddEnvironmentVariables().Build();
                 stringLoggingData = stringResorsConfig.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
                 return false;
             }
-
             
+
             bool startUp = true;
             IConfiguration config = new ConfigurationBuilder().AddJsonFile("AppSettings.json").AddJsonFile(".\\Properties\\StringResources.json").AddEnvironmentVariables().Build();
             Settings = config.GetRequiredSection("Settings").Get<AppSettings>();
@@ -54,12 +59,13 @@ namespace ESLifyEverything
             {
                 Directory.CreateDirectory(Path.Combine(GF.Settings.SkyrimDataFolderPath, "CompactedForms"));
             }
-
+            
+            
             if (!Directory.Exists(GF.Settings.XEditFolderPath))
             {
                 GF.WriteLine(GF.stringLoggingData.XEditFolderNotFound);
                 startUp = false;
-                if (!File.GetAttributes(GF.Settings.XEditFolderPath).HasFlag(FileAttributes.Directory))
+                if (File.Exists(GF.Settings.XEditFolderPath))
                 {
                     GF.WriteLine(GF.stringLoggingData.XEditFolderSetToFile);
                 }
@@ -78,13 +84,15 @@ namespace ESLifyEverything
             if (!File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
             {
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFound);
-                startupError = 1;
+                startupError = 2;
             }
 
             if (!startUp)
             {
                 return startUp;
             }
+
+            Directory.CreateDirectory(ExtractedBSAModDataPath);
 
             if (GF.Settings.OutputToOptionalFolder)
             {
@@ -169,18 +177,28 @@ namespace ESLifyEverything
             return false;
         }
 
-        internal static void GenerateSettingsFileError()
+        public static void GenerateSettingsFileError()
         {
             GF.WriteLine(GF.stringLoggingData.SettingsFileNotFound);
             GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
             GF.WriteLine(GF.stringLoggingData.EditYourSettings);
-            File.WriteAllText("AppSettings.json", JsonSerializer.Serialize(new AppSettings(), GF.JsonSerializerOptions));
+            File.WriteAllText("AppSettings.json", JsonSerializer.Serialize(new GeneratedAppSettings(), GF.JsonSerializerOptions));
         }
 
         //origonalPath = Origonal path with replaced origonal FormID if it contains it
         public static string FixOuputPath(string origonalPath)
         {
             string newPath = origonalPath.Replace(GF.Settings.SkyrimDataFolderPath, "");
+            if (newPath[0] == '\\')
+            {
+                newPath = newPath.Substring(1);
+            }
+            return Path.Combine(GF.Settings.OptionalOutputFolder, newPath);
+        }
+
+        public static string FixOuputPath(string origonalPath, string origonalDataStartPath)
+        {
+            string newPath = origonalPath.Replace(origonalDataStartPath, "");
             if (newPath[0] == '\\')
             {
                 newPath = newPath.Substring(1);

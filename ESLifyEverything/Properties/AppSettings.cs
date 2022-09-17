@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ESLifyEverything.Properties
@@ -29,5 +30,11 @@ namespace ESLifyEverything.Properties
         public bool OutputToOptionalFolder { get; set; } = true;
 
         public string OptionalOutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
+    }
+
+    public sealed class GeneratedAppSettings
+    {
+        [JsonInclude]
+        public AppSettings Settings = new AppSettings();
     }
 }

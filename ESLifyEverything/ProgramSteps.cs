@@ -2,6 +2,7 @@
 using ESLifyEverything.XEdit;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,13 +80,74 @@ namespace ESLifyEverything
             foreach (string compactedFormsModFile in compactedFormsModFiles)
             {
                 CompactedModData mod = new CompactedModData();
-                mod.GetModData(Path.GetFileName(compactedFormsModFile).Replace("_ESlEverything.json", "").Replace("_ESlEverything", ""));
+                //mod.GetModData(Path.GetFileName(compactedFormsModFile).Replace("_ESlEverything.json", "").Replace("_ESlEverything", ""));
+                mod.GetModData(compactedFormsModFile);
                 mod.Write();
                 CompactedModDataD.TryAdd(mod.ModName, mod);
             }
         }
 
+        #region Plugin Specific BSA Extract
+        public static async Task<int> LoadOrderBSAExtract()
+        {
+            //string loadorderFilePath = "loadorder.txt";
+            string loadorderFilePath = Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "loadorder.txt");
+            if (File.Exists(loadorderFilePath))
+            {
+                string[] loadorder = File.ReadAllLines(loadorderFilePath);
+
+                foreach (string plugin in loadorder)
+                {
+                    string pluginNoExtension = Path.ChangeExtension(plugin, null);
+                    if (File.Exists(Path.Combine(GF.Settings.SkyrimDataFolderPath, pluginNoExtension + ".bsa")))
+                    {
+                        LoadOrderNoExtensions.Add(pluginNoExtension);
+                    }
+                }
+                int loadorderCount = LoadOrderNoExtensions.Count;
+                for (int i = 0; i < loadorderCount; i++)
+                {
+                    if (File.Exists(Path.Combine(GF.Settings.SkyrimDataFolderPath, LoadOrderNoExtensions[i] + ".bsa")))
+                    {
+                        Task BSAmesh = ExtractBSAModData(Path.Combine(GF.Settings.SkyrimDataFolderPath, LoadOrderNoExtensions[i] + ".bsa"));
+                        BSAmesh.Wait();
+                        BSAmesh.Dispose();
+                        if (File.Exists(Path.Combine(GF.Settings.SkyrimDataFolderPath, LoadOrderNoExtensions[i] + " - Textures.bsa")))
+                        {
+                            Task BSATex = ExtractBSAModData(Path.Combine(GF.Settings.SkyrimDataFolderPath, LoadOrderNoExtensions[i] + " - Textures.bsa"));
+                            BSATex.Wait();
+                            BSATex.Dispose();
+                        }
+                    }
+                    Console.WriteLine();
+                    GF.WriteLine(String.Format(GF.stringLoggingData.ProcessedBSAsLogCount, i + 1, loadorderCount));
+                }
+            }
+            else
+            {
+                GF.WriteLine(GF.stringLoggingData.LoadOrderNotDetectedError);
+                GF.WriteLine(GF.stringLoggingData.RunOrReport);
+                BSAExtracted = false;
+            }
+            return await Task.FromResult(0);
+        }
+
+        public static async Task<int> ExtractBSAModData(string potentialBSAPath)
+        {
+            foreach (CompactedModData modData in CompactedModDataD.Values)
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+                p.StartInfo.Arguments = $"\"{potentialBSAPath}\" -f \"{modData.ModName}\"  -e -o \"{GF.ExtractedBSAModDataPath}\"";
+                p.Start();
+                p.WaitForExit();
+            }
+            return await Task.FromResult(0);
+        }
+        #endregion Plugin Specific BSA Extract
+
         #region Voice Eslify
+
         public static void VoiceESlIfyMenu()
         {
             GF.WriteLine(GF.stringLoggingData.VoiceESLMenuHeader);
@@ -148,16 +210,23 @@ namespace ESLifyEverything
 
         public static void VoiceESLifyMod(CompactedModData modData)
         {
-            if (Directory.Exists(Path.Combine(GF.Settings.SkyrimDataFolderPath, "sound\\voice", modData.ModName))) {
+            VoiceESLifyModData(modData, GF.ExtractedBSAModDataPath);
+            VoiceESLifyModData(modData, GF.Settings.SkyrimDataFolderPath);
+        }
+
+        public static void VoiceESLifyModData(CompactedModData modData, string dataStartPath)
+        {
+            if (Directory.Exists(Path.Combine(dataStartPath, "sound\\voice", modData.ModName)))
+            {
                 foreach (FormHandler form in modData.CompactedModFormList)
                 {
                     IEnumerable<string> voiceFilePaths = Directory.EnumerateFiles(
-                        Path.Combine(GF.Settings.SkyrimDataFolderPath, "sound\\voice", modData.ModName),
+                        Path.Combine(dataStartPath, "sound\\voice", modData.ModName),
                         "*" + form.OrigonalFormID + "*",
                         SearchOption.AllDirectories);
                     foreach (string voiceFilePath in voiceFilePaths)
                     {
-                        CopyFormFile(form, voiceFilePath, out string filePath);
+                        CopyFormFile(form, dataStartPath, voiceFilePath, out string filePath);
                     }
                 }
             }
@@ -224,32 +293,37 @@ namespace ESLifyEverything
                 }
             } while (whileContinue == true);
         }
-
         
         public static void FaceGenESLifyMod(CompactedModData modData)
         {
-            if (Directory.Exists(Path.Combine(GF.Settings.SkyrimDataFolderPath, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\", modData.ModName)))
+            FaceGenEslifyModData(modData, GF.ExtractedBSAModDataPath);
+            FaceGenEslifyModData(modData, GF.Settings.SkyrimDataFolderPath);
+            
+        }
+
+        public static void FaceGenEslifyModData(CompactedModData modData, string dataStartPath)
+        {
+            if (Directory.Exists(Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName)))
             {
                 foreach (FormHandler form in modData.CompactedModFormList)
                 {
                     IEnumerable<string> FaceGenTexFilePaths = Directory.EnumerateFiles(
-                        Path.Combine(GF.Settings.SkyrimDataFolderPath, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\", modData.ModName),
+                        Path.Combine(dataStartPath, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\", modData.ModName),
                         "*" + form.OrigonalFormID + "*",
                         SearchOption.AllDirectories);
                     foreach (string FaceGenFilePath in FaceGenTexFilePaths)
                     {
-                        CopyFormFile(form, FaceGenFilePath, out string filePath);
+                        CopyFormFile(form, dataStartPath, FaceGenFilePath, out string filePath);
                     }
 
                     IEnumerable<string> FaceGenFilePaths = Directory.EnumerateFiles(
-                        Path.Combine(GF.Settings.SkyrimDataFolderPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName),
+                        Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName),
                         "*" + form.OrigonalFormID + "*",
                         SearchOption.AllDirectories);
 
                     foreach (string FaceGenFilePath in FaceGenFilePaths)
                     {
-                        CopyFormFile(form, FaceGenFilePath, out string filePath);
-                        Console.WriteLine(filePath);
+                        CopyFormFile(form, dataStartPath, FaceGenFilePath, out string filePath);
                         EditedFaceGen = true;
                         using (StreamWriter stream = File.AppendText(GF.FaceGenFileFixPath))
                         {
@@ -347,7 +421,7 @@ namespace ESLifyEverything
                 string[] fileLines = FormInFileReader(File.ReadAllLines(autoBodyMorphsPath), out changed);
                 if (changed == true)
                 {
-                    string newPath = GF.FixOuputPath(autoBodyMorphsPath);
+                    string newPath = GF.FixOuputPath(autoBodyMorphsPath, GF.Settings.SkyrimDataFolderPath);
                     Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
                     File.WriteAllLines(newPath, fileLines);
                 }
@@ -410,6 +484,9 @@ namespace ESLifyEverything
             }
             return Task.FromResult(0);
         }
+
+
+
     }
 }
 

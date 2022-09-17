@@ -1,6 +1,7 @@
 ﻿using ESLifyEverything.FormData;
 using ESLifyEverything.XEdit;
 using System;
+using System.Diagnostics;
 using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,7 +11,11 @@ namespace ESLifyEverything
     public static partial class Program
     {
         public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
+
+        public static List<string> LoadOrderNoExtensions = new List<string>();
+
         public static bool EditedFaceGen = false;
+        public static bool BSAExtracted = true;
 
         static void Main(string[] args)
         {
@@ -18,6 +23,7 @@ namespace ESLifyEverything
             { 
                 if (GF.Startup(out int StartupError, "ESLifyEverything_Log.txt"))
                 {
+                    Console.WriteLine("Sucessful startup");
                     if (StartupError == 0)
                     {
                         XEditSession();
@@ -33,6 +39,14 @@ namespace ESLifyEverything
                     {
                         ImportModData(Path.Combine(GF.Settings.OptionalOutputFolder, "CompactedForms"));
                     }
+
+                    Console.WriteLine("\n\n\n\n");
+                    Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
+                    Console.WriteLine("Ignore this <");
+                    Task bsamod = LoadOrderBSAExtract();
+                    bsamod.Wait();
+                    Console.WriteLine("> Ignore that.");
+                    bsamod.Dispose();
 
                     if (!GF.Settings.AutoRunESLify)
                     {
@@ -61,7 +75,8 @@ namespace ESLifyEverything
                     //Task DAR = InumDAR();
                     Task DAR = InumDataSubfolder(Path.Combine(GF.Settings.SkyrimDataFolderPath, "meshes"), "_CustomConditions", "_conditions.txt", GF.stringLoggingData.DARFileAt, GF.stringLoggingData.ConditionsUnchanged);
                     DAR.Wait();
-                    
+                    DAR.Dispose();
+
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingSPIDESLify);
                     InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_DISTR.ini", GF.stringLoggingData.SPIDFileAt, GF.stringLoggingData.SPIDFileUnchanged);
@@ -99,27 +114,29 @@ namespace ESLifyEverything
                     //Task DAR = InumDAR();
                     Task SKSE = InumDataSubfolder(Path.Combine(GF.Settings.SkyrimDataFolderPath, "skse"), "plugins", "*.ini", GF.stringLoggingData.SKSEINIFileAt, GF.stringLoggingData.SKSEINIFileUnchanged);
                     SKSE.Wait();
+                    SKSE.Dispose();
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
                     Task CustomSkills = CustomSkillsFramework();
                     CustomSkills.Wait();
-
+                    CustomSkills.Dispose();
 
                     Console.WriteLine("\n\n\n\n");
                 }
                 
-                GF.WriteLine($"Start up Error: {StartupError}");
+                
                 switch (StartupError)
                 {
-                    case 0:
+                    case 1:
                         GF.GenerateSettingsFileError();
+                        break;
+                    case 2:
                         break;
                     default:
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.ExitingFolderNotFound);
                         break;
-
                 }
             }
             catch(AggregateException e)
@@ -143,15 +160,21 @@ namespace ESLifyEverything
 
             if (EditedFaceGen)
             {
+                Console.WriteLine();
                 GF.WriteLine(GF.stringLoggingData.EditedFaceGen);
             }
 
+            if (!BSAExtracted)
+            {
+                Console.WriteLine();
+                GF.WriteLine(GF.stringLoggingData.LoadOrderNotDetectedError);
+                GF.WriteLine(GF.stringLoggingData.RunOrReport);
+            }
+
+            Console.WriteLine();
             GF.WriteLine(GF.stringLoggingData.EnterToExit);
             Console.ReadLine();
         }
-        
-
-        
 
 
 

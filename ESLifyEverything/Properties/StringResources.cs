@@ -13,6 +13,8 @@ namespace ESLifyEverything.Properties
     }
     public sealed class StringLoggingData
     {
+        public string LoadOrderNotDetectedError { get; set; } = "";
+        public string RunOrReport { get; set; } = "";
         public string SettingsFileNotFound { get; set; } = "";
         public string GenSettingsFile { get; set; } = "";
         public string EditYourSettings { get; set; } = "";
@@ -60,6 +62,8 @@ namespace ESLifyEverything.Properties
         public string GeneratingJson { get; set; } = "";
         public string OuputingJson { get; set; } = "";
         public string ImportingAllModData { get; set; } = "";
+        public string StartBSAExtract { get; set; } = "";
+        public string ProcessedBSAsLogCount { get; set; } = "";
         public string StartingVoiceESLify { get; set; } = "";
         public string StartingFaceGenESLify { get; set; } = "";
         public string StartingDARESLify { get; set; } = "";

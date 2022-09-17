@@ -37,11 +37,9 @@ namespace ESLifyEverything.FormData
                 JsonSerializer.Serialize(this, GF.JsonSerializerOptions));
         }
 
-        public CompactedModData GetModData(string modFileName) 
+        public CompactedModData GetModData(string filePath) 
         {
-            string filePath = Path.Combine(Path.Combine(GF.Settings.OptionalOutputFolder, "CompactedForms"), modFileName + "_ESlEverything.json");
             GF.WriteLine(GF.stringLoggingData.GetCompDataLog + filePath);
-
             Import(JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(filePath))!);
 
             return this;
@@ -55,10 +53,8 @@ namespace ESLifyEverything.FormData
 
         public void Write()
         {
-            Console.WriteLine();
-            GF.WriteLine(ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-            GF.WriteLine(CompactedModFormList, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-            Console.WriteLine();
+            GF.WriteLine(ModName, false, GF.Settings.VerboseFileLoging);
+            GF.WriteLine(CompactedModFormList, false, GF.Settings.VerboseFileLoging);
         }
     }
 }
