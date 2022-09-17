@@ -29,7 +29,7 @@ Message me via Nexus comments on this mod, or making a new issue on this mod's G
 1. Extract my 2 folders into the folder containing SSEEdit.exe, ensuring the file "_ESLifyEverythingFaceGenFix.pas" is inside of SSEEdit's Edit Scripts Folder.
 The "ESLifyEverything" folder doesn't exactly need to be included inside of SSEEdit's folder, but I place it there with the rest of my tools based on SSEEdit's data.
 
-2. Now open the AppSettings.json file and set value of "XEditFolderPath": "xEditFolder", to be the full path to SSEEdit's folder, NOT THE EXE. Ensure " are needed around it and the path's \ need to be doubled \\
+2. Now open the AppSettings.json file and set value of "XEditFolderPath": "xEditFolder", to be the full path to SSEEdit's folder, NOT THE EXE. Ensure that " are around it and the path's \ need to be doubled \\
 Example of mine: "XEditFolderPath": "C:\\Modding\\SkyrimSE\\sseedit",
 
 3. Do not change: "XEditLogFileName": "SSEEdit_log.txt", unless you want to try this with Fallout 4, I do not know what will work and what will not work for Fallout 4
