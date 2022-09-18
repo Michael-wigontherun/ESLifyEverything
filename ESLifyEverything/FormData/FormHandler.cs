@@ -25,6 +25,17 @@ namespace ESLifyEverything.FormData
             CreateCompactedForm(xEditLogCompactedLine);
         }
 
+        public string GetOrigonalFormID()
+        {
+            return OrigonalFormID.TrimStart('0');
+        }
+
+        public string GetCompactedFormID()
+        {
+            int len = 6 - GetOrigonalFormID().Length;
+            return CompactedFormID.Substring(len);
+        }
+
         public void CreateCompactedForm(string xEditLogCompactedLine)
         {
             string logLineFilter = GF.stringsResources.xEditCompactedFormFilter;

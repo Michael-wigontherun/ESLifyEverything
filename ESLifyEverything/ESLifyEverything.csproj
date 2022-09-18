@@ -23,6 +23,9 @@
     <None Update="AppSettings.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+    <None Update="Properties\DefaultBSAs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\StringResources.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

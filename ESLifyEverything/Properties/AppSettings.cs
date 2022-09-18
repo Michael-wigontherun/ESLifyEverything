@@ -21,19 +21,23 @@ namespace ESLifyEverything.Properties
 
         public bool AutoRunESLify { get; set; } = false;
 
+        public bool AutoRunScriptDecompile { get; set; } = false;
+
         public string XEditFolderPath { get; set; } = "xEditFolderPath";
 
         public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
 
-        public string SkyrimDataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
+        public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
 
-        public bool OutputToOptionalFolder { get; set; } = true;
+        public string PapyrusFlag { get; set; } = "TESV_Papyrus_Flags.flg";
 
-        public string OptionalOutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
+        public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
     }
 
     public sealed class GeneratedAppSettings
     {
+        [JsonInclude]
+        public string SettingsVersion { get { return GF.SettingsVersion; } }
         [JsonInclude]
         public AppSettings Settings = new AppSettings();
     }

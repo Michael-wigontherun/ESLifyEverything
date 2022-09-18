@@ -13,6 +13,7 @@ namespace ESLifyEverything
         public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
 
         public static List<string> LoadOrderNoExtensions = new List<string>();
+        public static List<string> FailedToCompile = new List<string>();
 
         public static bool EditedFaceGen = false;
         public static bool BSAExtracted = true;
@@ -34,19 +35,16 @@ namespace ESLifyEverything
                     }
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.ImportingAllModData);
-                    ImportModData(Path.Combine(GF.Settings.SkyrimDataFolderPath, "CompactedForms"));
-                    if (GF.Settings.OutputToOptionalFolder)
-                    {
-                        ImportModData(Path.Combine(GF.Settings.OptionalOutputFolder, "CompactedForms"));
-                    }
+                    ImportModData(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms"));
+                    ImportModData(Path.Combine(GF.Settings.OutputFolder, "CompactedForms"));
 
                     Console.WriteLine("\n\n\n\n");
                     Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
-                    Console.WriteLine("Ignore this <");
+                    Console.WriteLine(GF.stringLoggingData.IgnoreBelow);
                     Task bsamod = LoadOrderBSAExtract();
                     bsamod.Wait();
-                    Console.WriteLine("> Ignore that.");
                     bsamod.Dispose();
+                    Console.WriteLine(GF.stringLoggingData.IgnoreAbove);
 
                     if (!GF.Settings.AutoRunESLify)
                     {
@@ -73,33 +71,33 @@ namespace ESLifyEverything
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingDARESLify);
                     //Task DAR = InumDAR();
-                    Task DAR = InumDataSubfolder(Path.Combine(GF.Settings.SkyrimDataFolderPath, "meshes"), "_CustomConditions", "_conditions.txt", GF.stringLoggingData.DARFileAt, GF.stringLoggingData.ConditionsUnchanged);
+                    Task DAR = InumDataSubfolder(Path.Combine(GF.Settings.DataFolderPath, "meshes"), "_CustomConditions", "_conditions.txt", GF.stringLoggingData.DARFileAt, GF.stringLoggingData.ConditionsUnchanged);
                     DAR.Wait();
                     DAR.Dispose();
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingSPIDESLify);
-                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_DISTR.ini", GF.stringLoggingData.SPIDFileAt, GF.stringLoggingData.SPIDFileUnchanged);
+                    InumSwappers(GF.Settings.DataFolderPath, "*_DISTR.ini", GF.stringLoggingData.SPIDFileAt, GF.stringLoggingData.SPIDFileUnchanged);
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingBaseObjectESLify);
-                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_SWAP.ini", GF.stringLoggingData.BaseObjectFileAt, GF.stringLoggingData.BaseObjectFileUnchanged);
+                    InumSwappers(GF.Settings.DataFolderPath, "*_SWAP.ini", GF.stringLoggingData.BaseObjectFileAt, GF.stringLoggingData.BaseObjectFileUnchanged);
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingKIDESLify);
-                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_KID.ini", GF.stringLoggingData.KIDFileAt, GF.stringLoggingData.KIDFileUnchanged);
+                    InumSwappers(GF.Settings.DataFolderPath, "*_KID.ini", GF.stringLoggingData.KIDFileAt, GF.stringLoggingData.KIDFileUnchanged);
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingFLMESLify);
-                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_FLM.ini", GF.stringLoggingData.FLMFileAt, GF.stringLoggingData.FLMFileUnchanged);
+                    InumSwappers(GF.Settings.DataFolderPath, "*_FLM.ini", GF.stringLoggingData.FLMFileAt, GF.stringLoggingData.FLMFileUnchanged);
                     
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingAnimObjectESLify);
-                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_ANIO.ini", GF.stringLoggingData.AnimObjectFileAt, GF.stringLoggingData.AnimObjectFileUnchanged);
+                    InumSwappers(GF.Settings.DataFolderPath, "*_ANIO.ini", GF.stringLoggingData.AnimObjectFileAt, GF.stringLoggingData.AnimObjectFileUnchanged);
                     
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingENBLightsForEffectShadersESLify);
-                    InumSwappers(GF.Settings.SkyrimDataFolderPath, "*_ENBL.ini", GF.stringLoggingData.ENBLightsForEffectShadersFileAt, GF.stringLoggingData.ENBLightsForEffectShadersFileUnchanged);
+                    InumSwappers(GF.Settings.DataFolderPath, "*_ENBL.ini", GF.stringLoggingData.ENBLightsForEffectShadersFileAt, GF.stringLoggingData.ENBLightsForEffectShadersFileUnchanged);
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingAutoBodyESLify);
@@ -107,12 +105,12 @@ namespace ESLifyEverything
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingPayloadInterpreterESLify);
-                    InumSwappers(Path.Combine(GF.Settings.SkyrimDataFolderPath, "SKSE\\PayloadInterpreter\\Config"), "*.ini", GF.stringLoggingData.PayloadInterpreterFileAt, GF.stringLoggingData.PayloadInterpreterFileUnchanged);
+                    InumSwappers(Path.Combine(GF.Settings.DataFolderPath, "SKSE\\PayloadInterpreter\\Config"), "*.ini", GF.stringLoggingData.PayloadInterpreterFileAt, GF.stringLoggingData.PayloadInterpreterFileUnchanged);
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingSKSEINIESLify);
                     //Task DAR = InumDAR();
-                    Task SKSE = InumDataSubfolder(Path.Combine(GF.Settings.SkyrimDataFolderPath, "skse"), "plugins", "*.ini", GF.stringLoggingData.SKSEINIFileAt, GF.stringLoggingData.SKSEINIFileUnchanged);
+                    Task SKSE = InumDataSubfolder(Path.Combine(GF.Settings.DataFolderPath, "skse"), "plugins", "*.ini", GF.stringLoggingData.SKSEINIFileAt, GF.stringLoggingData.SKSEINIFileUnchanged);
                     SKSE.Wait();
                     SKSE.Dispose();
 
@@ -121,6 +119,12 @@ namespace ESLifyEverything
                     Task CustomSkills = CustomSkillsFramework();
                     CustomSkills.Wait();
                     CustomSkills.Dispose();
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
+                    Task Scripts = ExtractScripts();
+                    Scripts.Wait();
+                    Scripts.Dispose();
 
                     Console.WriteLine("\n\n\n\n");
                 }
@@ -171,11 +175,33 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.RunOrReport);
             }
 
+            if (FailedToCompile.Any())
+            {
+                Console.WriteLine("\n\n\n\n");
+                GF.WriteLine(GF.stringLoggingData.ImportantBelow);
+                GF.WriteLine(GF.stringLoggingData.ImportantBelow1);
+                Console.WriteLine();
+                Directory.CreateDirectory(Path.Combine(GF.Settings.OutputFolder, GF.SourceSubPath));
+                foreach(string error in FailedToCompile)
+                {
+                    File.Copy(Path.Combine(GF.ChangedScriptsPath, error + ".psc"), Path.Combine(GF.Settings.OutputFolder, GF.SourceSubPath, error + ".psc"), true);
+                    GF.WriteLine(error + GF.stringLoggingData.ScriptFailedCompilation);
+                    GF.WriteLine(String.Format(GF.stringLoggingData.ScriptFailedCompilation2, error));
+                    Console.WriteLine();
+                    
+                }
+                GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
+                Console.WriteLine();
+                GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation4);
+                Console.WriteLine();
+                GF.WriteLine(GF.stringLoggingData.ImportantAbove);
+                Console.WriteLine("\n\n\n\n");
+            }
+
             Console.WriteLine();
             GF.WriteLine(GF.stringLoggingData.EnterToExit);
             Console.ReadLine();
         }
-
 
 
     }

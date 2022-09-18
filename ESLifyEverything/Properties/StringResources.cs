@@ -28,6 +28,9 @@ namespace ESLifyEverything.Properties
         public string NewFormForMod { get; set; } = "";
         public string NewForm { get; set; } = "";
         public string NewMod { get; set; } = "";
+        public string ModLine { get; set; } = "";
+        public string NewLine { get; set; } = "";
+        public string OldLine { get; set; } = "";
         public string SkipingSessionLogNotFound { get; set; } = "";
         public string ExitingFolderNotFound { get; set; } = "";
         public string EditedFaceGen { get; set; } = "";
@@ -40,7 +43,8 @@ namespace ESLifyEverything.Properties
         public string XEditLogNotFound { get; set; } = "";
         public string OutputFolderWarning { get; set; } = "";
         public string OutputFolderNotFound { get; set; } = "";
-        public string OutputFolderDefaultWarning { get; set; } = "";
+        public string OutputFolderIsRequired { get; set; } = "";
+        public string PotectOrigonalScripts { get; set; } = "";
         public string ExitCodeInput { get; set; } = "";
         public string WithCompactedForms { get; set; } = "";
         public string ExamplePlugin { get; set; } = "";
@@ -96,5 +100,34 @@ namespace ESLifyEverything.Properties
         public string StartingCustomSkillsESLify { get; set; } = "";
         public string CustomSkillsFileAt { get; set; } = "";
         public string CustomSkillsFileUnchanged { get; set; } = "";
+        public string StartingScriptESLify { get; set; } = "";
+        public string ScriptSourceFileChanged { get; set; } = "";
+        public string PapyrusCompilerMissing { get; set; } = "";
+        public string PapyrusCompilerMissing2 { get; set; } = "";
+        public string PapyrusCompilerMissing3 { get; set; } = "";
+        public string PapyrusCompilerMissing4 { get; set; } = "";
+        public string PapyrusFlagFileMissing { get; set; } = "";
+        public string PapyrusFlagFileMissing2 { get; set; } = "";
+        public string ClearYourOutputFolderScripts { get; set; } = "";
+        public string ScriptFailedCompilation { get; set; } = "";
+        public string ScriptFailedCompilation2 { get; set; } = "";
+        public string ScriptFailedCompilation3 { get; set; } = "";
+        public string ScriptFailedCompilation4 { get; set; } = "";
+        public string ScriptESLifyINeedThisDataToBeReported { get; set; } = "";
+        public string ImportantBelow { get; set; } = "";
+        public string ImportantBelow1 { get; set; } = "";
+        public string ImportantAbove { get; set; } = "";
+        public string IgnoreBelow { get; set; } = "";
+        public string IgnoreAbove { get; set; } = "";
+        public string ScriptESLifyMenuA { get; set; } = "";
+        public string ScriptESLifyMenu1 { get; set; } = "";
+        public string ScriptESLifyMenu2 { get; set; } = "";
+        public string ScriptESLifyMenu3 { get; set; } = "";
+        public string ScriptESLifyMenuN { get; set; } = "";
+        public string ScriptESLifyMenuY { get; set; } = "";
+        public string RunningChampBSA { get; set; } = "";
+        public string EndedChampBSA { get; set; } = "";
+        public string RunningChampLoose { get; set; } = "";
+        public string EndedChampLoose { get; set; } = "";
     }
 }

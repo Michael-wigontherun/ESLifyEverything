@@ -32,8 +32,8 @@ namespace ESLifyEverything.FormData
         public void OutputModData()
         {
             Write();
-            GF.WriteLine(GF.stringLoggingData.OutputtingTo + Path.Combine(Path.Combine(GF.Settings.OptionalOutputFolder, "CompactedForms"), ModName + "_ESlEverything.json"));
-            File.WriteAllText(Path.Combine(Path.Combine(GF.Settings.OptionalOutputFolder, "CompactedForms"), ModName + "_ESlEverything.json"), 
+            GF.WriteLine(GF.stringLoggingData.OutputtingTo + Path.Combine(Path.Combine(GF.Settings.OutputFolder, "CompactedForms"), ModName + "_ESlEverything.json"));
+            File.WriteAllText(Path.Combine(Path.Combine(GF.Settings.OutputFolder, "CompactedForms"), ModName + "_ESlEverything.json"), 
                 JsonSerializer.Serialize(this, GF.JsonSerializerOptions));
         }
 

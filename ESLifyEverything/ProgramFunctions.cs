@@ -25,10 +25,11 @@ namespace ESLifyEverything
                         {
                             foreach (FormHandler form in modData.CompactedModFormList)
                             {
-                                if (line.Contains(form.OrigonalFormID.TrimStart('0'), StringComparison.OrdinalIgnoreCase))
+                                if (line.Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
                                 {
-                                    line = line.Replace(form.OrigonalFormID.TrimStart('0'), form.CompactedFormID.TrimStart('0'));
-                                    GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                    GF.WriteLine(GF.stringLoggingData.OldLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                    line = line.Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                    GF.WriteLine(GF.stringLoggingData.NewLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                                     changed = true;
                                 }
                             }
@@ -44,7 +45,7 @@ namespace ESLifyEverything
         {
             GF.WriteLine(GF.stringLoggingData.OriganalPath + OrgFilePath);
             //string newPath = GF.FixOuputPath(OrgFilePath.Replace(form.OrigonalFormID, form.CompactedFormID));
-            newPath = GF.FixOuputPath(OrgFilePath.Replace(form.OrigonalFormID, form.CompactedFormID, StringComparison.OrdinalIgnoreCase), origonalDataStartPath);
+            newPath = GF.FixOuputPath(OrgFilePath.Replace(form.OrigonalFormID, form.CompactedFormID, StringComparison.OrdinalIgnoreCase), origonalDataStartPath, GF.Settings.OutputFolder);
             GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
             Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
             //newPath = newPath;
