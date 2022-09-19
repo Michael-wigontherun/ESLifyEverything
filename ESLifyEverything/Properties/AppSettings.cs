@@ -9,6 +9,10 @@ namespace ESLifyEverything.Properties
 {
     public sealed class AppSettings
     {
+        public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
+
+        public string PapyrusFlag { get; set; } = "TESV_Papyrus_Flags.flg";
+
         public bool VerboseConsoleLoging { get; set; } = true;
 
         public bool VerboseFileLoging { get; set; } = true;
@@ -17,20 +21,16 @@ namespace ESLifyEverything.Properties
 
         public bool AutoReadAllxEditSeesion { get; set; } = false;
 
-        public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion { get; set; } = false;
-
         public bool AutoRunESLify { get; set; } = false;
 
         public bool AutoRunScriptDecompile { get; set; } = false;
 
+        public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion { get; set; } = false;
+
         public string XEditFolderPath { get; set; } = "xEditFolderPath";
 
-        public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
-
         public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
-
-        public string PapyrusFlag { get; set; } = "TESV_Papyrus_Flags.flg";
-
+        
         public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
     }
 

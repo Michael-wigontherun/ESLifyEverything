@@ -110,6 +110,13 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFound);
                 startupError = 2;
             }
+
+            if (!File.Exists(".\\Champollion\\Champollion.exe"))
+            {
+                startUp = false;
+                GF.WriteLine(GF.stringLoggingData.ChampollionMissing);
+            }
+
             if (!File.Exists(Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe")))
             {
                 startUp = false;
@@ -168,7 +175,18 @@ namespace ESLifyEverything
             GF.ClearChangedScripts();
             Directory.CreateDirectory(Path.Combine(GF.Settings.OutputFolder, "CompactedForms"));
 
-            
+            if (Directory.Exists(Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath)))
+            {
+                IEnumerable<string> scripts = Directory.EnumerateFiles(
+                    Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath),
+                    "*.psc",
+                    SearchOption.TopDirectoryOnly);
+                if (!scripts.Any())
+                {
+                    GF.Settings.AutoRunScriptDecompile = true;
+                }
+            }
+
 
             return startUp;
         }

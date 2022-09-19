@@ -102,6 +102,7 @@ namespace ESLifyEverything.Properties
         public string CustomSkillsFileUnchanged { get; set; } = "";
         public string StartingScriptESLify { get; set; } = "";
         public string ScriptSourceFileChanged { get; set; } = "";
+        public string ChampollionMissing { get; set; } = "";
         public string PapyrusCompilerMissing { get; set; } = "";
         public string PapyrusCompilerMissing2 { get; set; } = "";
         public string PapyrusCompilerMissing3 { get; set; } = "";
