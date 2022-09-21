@@ -136,10 +136,10 @@ namespace ESLifyEverything
                         GF.GenerateSettingsFileError();
                         break;
                     case 2:
+                        Console.WriteLine("\n\n\n\n");
+                        GF.WriteLine(GF.stringLoggingData.xEditlogNotFound);
                         break;
                     default:
-                        Console.WriteLine("\n\n\n\n");
-                        GF.WriteLine(GF.stringLoggingData.ExitingFolderNotFound);
                         break;
                 }
             }

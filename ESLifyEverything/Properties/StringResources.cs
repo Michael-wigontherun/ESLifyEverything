@@ -32,7 +32,7 @@ namespace ESLifyEverything.Properties
         public string NewLine { get; set; } = "";
         public string OldLine { get; set; } = "";
         public string SkipingSessionLogNotFound { get; set; } = "";
-        public string ExitingFolderNotFound { get; set; } = "";
+        public string xEditlogNotFound { get; set; } = "";
         public string EditedFaceGen { get; set; } = "";
         public string EnterToExit { get; set; } = "";
         public string FolderNotFoundError { get; set; } = "";

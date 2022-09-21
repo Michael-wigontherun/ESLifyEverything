@@ -197,13 +197,13 @@ namespace ESLifyEverything
         {
             bool whileContinue = true;
             string input;
-            CompactedModData modData;
+            CompactedModData? modData;
             do
             {
                 GF.WriteLine($"{GF.stringLoggingData.SingleModInputHeader}{GF.stringLoggingData.ExamplePlugin}");
                 GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
                 input = Console.ReadLine() ?? "";
-                if (CompactedModDataD.TryGetValue(input, out modData!))
+                if (CompactedModDataD.TryGetValue(input, out modData))
                 {
                     modData.Write();
                     VoiceESLifyMod(modData);

@@ -24,7 +24,7 @@
     "NewLine": "New line: ",
     "OldLine": "Old line: ",
     "SkipingSessionLogNotFound": "xEdit Log file not found. Skiping xEdit Session import.",
-    "ExitingFolderNotFound": "Exiting... Folders not found.",
+    "xEditlogNotFound": "xEdit log was not found and read this session. You can saftly ignore this.",
     "EditedFaceGen": "FaceGen Data has been edited please run \"_ESPFEEverythingFaceGenFix.pas\" in xEdit. So you don't have the black face bug.",
     "EnterToExit": "Press Enter to exit...",
     "FolderNotFoundError": "Canceling.. \nFolder not found: ",
