@@ -1,4 +1,5 @@
-﻿using ESLifyEverything.FormData;
+﻿using ESLifyEverything.BSAHandlers;
+using ESLifyEverything.FormData;
 using ESLifyEverything.Properties;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -87,7 +88,7 @@ namespace ESLifyEverything
             
             if (!Directory.Exists(GF.Settings.XEditFolderPath))
             {
-                GF.WriteLine(GF.stringLoggingData.XEditFolderNotFound);
+                GF.WriteLine(GF.stringLoggingData.XEditLogNotFoundStartup);
                 startUp = false;
                 if (File.Exists(GF.Settings.XEditFolderPath))
                 {
@@ -187,6 +188,7 @@ namespace ESLifyEverything
                 }
             }
 
+            BSAData.GetBSAData();
 
             return startUp;
         }

@@ -1,4 +1,5 @@
-﻿using ESLifyEverything.FormData;
+﻿using ESLifyEverything.BSAHandlers;
+using ESLifyEverything.FormData;
 using ESLifyEverything.XEdit;
 using System;
 using System.Collections.Generic;
@@ -87,8 +88,7 @@ namespace ESLifyEverything
             }
         }
 
-        #region Plugin Specific BSA Extract
-        public static async Task<int> LoadOrderBSAExtract()
+        public static async Task<int> LoadOrderBSAData()
         {
             string loadorderFilePath = Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "loadorder.txt");
             if (!File.Exists(loadorderFilePath))
@@ -108,26 +108,20 @@ namespace ESLifyEverything
                         LoadOrderNoExtensions.Add(pluginNoExtension);
                     }
                 }
+
                 int loadorderCount = LoadOrderNoExtensions.Count;
                 for (int i = 0; i < loadorderCount; i++)
                 {
                     if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, LoadOrderNoExtensions[i] + ".bsa")))
                     {
-                        Console.WriteLine(LoadOrderNoExtensions[i]);
-                        Task BSAmesh = ExtractBSAModData(Path.Combine(GF.Settings.DataFolderPath, LoadOrderNoExtensions[i] + ".bsa"));
-                        BSAmesh.Wait();
-                        BSAmesh.Dispose();
-                        if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, LoadOrderNoExtensions[i] + " - Textures.bsa")))
-                        {
-                            Task BSATex = ExtractBSAModData(Path.Combine(GF.Settings.DataFolderPath, LoadOrderNoExtensions[i] + " - Textures.bsa"));
-                            BSATex.Wait();
-                            BSATex.Dispose();
-                        }
+                        GF.WriteLine(String.Format(GF.stringLoggingData.BSACheckMod, LoadOrderNoExtensions[i]));
+                        BSAData.AddNew(LoadOrderNoExtensions[i]);
                     }
                     Console.WriteLine();
                     GF.WriteLine(String.Format(GF.stringLoggingData.ProcessedBSAsLogCount, i + 1, loadorderCount));
                     Console.WriteLine();
                 }
+                BSAData.Output();
             }
             else
             {
@@ -137,21 +131,6 @@ namespace ESLifyEverything
             }
             return await Task.FromResult(0);
         }
-
-        public static async Task<int> ExtractBSAModData(string potentialBSAPath)
-        {
-            foreach (CompactedModData modData in CompactedModDataD.Values)
-            {
-                Process p = new Process();
-                p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
-                p.StartInfo.Arguments = $"\"{Path.GetFullPath(potentialBSAPath)}\" -f \"{modData.ModName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
-                p.Start();
-                p.WaitForExit();
-                p.Dispose();
-            }
-            return await Task.FromResult(0);
-        }
-        #endregion Plugin Specific BSA Extract
 
         #region Voice Eslify
 
@@ -217,8 +196,36 @@ namespace ESLifyEverything
 
         public static void VoiceESLifyMod(CompactedModData modData)
         {
+            Task v = ExtractBSAVoiceData(modData.ModName);
+            v.Wait();
+            v.Dispose();
             VoiceESLifyModData(modData, GF.ExtractedBSAModDataPath);
             VoiceESLifyModData(modData, GF.Settings.DataFolderPath);
+        }
+
+        public static async Task<int> ExtractBSAVoiceData(string pluginName)
+        {
+            foreach (string plugin in LoadOrderNoExtensions)
+            {
+                BSA? bsa;
+                if (BSAData.BSAs.TryGetValue(plugin, out bsa))
+                {
+                    foreach (string connectedVoice in bsa.VoiceModConnections)
+                    {
+                        if (connectedVoice.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            GF.WriteLine(String.Format(GF.stringLoggingData.BSAContainsData, bsa.BSAName_NoExtention, pluginName));
+                            Process m = new Process();
+                            m.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+                            m.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
+                            m.Start();
+                            m.WaitForExit();
+                            m.Dispose();
+                        }
+                    }
+                }
+            }
+            return await Task.FromResult(0);
         }
 
         public static void VoiceESLifyModData(CompactedModData modData, string dataStartPath)
@@ -303,9 +310,47 @@ namespace ESLifyEverything
         
         public static void FaceGenESLifyMod(CompactedModData modData)
         {
+            Task f = ExtractBSAFaceGenData(modData.ModName);
+            f.Wait();
+            f.Dispose();
             FaceGenEslifyModData(modData, GF.ExtractedBSAModDataPath);
             FaceGenEslifyModData(modData, GF.Settings.DataFolderPath);
             
+        }
+
+        public static async Task<int> ExtractBSAFaceGenData(string pluginName)
+        {
+            foreach (string plugin in LoadOrderNoExtensions)
+            {
+                BSA? bsa;
+                if (BSAData.BSAs.TryGetValue(plugin, out bsa))
+                {
+                    foreach (string connectedFaceGen in bsa.FaceGenModConnections)
+                    {
+
+                        if (connectedFaceGen.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            GF.WriteLine($"{bsa.BSAName_NoExtention}.bsa is connected to {pluginName}");
+                            Process m = new Process();
+                            m.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+                            m.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
+                            m.Start();
+                            m.WaitForExit();
+                            m.Dispose();
+                            if (bsa.HasTextureBSA)
+                            {
+                                Process t = new Process();
+                                t.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+                                t.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + " - Textures.bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
+                                t.Start();
+                                t.WaitForExit();
+                                t.Dispose();
+                            }
+                        }
+                    }
+                }
+            }
+            return await Task.FromResult(0);
         }
 
         public static void FaceGenEslifyModData(CompactedModData modData, string dataStartPath)

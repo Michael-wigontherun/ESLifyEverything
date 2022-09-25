@@ -17,6 +17,12 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.ScriptESLifyMenuA, false, true);
                 return true;
             }
+
+            if (NewOrUpdatedMods)
+            {
+                GF.WriteLine(GF.stringLoggingData.ScriptESLifyMenuA, false, true);
+                return true;
+            }
             Console.WriteLine(GF.stringLoggingData.ScriptESLifyMenu1);
             Console.WriteLine(GF.stringLoggingData.ScriptESLifyMenu2);
             Console.WriteLine(GF.stringLoggingData.ScriptESLifyMenu3);
@@ -87,10 +93,11 @@ namespace ESLifyEverything
                 Console.WriteLine(GF.stringLoggingData.IgnoreAbove);
             }
 
-
+            
             Task inmScripts = CompileScripts();
             inmScripts.Wait();
             inmScripts.Dispose();
+            
 
             return await Task.FromResult(0);
         }
@@ -150,29 +157,36 @@ namespace ESLifyEverything
                 }
             }
             GF.Settings.VerboseConsoleLoging = tempLogging;
-
+            
             if (File.Exists(Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe")))
             {
-                Console.WriteLine();
-                Console.WriteLine(GF.stringLoggingData.ImportantBelow);
-                Console.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
-                Console.WriteLine();
-                Console.WriteLine(GF.stringLoggingData.ScriptESLifyINeedThisDataToBeReported);
-                Console.WriteLine();
-                Console.WriteLine(GF.stringLoggingData.ImportantBelow1);
-                Console.WriteLine();
-                Process p = new Process();
-                p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
-                p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"TESV_Papyrus_Flags.flg\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
-                p.Start();
-                p.WaitForExit();
-                p.Dispose();
-                Console.WriteLine();
-                Console.WriteLine(GF.stringLoggingData.ImportantAbove);
-
-                foreach (var changedFile in changedFiles)
+                if (changedFiles.Any())
                 {
-                    ScriptCompiled(Path.ChangeExtension(Path.GetFileName(changedFile), null));
+                    Console.WriteLine();
+                    Console.WriteLine(GF.stringLoggingData.ImportantBelow);
+                    Console.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
+                    Console.WriteLine();
+                    Console.WriteLine(GF.stringLoggingData.ScriptESLifyINeedThisDataToBeReported);
+                    Console.WriteLine();
+                    Console.WriteLine(GF.stringLoggingData.ImportantBelow1);
+                    Console.WriteLine();
+                    Process p = new Process();
+                    p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
+                    p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"TESV_Papyrus_Flags.flg\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
+                    p.Start();
+                    p.WaitForExit();
+                    p.Dispose();
+                    Console.WriteLine();
+                    Console.WriteLine(GF.stringLoggingData.ImportantAbove);
+
+                    foreach (var changedFile in changedFiles)
+                    {
+                        ScriptCompiled(Path.ChangeExtension(Path.GetFileName(changedFile), null));
+                    }
+                }
+                else
+                {
+                    GF.WriteLine(GF.stringLoggingData.NoChangedScriptsDetected);
                 }
             }
             else

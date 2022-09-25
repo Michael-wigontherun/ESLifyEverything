@@ -1,4 +1,5 @@
-﻿using ESLifyEverything.FormData;
+﻿using ESLifyEverything.BSAHandlers;
+using ESLifyEverything.FormData;
 using ESLifyEverything.XEdit;
 using System;
 using System.Diagnostics;
@@ -13,10 +14,11 @@ namespace ESLifyEverything
         public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
 
         public static List<string> LoadOrderNoExtensions = new List<string>();
-        public static List<string> FailedToCompile = new List<string>();
+        public static HashSet<string> FailedToCompile = new HashSet<string>();
 
         public static bool EditedFaceGen = false;
         public static bool BSAExtracted = true;
+        public static bool NewOrUpdatedMods = false;
 
         static void Main(string[] args)
         {
@@ -40,11 +42,9 @@ namespace ESLifyEverything
 
                     Console.WriteLine("\n\n\n\n");
                     Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
-                    Console.WriteLine(GF.stringLoggingData.IgnoreBelow);
-                    Task bsamod = LoadOrderBSAExtract();
+                    Task bsamod = LoadOrderBSAData();
                     bsamod.Wait();
                     bsamod.Dispose();
-                    Console.WriteLine(GF.stringLoggingData.IgnoreAbove);
 
                     if (!GF.Settings.AutoRunESLify)
                     {
@@ -204,5 +204,7 @@ namespace ESLifyEverything
         }
 
 
+
+        
     }
 }

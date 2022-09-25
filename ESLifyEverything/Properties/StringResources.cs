@@ -24,6 +24,12 @@ namespace ESLifyEverything.Properties
         public string NoxEditSessions { get; set; } = "";
         public string SelectSession { get; set; } = "";
         public string InputSessionPromt { get; set; } = "";
+        public string BSADataImport { get; set; } = "";
+        public string BSADataImportNotFound { get; set; } = "";
+
+
+
+
         public string GetCompDataLog { get; set; } = "";
         public string NewFormForMod { get; set; } = "";
         public string NewForm { get; set; } = "";
@@ -32,6 +38,7 @@ namespace ESLifyEverything.Properties
         public string NewLine { get; set; } = "";
         public string OldLine { get; set; } = "";
         public string SkipingSessionLogNotFound { get; set; } = "";
+        public string XEditLogNotFoundStartup { get; set; } = "";
         public string xEditlogNotFound { get; set; } = "";
         public string EditedFaceGen { get; set; } = "";
         public string EnterToExit { get; set; } = "";
@@ -55,6 +62,7 @@ namespace ESLifyEverything.Properties
         public string SingleInputMod { get; set; } = "";
         public string VoiceESLMenuHeader { get; set; } = "";
         public string ExitCodeInputOutput { get; set; } = "";
+        public string BSAContainsData { get; set; } = "";
         public string EslifingEverything { get; set; } = "";
         public string EslifingSingleMod { get; set; } = "";
         public string FaceGenESLMenuHeader { get; set; } = "";
@@ -65,7 +73,13 @@ namespace ESLifyEverything.Properties
         public string GeneratingJson { get; set; } = "";
         public string OuputingJson { get; set; } = "";
         public string ImportingAllModData { get; set; } = "";
-        public string StartBSAExtract { get; set; } = "";
+        public string StartBSAExtract { get; set; } = ""; 
+        public string BSACheckMod { get; set; } = "";
+        public string BSACheckPrev { get; set; } = "";
+        public string BSACheckUpdated { get; set; } = "";
+        public string BSACheckModReimp { get; set; } = "";
+        public string BSACheckNew { get; set; } = "";
+        public string BSACheckModImp { get; set; } = "";
         public string ProcessedBSAsLogCount { get; set; } = "";
         public string StartingVoiceESLify { get; set; } = "";
         public string StartingFaceGenESLify { get; set; } = "";
@@ -109,6 +123,7 @@ namespace ESLifyEverything.Properties
         public string PapyrusCompilerMissing4 { get; set; } = "";
         public string PapyrusFlagFileMissing { get; set; } = "";
         public string PapyrusFlagFileMissing2 { get; set; } = "";
+        public string NoChangedScriptsDetected { get; set; } = "";
         public string ClearYourOutputFolderScripts { get; set; } = "";
         public string ScriptFailedCompilation { get; set; } = "";
         public string ScriptFailedCompilation2 { get; set; } = "";

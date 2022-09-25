@@ -33,6 +33,10 @@ namespace ESLifyEverything.FormData
         public string GetCompactedFormID()
         {
             int len = 6 - GetOrigonalFormID().Length;
+            if (len > 3)
+            {
+                len = 3;
+            }
             return CompactedFormID.Substring(len);
         }
 
