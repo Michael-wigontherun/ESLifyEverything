@@ -82,9 +82,21 @@ The same warning will pop up from if it detects a world space because it also ad
 (insert worldspace.png)
 Usually if its a mod that adds a new worldspace it likely will have more then that 2048 form budget.
 
+SKSE mods with hardcoded formIDs inside the DLL
+Reason) There is no reliable way to decompile a C++ DLL. So from a scripting standpoint, I have no way to decompile and recompile the .dll file. And a user standpoint there is no point because it isn't a quick thing to do as a regular user. You must ask the mod author to do it and upload it.
+
+How to tell) The only way to tell is finding the source code. Many mod authors usually have a link to there source code on GitHub or have it posted on nexus, If they don't don't compact the plugin.
+
+If they do, go one by one through the .cpp files using ctrl+F searching for the plugin name, I am using source code from [Loki's Poise mod](https://github.com/LokiWasTaken/POISE-Stagger-Overhaul-SKSE/blob/main/src/POISE/PoiseMod.cpp)﻿ for this example
+
+(insert hardcodedlokiform.png)
+
+The underline in Green﻿ is ok because it wont be changed when compacted, but what is underlined in red is not because it will be compacted because it is outside the Hex range of 800 and FFF.
+
+If it has any hardcoded forms for other mods, it is not safe to compact those mods. However most modders will use a .ini file to cover other mods or some other way to add support for other mods if needed. To check for other mods you can use ctrl+F searching for .esp or .esm files, .esl files don't need to be compacted anyway so you don't need to worry about them. and Skyrim.esm, Update.esm, Dawnguard.esm, Hearthfire.esm and Dragonborn.esm can be ignored because they are Skyrim's base plugins.
+
 ## How to tell if a mod SHOULD NOT be ESLified.
 #### this is more a personal choice sellection
-
 
 Master plugins
 Reason) It likly is either too large or required by alot of other mods,
