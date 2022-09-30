@@ -22,6 +22,9 @@ Currently Eslifies
 - SKSE INI files
 - Custom Skills Framework \ Extended Framework
 - Papyrus Scripts
+- Precision
+- True Directional Movement
+- POISE - Stagger Overhaul
 
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github, for any other file mod data that needs to be eslified.
 
@@ -90,7 +93,7 @@ This is an example of mine
 
 5.  If you have "AutoReadAllxEditSeesion" or "AutoReadNewestxEditSeesion" set to true you can skip this step. This is a console menu that lets you select which session you want to read and output Compacted mod data. Input the menu item number then press enter.
 
-Skip Steps 6 and 7, if you want to use "AutoRunESLify"
+Skip Steps 6, 7 and 8, if you want to use "AutoRunESLify"
 
 6.  This Console menu is for Voice ESLify. You have 2 options:
     1. Eslifies every mod: Eslifies every mod that has compacted mod data attached to it
@@ -103,13 +106,15 @@ To leave a menu or skip it enter "XXX", this is not case sensitive.
 
 7.  Is identical to step 6, but is for FaceGen ESLify.
 
-8.  Once you reach the Scripts Eslify, it will ask if you have installed any new mods or updated a mod since the last time you ran ESLify Everything 1.9.0.
+8.  Is identical to step 6, but is for Mod Data Files ESLify.
+
+9.  Once you reach the Scripts Eslify, it will ask if you have installed any new mods or updated a mod since the last time you ran ESLify Everything 1.9.0.
     - Press N if you have not and it will skip decompiling scripts and go strait to Eslifing the scripts that it already knows.
     - If ESLify Everything does not detect any scripts inside of "ExtractedBSAModData\Source\Scripts" it will auto run the decompile process.
 
-9.  Wait until ESLify Everything ends. "Press Enter to exit..." this is what you should see at the end of the code. Please verify that you did not get any errors at the end of the console.
+10.  Wait until ESLify Everything ends. "Press Enter to exit..." this is what you should see at the end of the code. Please verify that you did not get any errors at the end of the console.
 
-10. Run xEdit once more and run the "_ESLifyEverythingFaceGenFix.pas" script, this fixes all the FaceMesh paths inside the mesh files that ESLify Everything just outputted.
+11. Run xEdit once more and run the "_ESLifyEverythingFaceGenFix.pas" script, this fixes all the FaceMesh paths inside the mesh files that ESLify Everything just outputted.
 
 ## Extra Directions
 Before each run of Eslify everything, you need to clear the outputted scripts. This needs to happen in order to protect data integrity. Script Eslify needs to decompile the BSA scripts and the Loose scripts in order to Eslify and decompile, because there is no way I could incorporate a optimized and scripted intellisense to find what scripts need to be decompiled and recompiled each run.
