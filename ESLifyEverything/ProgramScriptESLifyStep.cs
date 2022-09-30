@@ -145,7 +145,7 @@ namespace ESLifyEverything
             foreach (string script in scripts)
             {
                 bool changed = false;
-                string[] fileLines = FormInFileReader(File.ReadAllLines(script), out changed);
+                string[] fileLines = FormInFileLineReader(File.ReadAllLines(script), out changed);
                 if (changed)
                 {
                     GF.WriteLine(GF.stringLoggingData.ScriptSourceFileChanged + script, false, GF.Settings.VerboseFileLoging);
@@ -163,12 +163,12 @@ namespace ESLifyEverything
                 if (changedFiles.Any())
                 {
                     Console.WriteLine();
-                    Console.WriteLine(GF.stringLoggingData.ImportantBelow);
-                    Console.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
+                    GF.WriteLine(GF.stringLoggingData.ImportantBelow);
+                    GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
                     Console.WriteLine();
-                    Console.WriteLine(GF.stringLoggingData.ScriptESLifyINeedThisDataToBeReported);
+                    GF.WriteLine(GF.stringLoggingData.ScriptESLifyINeedThisDataToBeReported);
                     Console.WriteLine();
-                    Console.WriteLine(GF.stringLoggingData.ImportantBelow1);
+                    GF.WriteLine(GF.stringLoggingData.ImportantBelow1);
                     Console.WriteLine();
                     Process p = new Process();
                     p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
@@ -177,7 +177,7 @@ namespace ESLifyEverything
                     p.WaitForExit();
                     p.Dispose();
                     Console.WriteLine();
-                    Console.WriteLine(GF.stringLoggingData.ImportantAbove);
+                    GF.WriteLine(GF.stringLoggingData.ImportantAbove);
 
                     foreach (var changedFile in changedFiles)
                     {

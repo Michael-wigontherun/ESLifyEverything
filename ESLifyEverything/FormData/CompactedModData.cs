@@ -14,7 +14,7 @@ namespace ESLifyEverything.FormData
         [JsonInclude]
         public string ModName = "";
         [JsonInclude]
-        public List<FormHandler> CompactedModFormList = new List<FormHandler>();
+        public HashSet<FormHandler> CompactedModFormList = new HashSet<FormHandler>();
 
         public CompactedModData() { }
 
@@ -23,7 +23,7 @@ namespace ESLifyEverything.FormData
             ModName = modName;
         }
 
-        public CompactedModData(string modName, List<FormHandler> compactedModFormList)
+        public CompactedModData(string modName, HashSet<FormHandler> compactedModFormList)
         {
             ModName = modName;
             CompactedModFormList = compactedModFormList;

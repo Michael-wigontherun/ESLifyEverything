@@ -1,0 +1,72 @@
+[
+  {
+    "Enabled": true,
+    "Name": "SPID",
+    "StartFolder": "",
+    "FileNameFilter": "*_DISTR.ini",
+    "StartingLogLine": "Starting SPID Eslify",
+    "FileAtLogLine": "SPID file found at ",
+    "FileUnchangedLogLine": "SPID file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "BOS",
+    "StartFolder": "",
+    "FileNameFilter": "*_SWAP.ini",
+    "StartingLogLine": "Starting Base Object Swapper Eslify",
+    "FileAtLogLine": "BOSwap file found at ",
+    "FileUnchangedLogLine": "BOSwap file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "KID",
+    "StartFolder": "",
+    "FileNameFilter": "*_KID.ini",
+    "StartingLogLine": "Starting KID Eslify",
+    "FileAtLogLine": "KID file found at ",
+    "FileUnchangedLogLine": "KID file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "FLM",
+    "StartFolder": "",
+    "FileNameFilter": "*_FLM.ini",
+    "StartingLogLine": "Starting FLM Eslify",
+    "FileAtLogLine": "FLM file found at ",
+    "FileUnchangedLogLine": "FLM file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "AOS",
+    "StartFolder": "",
+    "FileNameFilter": "*_ANIO.ini",
+    "StartingLogLine": "Starting AnimObject Eslify",
+    "FileAtLogLine": "AnimObject file found at ",
+    "FileUnchangedLogLine": "AnimObject file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "ENBLight",
+    "StartFolder": "",
+    "FileNameFilter": "*_ENBL.ini",
+    "StartingLogLine": "Starting ENB Lights For Effect Shaders Eslify",
+    "FileAtLogLine": "ENBLightsForEffectShaders file found at ",
+    "FileUnchangedLogLine": "ENBLightsForEffectShaders file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "PayInt",
+    "StartFolder": "SKSE\\PayloadInterpreter\\Config",
+    "FileNameFilter": "*.ini",
+    "StartingLogLine": "Starting Payload Interpreter Eslify",
+    "FileAtLogLine": "PayloadInterpreter file found at ",
+    "FileUnchangedLogLine": "PayloadInterpreter file unchanged: ",
+    "SeachLevel": 0
+  }
+]

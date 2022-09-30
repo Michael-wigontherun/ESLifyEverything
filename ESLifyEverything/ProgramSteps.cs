@@ -1,12 +1,9 @@
 ﻿using ESLifyEverything.BSAHandlers;
 using ESLifyEverything.FormData;
+using ESLifyEverything.Properties.DataFileTypes;
 using ESLifyEverything.XEdit;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace ESLifyEverything
 {
@@ -330,7 +327,7 @@ namespace ESLifyEverything
 
                         if (connectedFaceGen.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
                         {
-                            GF.WriteLine($"{bsa.BSAName_NoExtention}.bsa is connected to {pluginName}");
+                            GF.WriteLine(String.Format(GF.stringLoggingData.BSAContainsData, bsa.BSAName_NoExtention, pluginName));
                             Process m = new Process();
                             m.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
                             m.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
@@ -388,92 +385,305 @@ namespace ESLifyEverything
         }
         #endregion FaceGen Eslify
 
-        public static async Task<int> InumDataSubfolder(string subfolderStart, string directoryFilter, string fileFilter, string fileAtLogLine, string fileUnchangedLogLine)
+        #region ESLify Data Files
+        public static void ESLifyDataFilesMainMenu()
         {
-            if (Directory.Exists(subfolderStart))
+            GetESLifyModConfigurationFiles();
+
+            Console.WriteLine(GF.stringLoggingData.InputDataFileExecutionPromt);
+            Console.WriteLine($"1. {GF.stringLoggingData.ESLEveryModConfig}", true, false);
+            Console.WriteLine($"2. {GF.stringLoggingData.SelectESLModConfig}", true, false);
+            GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
+            int selectedMenuItem;
+            while (GF.WhileMenuSelect(2, out selectedMenuItem, 1) == false) ;
+            switch (selectedMenuItem)
             {
-                IEnumerable<string> dataSubFolders = Directory.EnumerateDirectories(
-                    subfolderStart,
-                    directoryFilter,
-                    SearchOption.AllDirectories);
+                case -1:
+                    GF.WriteLine(GF.stringLoggingData.ExitCodeInputOutput);
+                    break;
+                case 1:
+                    ESLifyAllDataFiles();
+                    break;
+                case 2:
+                    ESLifySelectedDataFilesMenu();
+                    break;
+                default:
+                    break;
+            }
+        }
 
-                IEnumerable<string> files;
+        public static void ESLifyAllDataFiles()
+        {
+            GetESLifyModConfigurationFiles();
+            foreach (var modConfiguration in BasicSingleModConfigurations)
+            {
+                HandleConfigurationType(modConfiguration);
+            }
+            foreach (var modConfiguration in BasicDirectFolderModConfigurations)
+            {
+                HandleConfigurationType(modConfiguration);
+            }
+            foreach (var modConfiguration in BasicDataSubfolderModConfigurations)
+            {
+                HandleConfigurationType(modConfiguration);
+            }
+            foreach (var modConfiguration in ComplexTOMLModConfigurations)
+            {
+                HandleConfigurationType(modConfiguration);
+            }
+        }
 
-                foreach (string dataSubFolder in dataSubFolders)
+        public static void GetESLifyModConfigurationFiles()
+        {
+            //                 BasicSingleFile
+            IEnumerable<string> basicSingleFilesModConfigurations = Directory.EnumerateFiles(
+                    ".\\Properties\\DataFileTypes",
+                    "*_BasicSingleFile.json",
+                    SearchOption.TopDirectoryOnly);
+            foreach (string file in basicSingleFilesModConfigurations)
+            {
+                try
                 {
-                    files = Directory.EnumerateFiles(
-                        dataSubFolder,
-                        fileFilter,
-                        SearchOption.AllDirectories);
-                    foreach (string condition in files)
+                    HashSet<BasicSingleFile> basicSingleFile = JsonSerializer.Deserialize<HashSet<BasicSingleFile>>(File.ReadAllText(file))!;
+                    if (basicSingleFile != null)
                     {
-                        GF.WriteLine(fileAtLogLine + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                        bool changed = false;
-                        string[] fileLines = FormInFileReader(File.ReadAllLines(condition), out changed);
-                        GF.OuputDataFileToOutputFolder(changed, condition, fileLines, fileUnchangedLogLine);
-                        //if (changed == true)
-                        //{
-                        //    string newPath = GF.FixOuputPath(condition);
-                        //    Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-                        //    File.WriteAllLines(newPath, fileLines);
-                        //}
-                        //else
-                        //{
-                        //    GF.WriteLine(fileUnchangedLogLine + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                        //}
+                        foreach (BasicSingleFile modConfiguration in basicSingleFile)
+                        {
+                            if (modConfiguration.Enabled)
+                            {
+                                BasicSingleModConfigurations.Add(modConfiguration);
+                            }
+                        }
                     }
                 }
+                catch (Exception)
+                {
+                    GF.WriteLine(GF.stringLoggingData.ConfiguartionFileFailed + Path.GetFileName(file));
+                }
             }
-            else
-            {
-                GF.WriteLine(GF.stringLoggingData.FolderNotFoundError + subfolderStart);
-            }
+            //                 BasicDirectFolder
+            IEnumerable<string> basicDirectFolderModConfigurations = Directory.EnumerateFiles(
+                    ".\\Properties\\DataFileTypes",
+                    "*_BasicDirectFolder.json",
+                    SearchOption.TopDirectoryOnly);
 
-            return await Task.FromResult(0);
+            foreach (var file in basicDirectFolderModConfigurations)
+            {
+                try
+                {
+                    HashSet<BasicDirectFolder> basicDirectFolderFile = JsonSerializer.Deserialize<HashSet<BasicDirectFolder>>(File.ReadAllText(file))!;
+                    if (basicDirectFolderFile != null)
+                    {
+                        foreach (BasicDirectFolder modConfiguration in basicDirectFolderFile)
+                        {
+                            if (modConfiguration.Enabled)
+                            {
+                                BasicDirectFolderModConfigurations.Add(modConfiguration);
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    GF.WriteLine(GF.stringLoggingData.ConfiguartionFileFailed + Path.GetFileName(file));
+                }
+            }
+            //                 BasicDataSubfolder
+            IEnumerable<string> basicDataSubfolderModConfigurations = Directory.EnumerateFiles(
+                    ".\\Properties\\DataFileTypes",
+                    "*_BasicDataSubfolder.json",
+                    SearchOption.TopDirectoryOnly);
+
+            foreach (var file in basicDataSubfolderModConfigurations)
+            {
+                try
+                {
+                    HashSet<BasicDataSubfolder> basicDirectFolderFile = JsonSerializer.Deserialize<HashSet<BasicDataSubfolder>>(File.ReadAllText(file))!;
+                    if (basicDirectFolderFile != null)
+                    {
+                        foreach (BasicDataSubfolder modConfiguration in basicDirectFolderFile)
+                        {
+                            if (modConfiguration.Enabled)
+                            {
+                                BasicDataSubfolderModConfigurations.Add(modConfiguration);
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    GF.WriteLine(GF.stringLoggingData.ConfiguartionFileFailed + Path.GetFileName(file));
+                }
+            }
+            //                 ComplexTOML
+            IEnumerable<string> complexTOMLModConfigurations = Directory.EnumerateFiles(
+                    ".\\Properties\\DataFileTypes",
+                    "*_ComplexTOML.json",
+                    SearchOption.TopDirectoryOnly);
+            foreach (var file in complexTOMLModConfigurations)
+            {
+                try
+                {
+                    HashSet<ComplexTOML> basicDirectFolderFile = JsonSerializer.Deserialize<HashSet<ComplexTOML>>(File.ReadAllText(file))!;
+                    if (basicDirectFolderFile != null)
+                    {
+                        foreach (ComplexTOML modConfiguration in basicDirectFolderFile)
+                        {
+                            if (modConfiguration.Enabled)
+                            {
+                                ComplexTOMLModConfigurations.Add(modConfiguration);
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    GF.WriteLine(GF.stringLoggingData.ConfiguartionFileFailed + Path.GetFileName(file));
+                }
+            }
         }
 
-        public static void InumSwappers(string startFolder, string fileNameFilter, string fileAtLogLine, string fileUnchangedLogLine)
+        public static void HandleConfigurationType(BasicSingleFile ModConfiguration)
         {
-            if (!Directory.Exists(startFolder))
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(ModConfiguration.StartingLogLine);
+            SingleBasicFile(Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.DataPath), ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine);
+        }
+
+        public static void HandleConfigurationType(BasicDirectFolder ModConfiguration)
+        {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(ModConfiguration.StartingLogLine);
+            EnumDirectFolder(
+                Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.StartFolder), ModConfiguration.FileNameFilter,
+                ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine,
+                ModConfiguration.SeachLevel);
+        }
+
+        public static void HandleConfigurationType(BasicDataSubfolder ModConfiguration)
+        {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(ModConfiguration.StartingLogLine);
+            Task t = EnumDataSubfolder(
+                        Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.StartDataSubFolder), ModConfiguration.DirectoryFilter, ModConfiguration.FileFilter,
+                        ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine,
+                        ModConfiguration.StartSeachLevel, ModConfiguration.SubFolderSeachLevel);
+            t.Wait();
+            t.Dispose();
+        }
+
+        public static void HandleConfigurationType(ComplexTOML ModConfiguration)
+        {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(ModConfiguration.StartingLogLine);
+            Task t = EnumToml(
+                        Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.StartFolder), ModConfiguration.FileNameFilter, ModConfiguration.ArrayStartFilters,
+                        ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine,
+                        ModConfiguration.SeachLevel);
+            t.Wait();
+            t.Dispose();
+        }
+
+        public static void ESLifySelectedDataFilesMenu()
+        {
+            bool endMenu = false;
+            string[] modConMenuList = GetModConList();
+            string[] GetModConList()
             {
-                GF.WriteLine(GF.stringLoggingData.FolderNotFoundError + startFolder);
+                List<string> modConMenuList = new List<string>();
+                foreach (var modConfiguration in BasicSingleModConfigurations)
+                {
+                    Console.WriteLine(modConfiguration.Name);
+                    modConMenuList.Add(modConfiguration.Name);
+                }
+                foreach (var modConfiguration in BasicDirectFolderModConfigurations)
+                {
+                    modConMenuList.Add(modConfiguration.Name);
+                }
+                foreach (var modConfiguration in BasicDataSubfolderModConfigurations)
+                {
+                    modConMenuList.Add(modConfiguration.Name);
+                }
+                foreach (var modConfiguration in ComplexTOMLModConfigurations)
+                {
+                    modConMenuList.Add(modConfiguration.Name);
+                }
+                return modConMenuList.ToArray();
+            }
+            if (modConMenuList.Length <= 0)
+            {
+                GF.WriteLine(GF.stringLoggingData.NoModConfigurationFilesFound);
                 return;
             }
-            IEnumerable<string> files = Directory.EnumerateFiles(
-                    startFolder,
-                    fileNameFilter,
-                    SearchOption.TopDirectoryOnly);
-            foreach (string file in files)
+
+            do
             {
-                GF.WriteLine(fileAtLogLine + file, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                bool changed = false;
-                string[] fileLines = FormInFileReader(File.ReadAllLines(file), out changed);
-                GF.OuputDataFileToOutputFolder(changed, file, fileLines, fileUnchangedLogLine);
-            }
+                Console.WriteLine("\n\n");
+                Console.WriteLine(GF.stringLoggingData.ModConfigInputPrompt);
+                Console.WriteLine($"0. {GF.stringLoggingData.SwitchToEverythingMenuItem}");
+                for (int i = 0; i < modConMenuList.Length; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {modConMenuList[i]}");
+                }
+                GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
+                if (GF.WhileMenuSelect(modConMenuList.Length + 1, out int selectedMenuItem, 0))
+                {
+                    if (selectedMenuItem == 0)
+                    {
+                        ESLifyAllDataFiles();
+                        endMenu = true;
+                    }
+                    else if (selectedMenuItem == -1)
+                    {
+                        GF.WriteLine(GF.stringLoggingData.ExitCodeInputOutput);
+                        endMenu = true;
+                    }
+                    else
+                    {
+                        RunSelectedModConfig(modConMenuList, selectedMenuItem);
+                    }
+                }
+
+
+            } while (endMenu == false);
         }
 
-        public static void AutoBody()
+        public static void RunSelectedModConfig(string[] modConMenuList, int selectedMenuItem)
         {
-            string autoBodyMorphsPath = Path.Combine(GF.Settings.DataFolderPath, "autoBody\\Config\\morphs.ini");
-            if (File.Exists(autoBodyMorphsPath))
+
+            foreach (var modConfiguration in BasicSingleModConfigurations)
             {
-                GF.WriteLine(GF.stringLoggingData.AutoBodyFileAt + autoBodyMorphsPath);
-                bool changed = false;
-                string[] fileLines = FormInFileReader(File.ReadAllLines(autoBodyMorphsPath), out changed);
-                if (changed == true)
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem - 1]))
                 {
-                    string newPath = GF.FixOuputPath(autoBodyMorphsPath, GF.Settings.DataFolderPath, GF.Settings.OutputFolder);
-                    Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-                    File.WriteAllLines(newPath, fileLines);
-                }
-                else
-                {
-                    GF.WriteLine($"{GF.stringLoggingData.AutoBodyFileUnchanged}{autoBodyMorphsPath}");
+                    HandleConfigurationType(modConfiguration);
                 }
             }
-        }
+            foreach (var modConfiguration in BasicDirectFolderModConfigurations)
+            {
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem - 1]))
+                {
+                    HandleConfigurationType(modConfiguration);
+                }
+            }
+            foreach (var modConfiguration in BasicDataSubfolderModConfigurations)
+            {
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem - 1]))
+                {
+                    HandleConfigurationType(modConfiguration);
+                }
+            }
+            foreach (var modConfiguration in ComplexTOMLModConfigurations)
+            {
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem - 1]))
+                {
+                    HandleConfigurationType(modConfiguration);
+                }
+            }
 
-        public static Task<int> CustomSkillsFramework()
+        }
+        #endregion ESLify Data Files
+
+        public static async Task<int> CustomSkillsFramework()
         {
             string startSearchPath = Path.Combine(GF.Settings.DataFolderPath, "NetScriptFramework\\Plugins");
             if (Directory.Exists(startSearchPath))
@@ -499,6 +709,7 @@ namespace ESLifyEverything
                             {
                                 currentModName = modName;
                                 CompactedModDataD.TryGetValue(modName, out currentMod!);
+                                GF.WriteLine("", GF.Settings.VerboseConsoleLoging, false);
                                 GF.WriteLine(GF.stringLoggingData.ModLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                             }
                         }
@@ -518,103 +729,15 @@ namespace ESLifyEverything
                         }
                         newCustomSkillConfigFile[i] = line;
                     }
-                    GF.OuputDataFileToOutputFolder(changed, customSkillConfig, newCustomSkillConfigFile, GF.stringLoggingData.CustomSkillsFileUnchanged);
+                    OuputDataFileToOutputFolder(changed, customSkillConfig, newCustomSkillConfigFile, GF.stringLoggingData.CustomSkillsFileUnchanged);
                 }
 
-
             }
-            return Task.FromResult(0);
+            else
+            {
+                GF.WriteLine(GF.stringLoggingData.FolderNotFoundError + startSearchPath);
+            }
+            return await Task.FromResult(0);
         }
-
-
-
     }
 }
-
-//public static async Task<int> InumDAR()
-//{
-//    IEnumerable<string> _CustomConditions = Directory.EnumerateDirectories(
-//        Path.Combine(GF.Settings.SkyrimDataFolderPath, "meshes"),
-//        "_CustomConditions",
-//        SearchOption.AllDirectories);
-
-//    IEnumerable<string> _Conditions;
-
-//    foreach (string _CustomConditionsFolder in _CustomConditions)
-//    {
-//        _Conditions = Directory.EnumerateFiles(
-//            _CustomConditionsFolder,
-//            "_conditions.txt",
-//            SearchOption.AllDirectories);
-//        foreach (string condition in _Conditions)
-//        {
-//            GF.WriteLine(GF.stringLoggingData.DARFileAt + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-//            bool changed = false;
-//            string[] fileLines = FormInFileReader(File.ReadAllLines(condition), out changed);
-//            if (changed == true)
-//            {
-//                string newPath = GF.FixOuputPath(condition);
-//                Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-//                File.WriteAllLines(newPath, fileLines);
-//            }
-//            else
-//            {
-//                GF.WriteLine(GF.stringLoggingData.ConditionsUnchanged + condition, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-//            }
-//        }
-//    }
-
-//    return await Task.FromResult(1);
-//}
-
-//public static void InumSPID()
-//{
-
-//    IEnumerable<string> _Conditions = Directory.EnumerateFiles(
-//            GF.Settings.SkyrimDataFolderPath,
-//            "*_DISTR.ini",
-//            SearchOption.TopDirectoryOnly);
-//    foreach (string condition in _Conditions)
-//    {
-//        GF.WriteLine(GF.stringLoggingData.SPIDFileAt + condition);
-//        bool changed = false;
-//        string[] fileLines = FormInFileReader(File.ReadAllLines(condition), out changed);
-//        if (changed == true)
-//        {
-//            string newPath = GF.FixOuputPath(condition);
-//            Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-//            File.WriteAllLines(newPath, fileLines);
-//        }
-//        else
-//        {
-//            GF.WriteLine($"{GF.stringLoggingData.SPIDFileUnchanged}{condition}");
-//        }
-//    }
-
-//}
-
-//public static void InumBaseObject()
-//{
-
-//    IEnumerable<string> _Conditions = Directory.EnumerateFiles(
-//            GF.Settings.SkyrimDataFolderPath,
-//            "*_SWAP.ini",
-//            SearchOption.TopDirectoryOnly);
-//    foreach (string condition in _Conditions)
-//    {
-//        GF.WriteLine(GF.stringLoggingData.BaseObjectFileAt + condition);
-//        bool changed = false;
-//        string[] fileLines = FormInFileReader(File.ReadAllLines(condition), out changed);
-//        if (changed == true)
-//        {
-//            string newPath = GF.FixOuputPath(condition);
-//            Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-//            File.WriteAllLines(newPath, fileLines);
-//        }
-//        else
-//        {
-//            GF.WriteLine($"{GF.stringLoggingData.BaseObjectFileUnchanged}{condition}");
-//        }
-//    }
-
-//}

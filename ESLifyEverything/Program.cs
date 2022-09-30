@@ -1,11 +1,5 @@
-﻿using ESLifyEverything.BSAHandlers;
-using ESLifyEverything.FormData;
-using ESLifyEverything.XEdit;
-using System;
-using System.Diagnostics;
-using System.Resources;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using ESLifyEverything.FormData;
+using ESLifyEverything.Properties.DataFileTypes;
 
 namespace ESLifyEverything
 {
@@ -14,6 +8,10 @@ namespace ESLifyEverything
         public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
 
         public static List<string> LoadOrderNoExtensions = new List<string>();
+        public static HashSet<BasicSingleFile> BasicSingleModConfigurations = new HashSet<BasicSingleFile>();
+        public static HashSet<BasicDirectFolder> BasicDirectFolderModConfigurations = new HashSet<BasicDirectFolder>();
+        public static HashSet<BasicDataSubfolder> BasicDataSubfolderModConfigurations = new HashSet<BasicDataSubfolder>();
+        public static HashSet<ComplexTOML> ComplexTOMLModConfigurations = new HashSet<ComplexTOML>();
         public static HashSet<string> FailedToCompile = new HashSet<string>();
 
         public static bool EditedFaceGen = false;
@@ -55,6 +53,10 @@ namespace ESLifyEverything
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingFaceGenESLify);
                         FaceGenESlIfyMenu();
+
+                        Console.WriteLine("\n\n\n\n");
+                        GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
+                        ESLifyDataFilesMainMenu();
                     }
                     //Auto Run
                     else
@@ -66,53 +68,11 @@ namespace ESLifyEverything
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingFaceGenESLify);
                         FaceGenESLifyEverything();
+
+                        Console.WriteLine("\n\n\n\n");
+                        GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
+                        ESLifyAllDataFiles();
                     }
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingDARESLify);
-                    //Task DAR = InumDAR();
-                    Task DAR = InumDataSubfolder(Path.Combine(GF.Settings.DataFolderPath, "meshes"), "_CustomConditions", "_conditions.txt", GF.stringLoggingData.DARFileAt, GF.stringLoggingData.ConditionsUnchanged);
-                    DAR.Wait();
-                    DAR.Dispose();
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingSPIDESLify);
-                    InumSwappers(GF.Settings.DataFolderPath, "*_DISTR.ini", GF.stringLoggingData.SPIDFileAt, GF.stringLoggingData.SPIDFileUnchanged);
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingBaseObjectESLify);
-                    InumSwappers(GF.Settings.DataFolderPath, "*_SWAP.ini", GF.stringLoggingData.BaseObjectFileAt, GF.stringLoggingData.BaseObjectFileUnchanged);
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingKIDESLify);
-                    InumSwappers(GF.Settings.DataFolderPath, "*_KID.ini", GF.stringLoggingData.KIDFileAt, GF.stringLoggingData.KIDFileUnchanged);
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingFLMESLify);
-                    InumSwappers(GF.Settings.DataFolderPath, "*_FLM.ini", GF.stringLoggingData.FLMFileAt, GF.stringLoggingData.FLMFileUnchanged);
-                    
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingAnimObjectESLify);
-                    InumSwappers(GF.Settings.DataFolderPath, "*_ANIO.ini", GF.stringLoggingData.AnimObjectFileAt, GF.stringLoggingData.AnimObjectFileUnchanged);
-                    
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingENBLightsForEffectShadersESLify);
-                    InumSwappers(GF.Settings.DataFolderPath, "*_ENBL.ini", GF.stringLoggingData.ENBLightsForEffectShadersFileAt, GF.stringLoggingData.ENBLightsForEffectShadersFileUnchanged);
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingAutoBodyESLify);
-                    AutoBody();
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingPayloadInterpreterESLify);
-                    InumSwappers(Path.Combine(GF.Settings.DataFolderPath, "SKSE\\PayloadInterpreter\\Config"), "*.ini", GF.stringLoggingData.PayloadInterpreterFileAt, GF.stringLoggingData.PayloadInterpreterFileUnchanged);
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingSKSEINIESLify);
-                    //Task DAR = InumDAR();
-                    Task SKSE = InumDataSubfolder(Path.Combine(GF.Settings.DataFolderPath, "skse"), "plugins", "*.ini", GF.stringLoggingData.SKSEINIFileAt, GF.stringLoggingData.SKSEINIFileUnchanged);
-                    SKSE.Wait();
-                    SKSE.Dispose();
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
@@ -126,10 +86,7 @@ namespace ESLifyEverything
                     Scripts.Wait();
                     Scripts.Dispose();
 
-                    Console.WriteLine("\n\n\n\n");
                 }
-                
-                
                 switch (StartupError)
                 {
                     case 1:
@@ -145,27 +102,30 @@ namespace ESLifyEverything
             }
             catch(AggregateException e)
             {
+                Console.WriteLine("\n\n\n\n");
                 GF.WriteLine("AggregateException. Please report to GitHub with log file.");
                 GF.WriteLine(e.ToString());
                 GF.WriteLine(e.Message);
             }
             catch (ObjectDisposedException e)
             {
+                Console.WriteLine("\n\n\n\n");
                 GF.WriteLine("ObjectDisposedException. Please report to GitHub with log file.");
                 GF.WriteLine(e.ToString());
                 GF.WriteLine(e.Message);
             }
             catch (Exception e)
             {
+                Console.WriteLine("\n\n\n\n");
                 GF.WriteLine(e.ToString());
                 GF.WriteLine(e.Message);
-                
             }
 
             if (EditedFaceGen)
             {
                 Console.WriteLine();
                 GF.WriteLine(GF.stringLoggingData.EditedFaceGen);
+                GF.RunFaceGenFix();
             }
 
             if (!BSAExtracted)
@@ -203,8 +163,7 @@ namespace ESLifyEverything
             Console.ReadLine();
         }
 
-
-
         
+
     }
 }

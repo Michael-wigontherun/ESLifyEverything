@@ -2,12 +2,8 @@
 using ESLifyEverything.FormData;
 using ESLifyEverything.Properties;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace ESLifyEverything
 {
@@ -24,13 +20,15 @@ namespace ESLifyEverything
         public static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
         public static string[] DefaultScriptBSAs = new string[0];
 
+        public static string logName = "log.txt";
         public static string FaceGenFileFixPath = "";
 
         public static List<string> BSALoadOrder = new List<string>();
 
         public static bool Startup(out int startupError, string ProgramLogName)
         {
-            File.Create(ProgramLogName).Close();
+            logName = ProgramLogName;
+            File.Create(logName).Close();
             startupError = 0;
 
             if (!File.Exists("AppSettings.json"))
@@ -216,7 +214,7 @@ namespace ESLifyEverything
             }
             if (fileLogging)
             {
-                using (StreamWriter stream = File.AppendText("ESLifyEverything_Log.txt"))
+                using (StreamWriter stream = File.AppendText(logName))
                 {
                     stream.WriteLine(logLine);
                 }
@@ -224,6 +222,27 @@ namespace ESLifyEverything
         }
 
         public static void WriteLine(List<FormHandler> logData, bool consoleLog = true, bool fileLogging = true)
+        {
+            if (consoleLog)
+            {
+                foreach (FormHandler item in logData)
+                {
+                    Console.WriteLine(item!.ToString());
+                }
+            }
+            if (fileLogging)
+            {
+                using (StreamWriter stream = File.AppendText(logName))
+                {
+                    foreach (FormHandler item in logData)
+                    {
+                        stream.WriteLine(item!.ToString());
+                    }
+                }
+            }
+        }
+
+        public static void WriteLine(HashSet<FormHandler> logData, bool consoleLog = true, bool fileLogging = true)
         {
             if (consoleLog)
             {
@@ -295,23 +314,54 @@ namespace ESLifyEverything
             return Path.Combine(newStartPath, newPath);
         }
 
-        public static void OuputDataFileToOutputFolder(bool changed, string origonalFilePath, string[] newFileLinesArr, string unchangedLogLine)
-        {
-            if (changed == true)
-            {
-                string newPath = GF.FixOuputPath(origonalFilePath);
-                Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-                File.WriteAllLines(newPath, newFileLinesArr);
-            }
-            else
-            {
-                GF.WriteLine(unchangedLogLine + origonalFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-            }
-        }
-
         public static string GetSkyrimRootFolder()
         {
             return Path.GetFullPath(GF.Settings.DataFolderPath).Replace("\\Data", "");
+        }
+
+        public static void RunFaceGenFix()
+        {
+            if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "Edit Scripts\\_ESLifyEverythingFaceGenFix.pas")))
+            {
+                bool run = true;
+                Process RunXEditFaceGenFix = new Process();
+                if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit64.exe")))
+                {
+                    RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit64.exe");
+                }
+                else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit.exe")))
+                {
+                    RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit.exe");
+                }
+                else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit64.exe")))
+                {
+                    RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit64.exe");
+                }
+                else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit.exe")))
+                {
+                    RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit.exe");
+                }
+                else
+                {
+                    GF.WriteLine(GF.stringLoggingData.NoxEditEXE);
+                    run = false;
+                }
+
+                if (run)
+                {
+                    RunXEditFaceGenFix.StartInfo.Arguments = "-TES5 -script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
+                    GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
+                    RunXEditFaceGenFix.Start();
+                    RunXEditFaceGenFix.WaitForExit();
+                }
+                RunXEditFaceGenFix.Dispose();
+
+            }
+            else
+            {
+                GF.WriteLine(GF.stringLoggingData.FixFaceGenScriptNotFound);
+            }
+
         }
     }
 }

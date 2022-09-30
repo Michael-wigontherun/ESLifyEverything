@@ -1,0 +1,10 @@
+[
+  {
+    "Enabled": true,
+    "Name": "AutoBody",
+    "DataPath": "autoBody\\Config\\morphs.ini",
+    "StartingLogLine": "Starting AutoBody Eslify",
+    "FileAtLogLine": "AutoBody file found at ",
+    "FileUnchangedLogLine": "AutoBody file unchanged: "
+  }
+]

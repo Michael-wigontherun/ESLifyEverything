@@ -1,0 +1,41 @@
+[
+  {
+    "Enabled": true,
+    "Name": "LokiPOISE",
+    "StartFolder": "SKSE\\Plugins\\loki_POISE",
+    "FileNameFilter": "loki_POISE*.toml",
+    "ArrayStartFilters": [
+      "[[race]]"
+    ],
+    "StartingLogLine": "Starting POISE - Stagger Overhaul Eslify",
+    "FileAtLogLine": "Loki Poise file found at ",
+    "FileUnchangedLogLine": "Loki Poise file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "TDM",
+    "StartFolder": "SKSE\\Plugins\\TrueDirectionalMovement",
+    "FileNameFilter": "TrueDirectionalMovement*.toml",
+    "ArrayStartFilters": [
+      "[[TargetPoints]]"
+    ],
+    "StartingLogLine": "Starting TDM Eslify",
+    "FileAtLogLine": "TDM file found at ",
+    "FileUnchangedLogLine": "TDM file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "Precision",
+    "StartFolder": "SKSE\\Plugins\\Precision",
+    "FileNameFilter": "Precision*.toml",
+    "ArrayStartFilters": [
+      "[[AttackDefinitions]]"
+    ],
+    "StartingLogLine": "Starting Precision Eslify",
+    "FileAtLogLine": "Precision file found at ",
+    "FileUnchangedLogLine": "Precision file unchanged: ",
+    "SeachLevel": 0
+  }
+]
