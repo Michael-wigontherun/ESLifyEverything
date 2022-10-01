@@ -12,19 +12,21 @@ ESLify Everything is a .Net 6 program that reads the data outputted by xEdit whe
 
 Currently Eslifies
 
-- Voice Files
-- FaceGen data
+- Voice Files, Internally coded
+- FaceGen data, Internally coded
 - SPID, Base Object Swapper, KID, FLM, Animated Object Swapper
 - Dynamic Animation Conditions
 - ENB Lights For Effect Shaders
 - AutoBody
 - Payload Interpreter
 - SKSE INI files
-- Custom Skills Framework \ Extended Framework
-- Papyrus Scripts
+- Custom Skills Framework \ Extended Framework, Internally coded
+- Papyrus Scripts, Internally coded
 - Precision
 - True Directional Movement
 - POISE - Stagger Overhaul
+- Racemenu Presets, Internally coded
+- CoMap MapMarker json files
 
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github, for any other file mod data that needs to be eslified.
 
