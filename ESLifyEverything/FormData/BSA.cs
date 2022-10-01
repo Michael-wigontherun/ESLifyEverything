@@ -6,8 +6,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-// this is just an idea its not implemented or fully worked
-namespace ESLifyEverything.BSAHandlers
+
+namespace ESLifyEverything.FormData
 {
     public static class BSAData
     {
@@ -37,7 +37,7 @@ namespace ESLifyEverything.BSAHandlers
             if (BSAs.TryGetValue(BSAName_NoExtention, out bsa))
             {
                 GF.WriteLine(BSAName_NoExtention + GF.stringLoggingData.BSACheckPrev);
-                if(!bsa.BSALastModified.Equals(File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"))))
+                if (!bsa.BSALastModified.Equals(File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"))))
                 {
                     GF.WriteLine(BSAName_NoExtention + GF.stringLoggingData.BSACheckUpdated);
                     BSAs.Remove(BSAName_NoExtention);
@@ -76,7 +76,7 @@ namespace ESLifyEverything.BSAHandlers
         [JsonInclude]
         public HashSet<string> VoiceModConnections = new HashSet<string>();
 
-        public BSA(){}
+        public BSA() { }
 
         public BSA(string bSAName_NoExtention)
         {
@@ -89,7 +89,7 @@ namespace ESLifyEverything.BSAHandlers
 
         public void GetTempFullPath()
         {
-            tempFullPath =  Path.GetFullPath($".\\TempData\\{BSAName_NoExtention}");
+            tempFullPath = Path.GetFullPath($".\\TempData\\{BSAName_NoExtention}");
             Directory.CreateDirectory(tempFullPath);
         }
 
@@ -97,7 +97,7 @@ namespace ESLifyEverything.BSAHandlers
         {
             GetTempFullPath();
             BSALastModified = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"));
-            if(File.Exists(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + " - Textures.bsa")))
+            if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + " - Textures.bsa")))
             {
                 HasTextureBSA = true;
             }
@@ -109,7 +109,7 @@ namespace ESLifyEverything.BSAHandlers
                         Path.Combine(tempFullPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom"),
                         "*",
                         SearchOption.TopDirectoryOnly);
-                foreach(string FaceGenFilePath in FaceGenFilePaths)
+                foreach (string FaceGenFilePath in FaceGenFilePaths)
                 {
                     FaceGenModConnections.Add(Path.GetFileName(FaceGenFilePath));
                 }

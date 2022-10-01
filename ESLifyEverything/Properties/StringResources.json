@@ -113,6 +113,9 @@
     "NoxEditEXE": "No xEdit executable found, Please run \"_ESLifyEverythingFaceGenFix.pas\" in xEdit.",
     "RunningxEditEXE": "Running xEdit with \"_ESLifyEverythingFaceGenFix.pas\". Please wait untill xEdit is finished",
     "FixFaceGenScriptNotFound": "\"_ESLifyEverythingFaceGenFix.pas\" not found inside of Edit Scripts folder of xEdit. Please install the script and run it in xEdit.",
-    "FileChanged": "File changed and output: "
+    "FileChanged": "File changed and output: ",
+    "StartingRaceMenuESLify": "Starting RaceMenu Eslify",
+    "RaceMenuFileAt": "RaceMenu file found at ",
+    "RaceMenuFileUnchanged": "RaceMenu file unchanged: "
   }
 }

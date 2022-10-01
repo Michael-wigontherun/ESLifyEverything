@@ -1,5 +1,4 @@
-﻿using ESLifyEverything.BSAHandlers;
-using ESLifyEverything.FormData;
+﻿using ESLifyEverything.FormData;
 using ESLifyEverything.Properties.DataFileTypes;
 using ESLifyEverything.XEdit;
 using System.Diagnostics;
@@ -682,6 +681,68 @@ namespace ESLifyEverything
 
         }
         #endregion ESLify Data Files
+
+        public static void RaceMenuESLify()
+        {
+            if (Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, "SKSE\\Plugins\\CharGen\\Presets")))
+            {
+                string FixDecimalValue(string line, string CompactedFormID)
+                {
+                    string[] arr = line.Split(':');
+                    string decStr = arr[1].Replace(",", "").Trim();
+                    string inGameFormID = string.Format("{0:x}", long.Parse(decStr)).Substring(0, 2) + CompactedFormID;
+                    string compDec = Convert.ToInt64(inGameFormID, 16).ToString();
+                    return line.Replace(decStr, compDec);
+                }
+
+                IEnumerable<string> jslotFiles = Directory.EnumerateFiles(
+                    Path.Combine(GF.Settings.DataFolderPath, "SKSE\\plugins\\CharGen\\Presets"),
+                    "*.jslot",
+                    SearchOption.AllDirectories);
+                bool changed = false;
+                foreach (string jslotFile in jslotFiles)
+                {
+                    GF.WriteLine(GF.stringLoggingData.CustomSkillsFileAt + jslotFile, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    string[] jslotFileLines = File.ReadAllLines(jslotFile);
+                    for (int i = 0; i < jslotFileLines.Length; i++)
+                    {
+                        if (jslotFileLines[i].Contains("\"formIdentifier\"", StringComparison.OrdinalIgnoreCase))
+                        {
+                            foreach (string modName in CompactedModDataD.Keys)
+                            {
+                                if (jslotFileLines[i].Contains(modName, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    CompactedModData? mod;
+                                    if (CompactedModDataD.TryGetValue(modName, out mod))
+                                    {
+                                        foreach (FormHandler form in mod.CompactedModFormList)
+                                        {
+                                            if (jslotFileLines[i].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                GF.WriteLine(GF.stringLoggingData.OldLine + jslotFileLines[i], true, GF.Settings.VerboseFileLoging);
+                                                jslotFileLines[i] = jslotFileLines[i].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                                GF.WriteLine(GF.stringLoggingData.NewLine + jslotFileLines[i], true, GF.Settings.VerboseFileLoging);
+
+                                                GF.WriteLine(GF.stringLoggingData.OldLine + jslotFileLines[i - 1], true, GF.Settings.VerboseFileLoging);
+                                                jslotFileLines[i - 1] = FixDecimalValue(jslotFileLines[i - 1], form.CompactedFormID);
+                                                GF.WriteLine(GF.stringLoggingData.NewLine + jslotFileLines[i - 1], true, GF.Settings.VerboseFileLoging);
+                                                changed = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    OuputDataFileToOutputFolder(changed, jslotFile, jslotFileLines, GF.stringLoggingData.CustomSkillsFileUnchanged);
+
+                }
+            }
+            else
+            {
+                GF.WriteLine(GF.stringLoggingData.FolderNotFoundError + Path.Combine(GF.Settings.DataFolderPath, "SKSE\\plugins\\CharGen\\Presets"));
+            }
+        }
 
         public static async Task<int> CustomSkillsFramework()
         {

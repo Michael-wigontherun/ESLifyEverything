@@ -68,5 +68,15 @@
     "FileAtLogLine": "PayloadInterpreter file found at ",
     "FileUnchangedLogLine": "PayloadInterpreter file unchanged: ",
     "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "CoMap",
+    "StartFolder": "MapMarkers",
+    "FileNameFilter": "*.json",
+    "StartingLogLine": "Starting CoMap Eslify",
+    "FileAtLogLine": "CoMap file found at ",
+    "FileUnchangedLogLine": "CoMap file unchanged: ",
+    "SeachLevel": 0
   }
 ]

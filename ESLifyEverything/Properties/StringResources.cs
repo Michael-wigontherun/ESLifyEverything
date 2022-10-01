@@ -114,6 +114,11 @@ namespace ESLifyEverything.Properties
         public string ModConfigInputPrompt { get; set; } = "";
         public string SwitchToEverythingMenuItem { get; set; } = "";
 
+        //Race Menu ESLify
+        public string StartingRaceMenuESLify { get; set; } = "";
+        public string RaceMenuFileAt { get; set; } = "";
+        public string RaceMenuFileUnchanged { get; set; } = "";
+
         //Custom Skills ESLify
         public string StartingCustomSkillsESLify { get; set; } = "";
         public string CustomSkillsFileAt { get; set; } = "";

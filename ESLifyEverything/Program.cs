@@ -74,6 +74,12 @@ namespace ESLifyEverything
                         ESLifyAllDataFiles();
                     }
 
+                    //Console.ReadLine();
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
+                    RaceMenuESLify();
+
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
                     Task CustomSkills = CustomSkillsFramework();
@@ -164,6 +170,7 @@ namespace ESLifyEverything
         }
 
         
+
 
     }
 }
