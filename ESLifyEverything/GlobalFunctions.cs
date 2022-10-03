@@ -320,6 +320,8 @@ namespace ESLifyEverything
 
         public static void RunFaceGenFix()
         {
+            string loadorder = Path.GetFullPath(".\\Properties\\JustSkyrimLO.txt");
+            string gameType = "-TES5";
             if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "Edit Scripts\\_ESLifyEverythingFaceGenFix.pas")))
             {
                 bool run = true;
@@ -334,10 +336,14 @@ namespace ESLifyEverything
                 }
                 else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit64.exe")))
                 {
+                    loadorder = Path.GetFullPath(".\\Properties\\JustFalloutLO.txt");
+                    gameType = "-fo4";
                     RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit64.exe");
                 }
                 else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit.exe")))
                 {
+                    loadorder = Path.GetFullPath(".\\Properties\\JustFalloutLO.txt");
+                    gameType = "-fo4";
                     RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit.exe");
                 }
                 else
@@ -348,10 +354,24 @@ namespace ESLifyEverything
 
                 if (run)
                 {
-                    RunXEditFaceGenFix.StartInfo.Arguments = "-TES5 -script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
-                    GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
-                    RunXEditFaceGenFix.Start();
-                    RunXEditFaceGenFix.WaitForExit();
+                    if (File.Exists(Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "Skyrim.ini")))
+                    {
+                        RunXEditFaceGenFix.StartInfo.Arguments = $"{gameType} " +
+                        $"-D:\"{GF.Settings.DataFolderPath}\" " +
+                        $"-I:\"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "Skyrim.ini")}\" " +
+                        $" {loadorder}" +
+                        "-script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
+                        GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
+                        RunXEditFaceGenFix.Start();
+                        RunXEditFaceGenFix.WaitForExit();
+                    }
+                    else 
+                    {
+                        RunXEditFaceGenFix.StartInfo.Arguments = "-TES5 -script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
+                        GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
+                        RunXEditFaceGenFix.Start();
+                        RunXEditFaceGenFix.WaitForExit();
+                    }
                 }
                 RunXEditFaceGenFix.Dispose();
 
