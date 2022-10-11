@@ -127,6 +127,24 @@ namespace ESLifyEverything
                 GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData4, modData.ModName));
                 modData.Enabled = false;
 
+                GF.WriteLine("Would you like ESLify Everything to handle recompacting the known forms?");
+                GF.WriteLine("Enter Y to procced. Any other input will skip this and ESLify Everything will not use the Compacted Mod Data. Until it detects rereads it from xEdit");
+
+                string input = Console.ReadLine()!;
+                if(input != null)
+                {
+                    if (input.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                    {
+                        RunRecompact(modData.ModName);
+                        if (modData.IsCompacted())
+                        {
+                            modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
+                            modData.Enabled = true;
+                            modData.Rechack = true;
+                        }
+                    }
+                }
+
                 GF.WriteLine(GF.stringLoggingData.EnterToContinue);
                 Console.ReadLine();
                 GF.WriteLine("", false, true);
@@ -135,6 +153,25 @@ namespace ESLifyEverything
                 modData.OutputModData(false, false);
             }
             return modData;
+        }
+
+        public static void RunRecompact(string pluginName)
+        {
+            Task<int> handlePluginTask = HandleMod.HandleSkyrimMod(pluginName);
+            handlePluginTask.Wait();
+            switch (handlePluginTask.Result)
+            {
+                case 0:
+                    Console.WriteLine(pluginName + GF.stringLoggingData.PluginNotFound);
+                    break;
+                case 2:
+                    Console.WriteLine(pluginName + GF.stringLoggingData.PluginNotChanged);
+                    break;
+                default:
+                    Console.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
+                    break;
+            }
+            handlePluginTask.Dispose();
         }
         #endregion Import Mod Data
 
@@ -972,6 +1009,8 @@ namespace ESLifyEverything
                 }
                 handlePluginTask.Dispose();
             }
+
+            PluginData.Output();
         }
 
         public static HashSet<string> SelectCompactedModsMenu()

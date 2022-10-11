@@ -56,9 +56,12 @@ namespace ESLifyEverything.FormData
 
                         foreach (IMajorRecordGetter? form in mod.EnumerateMajorRecords())
                         {
-                            if (form.FormKey.ID < validMin && form.FormKey.ID > validMax)
+                            if (form.FormKey.ModKey.ToString().Equals(this.ModName))
                             {
-                                return false;
+                                if (form.FormKey.ID < validMin && form.FormKey.ID > validMax)
+                                {
+                                    return false;
+                                }
                             }
                         }
                     }
@@ -117,14 +120,6 @@ namespace ESLifyEverything.FormData
                 }
             }
             return false;
-        }
-
-        public CompactedModData GetModData(string filePath) 
-        {
-            GF.WriteLine(GF.stringLoggingData.GetCompDataLog + filePath);
-            Import(JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(filePath))!);
-
-            return this;
         }
 
         public Dictionary<FormKey, FormKey> ToDictionary()
