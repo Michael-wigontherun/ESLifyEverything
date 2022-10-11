@@ -1,4 +1,5 @@
 ﻿using ESLifyEverything.FormData;
+using ESLifyEverything.PluginHandles;
 using ESLifyEverything.Properties.DataFileTypes;
 using ESLifyEverything.XEdit;
 using System.Diagnostics;
@@ -8,7 +9,6 @@ namespace ESLifyEverything
 {
     public static partial class Program
     {
-
         #region xEdit Log
         public static void XEditSession()
         {
@@ -54,7 +54,7 @@ namespace ESLifyEverything
             GF.WriteLine(GF.stringLoggingData.InputSessionPromt, true, false);
             GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
             int selectedMenuItem;
-            while (GF.WhileMenuSelect(xEditSessionsCount - 1, out selectedMenuItem) == false) ;
+            while (GF.WhileMenuSelect(xEditSessionsCount - 1, out selectedMenuItem) == false);
             if (selectedMenuItem != -1) XEditLogReader.xEditLog.xEditSessions![selectedMenuItem].GenerateCompactedModDatas();
         }
 
@@ -65,9 +65,9 @@ namespace ESLifyEverything
                 session.GenerateCompactedModDatas();
             }
         }
-
         #endregion xEdit Log
 
+        #region Import Mod Data
         public static void ImportModData(string compactedFormsLocation)
         {
             IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(
@@ -76,13 +76,67 @@ namespace ESLifyEverything
                 SearchOption.AllDirectories);
             foreach (string compactedFormsModFile in compactedFormsModFiles)
             {
-                CompactedModData mod = new CompactedModData();
-                //mod.GetModData(Path.GetFileName(compactedFormsModFile).Replace("_ESlEverything.json", "").Replace("_ESlEverything", ""));
-                mod.GetModData(compactedFormsModFile);
-                mod.Write();
-                CompactedModDataD.TryAdd(mod.ModName, mod);
+                GF.WriteLine(GF.stringLoggingData.GetCompDataLog + compactedFormsModFile);
+                CompactedModData modData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(compactedFormsModFile))!;
+                modData.Write();
+
+                if (modData.Rechack == true)
+                {
+                    if (modData.PluginLastModifiedValidation is null)
+                    {
+                        modData = ValidateCompactedModDataJson(modData);
+                    }
+                    else
+                    {
+                        if (!modData.PluginLastModifiedValidation!.Value.Equals(File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName))))
+                        {
+                            modData = ValidateCompactedModDataJson(modData);
+                        }
+                    }
+                }
+
+                if (modData.Enabled == true)
+                {
+                    if (modData.PluginLastModifiedValidation is not null)
+                    {
+                        CompactedModDataD.TryAdd(modData.ModName, modData);
+                    }
+                }
+                
             }
         }
+        
+        public static CompactedModData ValidateCompactedModDataJson(CompactedModData modData)
+        {
+            if (modData.IsCompacted())
+            {
+                modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
+                modData.Enabled = true;
+                modData.Rechack = true;
+                modData.OutputModData(false, false);
+            }
+            else
+            {
+                modData.PluginLastModifiedValidation = null;
+                GF.WriteLine("");
+                GF.WriteLine("", false, true);
+                GF.WriteLine("", false, true);
+                GF.WriteLine(modData.ModName + "_ESlEverything.json" + GF.stringLoggingData.OutOfDateCMData1);
+                GF.WriteLine(GF.stringLoggingData.OutOfDateCMData2);
+                GF.WriteLine(GF.stringLoggingData.OutOfDateCMData3);
+                GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData4, modData.ModName));
+                modData.Enabled = false;
+
+                GF.WriteLine(GF.stringLoggingData.EnterToContinue);
+                Console.ReadLine();
+                GF.WriteLine("", false, true);
+                GF.WriteLine("", false, true);
+                GF.WriteLine("");
+                modData.OutputModData(false, false);
+            }
+            return modData;
+        }
+        #endregion Import Mod Data
 
         public static async Task<int> LoadOrderBSAData()
         {
@@ -94,9 +148,9 @@ namespace ESLifyEverything
 
             if (File.Exists(loadorderFilePath))
             {
-                string[] loadorder = File.ReadAllLines(loadorderFilePath);
+                LoadOrder = File.ReadAllLines(loadorderFilePath);
 
-                foreach (string plugin in loadorder)
+                foreach (string plugin in LoadOrder)
                 {
                     string pluginNoExtension = Path.ChangeExtension(plugin, null);
                     if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, pluginNoExtension + ".bsa")))
@@ -129,7 +183,6 @@ namespace ESLifyEverything
         }
 
         #region Voice Eslify
-
         public static void VoiceESlIfyMenu()
         {
             GF.WriteLine(GF.stringLoggingData.VoiceESLMenuHeader);
@@ -413,7 +466,6 @@ namespace ESLifyEverything
 
         public static void ESLifyAllDataFiles()
         {
-            GetESLifyModConfigurationFiles();
             foreach (var modConfiguration in BasicSingleModConfigurations)
             {
                 HandleConfigurationType(modConfiguration);
@@ -427,6 +479,10 @@ namespace ESLifyEverything
                 HandleConfigurationType(modConfiguration);
             }
             foreach (var modConfiguration in ComplexTOMLModConfigurations)
+            {
+                HandleConfigurationType(modConfiguration);
+            }
+            foreach (var modConfiguration in DelimitedFormKeysModConfigurations)
             {
                 HandleConfigurationType(modConfiguration);
             }
@@ -540,6 +596,32 @@ namespace ESLifyEverything
                     GF.WriteLine(GF.stringLoggingData.ConfiguartionFileFailed + Path.GetFileName(file));
                 }
             }
+            //                 delimitedFormKeys
+            IEnumerable<string> delimitedFormKeysModConfigurations = Directory.EnumerateFiles(
+                    ".\\Properties\\DataFileTypes",
+                    "*_DelimitedFormKeys.json",
+                    SearchOption.TopDirectoryOnly);
+            foreach (var file in delimitedFormKeysModConfigurations)
+            {
+                try
+                {
+                    HashSet<DelimitedFormKeys> basicDirectFolderFile = JsonSerializer.Deserialize<HashSet<DelimitedFormKeys>>(File.ReadAllText(file))!;
+                    if (basicDirectFolderFile != null)
+                    {
+                        foreach (DelimitedFormKeys modConfiguration in basicDirectFolderFile)
+                        {
+                            if (modConfiguration.Enabled)
+                            {
+                                DelimitedFormKeysModConfigurations.Add(modConfiguration);
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    GF.WriteLine(GF.stringLoggingData.ConfiguartionFileFailed + Path.GetFileName(file));
+                }
+            }
         }
 
         public static void HandleConfigurationType(BasicSingleFile ModConfiguration)
@@ -582,6 +664,16 @@ namespace ESLifyEverything
             t.Wait();
             t.Dispose();
         }
+        
+        public static void HandleConfigurationType(DelimitedFormKeys ModConfiguration)
+        {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(ModConfiguration.StartingLogLine);
+            EnumDelimitedFormKeys(
+                Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.StartFolder), ModConfiguration.FileNameFilter, ModConfiguration.Delimiter,
+                ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine,
+                ModConfiguration.SeachLevel);
+        }
 
         public static void ESLifySelectedDataFilesMenu()
         {
@@ -604,6 +696,10 @@ namespace ESLifyEverything
                     modConMenuList.Add(modConfiguration.Name);
                 }
                 foreach (var modConfiguration in ComplexTOMLModConfigurations)
+                {
+                    modConMenuList.Add(modConfiguration.Name);
+                }
+                foreach (var modConfiguration in DelimitedFormKeysModConfigurations)
                 {
                     modConMenuList.Add(modConfiguration.Name);
                 }
@@ -639,7 +735,7 @@ namespace ESLifyEverything
                     }
                     else
                     {
-                        RunSelectedModConfig(modConMenuList, selectedMenuItem);
+                        RunSelectedModConfig(modConMenuList, selectedMenuItem -1);
                     }
                 }
 
@@ -652,28 +748,35 @@ namespace ESLifyEverything
 
             foreach (var modConfiguration in BasicSingleModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem - 1]))
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
                 {
                     HandleConfigurationType(modConfiguration);
                 }
             }
             foreach (var modConfiguration in BasicDirectFolderModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem - 1]))
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
                 {
                     HandleConfigurationType(modConfiguration);
                 }
             }
             foreach (var modConfiguration in BasicDataSubfolderModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem - 1]))
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
                 {
                     HandleConfigurationType(modConfiguration);
                 }
             }
             foreach (var modConfiguration in ComplexTOMLModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem - 1]))
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
+                {
+                    HandleConfigurationType(modConfiguration);
+                }
+            }
+            foreach (var modConfiguration in DelimitedFormKeysModConfigurations)
+            {
+                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
                 {
                     HandleConfigurationType(modConfiguration);
                 }
@@ -800,5 +903,118 @@ namespace ESLifyEverything
             }
             return await Task.FromResult(0);
         }
+
+        #region Plugins
+        public static void ReadLoadOrder()
+        {
+            //Read plugin masters for caching
+            PluginData.GetPluginData();
+            for (int i = 1; i < LoadOrder.Length; i++)
+            {
+                if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, LoadOrder[i])))
+                {
+                    if (!GF.IgnoredPlugins.Contains(LoadOrder[i]))
+                    {
+                        GF.WriteLine(String.Format(GF.stringLoggingData.PluginCheckMod, LoadOrder[i]));
+                        PluginData.AddNew(LoadOrder[i]);
+                    }
+                }
+                GF.WriteLine(String.Format(GF.stringLoggingData.ProcessedPluginsLogCount, i, LoadOrder.Length));
+            }
+
+            //select compacted mod data to run
+            HashSet<string> selectedCompactedMods = SelectCompactedModsMenu();
+
+            //filter plugins that require the compacted mods
+            HashSet<Plugin> runPlugins = new HashSet<Plugin>();
+            foreach (Plugin plugin in PluginData.LoadOrderPlugins.Values)
+            {
+                if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, plugin.PluginName)))
+                {
+                    if (PluginData.CompactedSubPlugins.TryGetValue(plugin.PluginName, out Plugin? subPlugin))
+                    {
+                        if (plugin.LastModified.Equals(subPlugin.LastModified))
+                        {
+                            continue;
+                        }
+                    }
+                    foreach (string compactedModData in selectedCompactedMods)
+                    {
+                        if (plugin.Masters.Contains(compactedModData))
+                        {
+                            runPlugins.Add(plugin);
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            //Fix and output plugins that still use uncompacted data
+            foreach (Plugin plugin in runPlugins)
+            {
+                Task<int> handlePluginTask = HandleMod.HandleSkyrimMod(plugin.PluginName);
+                handlePluginTask.Wait();
+                switch (handlePluginTask.Result)
+                {
+                    case 0:
+                        Console.WriteLine(plugin.PluginName + GF.stringLoggingData.PluginNotFound);
+                        break;
+                    case 1:
+                        PluginData.UpdateCompactedData(plugin);
+                        break;
+                    case 2:
+                        PluginData.NewCompactedSubPlugin(plugin);
+                        Console.WriteLine(plugin.PluginName + GF.stringLoggingData.PluginNotChanged);
+                        break;
+                    default:
+                        Console.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
+                        break;
+                }
+                handlePluginTask.Dispose();
+            }
+        }
+
+        public static HashSet<string> SelectCompactedModsMenu()
+        {
+            HashSet<string> slectedCompactedMods = new HashSet<string>();
+            List<string> menuList = new List<string>();
+            menuList.AddRange(CompactedModDataD.Keys);
+            bool exit = false;
+            int menuModifier = 2;//1 is for offsetting the 0. in the menu add one for each extra menu item.
+            do
+            {
+                GF.WriteLine(GF.stringLoggingData.SelectCompactedModsMenuHeader);
+                Console.WriteLine(GF.stringLoggingData.ExitCodeInput);
+                Console.WriteLine("1. " + GF.stringLoggingData.RunAllPluginChecks);
+                for (int i = 0; i < menuList.Count; i++)
+                {
+                    Console.WriteLine($"{i + menuModifier}. {menuList.ElementAt(i)}");
+                }
+                if (GF.WhileMenuSelect(menuList.Count + menuModifier, out int selectedMenuItem, 1))
+                {
+                    if (selectedMenuItem == -1)
+                    {
+                        GF.WriteLine(GF.stringLoggingData.ExitCodeInputOutput);
+                        exit = true;
+                    }
+                    else if (selectedMenuItem == 1)
+                    {
+                        GF.WriteLine(GF.stringLoggingData.RunAllPluginChecks + GF.stringLoggingData.SingleWordSelected);
+                        return CompactedModDataD.Keys.ToHashSet();
+                    }
+                    else
+                    {
+                        GF.WriteLine(menuList.ElementAt(selectedMenuItem - menuModifier) + GF.stringLoggingData.SingleWordSelected);
+                        slectedCompactedMods.Add(menuList.ElementAt(selectedMenuItem - menuModifier));
+                        menuList.RemoveAt(selectedMenuItem - menuModifier);
+                    }
+                    Console.WriteLine();
+                }
+            } while (exit == false);
+
+            return slectedCompactedMods;
+        }
+        #endregion Plugins
+
     }
 }

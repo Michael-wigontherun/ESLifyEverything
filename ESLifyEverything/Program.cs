@@ -1,5 +1,9 @@
 ﻿using ESLifyEverything.FormData;
+using ESLifyEverything.PluginHandles;
+using ESLifyEverything.Properties;
 using ESLifyEverything.Properties.DataFileTypes;
+using Mutagen.Bethesda.Plugins.Records;
+using Mutagen.Bethesda.Skyrim;
 
 namespace ESLifyEverything
 {
@@ -7,11 +11,13 @@ namespace ESLifyEverything
     {
         public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
 
+        public static string[] LoadOrder = new string[0];
         public static List<string> LoadOrderNoExtensions = new List<string>();
         public static HashSet<BasicSingleFile> BasicSingleModConfigurations = new HashSet<BasicSingleFile>();
         public static HashSet<BasicDirectFolder> BasicDirectFolderModConfigurations = new HashSet<BasicDirectFolder>();
         public static HashSet<BasicDataSubfolder> BasicDataSubfolderModConfigurations = new HashSet<BasicDataSubfolder>();
         public static HashSet<ComplexTOML> ComplexTOMLModConfigurations = new HashSet<ComplexTOML>();
+        public static HashSet<DelimitedFormKeys> DelimitedFormKeysModConfigurations = new HashSet<DelimitedFormKeys>();
         public static HashSet<string> FailedToCompile = new HashSet<string>();
 
         public static bool EditedFaceGen = false;
@@ -36,7 +42,7 @@ namespace ESLifyEverything
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.ImportingAllModData);
                     ImportModData(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms"));
-                    ImportModData(Path.Combine(GF.Settings.OutputFolder, "CompactedForms"));
+                    ImportModData(GF.CompactedFormsFolder);
 
                     Console.WriteLine("\n\n\n\n");
                     Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
@@ -71,6 +77,7 @@ namespace ESLifyEverything
 
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
+                        GetESLifyModConfigurationFiles();
                         ESLifyAllDataFiles();
                     }
 
@@ -92,6 +99,13 @@ namespace ESLifyEverything
                     Scripts.Wait();
                     Scripts.Dispose();
 
+                    if (GF.Settings.RunSubPluginCompaction)
+                    {
+                        Console.WriteLine("\n\n\n\n");
+                        GF.WriteLine(GF.stringLoggingData.StartPluginReader);
+                        ReadLoadOrder();
+                    }
+
                 }
                 switch (StartupError)
                 {
@@ -101,6 +115,9 @@ namespace ESLifyEverything
                     case 2:
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.xEditlogNotFound);
+                        break;
+                    case 3:
+                        GF.UpdateSettingsFile();
                         break;
                     default:
                         break;
@@ -168,8 +185,10 @@ namespace ESLifyEverything
             GF.WriteLine(GF.stringLoggingData.EnterToExit);
             Console.ReadLine();
         }
-
         
+        
+
+
 
 
     }

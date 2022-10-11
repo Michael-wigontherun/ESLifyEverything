@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ESLifyEverything.Properties
+﻿namespace ESLifyEverything.Properties
 {
     public sealed class StringResources
     {
@@ -13,6 +7,9 @@ namespace ESLifyEverything.Properties
     }
     public sealed class StringLoggingData
     {
+        //single words
+        public string SingleWordSelected { get; set; } = "";
+
         //error & Problems
         public string LoadOrderNotDetectedError { get; set; } = "";
         public string RunOrReport { get; set; } = "";
@@ -23,6 +20,7 @@ namespace ESLifyEverything.Properties
         public string PapyrusFlagFileMissing { get; set; } = "";
         public string PapyrusFlagFileMissing2 { get; set; } = "";
         public string FolderNotFoundError { get; set; } = "";
+        public string ESLifyEverythingIsNotSetUpForSkyrim { get; set; } = "";
 
         //General Menu
         public string ExitCodeInput { get; set; } = "";
@@ -35,6 +33,7 @@ namespace ESLifyEverything.Properties
         public string ExitCodeInputOutput { get; set; } = "";
         public string EslifingEverything { get; set; } = "";
         public string EslifingSingleMod { get; set; } = "";
+        public string EnterToContinue { get; set; } = "";
 
         //General logging
         public string ModLine { get; set; } = "";
@@ -84,6 +83,28 @@ namespace ESLifyEverything.Properties
         //ImportModData
         public string ImportingAllModData { get; set; } = "";
         public string GetCompDataLog { get; set; } = "";
+        public string OutOfDateCMData1 { get; set; } = "";
+        public string OutOfDateCMData2 { get; set; } = "";
+        public string OutOfDateCMData3 { get; set; } = "";
+        public string OutOfDateCMData4 { get; set; } = "";
+
+        //PluginData & Sub Mod Compactions
+        public string StartPluginReader { get; set; } = "";
+        public string PluginDataImport { get; set; } = "";
+        public string PluginDataImportNotFound { get; set; } = "";
+        public string PluginCheckPrev { get; set; } = "";
+        public string PluginCheckUpdated { get; set; } = "";
+        public string PluginCheckModReimp { get; set; } = "";
+        public string PluginCheckNew { get; set; } = "";
+        public string PluginCheckModImp { get; set; } = "";
+        public string PluginCheckMod { get; set; } = "";
+        public string ProcessedPluginsLogCount { get; set; } = "";
+        public string PluginNotFound { get; set; } = "";
+        public string PluginNotChanged { get; set; } = "";
+        public string RunAllPluginChecks { get; set; } = "";
+        public string PluginUnchanged { get; set; } = "";
+        public string SelectCompactedModsMenuHeader { get; set; } = "";
+        public string PluginEditorDisabled { get; set; } = "";
 
         //BSAData & LoadOrderBSAData
         public string StartBSAExtract { get; set; } = "";
@@ -155,6 +176,8 @@ namespace ESLifyEverything.Properties
         public string RunningxEditEXE { get; set; } = "";
         public string FixFaceGenScriptNotFound { get; set; } = "";
 
+        //Default Switch Error Messege
+        public string PluginSwitchDefaultMessage { get; set; } = "";
 
         //End Report
         public string EnterToExit { get; set; } = "";

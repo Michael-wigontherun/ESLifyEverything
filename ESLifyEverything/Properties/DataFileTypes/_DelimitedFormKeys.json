@@ -1,0 +1,13 @@
+[
+  {
+    "Enabled": true,
+    "Name": "VSU",
+    "StartFolder": "VSU",
+    "FileNameFilter": "*_VSU.ini",
+    "Delimiter": "|",
+    "StartingLogLine": "Starting VSU ESLify",
+    "FileAtLogLine": "VSU file found at ",
+    "FileUnchangedLogLine": "VSU file unchanged: ",
+    "SeachLevel": 0
+  }
+]

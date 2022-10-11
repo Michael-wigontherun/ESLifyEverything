@@ -6,9 +6,9 @@ using System.Text.Json;
 
 namespace ESLifyEverything
 {
-    public static class GF
+    public static partial class GF
     {
-        public static readonly string SettingsVersion = "1.9";
+        public static readonly string SettingsVersion = "3.0.0";
         public static readonly string ExtractedBSAModDataPath = ".\\ExtractedBSAModData";
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
         public static readonly string SourceSubPath = "Source\\Scripts";
@@ -18,9 +18,12 @@ namespace ESLifyEverything
         public static StringLoggingData stringLoggingData = new StringLoggingData();
         public static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
         public static string[] DefaultScriptBSAs = new string[0];
+        public static HashSet<string> IgnoredPlugins = new HashSet<string>();
 
         public static string logName = "log.txt";
         public static string FaceGenFileFixPath = "";
+        public static string CompactedFormsFolder = "";
+
 
         public static List<string> BSALoadOrder = new List<string>();
 
@@ -44,28 +47,29 @@ namespace ESLifyEverything
                 .AddJsonFile("AppSettings.json")
                 .AddJsonFile(".\\Properties\\StringResources.json")
                 .AddJsonFile(".\\Properties\\DefaultBSAs.json")
+                .AddJsonFile(".\\Properties\\IgnoredPugins.json")
                 .AddEnvironmentVariables().Build();
+            stringLoggingData = config.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
+
             try
             {
                 string version = config.GetRequiredSection("SettingsVersion").Get<string>();
                 if (!version.Equals(GF.SettingsVersion))
                 {
-                    startupError = 1;
-                    stringLoggingData = config.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
+                    startupError = 3;
                     return false;
                 }
             }
             catch (Exception)
             {
                 startupError = 1;
-                stringLoggingData = config.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
                 return false;
             }
             
             Settings = config.GetRequiredSection("Settings").Get<AppSettings>();
             stringsResources = config.GetRequiredSection("StringResources").Get<StringResources>();
-            stringLoggingData = config.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
             DefaultScriptBSAs = config.GetRequiredSection("DefaultScriptBSAs").Get<string[]>();
+            IgnoredPlugins = config.GetRequiredSection("IgnoredPugins").Get<HashSet<string>>();
 
             if (GF.Settings.AutoReadAllxEditSeesion == false)
             {
@@ -76,10 +80,6 @@ namespace ESLifyEverything
             {
                 GF.WriteLine(GF.stringLoggingData.DataFolderNotFound);
                 startUp = false;
-            }
-            else if(!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms")))
-            {
-                Directory.CreateDirectory(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms"));
             }
             
             
@@ -168,10 +168,24 @@ namespace ESLifyEverything
                 return startUp;
             }
 
+            if (GF.Settings.RunSubPluginCompaction)
+            {
+                if (!GF.Settings.PapyrusFlag.Equals("TESV_Papyrus_Flags.flg"))
+                {
+                    if(!File.Exists(Path.Combine(GF.Settings.DataFolderPath, "Skyrim.esm")))
+                    {
+                        GF.WriteLine(GF.stringLoggingData.ESLifyEverythingIsNotSetUpForSkyrim);
+                        GF.Settings.RunSubPluginCompaction = false;
+                    }
+                }
+            }
+
             Directory.CreateDirectory(GF.ExtractedBSAModDataPath);
             Directory.CreateDirectory(GF.ChangedScriptsPath);
             GF.ClearChangedScripts();
-            Directory.CreateDirectory(Path.Combine(GF.Settings.OutputFolder, "CompactedForms"));
+
+            CompactedFormsFolder = Path.Combine(GF.Settings.OutputFolder, "CompactedForms");
+            Directory.CreateDirectory(CompactedFormsFolder);
 
             if (Directory.Exists(Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath)))
             {
@@ -186,6 +200,7 @@ namespace ESLifyEverything
             }
 
             BSAData.GetBSAData();
+
 
             return startUp;
         }
@@ -262,7 +277,7 @@ namespace ESLifyEverything
             }
         }
 
-        //true = exit while
+        //returns true when a valid input number is input
         //-1 = return exit code in selectedMenuItem
         public static bool WhileMenuSelect(int menuMaxNum, out int selectedMenuItem, int MenuMinNum = 0)
         {
@@ -289,7 +304,26 @@ namespace ESLifyEverything
             GF.WriteLine(GF.stringLoggingData.SettingsFileNotFound);
             GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
             GF.WriteLine(GF.stringLoggingData.EditYourSettings);
-            File.WriteAllText("AppSettings.json", JsonSerializer.Serialize(new GeneratedAppSettings(), GF.JsonSerializerOptions));
+            new AppSettings().Build();
+        }
+
+        public static void UpdateSettingsFile()
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("AppSettings.json")
+                .AddEnvironmentVariables().Build();
+            
+            switch (config.GetRequiredSection("SettingsVersion").Get<string>())
+            {
+                case "1.9":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings19>()).Build();
+                    break;
+                default:
+                    GenerateSettingsFileError();
+                    break;
+            }
         }
 
         //origonalPath = Origonal path with replaced origonal FormID if it contains it

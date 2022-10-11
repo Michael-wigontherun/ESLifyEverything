@@ -9,7 +9,7 @@ namespace ESLifyEverything.XEdit
     public static class XEditLogReader
     {
         public static XEditLog xEditLog = new XEditLog();
-
+        
         public static void ReadLog(string logPath)
         {
             string[] xEditLogTextArr = File.ReadAllLines(logPath);

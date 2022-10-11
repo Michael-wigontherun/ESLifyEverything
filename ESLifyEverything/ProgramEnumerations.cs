@@ -1,4 +1,7 @@
-﻿namespace ESLifyEverything
+﻿using ESLifyEverything.FormData;
+using System.Text;
+
+namespace ESLifyEverything
 {
     public static partial class Program
     {
@@ -112,5 +115,27 @@
             }
             return await Task.FromResult(0);
         }
+    
+        public static void EnumDelimitedFormKeys(string startFolder, string fileNameFilter, string delimiter, string fileAtLogLine, string fileUnchangedLogLine,
+            SearchOption seachLevel = SearchOption.TopDirectoryOnly)
+        {
+            if (!Directory.Exists(startFolder))
+            {
+                GF.WriteLine(GF.stringLoggingData.FolderNotFoundError + startFolder);
+                return;
+            }
+            IEnumerable<string> files = Directory.EnumerateFiles(
+                    startFolder,
+                    fileNameFilter,
+                    seachLevel);
+            foreach (string file in files)
+            {
+                GF.WriteLine(fileAtLogLine + file, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                bool changed = false;
+                string[] fileLines = DelimitedFormKeysInFileLineReader(File.ReadAllLines(file), delimiter, out changed);
+                OuputDataFileToOutputFolder(changed, file, fileLines, fileUnchangedLogLine);
+            }
+        }
+        
     }
 }

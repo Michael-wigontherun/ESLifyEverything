@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mutagen.Bethesda.Plugins;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,6 +60,18 @@ namespace ESLifyEverything.FormData
         public new string ToString()
         {
             return "Mod Name: " + ModName + " | Origonal FormID: " + OrigonalFormID + " | Compacted FormID: " + CompactedFormID + " | IsModified: " + IsModified;
+        }
+
+        public FormKey CreateCompactedFormKey()
+        {
+            FormKey.TryFactory($"{CompactedFormID}:{ModName}", out FormKey compactedFormKey);
+            return compactedFormKey;
+        }
+
+        public FormKey CreateOrigonalFormKey()
+        {
+            FormKey.TryFactory($"{OrigonalFormID}:{ModName}", out FormKey origonalFormKey);
+            return origonalFormKey;
         }
     }
 }

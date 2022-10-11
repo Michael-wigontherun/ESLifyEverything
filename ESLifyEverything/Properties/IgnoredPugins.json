@@ -1,0 +1,14 @@
+{
+  "IgnoredPugins": [
+    "Skyrim.esm",
+    "Update.esm",
+    "Dawnguard.esm",
+    "HearthFires.esm",
+    "Dragonborn.esm",
+    "Unofficial Skyrim Special Edition Patch.esp",
+    "BSAssets.esm",
+    "BSHeartland.esm",
+    "BS_DLC_patch.esp",
+    "arnima.esm"
+  ]
+}

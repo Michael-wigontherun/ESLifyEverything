@@ -54,7 +54,7 @@ namespace ESLifyEverything.XEdit
             GF.WriteLine(GF.stringLoggingData.OuputingJson);
             foreach(CompactedModData modData in compactedModsSessionData.Values)
             {
-                modData.OutputModData();
+                modData.OutputModData(true, true);
             }
         }
     }

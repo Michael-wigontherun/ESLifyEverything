@@ -1,4 +1,5 @@
 ﻿using ESLifyEverything.FormData;
+using System.Text;
 
 namespace ESLifyEverything
 {
@@ -7,32 +8,29 @@ namespace ESLifyEverything
         public static string[] FormInFileLineReader(string[] fileLines, out bool changed)
         {
             changed = false;
-            string[] lines = new string[fileLines.Length];
             for (int i = 0; i < fileLines.Length; i++)
             {
-                string line = fileLines[i];
-                if (line.Contains(".esp", StringComparison.OrdinalIgnoreCase) || line.Contains(".esm", StringComparison.OrdinalIgnoreCase))
+                if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
                 {
                     foreach (CompactedModData modData in CompactedModDataD.Values)
                     {
-                        if (line.Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
+                        if (fileLines[i].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
                         {
                             foreach (FormHandler form in modData.CompactedModFormList)
                             {
-                                if (line.Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
+                                if (fileLines[i].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
                                 {
-                                    GF.WriteLine(GF.stringLoggingData.OldLine + line, true, GF.Settings.VerboseFileLoging);
-                                    line = line.Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
-                                    GF.WriteLine(GF.stringLoggingData.NewLine + line, true, GF.Settings.VerboseFileLoging);
+                                    GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                    fileLines[i] = fileLines[i].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                    GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                     changed = true;
                                 }
                             }
                         }
                     }
                 }
-                lines[i] = line;
             }
-            return lines;
+            return fileLines;
         }
 
         public static string[] FormInTomlArray(string[] fileLines, string[] arrayFilters, out bool changed)
@@ -104,6 +102,54 @@ namespace ESLifyEverything
             return fileLines;
         }
 
+        public static string[] DelimitedFormKeysInFileLineReader(string[] fileLines, string delimiter, out bool changed)
+        {
+            changed = false;
+            for (int i = 0; i < fileLines.Length; i++)
+            {
+                if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
+                {
+                    foreach (CompactedModData modData in CompactedModDataD.Values)
+                    {
+                        if (fileLines[i].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            string[] delimitedLine = fileLines[i].Split('|');
+                            StringBuilder reconstructedLine = new StringBuilder();
+                            bool lineChanged = false;
+                            for (int a = 0; a < delimitedLine.Length; a++)
+                            {
+                                foreach (FormHandler form in modData.CompactedModFormList)
+                                {
+                                    if (delimitedLine[a].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        delimitedLine[a] = delimitedLine[a].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                        lineChanged = true;
+                                        changed = true;
+                                    }
+                                }
+                            }
+                            for (int b = 0; b < delimitedLine.Length; b++)
+                            {
+                                reconstructedLine.Append(delimitedLine[b]);
+                                if (b < delimitedLine.Length - 1)
+                                {
+                                    reconstructedLine.Append('|');
+                                }
+                            }
+                            if (lineChanged)
+                            {
+                                GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                fileLines[i] = reconstructedLine.ToString();
+                                GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return fileLines;
+        }
+
         public static void CopyFormFile(FormHandler form, string origonalDataStartPath, string OrgFilePath, out string newPath)
         {
             GF.WriteLine(GF.stringLoggingData.OriganalPath + OrgFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
@@ -131,6 +177,5 @@ namespace ESLifyEverything
                 GF.WriteLine(unchangedLogLine + origonalFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
             }
         }
-
     }
 }

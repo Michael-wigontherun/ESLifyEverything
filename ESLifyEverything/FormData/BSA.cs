@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Mutagen.Bethesda;
+using Mutagen.Bethesda.Archives;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,7 +13,7 @@ namespace ESLifyEverything.FormData
 {
     public static class BSAData
     {
-        //               BSA name
+        //                      BSA name
         public static Dictionary<string, BSA> BSAs = new Dictionary<string, BSA>();
 
         public static bool Imported = false;
@@ -84,68 +86,104 @@ namespace ESLifyEverything.FormData
             NewBSAData();
         }
 
-        [JsonIgnore]
-        private string tempFullPath = string.Empty;
+        //[JsonIgnore]
+        //private string tempFullPath = string.Empty;
 
-        public void GetTempFullPath()
-        {
-            tempFullPath = Path.GetFullPath($".\\TempData\\{BSAName_NoExtention}");
-            Directory.CreateDirectory(tempFullPath);
-        }
+        //public void GetTempFullPath()
+        //{
+        //    tempFullPath = Path.GetFullPath($".\\TempData\\{BSAName_NoExtention}");
+        //    Directory.CreateDirectory(tempFullPath);
+        //}
 
         public void NewBSAData()
         {
-            GetTempFullPath();
+            //GetTempFullPath();
             BSALastModified = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"));
             if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + " - Textures.bsa")))
             {
                 HasTextureBSA = true;
             }
-            Task extData = ExtractBSAModData();
-            extData.Wait();
-            if (Directory.Exists(Path.Combine(tempFullPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom")))
+            //Task extData = ExtractBSAModData();
+            //extData.Wait();
+            //extData.Dispose();
+
+            IArchiveReader? reader = Archive.CreateReader(GameRelease.SkyrimSE, Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"));
+            
+            foreach (IArchiveFile? file in reader.Files)
             {
-                IEnumerable<string> FaceGenFilePaths = Directory.EnumerateDirectories(
-                        Path.Combine(tempFullPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom"),
-                        "*",
-                        SearchOption.TopDirectoryOnly);
-                foreach (string FaceGenFilePath in FaceGenFilePaths)
+                string[] path = file.Path.Split('\\');
+                
+                if (path.Length > 5)
                 {
-                    FaceGenModConnections.Add(Path.GetFileName(FaceGenFilePath));
+                    if (file.Path.Contains("meshes\\actors\\character\\facegendata\\facegeom"))
+                    {
+                        string pluginName = path[5];
+                        if (pluginName.Contains(".esp") || pluginName.Contains(".esm") || pluginName.Contains(".esl"))
+                        {
+                            FaceGenModConnections.Add(pluginName);
+                        }
+                    }
+                }
+
+                if (path.Length > 2)
+                {
+                    if (file.Path.Contains("sound\\voice\\"))
+                    {
+                        string pluginName = path[2];
+                        if (pluginName.Contains(".esp") || pluginName.Contains(".esm") || pluginName.Contains(".esl"))
+                        {
+                            VoiceModConnections.Add(pluginName);
+                        }
+                    }
                 }
             }
 
-            if (Directory.Exists(Path.Combine(tempFullPath, "sound\\voice")))
-            {
-                IEnumerable<string> VoiceFilePaths = Directory.EnumerateDirectories(
-                        Path.Combine(tempFullPath, "sound\\voice"),
-                        "*",
-                        SearchOption.TopDirectoryOnly);
-                foreach (string VoiceFilePath in VoiceFilePaths)
-                {
-                    VoiceModConnections.Add(Path.GetFileName(VoiceFilePath));
-                }
-            }
+            FaceGenModConnections = FaceGenModConnections.Distinct().ToHashSet();
+            VoiceModConnections = VoiceModConnections.Distinct().ToHashSet();
 
-            Directory.Delete(tempFullPath, true);
+            //if (Directory.Exists(Path.Combine(tempFullPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom")))
+            //{
+            //    IEnumerable<string> FaceGenFilePaths = Directory.EnumerateDirectories(
+            //            Path.Combine(tempFullPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom"),
+            //            "*",
+            //            SearchOption.TopDirectoryOnly);
+            //    foreach (string FaceGenFilePath in FaceGenFilePaths)
+            //    {
+            //        FaceGenModConnections.Add(Path.GetFileName(FaceGenFilePath));
+            //    }
+            //}
+
+            //if (Directory.Exists(Path.Combine(tempFullPath, "sound\\voice")))
+            //{
+            //    IEnumerable<string> VoiceFilePaths = Directory.EnumerateDirectories(
+            //            Path.Combine(tempFullPath, "sound\\voice"),
+            //            "*",
+            //            SearchOption.TopDirectoryOnly);
+            //    foreach (string VoiceFilePath in VoiceFilePaths)
+            //    {
+            //        VoiceModConnections.Add(Path.GetFileName(VoiceFilePath));
+            //    }
+            //}
+
+            //Directory.Delete(tempFullPath, true);
         }
 
-        private async Task<int> ExtractBSAModData()
-        {
-            Process v = new Process();
-            v.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
-            v.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"))}\" -f \"voice\"  -e -o \"{tempFullPath}\"";
-            v.Start();
-            v.WaitForExit();
-            v.Dispose();
+        //private async Task<int> ExtractBSAModData()
+        //{
+        //    Process v = new Process();
+        //    v.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+        //    v.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"))}\" -f \"voice\"  -e -o \"{tempFullPath}\"";
+        //    v.Start();
+        //    v.WaitForExit();
+        //    v.Dispose();
 
-            Process p = new Process();
-            p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
-            p.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"))}\" -f \"FaceGeom\"  -e -o \"{tempFullPath}\"";
-            p.Start();
-            p.WaitForExit();
-            p.Dispose();
-            return await Task.FromResult(0);
-        }
+        //    Process p = new Process();
+        //    p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+        //    p.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, BSAName_NoExtention + ".bsa"))}\" -f \"FaceGeom\"  -e -o \"{tempFullPath}\"";
+        //    p.Start();
+        //    p.WaitForExit();
+        //    p.Dispose();
+        //    return await Task.FromResult(0);
+        //}
     }
 }
