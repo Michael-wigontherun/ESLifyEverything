@@ -12,6 +12,7 @@ ESLify Everything is a .Net 6 program that reads the data outputted by xEdit whe
 
 Currently Eslifies
 
+- Recompacts plugins and updates Sub plugins
 - Voice Files, Internally coded
 - FaceGen data, Internally coded
 - SPID, Base Object Swapper, KID, FLM, Animated Object Swapper
@@ -27,6 +28,7 @@ Currently Eslifies
 - POISE - Stagger Overhaul
 - Racemenu Presets, Internally coded
 - CoMap MapMarker json files
+- VSU
 
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github, for any other file mod data that needs to be eslified.
 
