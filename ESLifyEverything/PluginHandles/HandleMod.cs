@@ -28,7 +28,6 @@ namespace ESLifyEverything.PluginHandles
 
             if (ModEditedS || ModEditedU) ModEdited = true;
 
-            
             foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToHashSet())
             {
                 foreach (CompactedModData compactedModData in CompactedModDataD.Values)
@@ -58,7 +57,7 @@ namespace ESLifyEverything.PluginHandles
                     rec.IsCompressed = false;
                 }
                 
-                mod.WriteToBinary(Path.Combine(GetPluginModOutputPath(pluginName), pluginName));
+                mod.WriteToBinary(Path.Combine(GetPluginModOutputPath(pluginName, mod.ModHeader.MasterReferences.ToHashSet()), pluginName));
 
                 return await Task.FromResult(1);
             }
@@ -81,11 +80,23 @@ namespace ESLifyEverything.PluginHandles
 			return OrgFormKey;
 		}
 
-        private static string GetPluginModOutputPath(string pluginName)
+        private static string GetPluginModOutputPath(string pluginName, HashSet<MasterReference> masters)
         {
             if (GF.Settings.MO2Support)
             {
-                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, pluginName + "_ESlEverything");
+                string masterExtentions = "";
+                foreach(var master in masters)
+                {
+                    foreach (CompactedModData compactedModData in CompactedModDataD.Values)
+                    {
+                        if (master.Master.ToString().Equals(compactedModData.ModName))
+                        {
+                            masterExtentions = masterExtentions + Path.GetFileNameWithoutExtension(compactedModData.ModName) + "_";
+                        }
+                    }
+                }
+
+                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, pluginName + $" {masterExtentions}ESlEverything");
                 Directory.CreateDirectory(OutputPath);
                 return OutputPath;
             }
