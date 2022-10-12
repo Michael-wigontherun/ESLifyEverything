@@ -28,16 +28,22 @@ namespace ESLifyEverything.PluginHandles
 
             if (ModEditedS || ModEditedU) ModEdited = true;
 
+            
             foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToHashSet())
             {
                 foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    if (masterReference.Master.Equals(compactedModData.ModName))
+                    if (masterReference.Master.ToString().Equals(compactedModData.ModName))
+                    {
+                        mod.RemapLinks(compactedModData.ToDictionary());
+                    }
+                    if (compactedModData.ModName.Equals(mod.ModKey.ToString()))
                     {
                         mod.RemapLinks(compactedModData.ToDictionary());
                     }
                 }
             }
+            
 
             if (!mod.Equals(orgMod))
             {
@@ -51,11 +57,9 @@ namespace ESLifyEverything.PluginHandles
                 {
                     rec.IsCompressed = false;
                 }
-                if (GF.Settings.ChangedPluginsOutputToDataFolder)
-                {
-                    mod.WriteToBinary(Path.Combine(GF.Settings.DataFolderPath, pluginName));
-                }
-                else mod.WriteToBinary(Path.Combine(GF.Settings.OutputFolder, pluginName));
+                
+                mod.WriteToBinary(Path.Combine(GetPluginModOutputPath(pluginName), pluginName));
+
                 return await Task.FromResult(1);
             }
             else GF.WriteLine(GF.stringLoggingData.PluginUnchanged);
@@ -76,6 +80,25 @@ namespace ESLifyEverything.PluginHandles
 			}
 			return OrgFormKey;
 		}
-	    
+
+        private static string GetPluginModOutputPath(string pluginName)
+        {
+            if (GF.Settings.MO2Support)
+            {
+                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, pluginName + "_ESlEverything");
+                Directory.CreateDirectory(OutputPath);
+                return OutputPath;
+            }
+            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
+            {
+                return GF.Settings.DataFolderPath;
+            }
+            return GF.Settings.OutputFolder;
+        }
+
+
+
+
+
     }
 }

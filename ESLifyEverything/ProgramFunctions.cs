@@ -33,6 +33,50 @@ namespace ESLifyEverything
             return fileLines;
         }
 
+        public static string[] FormInFileLineReaderDecimal(string[] fileLines, out bool changed)
+        {
+            string FixLineToHex(string line)
+            {
+                string afterGetFormFromFile = line.Substring(line.IndexOf("GetFormFromFile(") + "GetFormFromFile(".Length);
+                string stringDecimal = afterGetFormFromFile.Substring(0, afterGetFormFromFile.IndexOf(','));
+                if(long.TryParse(stringDecimal, out long value))
+                {
+                    string hex = "0x" + string.Format("{0:x}", value);
+                    line = line.Replace(stringDecimal, hex, StringComparison.OrdinalIgnoreCase);
+                }
+                return line;
+            }
+            
+            changed = false;
+            for (int i = 0; i < fileLines.Length; i++)
+            {
+                if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (fileLines[i].Contains("GetFormFromFile("))
+                    {
+                        fileLines[i] = FixLineToHex(fileLines[i]);
+                    }
+                    foreach (CompactedModData modData in CompactedModDataD.Values)
+                    {
+                        if (fileLines[i].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            foreach (FormHandler form in modData.CompactedModFormList)
+                            {
+                                if (fileLines[i].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
+                                {
+                                    GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                    fileLines[i] = fileLines[i].Replace(form.GetOrigonalFormID(), form.CompactedFormID, StringComparison.OrdinalIgnoreCase);
+                                    GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                    changed = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return fileLines;
+        }
+
         public static string[] FormInTomlArray(string[] fileLines, string[] arrayFilters, out bool changed)
         {
             bool ContainsArrayFilter(string line)
@@ -122,9 +166,12 @@ namespace ESLifyEverything
                                 {
                                     if (delimitedLine[a].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
                                     {
-                                        delimitedLine[a] = delimitedLine[a].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
-                                        lineChanged = true;
-                                        changed = true;
+                                        if (delimitedLine[a].Contains(form.ModName, StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            delimitedLine[a] = delimitedLine[a].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                            lineChanged = true;
+                                            changed = true;
+                                        }
                                     }
                                 }
                             }

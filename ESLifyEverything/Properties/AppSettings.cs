@@ -71,6 +71,10 @@ namespace ESLifyEverything.Properties
             }
         }
         
+        public bool MO2Support { get; set; } = false;
+
+        public string MO2ModFolder { get; set; } = "MO2\\Mods";
+
         public string XEditFolderPath { get; set; } = "xEditFolderPath";
 
         public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";

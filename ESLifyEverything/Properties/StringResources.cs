@@ -21,6 +21,7 @@
         public string PapyrusFlagFileMissing2 { get; set; } = "";
         public string FolderNotFoundError { get; set; } = "";
         public string ESLifyEverythingIsNotSetUpForSkyrim { get; set; } = "";
+        public string MO2ModsFolderDoesNotExist { get; set; } = "";
 
         //General Menu
         public string ExitCodeInput { get; set; } = "";
@@ -87,6 +88,11 @@
         public string OutOfDateCMData2 { get; set; } = "";
         public string OutOfDateCMData3 { get; set; } = "";
         public string OutOfDateCMData4 { get; set; } = "";
+        public string OutOfDateCMData5 { get; set; } = "";
+        public string RunPluginRecompactionMenu1 { get; set; } = "";
+        public string RunPluginRecompactionMenu2 { get; set; } = "";
+        public string RunPluginRecompactionMenu3 { get; set; } = "";
+        public string RunPluginRecompactionEnterPrompt { get; set; } = "";
 
         //PluginData & Sub Mod Compactions
         public string StartPluginReader { get; set; } = "";

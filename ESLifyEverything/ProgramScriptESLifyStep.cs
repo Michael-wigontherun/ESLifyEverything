@@ -9,7 +9,6 @@ namespace ESLifyEverything
 {
     public static partial class Program
     {
-
         public static bool ExtractScriptsMenu()
         {
             if (GF.Settings.AutoRunScriptDecompile)
@@ -145,13 +144,12 @@ namespace ESLifyEverything
             foreach (string script in scripts)
             {
                 bool changed = false;
-                string[] fileLines = FormInFileLineReader(File.ReadAllLines(script), out changed);
+                string[] fileLines = FormInFileLineReaderDecimal(File.ReadAllLines(script), out changed);
                 if (changed)
                 {
                     GF.WriteLine(GF.stringLoggingData.ScriptSourceFileChanged + script, false, GF.Settings.VerboseFileLoging);
                     string newFilePath = GF.FixOuputPath(script, startFolder, GF.ChangedScriptsPath);
-                    //File.WriteAllLines(script, fileLines);
-                    //changedFiles.Add(script);
+                    File.WriteAllLines(script, fileLines);
                     File.WriteAllLines(newFilePath, fileLines);
                     changedFiles.Add(newFilePath);
                 }

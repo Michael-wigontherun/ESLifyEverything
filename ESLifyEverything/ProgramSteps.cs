@@ -80,7 +80,7 @@ namespace ESLifyEverything
                 CompactedModData modData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(compactedFormsModFile))!;
                 modData.Write();
 
-                if (modData.Rechack == true)
+                if (modData.Recheck == true)
                 {
                     if (modData.PluginLastModifiedValidation is null)
                     {
@@ -108,11 +108,11 @@ namespace ESLifyEverything
         
         public static CompactedModData ValidateCompactedModDataJson(CompactedModData modData)
         {
-            if (modData.IsCompacted())
+            if (modData.IsCompacted(false))
             {
                 modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
                 modData.Enabled = true;
-                modData.Rechack = true;
+                modData.Recheck = true;
                 modData.OutputModData(false, false);
             }
             else
@@ -121,28 +121,50 @@ namespace ESLifyEverything
                 GF.WriteLine("");
                 GF.WriteLine("", false, true);
                 GF.WriteLine("", false, true);
-                GF.WriteLine(modData.ModName + "_ESlEverything.json" + GF.stringLoggingData.OutOfDateCMData1);
-                GF.WriteLine(GF.stringLoggingData.OutOfDateCMData2);
-                GF.WriteLine(GF.stringLoggingData.OutOfDateCMData3);
-                GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData4, modData.ModName));
                 modData.Enabled = false;
+                GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData1, modData.ModName + "_ESlEverything.json"));
+                Console.WriteLine();
 
-                GF.WriteLine("Would you like ESLify Everything to handle recompacting the known forms?");
-                GF.WriteLine("Enter Y to procced. Any other input will skip this and ESLify Everything will not use the Compacted Mod Data. Until it detects rereads it from xEdit");
+                bool notReCompactedFully = true;
 
-                string input = Console.ReadLine()!;
-                if(input != null)
+                if (GF.Settings.RunSubPluginCompaction)
                 {
-                    if (input.Equals("Y", StringComparison.OrdinalIgnoreCase))
+                    GF.WriteLine(GF.stringLoggingData.RunPluginRecompactionMenu1);
+                    GF.WriteLine(GF.stringLoggingData.RunPluginRecompactionMenu2);
+                    GF.WriteLine(GF.stringLoggingData.RunPluginRecompactionMenu3);
+                    GF.WriteLine(GF.stringLoggingData.RunPluginRecompactionEnterPrompt);
+
+                    string input = Console.ReadLine()!;
+                    GF.WriteLine("Input: " + input, false, true);
+
+                    if (input != null)
                     {
-                        RunRecompact(modData.ModName);
-                        if (modData.IsCompacted())
+                        if (input.Equals("Y", StringComparison.OrdinalIgnoreCase))
                         {
-                            modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
-                            modData.Enabled = true;
-                            modData.Rechack = true;
+                            bool added = CompactedModDataD.TryAdd(modData.ModName, modData);
+                            RunRecompact(modData.ModName);
+                            if (added)
+                            {
+                                CompactedModDataD.Remove(modData.ModName);
+                            }
+
+                            if (modData.IsCompacted(true))
+                            {
+                                modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
+                                modData.Enabled = true;
+                                modData.Recheck = true;
+                                notReCompactedFully = false;
+                            }
                         }
                     }
+                }
+
+                if(notReCompactedFully)
+                {
+                    GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData2, modData.ModName));
+                    GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData3, modData.ModName));
+                    GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData4, modData.ModName));
+                    GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData5, modData.ModName));
                 }
 
                 GF.WriteLine(GF.stringLoggingData.EnterToContinue);
@@ -163,6 +185,8 @@ namespace ESLifyEverything
             {
                 case 0:
                     Console.WriteLine(pluginName + GF.stringLoggingData.PluginNotFound);
+                    break;
+                case 1:
                     break;
                 case 2:
                     Console.WriteLine(pluginName + GF.stringLoggingData.PluginNotChanged);

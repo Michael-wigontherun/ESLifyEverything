@@ -12,6 +12,7 @@ namespace ESLifyEverything
         public static readonly string ExtractedBSAModDataPath = ".\\ExtractedBSAModData";
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
         public static readonly string SourceSubPath = "Source\\Scripts";
+        public static readonly string CompactedFormsFolder = ".\\CompactedForms";
 
         public static AppSettings Settings = new AppSettings();
         public static StringResources stringsResources = new StringResources();
@@ -22,8 +23,6 @@ namespace ESLifyEverything
 
         public static string logName = "log.txt";
         public static string FaceGenFileFixPath = "";
-        public static string CompactedFormsFolder = "";
-
 
         public static List<string> BSALoadOrder = new List<string>();
 
@@ -41,7 +40,6 @@ namespace ESLifyEverything
                 return false;
             }
             
-
             bool startUp = true;
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("AppSettings.json")
@@ -180,11 +178,19 @@ namespace ESLifyEverything
                 }
             }
 
+            if (GF.Settings.MO2Support)
+            {
+                if (!Directory.Exists(GF.Settings.MO2ModFolder))
+                {
+                    GF.WriteLine(GF.stringLoggingData.MO2ModsFolderDoesNotExist);
+                    GF.Settings.MO2Support = false;
+                }
+            }
+
             Directory.CreateDirectory(GF.ExtractedBSAModDataPath);
             Directory.CreateDirectory(GF.ChangedScriptsPath);
             GF.ClearChangedScripts();
 
-            CompactedFormsFolder = Path.Combine(GF.Settings.OutputFolder, "CompactedForms");
             Directory.CreateDirectory(CompactedFormsFolder);
 
             if (Directory.Exists(Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath)))
@@ -413,6 +419,22 @@ namespace ESLifyEverything
             else
             {
                 GF.WriteLine(GF.stringLoggingData.FixFaceGenScriptNotFound);
+            }
+
+        }
+        
+        public static void MoveCompactedModDataJsons()
+        {
+            string oldCompactedFormsFolder = Path.Combine(GF.Settings.OutputFolder, "CompactedForms");
+            if (Directory.Exists(oldCompactedFormsFolder))
+            {
+                IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(oldCompactedFormsFolder, "*_ESlEverything.json", SearchOption.AllDirectories);
+
+                foreach(string files in compactedFormsModFiles)
+                {
+                    File.Move(files, CompactedFormsFolder, true);
+                }
+
             }
 
         }

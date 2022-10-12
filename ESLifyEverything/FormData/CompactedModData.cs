@@ -18,7 +18,7 @@ namespace ESLifyEverything.FormData
         [JsonInclude]
         public DateTime? PluginLastModifiedValidation { get; set; }
         [JsonInclude]
-        public bool Rechack { get; set; } = true;
+        public bool Recheck { get; set; } = true;
 
         public CompactedModData() { }
 
@@ -33,11 +33,20 @@ namespace ESLifyEverything.FormData
             CompactedModFormList = compactedModFormList;
         }
         
-        public bool IsCompacted()
+        public bool IsCompacted(bool useOutputLocation)
         {
             try
             {
                 string path = Path.Combine(GF.Settings.DataFolderPath, ModName);
+
+                if (useOutputLocation)
+                {
+                    if (!GF.Settings.ChangedPluginsOutputToDataFolder)
+                    {
+                        path = Path.Combine(GF.Settings.OutputFolder, ModName);
+                    }
+                }
+
                 if (File.Exists(path))
                 {
                     using (ISkyrimModDisposableGetter mod = SkyrimMod.CreateFromBinaryOverlay(path, SkyrimRelease.SkyrimSE))
@@ -84,7 +93,7 @@ namespace ESLifyEverything.FormData
             ModName = json.ModName;
             CompactedModFormList = json.CompactedModFormList;
             PluginLastModifiedValidation = json.PluginLastModifiedValidation;
-            Rechack = json.Rechack;
+            Recheck = json.Recheck;
         }
 
         public void OutputModData(bool write, bool checkPreviousIfExists)

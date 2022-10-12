@@ -27,7 +27,7 @@ namespace ESLifyEverything
         static void Main(string[] args)
         {
             try
-            { 
+            {
                 if (GF.Startup(out int StartupError, "ESLifyEverything_Log.txt"))
                 {
                     Console.WriteLine("Sucessful startup");
@@ -39,11 +39,13 @@ namespace ESLifyEverything
                     {
                         GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
                     }
+
+                    GF.MoveCompactedModDataJsons();
+
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.ImportingAllModData);
                     ImportModData(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms"));
                     ImportModData(GF.CompactedFormsFolder);
-
                     Console.WriteLine("\n\n\n\n");
                     Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
                     Task bsamod = LoadOrderBSAData();

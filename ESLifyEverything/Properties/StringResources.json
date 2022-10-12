@@ -13,6 +13,7 @@
     "xEditCompactedFormLog": "Compacted form found: ",
     "XEditLogFileSizeWarning": "Your xEdit Log is more then about 10mb, This could take a while with logging",
     "NoxEditSessions": "No xEdit Sessions found.",
+    "MO2ModsFolderDoesNotExist": "MO2 Mods Folder does not exist. Disabling MO2 Support",
     "ExitCodeInput": "Enter XXX to skip menu, end menu, or return to previous menu...",
     "SelectSession": "Select a Session to create new Compacted form refferences inside \"OutputFolder\\CompactedForms\" Folder",
     "InputSessionPromt": "Type the number for the session you want. Then press Enter",
@@ -21,10 +22,11 @@
     "PluginDataImport": "Plugins data imported from previous session.",
     "PluginDataImportNotFound": "Plugins data not imported from a previous session. Will run through entire load order.",
     "GetCompDataLog": "Getting compacted mod data from ",
-    "OutOfDateCMData1": " is outdated or was not saved.",
-    "OutOfDateCMData2": "Please delete previously edited and outputed data files and\\or plugins.",
-    "OutOfDateCMData3": "Then recompact and save plugin in xEdit.",
-    "OutOfDateCMData4": "ESLify Everything will ignore {0} compacted mod data for this run.",
+    "OutOfDateCMData1": "{0} is outdated or was not saved.",
+    "OutOfDateCMData2": "{0} was not fully compacted. New forms detected. Recompact the plugin in xEdit, ensure you recompact the plugin in the output folder as well as set the esl flag.",
+    "OutOfDateCMData3": "Please delete previously edited and outputed data files and\\or plugins for {0}.",
+    "OutOfDateCMData4": "Then recompact and save {0} in xEdit. Do not delete the CompactedModData file. It can still be updated.",
+    "OutOfDateCMData5": "ESLify Everything will ignore {0} compacted mod data for this run.",
     "NewFormForMod": "New form for mod = ",
     "NewForm": "New form = ",
     "NewMod": "\nNew Mod:   ",
@@ -140,6 +142,10 @@
     "PluginUnchanged": "Plugin not changed.",
     "SelectCompactedModsMenuHeader": "Select Compacted Mod data's to use to parse over your plugins to run over Load Order.",
     "SingleWordSelected": " selected.",
-    "PluginEditorDisabled": "Plugin Editor is Disabled."
+    "PluginEditorDisabled": "Plugin Editor is Disabled.",
+    "RunPluginRecompactionMenu1": "Would you like ESLify Everything to handle recompacting the known forms?",
+    "RunPluginRecompactionMenu2": "Ensure that the new update does not say anything like \"It is not safe to update mid game\" before continuing with this.",
+    "RunPluginRecompactionMenu3": "If it says something like that its likely that the author changed formIDs.",
+    "RunPluginRecompactionEnterPrompt": "Enter Y to procced. Any other input will skip this and ESLify Everything will not use the Compacted Mod Data. Until it detects rereads it from xEdit"
   }
 }
