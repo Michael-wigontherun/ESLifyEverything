@@ -428,11 +428,11 @@ namespace ESLifyEverything
             string oldCompactedFormsFolder = Path.Combine(GF.Settings.OutputFolder, "CompactedForms");
             if (Directory.Exists(oldCompactedFormsFolder))
             {
-                IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(oldCompactedFormsFolder, "*_ESlEverything.json", SearchOption.AllDirectories);
+                IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(oldCompactedFormsFolder, "*_ESlEverything.json", SearchOption.TopDirectoryOnly);
 
                 foreach(string files in compactedFormsModFiles)
                 {
-                    File.Move(files, CompactedFormsFolder, true);
+                    File.Move(files, Path.Combine(CompactedFormsFolder, Path.GetFileName(files)), true);
                 }
 
             }
