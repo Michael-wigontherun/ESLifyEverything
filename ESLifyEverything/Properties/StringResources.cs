@@ -22,6 +22,7 @@
         public string FolderNotFoundError { get; set; } = "";
         public string ESLifyEverythingIsNotSetUpForSkyrim { get; set; } = "";
         public string MO2ModsFolderDoesNotExist { get; set; } = "";
+        public string NoCMDinDataFolder { get; set; } = "";
 
         //General Menu
         public string ExitCodeInput { get; set; } = "";

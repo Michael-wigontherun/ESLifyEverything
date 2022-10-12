@@ -70,6 +70,11 @@ namespace ESLifyEverything
         #region Import Mod Data
         public static void ImportModData(string compactedFormsLocation)
         {
+            if (!Directory.Exists(compactedFormsLocation))
+            {
+                GF.WriteLine(String.Format(GF.stringLoggingData.NoCMDinDataFolder, compactedFormsLocation));
+                return;
+            }
             IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(
                 compactedFormsLocation,
                 "*_ESlEverything.json",

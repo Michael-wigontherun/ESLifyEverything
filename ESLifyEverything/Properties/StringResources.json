@@ -13,6 +13,7 @@
     "xEditCompactedFormLog": "Compacted form found: ",
     "XEditLogFileSizeWarning": "Your xEdit Log is more then about 10mb, This could take a while with logging",
     "NoxEditSessions": "No xEdit Sessions found.",
+    "NoCMDinDataFolder": "No Compacted Mod Data at {0}. Safe to ignore.",
     "MO2ModsFolderDoesNotExist": "MO2 Mods Folder does not exist. Disabling MO2 Support",
     "ExitCodeInput": "Enter XXX to skip menu, end menu, or return to previous menu...",
     "SelectSession": "Select a Session to create new Compacted form refferences inside \"OutputFolder\\CompactedForms\" Folder",

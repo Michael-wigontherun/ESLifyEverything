@@ -42,7 +42,6 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            
 
             if (!mod.Equals(orgMod))
             {

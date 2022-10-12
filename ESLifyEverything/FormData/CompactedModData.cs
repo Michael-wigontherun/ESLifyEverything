@@ -101,7 +101,7 @@ namespace ESLifyEverything.FormData
             string CompactedFormPath = Path.Combine(GF.CompactedFormsFolder, ModName + "_ESlEverything.json");
             if (checkPreviousIfExists)
             {
-                if (!File.Exists(CompactedFormPath))
+                if (File.Exists(CompactedFormPath))
                 {
                     CompactedModData previous = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(CompactedFormPath))!;
                     
