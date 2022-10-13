@@ -361,7 +361,7 @@ namespace ESLifyEverything
         public static void RunFaceGenFix()
         {
             string loadorder = Path.GetFullPath(".\\Properties\\JustSkyrimLO.txt");
-            string gameType = "-TES5";
+            string gameType = "-SSE";
             if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "Edit Scripts\\_ESLifyEverythingFaceGenFix.pas")))
             {
                 bool run = true;
