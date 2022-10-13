@@ -9,10 +9,10 @@ namespace ESLifyEverything
     public static partial class GF
     {
         public static readonly string SettingsVersion = "3.0.0";
-        public static readonly string ExtractedBSAModDataPath = ".\\ExtractedBSAModData";
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
-        public static readonly string SourceSubPath = "Source\\Scripts";
         public static readonly string CompactedFormsFolder = ".\\CompactedForms";
+        public static readonly string ExtractedBSAModDataPath = ".\\ExtractedBSAModData";
+        public static readonly string SourceSubPath = "Source\\Scripts";
 
         public static AppSettings Settings = new AppSettings();
         public static StringResources stringsResources = new StringResources();

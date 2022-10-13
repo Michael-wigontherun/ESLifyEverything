@@ -49,7 +49,7 @@ namespace ESLifyEverything.FormData
             xEditLogCompactedLine = xEditLogCompactedLine.Substring(xEditLogCompactedLine.IndexOf('"') + 1);
             ModName = xEditLogCompactedLine.Substring(0, xEditLogCompactedLine.IndexOf('"'));
 
-            CompactedFormID = xEditLogCompactedLine.Substring(xEditLogCompactedLine.IndexOf('[') + 3, 6);
+            CompactedFormID = xEditLogCompactedLine.Substring(xEditLogCompactedLine.LastIndexOf('[') + 3, 6);
 
             if (OrigonalFormID.Equals(CompactedFormID))
             {
