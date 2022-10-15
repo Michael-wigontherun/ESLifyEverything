@@ -95,11 +95,11 @@ namespace ESLifyEverything
                     CustomSkills.Wait();
                     CustomSkills.Dispose();
 
-                    //Console.WriteLine("\n\n\n\n");
-                    //GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
-                    //Task Scripts = ExtractScripts();
-                    //Scripts.Wait();
-                    //Scripts.Dispose();
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
+                    Task Scripts = ExtractScripts();
+                    Scripts.Wait();
+                    Scripts.Dispose();
 
                     if (GF.Settings.RunSubPluginCompaction)
                     {
