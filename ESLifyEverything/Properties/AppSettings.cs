@@ -60,9 +60,13 @@ namespace ESLifyEverything.Properties
             {
                 bool setCPOTDF(bool value)
                 {
+                    
                     if (!value)
                     {
-                        GF.WriteLine(GF.stringLoggingData.PluginEditorDisabled);
+                        if (GF.StartUpInitialized)
+                        {
+                            GF.WriteLine(GF.stringLoggingData.PluginEditorDisabled);
+                        }
                         return false;
                     }
                     return true;

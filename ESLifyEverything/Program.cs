@@ -95,11 +95,11 @@ namespace ESLifyEverything
                     CustomSkills.Wait();
                     CustomSkills.Dispose();
 
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
-                    Task Scripts = ExtractScripts();
-                    Scripts.Wait();
-                    Scripts.Dispose();
+                    //Console.WriteLine("\n\n\n\n");
+                    //GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
+                    //Task Scripts = ExtractScripts();
+                    //Scripts.Wait();
+                    //Scripts.Dispose();
 
                     if (GF.Settings.RunSubPluginCompaction)
                     {
@@ -158,6 +158,12 @@ namespace ESLifyEverything
                 Console.WriteLine();
                 GF.WriteLine(GF.stringLoggingData.LoadOrderNotDetectedError);
                 GF.WriteLine(GF.stringLoggingData.RunOrReport);
+            }
+
+            if (GF.NewMO2FolderPaths)
+            {
+                GF.WriteLine(GF.stringLoggingData.NewMO2FoldersWarning);
+                GF.WriteLine(GF.stringLoggingData.HowToDisableMO2Folders);
             }
 
             if (FailedToCompile.Any())

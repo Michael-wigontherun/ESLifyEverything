@@ -85,6 +85,7 @@
         //ImportModData
         public string ImportingAllModData { get; set; } = "";
         public string GetCompDataLog { get; set; } = "";
+        public string PluginNotFoundImport { get; set; } = "";
         public string OutOfDateCMData1 { get; set; } = "";
         public string OutOfDateCMData2 { get; set; } = "";
         public string OutOfDateCMData3 { get; set; } = "";
@@ -106,12 +107,16 @@
         public string PluginCheckModImp { get; set; } = "";
         public string PluginCheckMod { get; set; } = "";
         public string ProcessedPluginsLogCount { get; set; } = "";
+        public string PluginAttemptFix { get; set; } = "";
         public string PluginNotFound { get; set; } = "";
+        public string PluginFixed { get; set; } = "";
+        public string PluginOutputTo { get; set; } = "";
         public string PluginNotChanged { get; set; } = "";
         public string RunAllPluginChecks { get; set; } = "";
-        public string PluginUnchanged { get; set; } = "";
         public string SelectCompactedModsMenuHeader { get; set; } = "";
         public string PluginEditorDisabled { get; set; } = "";
+        public string NewMO2FoldersWarning { get; set; } = "";
+        public string HowToDisableMO2Folders { get; set; } = "";
 
         //BSAData & LoadOrderBSAData
         public string StartBSAExtract { get; set; } = "";
@@ -176,6 +181,7 @@
         public string EndedChampBSA { get; set; } = "";
         public string RunningChampLoose { get; set; } = "";
         public string EndedChampLoose { get; set; } = "";
+        public string FixDecToHexError { get; set; } = "";
 
         //Run FaceGenFix
         public string EditedFaceGen { get; set; } = "";

@@ -397,3 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 ESLifyEverything/Data/NetScriptFramework/Plugins/CustomSkill.IdrinthRacialsAltmer.config.txt
+ReleaseSet/ESLifyEverything - Shortcut.lnk
+ESLifyEverything/changelog.txt

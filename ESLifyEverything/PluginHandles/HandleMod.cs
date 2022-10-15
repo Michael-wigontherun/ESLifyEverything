@@ -16,6 +16,7 @@ namespace ESLifyEverything.PluginHandles
             {
                 return await Task.FromResult(0);
             }
+
             ISkyrimModGetter orgMod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
             SkyrimMod mod = new SkyrimMod(orgMod.ModKey, SkyrimRelease.SkyrimSE);
             mod.DeepCopyIn(orgMod);
@@ -55,12 +56,14 @@ namespace ESLifyEverything.PluginHandles
                 {
                     rec.IsCompressed = false;
                 }
-                
-                mod.WriteToBinary(Path.Combine(GetPluginModOutputPath(pluginName, mod.ModHeader.MasterReferences.ToHashSet()), pluginName));
+                string outputPath = GF.GetPluginModOutputPath(pluginName);
+
+                mod.WriteToBinary(Path.Combine(outputPath, pluginName));
+
+                GF.WriteLine(String.Format(GF.stringLoggingData.PluginOutputTo, pluginName, outputPath));
 
                 return await Task.FromResult(1);
             }
-            else GF.WriteLine(GF.stringLoggingData.PluginUnchanged);
 
             return await Task.FromResult(2);
         }
@@ -78,37 +81,6 @@ namespace ESLifyEverything.PluginHandles
 			}
 			return OrgFormKey;
 		}
-
-        private static string GetPluginModOutputPath(string pluginName, HashSet<MasterReference> masters)
-        {
-            if (GF.Settings.MO2Support)
-            {
-                string masterExtentions = "";
-                foreach(var master in masters)
-                {
-                    foreach (CompactedModData compactedModData in CompactedModDataD.Values)
-                    {
-                        if (master.Master.ToString().Equals(compactedModData.ModName))
-                        {
-                            masterExtentions = masterExtentions + Path.GetFileNameWithoutExtension(compactedModData.ModName) + "_";
-                        }
-                    }
-                }
-
-                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, pluginName + $" {masterExtentions}ESlEverything");
-                Directory.CreateDirectory(OutputPath);
-                return OutputPath;
-            }
-            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
-            {
-                return GF.Settings.DataFolderPath;
-            }
-            return GF.Settings.OutputFolder;
-        }
-
-
-
-
 
     }
 }

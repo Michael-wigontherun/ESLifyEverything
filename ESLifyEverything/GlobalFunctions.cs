@@ -1,6 +1,7 @@
 ﻿using ESLifyEverything.FormData;
 using ESLifyEverything.Properties;
 using Microsoft.Extensions.Configuration;
+using Mutagen.Bethesda.Plugins.Records;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -14,17 +15,22 @@ namespace ESLifyEverything
         public static readonly string ExtractedBSAModDataPath = ".\\ExtractedBSAModData";
         public static readonly string SourceSubPath = "Source\\Scripts";
 
+        public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataD;
+
         public static AppSettings Settings = new AppSettings();
         public static StringResources stringsResources = new StringResources();
         public static StringLoggingData stringLoggingData = new StringLoggingData();
         public static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
+
+        public static List<string> BSALoadOrder = new List<string>();
         public static string[] DefaultScriptBSAs = new string[0];
         public static HashSet<string> IgnoredPlugins = new HashSet<string>();
 
         public static string logName = "log.txt";
         public static string FaceGenFileFixPath = "";
 
-        public static List<string> BSALoadOrder = new List<string>();
+        public static bool StartUpInitialized = false;
+        public static bool NewMO2FolderPaths = false;
 
         public static bool Startup(out int startupError, string ProgramLogName)
         {
@@ -41,12 +47,22 @@ namespace ESLifyEverything
             }
             
             bool startUp = true;
-            IConfiguration config = new ConfigurationBuilder()
+
+            IConfigurationBuilder? configurationBuilder = new ConfigurationBuilder()
                 .AddJsonFile("AppSettings.json")
                 .AddJsonFile(".\\Properties\\StringResources.json")
                 .AddJsonFile(".\\Properties\\DefaultBSAs.json")
-                .AddJsonFile(".\\Properties\\IgnoredPugins.json")
-                .AddEnvironmentVariables().Build();
+                .AddJsonFile(".\\Properties\\IgnoredPugins.json");
+
+            bool customIgnoredPlugins = false;
+
+            if (File.Exists(".\\Properties\\CustomIgnoredPugins.json"))
+            {
+                configurationBuilder.AddJsonFile(".\\Properties\\CustomIgnoredPugins.json");
+                customIgnoredPlugins = true;
+            }
+
+            IConfiguration config = configurationBuilder.AddEnvironmentVariables().Build();
             stringLoggingData = config.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
 
             try
@@ -68,6 +84,8 @@ namespace ESLifyEverything
             stringsResources = config.GetRequiredSection("StringResources").Get<StringResources>();
             DefaultScriptBSAs = config.GetRequiredSection("DefaultScriptBSAs").Get<string[]>();
             IgnoredPlugins = config.GetRequiredSection("IgnoredPugins").Get<HashSet<string>>();
+            
+            StartUpInitialized = true;
 
             if (GF.Settings.AutoReadAllxEditSeesion == false)
             {
@@ -79,7 +97,6 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.DataFolderNotFound);
                 startUp = false;
             }
-            
             
             if (!Directory.Exists(GF.Settings.XEditFolderPath))
             {
@@ -164,6 +181,15 @@ namespace ESLifyEverything
             if (!startUp)
             {
                 return startUp;
+            }
+
+            if (customIgnoredPlugins)
+            {
+                HashSet<string> customIgnoredPluginsSet = config.GetRequiredSection("CustomIgnoredPugins").Get<HashSet<string>>();
+                foreach (string plugin in customIgnoredPluginsSet)
+                {
+                    IgnoredPlugins.Add(plugin);
+                }
             }
 
             if (GF.Settings.RunSubPluginCompaction)
@@ -437,6 +463,23 @@ namespace ESLifyEverything
 
             }
 
+        }
+        
+        public static string GetPluginModOutputPath(string pluginName)
+        {
+            if (GF.Settings.MO2Support)
+            {
+                string masterExtentions = pluginName;
+                NewMO2FolderPaths = true;
+                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, $"{masterExtentions}_ESlEverything");
+                Directory.CreateDirectory(OutputPath);
+                return OutputPath;
+            }
+            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
+            {
+                return GF.Settings.DataFolderPath;
+            }
+            return GF.Settings.OutputFolder;
         }
     }
 }

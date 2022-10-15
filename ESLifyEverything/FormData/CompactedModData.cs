@@ -33,13 +33,13 @@ namespace ESLifyEverything.FormData
             CompactedModFormList = compactedModFormList;
         }
         
-        public bool IsCompacted(bool useOutputLocation)
+        public bool IsCompacted(bool usePluginOutputLocation)
         {
             try
             {
                 string path = Path.Combine(GF.Settings.DataFolderPath, ModName);
 
-                if (useOutputLocation)
+                if (usePluginOutputLocation)
                 {
                     if (!GF.Settings.ChangedPluginsOutputToDataFolder)
                     {

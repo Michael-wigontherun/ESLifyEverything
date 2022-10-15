@@ -39,11 +39,22 @@ namespace ESLifyEverything
             {
                 string afterGetFormFromFile = line.Substring(line.IndexOf("GetFormFromFile(") + "GetFormFromFile(".Length);
                 string stringDecimal = afterGetFormFromFile.Substring(0, afterGetFormFromFile.IndexOf(','));
-                if(long.TryParse(stringDecimal, out long value))
+                //GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                try
                 {
-                    string hex = "0x" + string.Format("{0:x}", value);
-                    line = line.Replace(stringDecimal, hex, StringComparison.OrdinalIgnoreCase);
+                    if (long.TryParse(stringDecimal, out long value))
+                    {
+                        string hex = "0x" + string.Format("{0:x}", value);
+                        line = line.Replace(stringDecimal, hex, StringComparison.OrdinalIgnoreCase);
+                    }
                 }
+                catch(Exception e)
+                {
+                    GF.WriteLine(GF.stringLoggingData.FixDecToHexError);
+                    GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    GF.WriteLine(e.Message);
+                }
+                
                 return line;
             }
             

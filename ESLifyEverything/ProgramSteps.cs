@@ -2,6 +2,9 @@
 using ESLifyEverything.PluginHandles;
 using ESLifyEverything.Properties.DataFileTypes;
 using ESLifyEverything.XEdit;
+using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins.Masters;
+using Mutagen.Bethesda.Skyrim;
 using System.Diagnostics;
 using System.Text.Json;
 
@@ -75,15 +78,28 @@ namespace ESLifyEverything
                 GF.WriteLine(String.Format(GF.stringLoggingData.NoCMDinDataFolder, compactedFormsLocation));
                 return;
             }
+
             IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(
                 compactedFormsLocation,
                 "*_ESlEverything.json",
                 SearchOption.AllDirectories);
+
+            if (!compactedFormsModFiles.Any())
+            {
+                GF.WriteLine(String.Format(GF.stringLoggingData.NoCMDinDataFolder, compactedFormsLocation));
+                return;
+            }
+
             foreach (string compactedFormsModFile in compactedFormsModFiles)
             {
                 GF.WriteLine(GF.stringLoggingData.GetCompDataLog + compactedFormsModFile);
                 CompactedModData modData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(compactedFormsModFile))!;
                 modData.Write();
+                if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, modData.ModName)))
+                {
+                    GF.WriteLine(String.Format(GF.stringLoggingData.PluginNotFoundImport, compactedFormsModFile));
+                    continue;
+                }
 
                 if (modData.Recheck == true)
                 {
@@ -973,73 +989,57 @@ namespace ESLifyEverything
         #region Plugins
         public static void ReadLoadOrder()
         {
-            //Read plugin masters for caching
-            PluginData.GetPluginData();
+            HashSet<string> checkPlugins = SelectCompactedModsMenu();
+
+            HashSet<string> runPlugins = new HashSet<string>();
             for (int i = 1; i < LoadOrder.Length; i++)
             {
-                if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, LoadOrder[i])))
+                if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, LoadOrder[i])))
                 {
                     if (!GF.IgnoredPlugins.Contains(LoadOrder[i]))
                     {
-                        GF.WriteLine(String.Format(GF.stringLoggingData.PluginCheckMod, LoadOrder[i]));
-                        PluginData.AddNew(LoadOrder[i]);
-                    }
-                }
-                GF.WriteLine(String.Format(GF.stringLoggingData.ProcessedPluginsLogCount, i, LoadOrder.Length));
-            }
-
-            //select compacted mod data to run
-            HashSet<string> selectedCompactedMods = SelectCompactedModsMenu();
-
-            //filter plugins that require the compacted mods
-            HashSet<Plugin> runPlugins = new HashSet<Plugin>();
-            foreach (Plugin plugin in PluginData.LoadOrderPlugins.Values)
-            {
-                if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, plugin.PluginName)))
-                {
-                    if (PluginData.CompactedSubPlugins.TryGetValue(plugin.PluginName, out Plugin? subPlugin))
-                    {
-                        if (plugin.LastModified.Equals(subPlugin.LastModified))
+                        GF.WriteLine(String.Format(GF.stringLoggingData.PluginCheckMod, LoadOrder[i]), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, LoadOrder[i])))
                         {
-                            continue;
-                        }
-                    }
-                    foreach (string compactedModData in selectedCompactedMods)
-                    {
-                        if (plugin.Masters.Contains(compactedModData))
-                        {
-                            runPlugins.Add(plugin);
-                            continue;
+                            MasterReferenceCollection? masterCollection = MasterReferenceCollection.FromPath(Path.Combine(GF.Settings.DataFolderPath, LoadOrder[i]), GameRelease.SkyrimSE);
+                            foreach (var master in masterCollection.Masters.ToHashSet())
+                            {
+                                if (checkPlugins.Contains(master.Master.FileName))
+                                {
+                                    GF.WriteLine(String.Format(GF.stringLoggingData.PluginAttemptFix, LoadOrder[i]));
+                                    runPlugins.Add(LoadOrder[i]);
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
+                GF.WriteLine(String.Format(GF.stringLoggingData.ProcessedPluginsLogCount, i, LoadOrder.Length, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging));
             }
 
             //Fix and output plugins that still use uncompacted data
-            foreach (Plugin plugin in runPlugins)
+            foreach (string pluginToRun in runPlugins)
             {
-                Task<int> handlePluginTask = HandleMod.HandleSkyrimMod(plugin.PluginName);
+                Task<int> handlePluginTask = HandleMod.HandleSkyrimMod(pluginToRun);
                 handlePluginTask.Wait();
                 switch (handlePluginTask.Result)
                 {
                     case 0:
-                        Console.WriteLine(plugin.PluginName + GF.stringLoggingData.PluginNotFound);
+                        GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginNotFound, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                         break;
                     case 1:
-                        PluginData.UpdateCompactedData(plugin);
+                        GF.WriteLine(String.Format(GF.stringLoggingData.PluginFixed, pluginToRun));
                         break;
                     case 2:
-                        PluginData.NewCompactedSubPlugin(plugin);
-                        Console.WriteLine(plugin.PluginName + GF.stringLoggingData.PluginNotChanged);
+                        GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                         break;
                     default:
-                        Console.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
+                        GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
                         break;
                 }
                 handlePluginTask.Dispose();
             }
 
-            PluginData.Output();
         }
 
         public static HashSet<string> SelectCompactedModsMenu()
@@ -1048,12 +1048,14 @@ namespace ESLifyEverything
             List<string> menuList = new List<string>();
             menuList.AddRange(CompactedModDataD.Keys);
             bool exit = false;
-            int menuModifier = 2;//1 is for offsetting the 0. in the menu add one for each extra menu item.
+            int menuModifier = 3;//1 is for offsetting the 0. in the menu add one for each extra menu item.
             do
             {
+                Console.WriteLine("\n\n");
                 GF.WriteLine(GF.stringLoggingData.SelectCompactedModsMenuHeader);
                 Console.WriteLine(GF.stringLoggingData.ExitCodeInput);
-                Console.WriteLine("1. " + GF.stringLoggingData.RunAllPluginChecks);
+                Console.WriteLine("1. " + GF.stringLoggingData.RunAllPluginChecks);//menuModifier = 2
+                Console.WriteLine("2. " + "Check the selected plugins");//menuModifier = 3
                 for (int i = 0; i < menuList.Count; i++)
                 {
                     Console.WriteLine($"{i + menuModifier}. {menuList.ElementAt(i)}");
@@ -1069,6 +1071,10 @@ namespace ESLifyEverything
                     {
                         GF.WriteLine(GF.stringLoggingData.RunAllPluginChecks + GF.stringLoggingData.SingleWordSelected);
                         return CompactedModDataD.Keys.ToHashSet();
+                    }
+                    else if (selectedMenuItem == 2)
+                    {
+                        exit = true;
                     }
                     else
                     {
