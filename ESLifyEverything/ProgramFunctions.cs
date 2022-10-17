@@ -6,6 +6,7 @@ namespace ESLifyEverything
 {
     public static partial class Program
     {
+        //Parses Data Files with a Separator
         public static string[] FormInFileLineReader(string[] fileLines, Separator? SeparatorData, out bool changed)
         {
             changed = false;
@@ -26,7 +27,13 @@ namespace ESLifyEverything
                                     {
                                         if (fileLines[i].Contains(SeparatorData.FormKeySeparator))
                                         {
-                                            string line = RemoveExtraFormHex(fileLines[i], form.GetOrigonalFormID(), SeparatorData.FormKeySeparator);
+                                            string line = fileLines[i];
+
+                                            if (SeparatorData.IDIsSecond)
+                                            {
+                                                line = RemoveExtraFormHex(fileLines[i], form.GetOrigonalFormID(), SeparatorData.FormKeySeparator);
+                                            }
+                                            
                                             string orgFormKey = form.GetOrigonalFileLineFormKey(SeparatorData, modData.ModName);
                                             if (line.Contains(orgFormKey))
                                             {
@@ -61,6 +68,7 @@ namespace ESLifyEverything
             return fileLines;
         }
 
+        //Parses Script files
         public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed)
         {
             string FixLineToHex(string line)
@@ -117,6 +125,7 @@ namespace ESLifyEverything
             return fileLines;
         }
 
+        //Parses Toml Arrays in Data Files
         public static string[] FormInTomlArray(string[] fileLines, string[] arrayFilters, out bool changed)
         {
             bool ContainsArrayFilter(string line)
@@ -186,6 +195,7 @@ namespace ESLifyEverything
             return fileLines;
         }
 
+        //Parses Data Files with Delimiter
         public static string[] DelimitedFormKeysInFileLineReader(string[] fileLines, string delimiter, out bool changed)
         {
             changed = false;
@@ -238,6 +248,7 @@ namespace ESLifyEverything
             return fileLines;
         }
 
+        //Removes the extra hex data infront of the FormID and after the separator
         public static string RemoveExtraFormHex(string line, string orgFormID, string separator)
         {
             if (separator.Length > 1)
@@ -258,19 +269,7 @@ namespace ESLifyEverything
             return line;
         }
 
-        public static void CopyFormFile(FormHandler form, string origonalDataStartPath, string OrgFilePath, out string newPath)
-        {
-            GF.WriteLine(GF.stringLoggingData.OriganalPath + OrgFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-
-            newPath = GF.FixOuputPath(OrgFilePath.Replace(form.OrigonalFormID, form.CompactedFormID, StringComparison.OrdinalIgnoreCase), origonalDataStartPath, GF.Settings.OutputFolder);
-
-            GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
-
-            Directory.CreateDirectory(newPath.Replace(Path.GetFileName(newPath), ""));
-
-            File.Copy(OrgFilePath, newPath, true);
-        }
-
+        //Outputs the Data file to the OutputFolder
         public static void OuputDataFileToOutputFolder(bool changed, string origonalFilePath, string[] newFileLinesArr, string unchangedLogLine)
         {
             if (changed == true)
@@ -284,6 +283,24 @@ namespace ESLifyEverything
             {
                 GF.WriteLine(unchangedLogLine + origonalFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
             }
+        }
+
+        //Gets the output folder for where plugins need to be outputed to
+        public static string GetPluginModOutputPath(string pluginName)
+        {
+            if (GF.Settings.MO2Support)
+            {
+                string masterExtentions = pluginName;
+                NewMO2FolderPaths = true;
+                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, $"{masterExtentions}_ESlEverything");
+                Directory.CreateDirectory(OutputPath);
+                return OutputPath;
+            }
+            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
+            {
+                return GF.Settings.DataFolderPath;
+            }
+            return GF.Settings.OutputFolder;
         }
     }
 }

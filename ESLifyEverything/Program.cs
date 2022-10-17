@@ -9,21 +9,48 @@ namespace ESLifyEverything
 {
     public static partial class Program
     {
+        //List of dictionary of all enabled and valid CompactedModData.
+        //The entire program functions using this.
         public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
 
+        //When populated it holds all plugin names parsed from your plugins.txt file from your my games folder
         public static string[] LoadOrder = new string[0];
+
+        //When populated it holds the plugins with attached BSAs without the extention
         public static List<string> LoadOrderNoExtensions = new List<string>();
+
+        //Populated by _BasicSingleFile.json ModConfigurations
         public static HashSet<BasicSingleFile> BasicSingleModConfigurations = new HashSet<BasicSingleFile>();
+
+        //Populated by _BasicDirectFolder.json ModConfigurations
         public static HashSet<BasicDirectFolder> BasicDirectFolderModConfigurations = new HashSet<BasicDirectFolder>();
+
+        //Populated by _BasicDataSubfolder.json ModConfigurations
         public static HashSet<BasicDataSubfolder> BasicDataSubfolderModConfigurations = new HashSet<BasicDataSubfolder>();
+
+        //Populated by _ComplexTOML.json ModConfigurations
         public static HashSet<ComplexTOML> ComplexTOMLModConfigurations = new HashSet<ComplexTOML>();
+
+        //Populated by _DelimitedFormKeys.json ModConfigurations
         public static HashSet<DelimitedFormKeys> DelimitedFormKeysModConfigurations = new HashSet<DelimitedFormKeys>();
+
+        //Populated by script names that failed to compile during Script ESLify
         public static HashSet<string> FailedToCompile = new HashSet<string>();
 
+        //End identifier to prompt that ESLify Everything output FaceGen data
         public static bool EditedFaceGen = false;
-        public static bool BSAExtracted = true;
+
+        //End identifier to prompt that ESLify Everything output BSAs were Extracted
+        public static bool BSAExtracted = false;
+
+        //End identifier to prompt that ESLify Everything output edited plugins to MO2 mods folder
+        public static bool NewMO2FolderPaths = false;
+
+        //identifier for ESLify Everything detected new mods and it needs to run Script ESLify
         public static bool NewOrUpdatedMods = false;
 
+        //Main method that starts all features for eslify
+        //Currently there are no Console Arguments, I will be adding some eventually
         static void Main(string[] args)
         {
             try
@@ -153,14 +180,14 @@ namespace ESLifyEverything
                 GF.RunFaceGenFix();
             }
 
-            if (!BSAExtracted)
+            if (BSAExtracted)
             {
                 Console.WriteLine();
                 GF.WriteLine(GF.stringLoggingData.LoadOrderNotDetectedError);
                 GF.WriteLine(GF.stringLoggingData.RunOrReport);
             }
 
-            if (GF.NewMO2FolderPaths)
+            if (NewMO2FolderPaths)
             {
                 GF.WriteLine(GF.stringLoggingData.NewMO2FoldersWarning);
                 GF.WriteLine(GF.stringLoggingData.HowToDisableMO2Folders);

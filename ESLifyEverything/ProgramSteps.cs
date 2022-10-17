@@ -259,7 +259,7 @@ namespace ESLifyEverything
             {
                 GF.WriteLine(GF.stringLoggingData.LoadOrderNotDetectedError);
                 GF.WriteLine(GF.stringLoggingData.RunOrReport);
-                BSAExtracted = false;
+                BSAExtracted = true;
             }
             return await Task.FromResult(0);
         }

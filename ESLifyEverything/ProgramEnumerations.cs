@@ -6,7 +6,7 @@ namespace ESLifyEverything
 {
     public static partial class Program
     {
-
+        //Unumerates BasicSingleFile Mod Configurations
         public static void SingleBasicFile(BasicSingleFile basicSingleFile)
         {
             //string path = Path.Combine(GF.Settings.DataFolderPath, "autoBody\\Config\\morphs.ini");
@@ -34,6 +34,7 @@ namespace ESLifyEverything
             
         }
 
+        //Unumerates BasicDirectFolder Mod Configurations
         public static void EnumDirectFolder(BasicDirectFolder basicDirectFolder)
         {
             if (!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, basicDirectFolder.StartFolder)))
@@ -54,6 +55,7 @@ namespace ESLifyEverything
             }
         }
 
+        //Unumerates BasicDataSubfolder Mod Configurations
         public static async Task<int> EnumDataSubfolder(BasicDataSubfolder basicDataSubfolder)
         {
             if (!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, basicDataSubfolder.StartDataSubFolder)))
@@ -84,6 +86,7 @@ namespace ESLifyEverything
             return await Task.FromResult(1);
         }
 
+        //Unumerates ComplexTOML Mod Configurations
         public static async Task<int> EnumToml(ComplexTOML complexTOML)
         {
             if (!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, complexTOML.StartFolder)))
@@ -114,6 +117,7 @@ namespace ESLifyEverything
             return await Task.FromResult(1);
         }
 
+        //Unumerates DelimitedFormKeys Mod Configurations
         public static void EnumDelimitedFormKeys(DelimitedFormKeys delimitedFormKeys)
         {
             if (!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, delimitedFormKeys.StartFolder)))

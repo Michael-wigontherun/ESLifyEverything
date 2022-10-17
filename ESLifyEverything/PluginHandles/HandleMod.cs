@@ -56,7 +56,7 @@ namespace ESLifyEverything.PluginHandles
                 {
                     rec.IsCompressed = false;
                 }
-                string outputPath = GF.GetPluginModOutputPath(pluginName);
+                string outputPath = Program.GetPluginModOutputPath(pluginName);
 
                 mod.WriteToBinary(Path.Combine(outputPath, pluginName));
 

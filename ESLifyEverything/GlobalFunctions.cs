@@ -9,29 +9,55 @@ namespace ESLifyEverything
 {
     public static partial class GF
     {
+        //readonly property to identify what settings version ESLify uses to update settings properly
         public static readonly string SettingsVersion = "3.2.0";
+
+        //readonly property to direct to where the Changed Scripts are stored
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
+
+        //readonly property to direct to where the Compacted Forms are stored
         public static readonly string CompactedFormsFolder = ".\\CompactedForms";
+
+        //readonly property to direct to where the Extracted BSA Mod Data is stored
         public static readonly string ExtractedBSAModDataPath = ".\\ExtractedBSAModData";
+
+        //readonly property to direct to where I wish for the Source code to be decompiled and read from.
         public static readonly string SourceSubPath = "Source\\Scripts";
 
-        public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataD;
-
+        //The settings object that the program functions off of
         public static AppSettings Settings = new AppSettings();
+
+        //Setting Object that enable developer console logging
+        public static DevAppSettings DevSettings = new DevAppSettings();
+
+        //string resources for support for other languages other then English
         public static StringResources stringsResources = new StringResources();
+
+        //string logging data for log lines in other languages other then English
         public static StringLoggingData stringLoggingData = new StringLoggingData();
+
+        //Global object for outputing json in readable format
         public static JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions() { WriteIndented = true };
 
-        public static List<string> BSALoadOrder = new List<string>();
+        //Reads from .\\Properties\\DefaultBSAs.json, it is a list of the default BSAs from the base game
         public static string[] DefaultScriptBSAs = new string[0];
+
+        //Reads from .\\Properties\\IgnoredPugins.json and .\\Properties\\CustomIgnoredPugins.json, if it exists
+        //It is a list that holds what plugins should not be looked at by ESLify Everything
+        //The base game plugins and a few large mod's plugins are included in IgnoredPugins.json
+        //CustomIgnoredPugins.json is created by the user and populated with what you want to make ESLify Everything processing them
         public static HashSet<string> IgnoredPlugins = new HashSet<string>();
 
+        //ESLify Everything's log name
         public static string logName = "log.txt";
+
+        //Path to the face gen fix list for the xEdit script
         public static string FaceGenFileFixPath = "";
 
+        //Identifier to start object logging
         public static bool StartUpInitialized = false;
-        public static bool NewMO2FolderPaths = false;
 
+        //Checks whether all AppSettings are valid and should work as intended so long as paths are directed to the correct folders
         public static bool Startup(out int startupError, string ProgramLogName)
         {
             logName = ProgramLogName;
@@ -84,7 +110,12 @@ namespace ESLifyEverything
             stringsResources = config.GetRequiredSection("StringResources").Get<StringResources>();
             DefaultScriptBSAs = config.GetRequiredSection("DefaultScriptBSAs").Get<string[]>();
             IgnoredPlugins = config.GetRequiredSection("IgnoredPugins").Get<HashSet<string>>();
-            
+
+            if (File.Exists("DevAppSettings.json"))
+            {
+                DevSettings = JsonSerializer.Deserialize<DevAppSettings>(File.ReadAllText("DevAppSettings.json"))!;
+            }
+
             StartUpInitialized = true;
 
             if (GF.Settings.AutoReadAllxEditSeesion == false)
@@ -237,6 +268,7 @@ namespace ESLifyEverything
             return startUp;
         }
 
+        //Clears the ChangedScripts folder from previous ESLify Everything session
         private static void ClearChangedScripts()
         {
             IEnumerable<string> changedSouce = Directory.EnumerateFiles(
@@ -252,8 +284,19 @@ namespace ESLifyEverything
             }
         }
 
+        //Writes a console line or file line when logging is set to true
         public static void WriteLine(string logLine, bool consoleLog = true, bool fileLogging = true)
         {
+            if (GF.DevSettings.DevLogging)
+            {
+                Console.WriteLine(logLine);
+                using (StreamWriter stream = File.AppendText(logName))
+                {
+                    stream.WriteLine(logLine);
+                }
+                return;
+            }
+
             if (consoleLog)
             {
                 Console.WriteLine(logLine);
@@ -267,8 +310,22 @@ namespace ESLifyEverything
             }
         }
 
-        public static void WriteLine(List<FormHandler> logData, bool consoleLog = true, bool fileLogging = true)
+        //Writes a list of FormHandler's to console line or file line when logging is set to true
+        public static void WriteLine(IEnumerable<FormHandler> logData, bool consoleLog = true, bool fileLogging = true)
         {
+            if (GF.DevSettings.DevLogging)
+            {
+                foreach (FormHandler item in logData)
+                {
+                    Console.WriteLine(item);
+                    using (StreamWriter stream = File.AppendText(logName))
+                    {
+                        stream.WriteLine(item);
+                    }
+                }
+                return;
+            }
+
             if (consoleLog)
             {
                 foreach (FormHandler item in logData)
@@ -288,28 +345,7 @@ namespace ESLifyEverything
             }
         }
 
-        public static void WriteLine(HashSet<FormHandler> logData, bool consoleLog = true, bool fileLogging = true)
-        {
-            if (consoleLog)
-            {
-                foreach (FormHandler item in logData)
-                {
-                    Console.WriteLine(item!.ToString());
-                }
-            }
-            if (fileLogging)
-            {
-                using (StreamWriter stream = File.AppendText("ESLifyEverything_Log.txt"))
-                {
-                    foreach (FormHandler item in logData)
-                    {
-                        stream.WriteLine(item!.ToString());
-                    }
-                }
-            }
-        }
-
-        //returns true when a valid input number is input
+        //returns true when a valid input is inputed
         //-1 = return exit code in selectedMenuItem
         public static bool WhileMenuSelect(int menuMaxNum, out int selectedMenuItem, int MenuMinNum = 0)
         {
@@ -331,6 +367,7 @@ namespace ESLifyEverything
             return false;
         }
 
+        //Generates and logs the AppSettings.json file
         public static void GenerateSettingsFileError()
         {
             GF.WriteLine(GF.stringLoggingData.SettingsFileNotFound);
@@ -339,6 +376,7 @@ namespace ESLifyEverything
             new AppSettings().Build();
         }
 
+        //Updates and logs the AppSettings.json file
         public static void UpdateSettingsFile()
         {
             IConfiguration config = new ConfigurationBuilder()
@@ -365,7 +403,6 @@ namespace ESLifyEverything
 #pragma warning restore CS0618 // Type or member is obsolete
         }
 
-        //origonalPath = Origonal path with replaced origonal FormID if it contains it
         public static string FixOuputPath(string origonalPath)
         {
             string newPath = origonalPath.Replace(GF.Settings.DataFolderPath, "");
@@ -386,11 +423,13 @@ namespace ESLifyEverything
             return Path.Combine(newStartPath, newPath);
         }
 
+        //Gets the root folder containing the Data folder
         public static string GetSkyrimRootFolder()
         {
             return Path.GetFullPath(GF.Settings.DataFolderPath).Replace("\\Data", "");
         }
 
+        //Auto Runs the xEdit script to fix FaceGen nif files
         public static void RunFaceGenFix()
         {
             string loadorder = Path.GetFullPath(".\\Properties\\JustSkyrimLO.txt");
@@ -456,6 +495,7 @@ namespace ESLifyEverything
 
         }
         
+        //Moves Compacted Mod Data files from the Data folder to the new folder in ESLify Everything
         public static void MoveCompactedModDataJsons()
         {
             string oldCompactedFormsFolder = Path.Combine(GF.Settings.OutputFolder, "CompactedForms");
@@ -472,21 +512,5 @@ namespace ESLifyEverything
 
         }
         
-        public static string GetPluginModOutputPath(string pluginName)
-        {
-            if (GF.Settings.MO2Support)
-            {
-                string masterExtentions = pluginName;
-                NewMO2FolderPaths = true;
-                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, $"{masterExtentions}_ESlEverything");
-                Directory.CreateDirectory(OutputPath);
-                return OutputPath;
-            }
-            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
-            {
-                return GF.Settings.DataFolderPath;
-            }
-            return GF.Settings.OutputFolder;
-        }
     }
 }
