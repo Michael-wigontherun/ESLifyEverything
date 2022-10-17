@@ -182,6 +182,8 @@
         public string RunningChampLoose { get; set; } = "";
         public string EndedChampLoose { get; set; } = "";
         public string FixDecToHexError { get; set; } = "";
+        public string CompilerIsDisabled { get; set; } = "";
+        public string ChangedScriptsLocated { get; set; } = "";
 
         //Run FaceGenFix
         public string EditedFaceGen { get; set; } = "";

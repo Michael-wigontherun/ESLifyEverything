@@ -1,4 +1,5 @@
-﻿using Mutagen.Bethesda.Plugins;
+﻿using ESLifyEverything.Properties.DataFileTypes;
+using Mutagen.Bethesda.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,41 @@ namespace ESLifyEverything.FormData
                 len = 3;
             }
             return CompactedFormID.Substring(len);
+        }
+
+        public string GetCompactedFormIDTrimmed()
+        {
+            return CompactedFormID.TrimStart('0');
+        }
+
+        public string GetOrigonalFileLineFormKey(Separator separator, string orgModName)
+        {
+            string modName = orgModName;
+            if (separator.ModNameAsString)
+            {
+                modName = separator.ModNameStringCharater + orgModName + separator.ModNameStringCharater;
+            }
+
+            if (separator.IDIsSecond)
+            {
+                return modName + separator.FormKeySeparator + GetOrigonalFormID();
+            }
+            return GetOrigonalFormID() + separator.FormKeySeparator + modName;
+        }
+
+        public string GetCompactedFileLineFormKey(Separator separator)
+        {
+            string modName = ModName;
+            if (separator.ModNameAsString)
+            {
+                modName = separator.ModNameStringCharater + ModName + separator.ModNameStringCharater;
+            }
+
+            if (separator.IDIsSecond)
+            {
+                return modName + separator.FormKeySeparator + GetCompactedFormIDTrimmed();
+            }
+            return GetCompactedFormIDTrimmed() + separator.FormKeySeparator + modName;
         }
 
         public void CreateCompactedForm(string xEditLogCompactedLine)

@@ -9,7 +9,7 @@ namespace ESLifyEverything
 {
     public static partial class GF
     {
-        public static readonly string SettingsVersion = "3.0.0";
+        public static readonly string SettingsVersion = "3.2.0";
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
         public static readonly string CompactedFormsFolder = ".\\CompactedForms";
         public static readonly string ExtractedBSAModDataPath = ".\\ExtractedBSAModData";
@@ -344,7 +344,8 @@ namespace ESLifyEverything
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("AppSettings.json")
                 .AddEnvironmentVariables().Build();
-            
+
+#pragma warning disable CS0618 // Type or member is obsolete
             switch (config.GetRequiredSection("SettingsVersion").Get<string>())
             {
                 case "1.9":
@@ -352,10 +353,16 @@ namespace ESLifyEverything
                     GF.WriteLine(GF.stringLoggingData.EditYourSettings);
                     UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings19>()).Build();
                     break;
+                case "3.0.0":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings3>()).Build();
+                    break;
                 default:
                     GenerateSettingsFileError();
                     break;
             }
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         //origonalPath = Origonal path with replaced origonal FormID if it contains it

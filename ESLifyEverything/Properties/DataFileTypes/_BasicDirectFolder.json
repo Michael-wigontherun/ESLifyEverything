@@ -4,6 +4,12 @@
     "Name": "SPID",
     "StartFolder": "",
     "FileNameFilter": "*_DISTR.ini",
+    "SeparatorData": {
+      "FormKeySeparator": "~",
+      "IDIsSecond": false,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting SPID Eslify",
     "FileAtLogLine": "SPID file found at ",
     "FileUnchangedLogLine": "SPID file unchanged: ",
@@ -14,6 +20,12 @@
     "Name": "BOS",
     "StartFolder": "",
     "FileNameFilter": "*_SWAP.ini",
+    "SeparatorData": {
+      "FormKeySeparator": "~",
+      "IDIsSecond": false,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting Base Object Swapper Eslify",
     "FileAtLogLine": "BOSwap file found at ",
     "FileUnchangedLogLine": "BOSwap file unchanged: ",
@@ -24,6 +36,12 @@
     "Name": "KID",
     "StartFolder": "",
     "FileNameFilter": "*_KID.ini",
+    "SeparatorData": {
+      "FormKeySeparator": "~",
+      "IDIsSecond": false,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting KID Eslify",
     "FileAtLogLine": "KID file found at ",
     "FileUnchangedLogLine": "KID file unchanged: ",
@@ -34,6 +52,12 @@
     "Name": "FLM",
     "StartFolder": "",
     "FileNameFilter": "*_FLM.ini",
+    "SeparatorData": {
+      "FormKeySeparator": "~",
+      "IDIsSecond": false,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting FLM Eslify",
     "FileAtLogLine": "FLM file found at ",
     "FileUnchangedLogLine": "FLM file unchanged: ",
@@ -44,6 +68,12 @@
     "Name": "AOS",
     "StartFolder": "",
     "FileNameFilter": "*_ANIO.ini",
+    "SeparatorData": {
+      "FormKeySeparator": "~",
+      "IDIsSecond": false,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting AnimObject Eslify",
     "FileAtLogLine": "AnimObject file found at ",
     "FileUnchangedLogLine": "AnimObject file unchanged: ",
@@ -54,6 +84,12 @@
     "Name": "ENBLight",
     "StartFolder": "",
     "FileNameFilter": "*_ENBL.ini",
+    "SeparatorData": {
+      "FormKeySeparator": "~",
+      "IDIsSecond": false,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting ENB Lights For Effect Shaders Eslify",
     "FileAtLogLine": "ENBLightsForEffectShaders file found at ",
     "FileUnchangedLogLine": "ENBLightsForEffectShaders file unchanged: ",
@@ -64,6 +100,12 @@
     "Name": "PayInt",
     "StartFolder": "SKSE\\PayloadInterpreter\\Config",
     "FileNameFilter": "*.ini",
+    "SeparatorData": {
+      "FormKeySeparator": "|",
+      "IDIsSecond": false,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting Payload Interpreter Eslify",
     "FileAtLogLine": "PayloadInterpreter file found at ",
     "FileUnchangedLogLine": "PayloadInterpreter file unchanged: ",
@@ -74,6 +116,12 @@
     "Name": "CoMap",
     "StartFolder": "MapMarkers",
     "FileNameFilter": "*.json",
+    "SeparatorData": {
+      "FormKeySeparator": "|",
+      "IDIsSecond": true,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting CoMap Eslify",
     "FileAtLogLine": "CoMap file found at ",
     "FileUnchangedLogLine": "CoMap file unchanged: ",

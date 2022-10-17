@@ -4,6 +4,7 @@
     "Name": "LokiPOISE",
     "StartFolder": "SKSE\\Plugins\\loki_POISE",
     "FileNameFilter": "loki_POISE*.toml",
+    "SeparatorData": null,
     "ArrayStartFilters": [
       "[[race]]"
     ],
@@ -17,6 +18,7 @@
     "Name": "TDM",
     "StartFolder": "SKSE\\Plugins\\TrueDirectionalMovement",
     "FileNameFilter": "TrueDirectionalMovement*.toml",
+    "SeparatorData": null,
     "ArrayStartFilters": [
       "[[TargetPoints]]"
     ],
@@ -30,6 +32,7 @@
     "Name": "Precision",
     "StartFolder": "SKSE\\Plugins\\Precision",
     "FileNameFilter": "Precision*.toml",
+    "SeparatorData": null,
     "ArrayStartFilters": [
       "[[AttackDefinitions]]"
     ],

@@ -14,6 +14,8 @@ namespace ESLifyEverything.Properties.DataFileTypes
         [JsonInclude]
         public string DirectoryFilter = String.Empty;
         [JsonInclude]
+        public Separator? SeparatorData = null;
+        [JsonInclude]
         public string FileFilter = String.Empty;
         [JsonInclude]
         public string StartingLogLine = String.Empty;

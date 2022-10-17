@@ -11,6 +11,8 @@ namespace ESLifyEverything.Properties.DataFileTypes
         [JsonInclude]
         public string DataPath = String.Empty;
         [JsonInclude]
+        public Separator? SeparatorData = null;
+        [JsonInclude]
         public string StartingLogLine = String.Empty;
         [JsonInclude]
         public string FileAtLogLine = String.Empty;

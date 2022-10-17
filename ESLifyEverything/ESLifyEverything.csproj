@@ -15,12 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="SSEEdit_log.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="AppSettings.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -53,9 +47,6 @@
     </None>
     <None Update="Properties\StringResources.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="SSEEdit_log.txt">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

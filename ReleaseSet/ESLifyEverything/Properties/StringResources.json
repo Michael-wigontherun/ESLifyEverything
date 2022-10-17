@@ -114,6 +114,8 @@
     "EndedChampBSA": "BSA scripts Champollion Ended.",
     "RunningChampLoose": "Running Champollion on loose scripts.",
     "EndedChampLoose": "Source code Champollion Ended.",
+    "CompilerIsDisabled": "Compiler is disabled. You must compile them yourself. Or enable the Compiler setting inside \"AppSettings.json\".",
+    "ChangedScriptsLocated": "The changed scripts can be found inside of {0}.",
     "ConfiguartionFileFailed": "Configuartion file failed to load: ",
     "StartingDataFileESLify": "Starting Data File ESLify with Mod Connections",
     "InputDataFileExecutionPromt": "Input number option to start Data File ESLify.",

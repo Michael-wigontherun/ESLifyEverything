@@ -144,7 +144,7 @@ namespace ESLifyEverything
             foreach (string script in scripts)
             {
                 bool changed = false;
-                string[] fileLines = FormInFileLineReaderDecimal(File.ReadAllLines(script), out changed);
+                string[] fileLines = FormInScriptFileLineReader(File.ReadAllLines(script), out changed);
                 if (changed)
                 {
                     GF.WriteLine(GF.stringLoggingData.ScriptSourceFileChanged + script, false, GF.Settings.VerboseFileLoging);
@@ -160,26 +160,34 @@ namespace ESLifyEverything
             {
                 if (changedFiles.Any())
                 {
-                    Console.WriteLine();
-                    GF.WriteLine(GF.stringLoggingData.ImportantBelow);
-                    GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
-                    Console.WriteLine();
-                    GF.WriteLine(GF.stringLoggingData.ScriptESLifyINeedThisDataToBeReported);
-                    Console.WriteLine();
-                    GF.WriteLine(GF.stringLoggingData.ImportantBelow1);
-                    Console.WriteLine();
-                    Process p = new Process();
-                    p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
-                    p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"TESV_Papyrus_Flags.flg\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
-                    p.Start();
-                    p.WaitForExit();
-                    p.Dispose();
-                    Console.WriteLine();
-                    GF.WriteLine(GF.stringLoggingData.ImportantAbove);
-
-                    foreach (var changedFile in changedFiles)
+                    if (GF.Settings.EnableCompiler)
                     {
-                        ScriptCompiled(Path.ChangeExtension(Path.GetFileName(changedFile), null));
+                        Console.WriteLine();
+                        GF.WriteLine(GF.stringLoggingData.ImportantBelow);
+                        GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
+                        Console.WriteLine();
+                        GF.WriteLine(GF.stringLoggingData.ScriptESLifyINeedThisDataToBeReported);
+                        Console.WriteLine();
+                        GF.WriteLine(GF.stringLoggingData.ImportantBelow1);
+                        Console.WriteLine();
+                        Process p = new Process();
+                        p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
+                        p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"TESV_Papyrus_Flags.flg\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
+                        p.Start();
+                        p.WaitForExit();
+                        p.Dispose();
+                        Console.WriteLine();
+                        GF.WriteLine(GF.stringLoggingData.ImportantAbove);
+
+                        foreach (var changedFile in changedFiles)
+                        {
+                            ScriptCompiled(Path.ChangeExtension(Path.GetFileName(changedFile), null));
+                        }
+                    }
+                    else
+                    {
+                        GF.WriteLine(GF.stringLoggingData.CompilerIsDisabled);
+                        GF.WriteLine(String.Format(GF.stringLoggingData.ChangedScriptsLocated, Path.GetFullPath(GF.ChangedScriptsPath)));
                     }
                 }
                 else
@@ -193,7 +201,6 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.PapyrusCompilerMissing2);
                 GF.WriteLine(GF.stringLoggingData.PapyrusCompilerMissing3);
             }
-
 
             return await Task.FromResult(0);
         }

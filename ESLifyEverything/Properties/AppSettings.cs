@@ -4,9 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace ESLifyEverything.Properties
 {
+#pragma warning disable CS0618 // Type or member is obsolete
     public static class UAppSettings
     {
         public static AppSettings AppSettings(AppSettings19 appSettings19)
+
         {
             AppSettings appSettings = new AppSettings();
             appSettings.XEditLogFileName = appSettings19.XEditLogFileName;
@@ -23,8 +25,30 @@ namespace ESLifyEverything.Properties
             appSettings.OutputFolder = appSettings19.OutputFolder;
             return appSettings;
         }
-    }
 
+        public static AppSettings AppSettings(AppSettings3 appSettings3)
+        {
+            AppSettings appSettings = new AppSettings();
+            appSettings.XEditLogFileName = appSettings3.XEditLogFileName;
+            appSettings.PapyrusFlag = appSettings3.PapyrusFlag;
+            appSettings.VerboseConsoleLoging = appSettings3.VerboseConsoleLoging;
+            appSettings.VerboseFileLoging = appSettings3.VerboseFileLoging;
+            appSettings.AutoReadNewestxEditSeesion = appSettings3.AutoReadNewestxEditSeesion;
+            appSettings.AutoReadAllxEditSeesion = appSettings3.AutoReadAllxEditSeesion;
+            appSettings.AutoRunESLify = appSettings3.AutoRunESLify;
+            appSettings.AutoRunScriptDecompile = appSettings3.AutoRunScriptDecompile;
+            appSettings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion = appSettings3.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion;
+            appSettings.RunSubPluginCompaction = appSettings3.RunSubPluginCompaction;
+            appSettings.ChangedPluginsOutputToDataFolder = appSettings3.ChangedPluginsOutputToDataFolder;
+            appSettings.MO2Support = appSettings3.MO2Support;
+            appSettings.MO2ModFolder = appSettings3.MO2ModFolder;
+            appSettings.XEditFolderPath = appSettings3.XEditFolderPath;
+            appSettings.DataFolderPath = appSettings3.DataFolderPath;
+            appSettings.OutputFolder = appSettings3.OutputFolder;
+            return appSettings;
+        }
+    }
+#pragma warning restore CS0618 // Type or member is obsolete
     public partial class AppSettings
     {
         public AppSettings(){}
@@ -44,6 +68,8 @@ namespace ESLifyEverything.Properties
         public bool AutoRunESLify { get; set; } = false;
 
         public bool AutoRunScriptDecompile { get; set; } = false;
+
+        public bool EnableCompiler { get; set; } = true;
 
         public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion { get; set; } = false;
 
@@ -92,6 +118,45 @@ namespace ESLifyEverything.Properties
 
     }
 
+    [Obsolete("Only used for Updating")]
+    public class AppSettings3
+    {
+
+        public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
+        [JsonInclude]
+        public string PapyrusFlag { get; set; } = "TESV_Papyrus_Flags.flg";
+        [JsonInclude]
+        public bool VerboseConsoleLoging { get; set; } = true;
+        [JsonInclude]
+        public bool VerboseFileLoging { get; set; } = true;
+        [JsonInclude]
+        public bool AutoReadNewestxEditSeesion { get; set; } = false;
+        [JsonInclude]
+        public bool AutoReadAllxEditSeesion { get; set; } = false;
+        [JsonInclude]
+        public bool AutoRunESLify { get; set; } = false;
+        [JsonInclude]
+        public bool AutoRunScriptDecompile { get; set; } = false;
+        [JsonInclude]
+        public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion { get; set; } = false;
+        [JsonInclude]
+        public bool RunSubPluginCompaction { get; set; } = false;
+        [JsonInclude]
+        public bool ChangedPluginsOutputToDataFolder { get; set; } = false;
+        [JsonInclude]
+        public bool MO2Support { get; set; } = false;
+        [JsonInclude]
+        public string MO2ModFolder { get; set; } = "MO2\\Mods";
+        [JsonInclude]
+        public string XEditFolderPath { get; set; } = "xEditFolderPath";
+        [JsonInclude]
+        public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
+        [JsonInclude]
+        public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
+
+    }
+
+    [Obsolete("Only used for Updating")]
     public class AppSettings19
     {
         [JsonInclude]

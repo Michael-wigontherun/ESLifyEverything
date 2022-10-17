@@ -1,11 +1,12 @@
 ﻿using ESLifyEverything.FormData;
+using ESLifyEverything.Properties.DataFileTypes;
 using System.Text;
 
 namespace ESLifyEverything
 {
     public static partial class Program
     {
-        public static string[] FormInFileLineReader(string[] fileLines, out bool changed)
+        public static string[] FormInFileLineReader(string[] fileLines, Separator? SeparatorData, out bool changed)
         {
             changed = false;
             for (int i = 0; i < fileLines.Length; i++)
@@ -20,10 +21,37 @@ namespace ESLifyEverything
                             {
                                 if (fileLines[i].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
                                 {
-                                    GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
-                                    fileLines[i] = fileLines[i].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
-                                    GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
-                                    changed = true;
+                                    bool lineChanged = false;
+                                    if(SeparatorData != null)
+                                    {
+                                        if (fileLines[i].Contains(SeparatorData.FormKeySeparator))
+                                        {
+                                            string line = RemoveExtraFormHex(fileLines[i], form.GetOrigonalFormID(), SeparatorData.FormKeySeparator);
+                                            string orgFormKey = form.GetOrigonalFileLineFormKey(SeparatorData, modData.ModName);
+                                            if (line.Contains(orgFormKey))
+                                            {
+                                                GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+
+                                                fileLines[i] = line.Replace(
+                                                    form.GetOrigonalFileLineFormKey(SeparatorData, modData.ModName),
+                                                    form.GetCompactedFileLineFormKey(SeparatorData),
+                                                    StringComparison.OrdinalIgnoreCase);
+
+                                                GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                                lineChanged = true;
+                                                changed = true;
+                                            }
+                                        }
+                                    }
+
+                                    if(!lineChanged)
+                                    {
+                                        GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                        fileLines[i] = fileLines[i].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
+                                        fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
+                                        GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                        changed = true;
+                                    }
                                 }
                             }
                         }
@@ -33,7 +61,7 @@ namespace ESLifyEverything
             return fileLines;
         }
 
-        public static string[] FormInFileLineReaderDecimal(string[] fileLines, out bool changed)
+        public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed)
         {
             string FixLineToHex(string line)
             {
@@ -77,6 +105,7 @@ namespace ESLifyEverything
                                 {
                                     GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                     fileLines[i] = fileLines[i].Replace(form.GetOrigonalFormID(), form.CompactedFormID, StringComparison.OrdinalIgnoreCase);
+                                    fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
                                     GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                     changed = true;
                                 }
@@ -168,7 +197,7 @@ namespace ESLifyEverything
                     {
                         if (fileLines[i].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
                         {
-                            string[] delimitedLine = fileLines[i].Split('|');
+                            string[] delimitedLine = fileLines[i].Split(delimiter);
                             StringBuilder reconstructedLine = new StringBuilder();
                             bool lineChanged = false;
                             for (int a = 0; a < delimitedLine.Length; a++)
@@ -177,9 +206,10 @@ namespace ESLifyEverything
                                 {
                                     if (delimitedLine[a].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
                                     {
-                                        if (delimitedLine[a].Contains(form.ModName, StringComparison.OrdinalIgnoreCase))
+                                        if (delimitedLine[a].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
                                         {
-                                            delimitedLine[a] = delimitedLine[a].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                            delimitedLine[a] = delimitedLine[a].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
+                                            delimitedLine[a] = delimitedLine[a].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
                                             lineChanged = true;
                                             changed = true;
                                         }
@@ -191,7 +221,7 @@ namespace ESLifyEverything
                                 reconstructedLine.Append(delimitedLine[b]);
                                 if (b < delimitedLine.Length - 1)
                                 {
-                                    reconstructedLine.Append('|');
+                                    reconstructedLine.Append(delimiter);
                                 }
                             }
                             if (lineChanged)
@@ -206,6 +236,26 @@ namespace ESLifyEverything
             }
 
             return fileLines;
+        }
+
+        public static string RemoveExtraFormHex(string line, string orgFormID, string separator)
+        {
+            if (separator.Length > 1)
+            {
+                string startString = line.Substring(line.IndexOf(separator) + separator.Length);
+                if (startString.Equals(orgFormID))
+                {
+                    return line;
+                }
+                int i = startString.IndexOf(orgFormID);
+                if (i <= 0)
+                {
+                    return line;
+                }
+
+                return line.Replace(startString.Substring(0, i), "");
+            }
+            return line;
         }
 
         public static void CopyFormFile(FormHandler form, string origonalDataStartPath, string OrgFilePath, out string newPath)

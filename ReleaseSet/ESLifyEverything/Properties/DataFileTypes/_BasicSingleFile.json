@@ -3,6 +3,12 @@
     "Enabled": true,
     "Name": "AutoBody",
     "DataPath": "autoBody\\Config\\morphs.ini",
+    "SeparatorData": {
+      "FormKeySeparator": "|",
+      "IDIsSecond": true,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting AutoBody Eslify",
     "FileAtLogLine": "AutoBody file found at ",
     "FileUnchangedLogLine": "AutoBody file unchanged: "

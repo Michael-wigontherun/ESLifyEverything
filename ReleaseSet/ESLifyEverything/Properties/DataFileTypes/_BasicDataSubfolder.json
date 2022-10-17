@@ -5,6 +5,12 @@
     "StartDataSubFolder": "Meshes",
     "DirectoryFilter": "_CustomConditions",
     "FileFilter": "_conditions.txt",
+    "SeparatorData": {
+      "FormKeySeparator": " | 0x",
+      "IDIsSecond": true,
+      "ModNameAsString": true,
+      "ModNameStringCharater": "\u0022"
+    },
     "StartingLogLine": "Starting DAR Eslify",
     "FileAtLogLine": "DAR file found at ",
     "FileUnchangedLogLine": "Conditions file unchanged: ",
@@ -17,6 +23,7 @@
     "StartDataSubFolder": "skse",
     "DirectoryFilter": "plugins",
     "FileFilter": "*.ini",
+    "SeparatorData": null,
     "StartingLogLine": "Starting SKSE INI Eslify",
     "FileAtLogLine": "SKSEINI file found at ",
     "FileUnchangedLogLine": "SKSEINI file unchanged: ",

@@ -367,11 +367,19 @@ namespace ESLifyEverything
                 {
                     IEnumerable<string> voiceFilePaths = Directory.EnumerateFiles(
                         Path.Combine(dataStartPath, "sound\\voice", modData.ModName),
-                        "*" + form.OrigonalFormID + "*",
+                        "*" + form.GetOrigonalFormID() + "*",
                         SearchOption.AllDirectories);
                     foreach (string voiceFilePath in voiceFilePaths)
                     {
-                        CopyFormFile(form, dataStartPath, voiceFilePath, out string filePath);
+                        GF.WriteLine(GF.stringLoggingData.OriganalPath + voiceFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        string[] pathArr = voiceFilePath.Split('\\');
+
+                        string newStartPath = Path.Combine(GF.Settings.OutputFolder, $"sound\\voice\\{form.ModName}\\{pathArr[pathArr.Length - 2]}");
+                        Directory.CreateDirectory(newStartPath);
+                        string newPath = Path.Combine(newStartPath, pathArr[pathArr.Length - 1].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase));
+
+                        File.Copy(voiceFilePath, newPath, true);
+                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
                     }
                 }
             }
@@ -492,25 +500,39 @@ namespace ESLifyEverything
                 {
                     IEnumerable<string> FaceGenTexFilePaths = Directory.EnumerateFiles(
                         Path.Combine(dataStartPath, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\", modData.ModName),
-                        "*" + form.OrigonalFormID + "*",
+                        "*" + form.OrigonalFormID + ".dds",
                         SearchOption.AllDirectories);
                     foreach (string FaceGenFilePath in FaceGenTexFilePaths)
                     {
-                        CopyFormFile(form, dataStartPath, FaceGenFilePath, out string filePath);
+                        GF.WriteLine(GF.stringLoggingData.OriganalPath + FaceGenFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+
+                        string newStartPath = Path.Combine(GF.Settings.OutputFolder, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\" + form.ModName);
+                        Directory.CreateDirectory(newStartPath);
+                        string newPath = Path.Combine(newStartPath, "00" + form.CompactedFormID + ".dds");
+
+                        File.Copy(FaceGenFilePath, newPath, true);
+                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
                     }
 
                     IEnumerable<string> FaceGenFilePaths = Directory.EnumerateFiles(
                         Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName),
-                        "*" + form.OrigonalFormID + "*",
+                        "*" + form.OrigonalFormID + ".nif",
                         SearchOption.AllDirectories);
 
                     foreach (string FaceGenFilePath in FaceGenFilePaths)
                     {
-                        CopyFormFile(form, dataStartPath, FaceGenFilePath, out string filePath);
+                        GF.WriteLine(GF.stringLoggingData.OriganalPath + FaceGenFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+
+                        string newStartPath = Path.Combine(GF.Settings.OutputFolder, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\" + form.ModName);
+                        Directory.CreateDirectory(newStartPath);
+                        string newPath = Path.Combine(newStartPath, "00" + form.CompactedFormID + ".nif");
+
+                        File.Copy(FaceGenFilePath, newPath, true);
+                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
                         EditedFaceGen = true;
                         using (StreamWriter stream = File.AppendText(GF.FaceGenFileFixPath))
                         {
-                            stream.WriteLine(Path.GetFullPath(filePath) + ";" + form.OrigonalFormID + ";" + form.CompactedFormID);
+                            stream.WriteLine(Path.GetFullPath(newPath) + ";" + form.OrigonalFormID + ";" + form.CompactedFormID);
                         }
                     }
 
@@ -710,27 +732,21 @@ namespace ESLifyEverything
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
-            SingleBasicFile(Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.DataPath), ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine);
+            SingleBasicFile(ModConfiguration);
         }
 
         public static void HandleConfigurationType(BasicDirectFolder ModConfiguration)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
-            EnumDirectFolder(
-                Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.StartFolder), ModConfiguration.FileNameFilter,
-                ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine,
-                ModConfiguration.SeachLevel);
+            EnumDirectFolder(ModConfiguration);
         }
 
         public static void HandleConfigurationType(BasicDataSubfolder ModConfiguration)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
-            Task t = EnumDataSubfolder(
-                        Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.StartDataSubFolder), ModConfiguration.DirectoryFilter, ModConfiguration.FileFilter,
-                        ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine,
-                        ModConfiguration.StartSeachLevel, ModConfiguration.SubFolderSeachLevel);
+            Task t = EnumDataSubfolder(ModConfiguration);
             t.Wait();
             t.Dispose();
         }
@@ -739,22 +755,16 @@ namespace ESLifyEverything
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
-            Task t = EnumToml(
-                        Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.StartFolder), ModConfiguration.FileNameFilter, ModConfiguration.ArrayStartFilters,
-                        ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine,
-                        ModConfiguration.SeachLevel);
+            Task t = EnumToml(ModConfiguration);
             t.Wait();
             t.Dispose();
         }
-        
+
         public static void HandleConfigurationType(DelimitedFormKeys ModConfiguration)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
-            EnumDelimitedFormKeys(
-                Path.Combine(GF.Settings.DataFolderPath, ModConfiguration.StartFolder), ModConfiguration.FileNameFilter, ModConfiguration.Delimiter,
-                ModConfiguration.FileAtLogLine, ModConfiguration.FileUnchangedLogLine,
-                ModConfiguration.SeachLevel);
+            EnumDelimitedFormKeys(ModConfiguration);
         }
 
         public static void ESLifySelectedDataFilesMenu()
@@ -884,10 +894,10 @@ namespace ESLifyEverything
                     Path.Combine(GF.Settings.DataFolderPath, "SKSE\\plugins\\CharGen\\Presets"),
                     "*.jslot",
                     SearchOption.AllDirectories);
-                bool changed = false;
                 foreach (string jslotFile in jslotFiles)
                 {
-                    GF.WriteLine(GF.stringLoggingData.CustomSkillsFileAt + jslotFile, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    bool changed = false;
+                    GF.WriteLine(GF.stringLoggingData.RaceMenuFileAt + jslotFile, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                     string[] jslotFileLines = File.ReadAllLines(jslotFile);
                     for (int i = 0; i < jslotFileLines.Length; i++)
                     {
@@ -906,6 +916,7 @@ namespace ESLifyEverything
                                             {
                                                 GF.WriteLine(GF.stringLoggingData.OldLine + jslotFileLines[i], true, GF.Settings.VerboseFileLoging);
                                                 jslotFileLines[i] = jslotFileLines[i].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                                jslotFileLines[i] = jslotFileLines[i].Replace(modName, form.ModName);
                                                 GF.WriteLine(GF.stringLoggingData.NewLine + jslotFileLines[i], true, GF.Settings.VerboseFileLoging);
 
                                                 GF.WriteLine(GF.stringLoggingData.OldLine + jslotFileLines[i - 1], true, GF.Settings.VerboseFileLoging);
@@ -919,7 +930,7 @@ namespace ESLifyEverything
                             }
                         }
                     }
-                    OuputDataFileToOutputFolder(changed, jslotFile, jslotFileLines, GF.stringLoggingData.CustomSkillsFileUnchanged);
+                    OuputDataFileToOutputFolder(changed, jslotFile, jslotFileLines, GF.stringLoggingData.RaceMenuFileUnchanged);
 
                 }
             }
@@ -944,6 +955,7 @@ namespace ESLifyEverything
                     string[] customSkillConfigFile = File.ReadAllLines(customSkillConfig);
                     string[] newCustomSkillConfigFile = new string[customSkillConfigFile.Length];
                     string currentModName = "";
+                    int currentModNameLine = -1;
                     CompactedModData currentMod = new CompactedModData();
                     bool changed = false;
                     for (int i = 0; i < customSkillConfigFile.Length; i++)
@@ -954,6 +966,7 @@ namespace ESLifyEverything
                             if (customSkillConfigFile[i].Contains(modName, StringComparison.OrdinalIgnoreCase))
                             {
                                 currentModName = modName;
+                                currentModNameLine = i;
                                 CompactedModDataD.TryGetValue(modName, out currentMod!);
                                 GF.WriteLine("", GF.Settings.VerboseConsoleLoging, false);
                                 GF.WriteLine(GF.stringLoggingData.ModLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
@@ -967,6 +980,7 @@ namespace ESLifyEverything
                                 {
                                     GF.WriteLine(GF.stringLoggingData.OldLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                                     line = line.Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                    customSkillConfigFile[currentModNameLine] = customSkillConfigFile[currentModNameLine].Replace(currentModName, form.ModName);
                                     GF.WriteLine(GF.stringLoggingData.NewLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                                     currentModName = "";
                                     changed = true;
