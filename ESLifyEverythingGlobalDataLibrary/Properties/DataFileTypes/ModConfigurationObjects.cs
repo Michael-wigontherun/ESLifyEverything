@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace ESLifyEverything.Properties.DataFileTypes
+namespace ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes
 {
     //Separator class for handling FormKeys in Mod Configurations
     public class Separator

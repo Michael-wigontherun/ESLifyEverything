@@ -1,26 +1,13 @@
-﻿using ESLifyEverything.Properties.DataFileTypes;
-using Mutagen.Bethesda.Plugins;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using Mutagen.Bethesda.Plugins;
+using ESLifyEverythingGlobalDataLibrary;
+using ESLifyEverythingGlobalDataLibrary.FormData;
+using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
 
 namespace ESLifyEverything.FormData
 {
     //Handles anything that specificly needs to be done with the FormKey
-    public class FormHandler
+    public class FormHandler : IFormHandler
     {
-        [JsonInclude]
-        public string ModName { get; private set; } = "";
-        [JsonInclude]
-        public string OriginalFormID { get; private set; } = "000000";
-        [JsonInclude]
-        public string CompactedFormID { get; private set; } = "000000";
-        [JsonInclude]
-        public bool IsModified { get; private set; } = true;
-
         public FormHandler(){}
 
         //Creates the Form Data from a xEditLogLine
@@ -34,7 +21,7 @@ namespace ESLifyEverything.FormData
         {
             string logLineFilter = GF.stringsResources.xEditCompactedFormFilter;
             OriginalFormID = xEditLogCompactedLine.Substring(xEditLogCompactedLine.IndexOf(logLineFilter) + logLineFilter.Length + 2, 6);
-
+            
             xEditLogCompactedLine = xEditLogCompactedLine.Substring(xEditLogCompactedLine.IndexOf('"') + 1);
             ModName = xEditLogCompactedLine.Substring(0, xEditLogCompactedLine.IndexOf('"'));
 

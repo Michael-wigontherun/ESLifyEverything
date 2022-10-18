@@ -1,6 +1,7 @@
 ﻿using ESLifyEverything.FormData;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Plugins;
+using ESLifyEverythingGlobalDataLibrary;
 
 namespace ESLifyEverything.PluginHandles
 {

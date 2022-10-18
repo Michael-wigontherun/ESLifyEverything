@@ -1,12 +1,12 @@
 ﻿using ESLifyEverything.FormData;
 using ESLifyEverything.PluginHandles;
-using ESLifyEverything.Properties.DataFileTypes;
 using ESLifyEverything.XEdit;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Plugins.Masters;
-using Mutagen.Bethesda.Skyrim;
 using System.Diagnostics;
 using System.Text.Json;
+using ESLifyEverythingGlobalDataLibrary;
+using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
 
 namespace ESLifyEverything
 {
@@ -137,6 +137,13 @@ namespace ESLifyEverything
         public static CompactedModData ValidateCompactedModDataJson(CompactedModData modData)
         {
             if (modData.IsCompacted(false))
+            {
+                modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
+                modData.Enabled = true;
+                modData.Recheck = true;
+                modData.OutputModData(false, false);
+            }
+            else if (modData.IsCompacted(true))
             {
                 modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
                 modData.Enabled = true;

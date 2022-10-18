@@ -1,6 +1,7 @@
 ﻿using ESLifyEverything.FormData;
-using ESLifyEverything.Properties.DataFileTypes;
 using System.Text;
+using ESLifyEverythingGlobalDataLibrary;
+using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
 
 namespace ESLifyEverything
 {

@@ -1,4 +1,10 @@
-﻿namespace ESLifyEverything.Properties
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ESLifyEverythingGlobalDataLibrary.Properties
 {
     public sealed class StringResources
     {
@@ -196,6 +202,5 @@
 
         //End Report
         public string EnterToExit { get; set; } = "";
-
     }
 }

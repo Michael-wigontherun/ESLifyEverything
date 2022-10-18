@@ -2,6 +2,7 @@
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Skyrim;
+using ESLifyEverythingGlobalDataLibrary;
 
 namespace ESLifyEverything.PluginHandles
 {

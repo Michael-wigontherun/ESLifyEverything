@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ESLifyEverything.Properties
+namespace ESLifyEverythingGlobalDataLibrary.Properties
 {
 #pragma warning disable CS0618 // Type or member is obsolete
     //Static class to update settings
@@ -52,7 +51,7 @@ namespace ESLifyEverything.Properties
 #pragma warning restore CS0618 // Type or member is obsolete
     public partial class AppSettings
     {
-        public AppSettings(){}
+        public AppSettings() { }
 
         public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
 
@@ -77,7 +76,7 @@ namespace ESLifyEverything.Properties
         public bool RunSubPluginCompaction { get; set; } = false;
 
         private bool _ChangedPluginsOutputToDataFolder_ = false;
-        public bool ChangedPluginsOutputToDataFolder 
+        public bool ChangedPluginsOutputToDataFolder
         {
             get
             {
@@ -87,7 +86,7 @@ namespace ESLifyEverything.Properties
             {
                 bool setCPOTDF(bool value)
                 {
-                    
+
                     if (!value)
                     {
                         if (GF.StartUpInitialized)
@@ -101,7 +100,7 @@ namespace ESLifyEverything.Properties
                 _ChangedPluginsOutputToDataFolder_ = setCPOTDF(value);
             }
         }
-        
+
         public bool MO2Support { get; set; } = false;
 
         public string MO2ModFolder { get; set; } = "MO2\\Mods";
@@ -109,14 +108,14 @@ namespace ESLifyEverything.Properties
         public string XEditFolderPath { get; set; } = "xEditFolderPath";
 
         public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
-        
+
         public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
 
         //Outputs the AppSettings.json
         public void Build()
         {
             File.WriteAllText("AppSettings.json", JsonSerializer.Serialize(new GeneratedAppSettings(this), GF.JsonSerializerOptions));
-        } 
+        }
 
     }
 
@@ -195,7 +194,7 @@ namespace ESLifyEverything.Properties
         [JsonInclude]
         public AppSettings Settings = new AppSettings();
 
-        public GeneratedAppSettings(){}
+        public GeneratedAppSettings() { }
 
         public GeneratedAppSettings(AppSettings settings)
         {

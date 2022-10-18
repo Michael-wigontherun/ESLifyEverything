@@ -1,9 +1,6 @@
 ﻿using ESLifyEverything.FormData;
-using ESLifyEverything.PluginHandles;
-using ESLifyEverything.Properties;
-using ESLifyEverything.Properties.DataFileTypes;
-using Mutagen.Bethesda.Plugins.Records;
-using Mutagen.Bethesda.Skyrim;
+using ESLifyEverythingGlobalDataLibrary;
+using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
 
 namespace ESLifyEverything
 {
@@ -221,7 +218,15 @@ namespace ESLifyEverything
             Console.ReadLine();
         }
         
-        
+        private static bool StartUp(out int startupError, string ProgramLogName)
+        {
+            bool startup = GF.Startup(out startupError, ProgramLogName);
+            if (startup)
+            {
+                BSAData.GetBSAData();
+            }
+            return startup;
+        }
 
 
 

@@ -1,11 +1,10 @@
-﻿using ESLifyEverything.FormData;
-using ESLifyEverything.Properties;
+﻿using ESLifyEverythingGlobalDataLibrary.FormData;
+using ESLifyEverythingGlobalDataLibrary.Properties;
 using Microsoft.Extensions.Configuration;
-using Mutagen.Bethesda.Plugins.Records;
 using System.Diagnostics;
 using System.Text.Json;
 
-namespace ESLifyEverything
+namespace ESLifyEverythingGlobalDataLibrary
 {
     public static partial class GF
     {
@@ -71,7 +70,7 @@ namespace ESLifyEverything
                 stringLoggingData = stringResorsConfig.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
                 return false;
             }
-            
+
             bool startUp = true;
 
             IConfigurationBuilder? configurationBuilder = new ConfigurationBuilder()
@@ -105,7 +104,7 @@ namespace ESLifyEverything
                 startupError = 1;
                 return false;
             }
-            
+
             Settings = config.GetRequiredSection("Settings").Get<AppSettings>();
             stringsResources = config.GetRequiredSection("StringResources").Get<StringResources>();
             DefaultScriptBSAs = config.GetRequiredSection("DefaultScriptBSAs").Get<string[]>();
@@ -128,7 +127,7 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.DataFolderNotFound);
                 startUp = false;
             }
-            
+
             if (!Directory.Exists(GF.Settings.XEditFolderPath))
             {
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFoundStartup);
@@ -171,10 +170,10 @@ namespace ESLifyEverything
             }
             else
             {
-                if(File.Exists(Path.Combine(GF.Settings.DataFolderPath, $"{GF.SourceSubPath}\\{GF.Settings.PapyrusFlag}")))
+                if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, $"{GF.SourceSubPath}\\{GF.Settings.PapyrusFlag}")))
                 {
                     Directory.CreateDirectory(Path.Combine(GF.ExtractedBSAModDataPath, $"{GF.SourceSubPath}"));
-                    File.Copy(Path.Combine(GF.Settings.DataFolderPath, $"{GF.SourceSubPath}\\{GF.Settings.PapyrusFlag}"), 
+                    File.Copy(Path.Combine(GF.Settings.DataFolderPath, $"{GF.SourceSubPath}\\{GF.Settings.PapyrusFlag}"),
                         Path.Combine(GF.ExtractedBSAModDataPath, $"{GF.SourceSubPath}\\{GF.Settings.PapyrusFlag}"), true);
                 }
                 else
@@ -227,7 +226,7 @@ namespace ESLifyEverything
             {
                 if (!GF.Settings.PapyrusFlag.Equals("TESV_Papyrus_Flags.flg"))
                 {
-                    if(!File.Exists(Path.Combine(GF.Settings.DataFolderPath, "Skyrim.esm")))
+                    if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, "Skyrim.esm")))
                     {
                         GF.WriteLine(GF.stringLoggingData.ESLifyEverythingIsNotSetUpForSkyrim);
                         GF.Settings.RunSubPluginCompaction = false;
@@ -262,7 +261,7 @@ namespace ESLifyEverything
                 }
             }
 
-            BSAData.GetBSAData();
+
 
 
             return startUp;
@@ -277,7 +276,7 @@ namespace ESLifyEverything
                     SearchOption.TopDirectoryOnly);
             if (changedSouce.Any())
             {
-                foreach(string script in changedSouce)
+                foreach (string script in changedSouce)
                 {
                     File.Delete(script);
                 }
@@ -311,11 +310,11 @@ namespace ESLifyEverything
         }
 
         //Writes a list of FormHandler's to console line or file line when logging is set to true
-        public static void WriteLine(IEnumerable<FormHandler> logData, bool consoleLog = true, bool fileLogging = true)
+        public static void WriteLine(IEnumerable<IFormHandler> logData, bool consoleLog = true, bool fileLogging = true)
         {
             if (GF.DevSettings.DevLogging)
             {
-                foreach (FormHandler item in logData)
+                foreach (IFormHandler item in logData)
                 {
                     Console.WriteLine(item);
                     using (StreamWriter stream = File.AppendText(logName))
@@ -328,7 +327,7 @@ namespace ESLifyEverything
 
             if (consoleLog)
             {
-                foreach (FormHandler item in logData)
+                foreach (IFormHandler item in logData)
                 {
                     Console.WriteLine(item!.ToString());
                 }
@@ -337,7 +336,7 @@ namespace ESLifyEverything
             {
                 using (StreamWriter stream = File.AppendText(logName))
                 {
-                    foreach (FormHandler item in logData)
+                    foreach (IFormHandler item in logData)
                     {
                         stream.WriteLine(item!.ToString());
                     }
@@ -477,7 +476,7 @@ namespace ESLifyEverything
                         RunXEditFaceGenFix.Start();
                         RunXEditFaceGenFix.WaitForExit();
                     }
-                    else 
+                    else
                     {
                         RunXEditFaceGenFix.StartInfo.Arguments = "-TES5 -script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
                         GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
@@ -494,7 +493,7 @@ namespace ESLifyEverything
             }
 
         }
-        
+
         //Moves Compacted Mod Data files from the Data folder to the new folder in ESLify Everything
         public static void MoveCompactedModDataJsons()
         {
@@ -503,7 +502,7 @@ namespace ESLifyEverything
             {
                 IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(oldCompactedFormsFolder, "*_ESlEverything.json", SearchOption.TopDirectoryOnly);
 
-                foreach(string files in compactedFormsModFiles)
+                foreach (string files in compactedFormsModFiles)
                 {
                     File.Move(files, Path.Combine(CompactedFormsFolder, Path.GetFileName(files)), true);
                 }
@@ -511,6 +510,6 @@ namespace ESLifyEverything
             }
 
         }
-        
+
     }
 }

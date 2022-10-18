@@ -4,6 +4,7 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Plugins.Cache.Internals.Implementations;
+using ESLifyEverythingGlobalDataLibrary;
 
 namespace ESLifyEverything.FormData
 {
@@ -85,6 +86,7 @@ namespace ESLifyEverything.FormData
             catch (Exception e)
             {
                 GF.WriteLine(e.Message);
+                return false;
             }
 
             return true;
@@ -94,11 +96,15 @@ namespace ESLifyEverything.FormData
         //checkPreviousIfExists = true will reimport previous outputed _ESlEverything.json data if it exists
         public void OutputModData(bool write, bool checkPreviousIfExists)
         {
-            bool ContainsOrigonalFormID(FormHandler previousForm)
+            bool ContainsFormID(FormHandler previousForm)
             {
                 foreach (FormHandler form in CompactedModFormList)
                 {
                     if (form.OriginalFormID.Equals(previousForm.OriginalFormID))
+                    {
+                        return true;
+                    }
+                    if (form.CompactedFormID.Equals(previousForm.CompactedFormID))
                     {
                         return true;
                     }
@@ -114,7 +120,7 @@ namespace ESLifyEverything.FormData
                     
                     foreach (FormHandler form in previous.CompactedModFormList)
                     {
-                        if (!ContainsOrigonalFormID(form))
+                        if (!ContainsFormID(form))
                         {
                             CompactedModFormList.Add(form);
                         }
