@@ -18,6 +18,7 @@ namespace ESLifyEverything.FormData
 
         public static bool Imported = false;
 
+        //Reimports previously cached BSAData
         public static void GetBSAData()
         {
             if (File.Exists(".\\Properties\\BSAModConnections.json"))
@@ -33,6 +34,7 @@ namespace ESLifyEverything.FormData
             }
         }
 
+        //Checks for updated BSAs to reconfigure
         public static void AddNew(string BSAName_NoExtention)
         {
             BSA? bsa;
@@ -59,12 +61,14 @@ namespace ESLifyEverything.FormData
             }
         }
 
+        //Outputs cached BSAData
         public static void Output()
         {
             File.WriteAllText(".\\Properties\\BSAModConnections.json", JsonSerializer.Serialize(BSAs, GF.JsonSerializerOptions));
         }
     }
 
+    //Class to hold each BSA connections
     public class BSA
     {
         [JsonInclude]

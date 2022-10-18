@@ -7,6 +7,7 @@ using Mutagen.Bethesda.Plugins.Cache.Internals.Implementations;
 
 namespace ESLifyEverything.FormData
 {
+    //Class to store Compacted Mod Data
     public class CompactedModData
     {
         [JsonInclude]
@@ -33,6 +34,7 @@ namespace ESLifyEverything.FormData
             CompactedModFormList = compactedModFormList;
         }
         
+        //Checks the plugin to see if it is still Compacted
         public bool IsCompacted(bool usePluginOutputLocation)
         {
             try
@@ -88,16 +90,21 @@ namespace ESLifyEverything.FormData
             return true;
         }
 
-        public void Import(CompactedModData json)
-        {
-            ModName = json.ModName;
-            CompactedModFormList = json.CompactedModFormList;
-            PluginLastModifiedValidation = json.PluginLastModifiedValidation;
-            Recheck = json.Recheck;
-        }
-
+        //Outputs the CompactedModData to a _ESlEverything.json file.
+        //checkPreviousIfExists = true will reimport previous outputed _ESlEverything.json data if it exists
         public void OutputModData(bool write, bool checkPreviousIfExists)
         {
+            bool ContainsOrigonalFormID(FormHandler previousForm)
+            {
+                foreach (FormHandler form in CompactedModFormList)
+                {
+                    if (form.OriginalFormID.Equals(previousForm.OriginalFormID))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
             string CompactedFormPath = Path.Combine(GF.CompactedFormsFolder, ModName + "_ESlEverything.json");
             if (checkPreviousIfExists)
             {
@@ -107,7 +114,7 @@ namespace ESLifyEverything.FormData
                     
                     foreach (FormHandler form in previous.CompactedModFormList)
                     {
-                        if (!this.ContainsOrigonalFormID(form))
+                        if (!ContainsOrigonalFormID(form))
                         {
                             CompactedModFormList.Add(form);
                         }
@@ -119,30 +126,20 @@ namespace ESLifyEverything.FormData
             File.WriteAllText(CompactedFormPath, JsonSerializer.Serialize(this, GF.JsonSerializerOptions));
         }
 
-        private bool ContainsOrigonalFormID(FormHandler previousForm)
-        {
-            foreach (FormHandler form in CompactedModFormList)
-            {
-                if (form.OrigonalFormID.Equals(previousForm.OrigonalFormID))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
+        //Creates a FormKey Dictionary for Remaping FormLinks inside of plugins
         public Dictionary<FormKey, FormKey> ToDictionary()
         {
             Dictionary<FormKey, FormKey> result = new Dictionary<FormKey, FormKey>();
 
             foreach (FormHandler handler in CompactedModFormList)
             {
-                result.TryAdd(handler.CreateOrigonalFormKey(), handler.CreateCompactedFormKey());
+                result.TryAdd(handler.CreateOriginalFormKey(ModName), handler.CreateCompactedFormKey());
             }
 
             return result;
         }
 
+        //Writes CompactedModData to log file
         public void Write()
         {
             GF.WriteLine(ModName, false, GF.Settings.VerboseFileLoging);

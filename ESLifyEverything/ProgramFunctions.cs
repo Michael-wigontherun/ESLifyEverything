@@ -20,7 +20,7 @@ namespace ESLifyEverything
                         {
                             foreach (FormHandler form in modData.CompactedModFormList)
                             {
-                                if (fileLines[i].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
+                                if (fileLines[i].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
                                 {
                                     bool lineChanged = false;
                                     if(SeparatorData != null)
@@ -31,16 +31,16 @@ namespace ESLifyEverything
 
                                             if (SeparatorData.IDIsSecond)
                                             {
-                                                line = RemoveExtraFormHex(fileLines[i], form.GetOrigonalFormID(), SeparatorData.FormKeySeparator);
+                                                line = RemoveExtraFormHex(fileLines[i], form.GetOriginalFormID(), SeparatorData.FormKeySeparator);
                                             }
                                             
-                                            string orgFormKey = form.GetOrigonalFileLineFormKey(SeparatorData, modData.ModName);
+                                            string orgFormKey = form.GetOriginalFileLineFormKey(SeparatorData, modData.ModName);
                                             if (line.Contains(orgFormKey))
                                             {
                                                 GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
 
                                                 fileLines[i] = line.Replace(
-                                                    form.GetOrigonalFileLineFormKey(SeparatorData, modData.ModName),
+                                                    form.GetOriginalFileLineFormKey(SeparatorData, modData.ModName),
                                                     form.GetCompactedFileLineFormKey(SeparatorData),
                                                     StringComparison.OrdinalIgnoreCase);
 
@@ -54,7 +54,7 @@ namespace ESLifyEverything
                                     if(!lineChanged)
                                     {
                                         GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
-                                        fileLines[i] = fileLines[i].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
+                                        fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
                                         fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
                                         GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                         changed = true;
@@ -109,10 +109,10 @@ namespace ESLifyEverything
                         {
                             foreach (FormHandler form in modData.CompactedModFormList)
                             {
-                                if (fileLines[i].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
+                                if (fileLines[i].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
                                 {
                                     GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
-                                    fileLines[i] = fileLines[i].Replace(form.GetOrigonalFormID(), form.CompactedFormID, StringComparison.OrdinalIgnoreCase);
+                                    fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.CompactedFormID, StringComparison.OrdinalIgnoreCase);
                                     fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
                                     GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                     changed = true;
@@ -178,10 +178,10 @@ namespace ESLifyEverything
                             }
                             foreach (FormHandler form in mod.CompactedModFormList)
                             {
-                                if (fileLines[a].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
+                                if (fileLines[a].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
                                 {
                                     GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[a], true, GF.Settings.VerboseFileLoging);
-                                    fileLines[a] = fileLines[a].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID());
+                                    fileLines[a] = fileLines[a].Replace(form.GetOriginalFormID(), form.GetCompactedFormID());
                                     GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[a], true, GF.Settings.VerboseFileLoging);
                                     changed = true;
                                 }
@@ -214,11 +214,11 @@ namespace ESLifyEverything
                             {
                                 foreach (FormHandler form in modData.CompactedModFormList)
                                 {
-                                    if (delimitedLine[a].Contains(form.GetOrigonalFormID(), StringComparison.OrdinalIgnoreCase))
+                                    if (delimitedLine[a].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
                                     {
                                         if (delimitedLine[a].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
                                         {
-                                            delimitedLine[a] = delimitedLine[a].Replace(form.GetOrigonalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
+                                            delimitedLine[a] = delimitedLine[a].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
                                             delimitedLine[a] = delimitedLine[a].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
                                             lineChanged = true;
                                             changed = true;

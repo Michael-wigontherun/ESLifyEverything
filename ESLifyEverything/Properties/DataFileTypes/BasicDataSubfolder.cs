@@ -3,8 +3,7 @@
 namespace ESLifyEverything.Properties.DataFileTypes
 {
     public class BasicDataSubfolder//_BasicDataSubfolder.json
-    {//InumDataSubfolder(string subfolderStart, string directoryFilter, string fileFilter, string fileAtLogLine, string fileUnchangedLogLine, 
-        //SearchOption startSeachLevel = SearchOption.AllDirectories, SearchOption secondSeachLevel = SearchOption.AllDirectories)
+    {//InumDataSubfolder(BasicDataSubfolder)
         [JsonInclude]
         public bool Enabled = false;
         [JsonInclude]

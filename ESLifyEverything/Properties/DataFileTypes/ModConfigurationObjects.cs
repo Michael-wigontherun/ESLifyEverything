@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ESLifyEverything.Properties.DataFileTypes
 {
+    //Separator class for handling FormKeys in Mod Configurations
     public class Separator
     {
         [JsonInclude]

@@ -12,6 +12,7 @@ namespace ESLifyEverything.XEdit
         public string SessionTimeStamp { get; set; } = "";
         public List<string> CompactedSessionText = new List<string>();
 
+        //Generates the list of forms from the found changed forms in log during the session
         public List<FormHandler> GenerateCompactedFormsList()
         {
             List<FormHandler> GeneratedForms = new List<FormHandler>();
@@ -24,6 +25,7 @@ namespace ESLifyEverything.XEdit
             return GeneratedForms;
         }
 
+        //Creates and outputs the found Compacted Mod Data
         public void GenerateCompactedModDatas()
         {
             Console.WriteLine();

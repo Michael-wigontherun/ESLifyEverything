@@ -3,8 +3,7 @@
 namespace ESLifyEverything.Properties.DataFileTypes
 {
     public class ComplexTOML//_ComplexTOML.json
-    {//public static async Task<int> InumToml(string startFolder, string fileNameFilter, string arrayStartFilter,
-        //string fileAtLogLine, string fileUnchangedLogLine, SearchOption searchLevel = SearchOption.TopDirectoryOnly)
+    {//InumToml(ComplexTOML)
         [JsonInclude]
         public bool Enabled = false;
         [JsonInclude]

@@ -6,6 +6,7 @@ namespace ESLifyEverything.PluginHandles
 {
     public static partial class HandleMod
     {
+        //Handles changing FormKeys in top level lists in mods
         public static SkyrimMod HandleUniformFormHeaders(SkyrimMod mod, out bool ModEdited)
         {
             ModEdited = false;

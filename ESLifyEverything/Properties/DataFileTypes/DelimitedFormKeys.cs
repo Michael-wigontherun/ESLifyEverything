@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ESLifyEverything.Properties.DataFileTypes
 {
     public class DelimitedFormKeys
-    {//EnumDelimitedFormKeys(string startFolder, string fileNameFilter,string delimiter , string fileAtLogLine, string fileUnchangedLogLine, SearchOption seachLevel = SearchOption.TopDirectoryOnly)
+    {//EnumDelimitedFormKeys(DelimitedFormKeys)
         [JsonInclude]
         public bool Enabled = false;
         [JsonInclude]

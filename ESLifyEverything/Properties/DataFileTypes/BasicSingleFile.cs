@@ -3,7 +3,7 @@
 namespace ESLifyEverything.Properties.DataFileTypes
 {
     public class BasicSingleFile//_BasicSingleFile.json
-    {//public static void SingleBasicFile(string path, string fileAtLogLine, string fileUnchangedLogLine)
+    {//SingleBasicFile(BasicSingleFile)
         [JsonInclude]
         public bool Enabled = false;
         [JsonInclude]

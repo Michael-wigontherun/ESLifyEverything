@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 namespace ESLifyEverything.Properties
 {
 #pragma warning disable CS0618 // Type or member is obsolete
+    //Static class to update settings
     public static class UAppSettings
     {
         public static AppSettings AppSettings(AppSettings19 appSettings19)
@@ -111,6 +112,7 @@ namespace ESLifyEverything.Properties
         
         public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
 
+        //Outputs the AppSettings.json
         public void Build()
         {
             File.WriteAllText("AppSettings.json", JsonSerializer.Serialize(new GeneratedAppSettings(this), GF.JsonSerializerOptions));
@@ -185,6 +187,7 @@ namespace ESLifyEverything.Properties
         public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
     }
 
+    //Class for generate the AppSettings.Json
     public class GeneratedAppSettings
     {
         [JsonInclude]

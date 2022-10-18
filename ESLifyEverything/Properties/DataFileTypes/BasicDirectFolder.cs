@@ -3,7 +3,7 @@
 namespace ESLifyEverything.Properties.DataFileTypes
 {
     public class BasicDirectFolder//_BasicDirectFolder.json
-    {//InumDirectFolder(string startFolder, string fileNameFilter, string fileAtLogLine, string fileUnchangedLogLine, SearchOption seachLevel = SearchOption.TopDirectoryOnly)
+    {//InumDirectFolder(BasicDirectFolder)
         [JsonInclude]
         public bool Enabled = false;
         [JsonInclude]

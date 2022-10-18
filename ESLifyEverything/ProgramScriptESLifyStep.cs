@@ -9,6 +9,7 @@ namespace ESLifyEverything
 {
     public static partial class Program
     {
+        //Menu to AutoRun or Ask if extraction and decompile is necessary
         public static bool ExtractScriptsMenu()
         {
             if (GF.Settings.AutoRunScriptDecompile)
@@ -35,6 +36,7 @@ namespace ESLifyEverything
             return true;
         }
 
+        //Extracts scripts from BSA's in the order of your load order
         public static async Task<int> ExtractScripts()
         {
             if (ExtractScriptsMenu())
@@ -93,7 +95,7 @@ namespace ESLifyEverything
             }
 
             
-            Task inmScripts = CompileScripts();
+            Task inmScripts = ReadAndCompileScripts();
             inmScripts.Wait();
             inmScripts.Dispose();
             
@@ -101,6 +103,7 @@ namespace ESLifyEverything
             return await Task.FromResult(0);
         }
 
+        //Runs BSA Browser to extract scripts from BSA path
         public static async Task<int> ExtractBSAScripts(string bsaPath)
         {
             Process p = new Process();
@@ -113,6 +116,7 @@ namespace ESLifyEverything
             return await Task.FromResult(0);
         }
 
+        //Runs Champolion on script path and outputting to the "ExtractedBSAModData\Source\Scripts" folder
         public static async Task<int> DecompileScripts(string startPath)
         {
             Process p = new Process();
@@ -126,7 +130,8 @@ namespace ESLifyEverything
             return await Task.FromResult(0);
         }
 
-        public static async Task<int> CompileScripts()
+        //Fixes script Form Keys and Compiles them if Compiler is enabled
+        public static async Task<int> ReadAndCompileScripts()
         {
             string startFolder = $"{GF.ExtractedBSAModDataPath}\\{GF.SourceSubPath}";
             if (!Directory.Exists(startFolder))
@@ -181,7 +186,10 @@ namespace ESLifyEverything
 
                         foreach (var changedFile in changedFiles)
                         {
-                            ScriptCompiled(Path.ChangeExtension(Path.GetFileName(changedFile), null));
+                            if (!File.Exists(Path.Combine(GF.Settings.OutputFolder, "Scripts\\" + Path.ChangeExtension(Path.GetFileName(changedFile), null) + ".pex")))
+                            {
+                                FailedToCompile.Add(Path.ChangeExtension(Path.GetFileName(changedFile), null));
+                            }
                         }
                     }
                     else
@@ -205,12 +213,6 @@ namespace ESLifyEverything
             return await Task.FromResult(0);
         }
 
-        public static void ScriptCompiled(string sourceFileNameNoExtention)
-        {
-            if (!File.Exists(Path.Combine(GF.Settings.OutputFolder, "Scripts\\" + sourceFileNameNoExtention + ".pex")))
-            {
-                FailedToCompile.Add(sourceFileNameNoExtention);
-            }
-        }
+
     }
 }

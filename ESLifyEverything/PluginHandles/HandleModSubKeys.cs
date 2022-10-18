@@ -5,6 +5,7 @@ namespace ESLifyEverything.PluginHandles
 {
     public static partial class HandleMod
     {
+        //Changes the FormKeys of plugins located in internalized lists
         public static SkyrimMod HandleSubFormHeaders(SkyrimMod mod, out bool ModEdited)
         {
             ModEdited = false;
@@ -25,7 +26,7 @@ namespace ESLifyEverything.PluginHandles
                             //var formCopy = sourceForm.Responses[i].DeepCopy();
                             foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                             {
-                                if (sourceForm.Responses[i].FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                if (sourceForm.Responses[i].FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                 {
                                     responsesC.Add(sourceForm.Responses[i]);
                                     responsesC.Add(sourceForm.Responses[i].Duplicate(formHandler.CreateCompactedFormKey()));
@@ -47,7 +48,7 @@ namespace ESLifyEverything.PluginHandles
                         //var formCopy = sourceForm.DeepCopy();
                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                         {
-                            if (sourceForm.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                            if (sourceForm.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                             {
 
                                 var formCopy = sourceForm.Duplicate(formHandler.CreateCompactedFormKey());
@@ -86,7 +87,7 @@ namespace ESLifyEverything.PluginHandles
                                 {
                                     foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                     {
-                                        if (sourceForm.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                        if (sourceForm.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                         {
 
                                             formCopy = sourceForm.Duplicate(formHandler.CreateCompactedFormKey());
@@ -111,7 +112,7 @@ namespace ESLifyEverything.PluginHandles
                                         {
                                             foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                             {
-                                                if (sourceFormP.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                                if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                                 {
                                                     formCopyP = (PlacedNpc)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
                                                     EditedFormP = true;
@@ -138,7 +139,7 @@ namespace ESLifyEverything.PluginHandles
                                         {
                                             foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                             {
-                                                if (sourceFormP.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                                if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                                 {
                                                     formCopyP = (PlacedObject)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
                                                     EditedFormP = true;
@@ -165,7 +166,7 @@ namespace ESLifyEverything.PluginHandles
                                         {
                                             foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                             {
-                                                if (sourceFormP.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                                if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                                 {
 
                                                     formCopyP = (APlacedTrap)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
@@ -200,7 +201,7 @@ namespace ESLifyEverything.PluginHandles
                                         {
                                             foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                             {
-                                                if (sourceFormT.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                                if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                                 {
 
                                                     formCopyT = (PlacedNpc)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
@@ -228,7 +229,7 @@ namespace ESLifyEverything.PluginHandles
                                         {
                                             foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                             {
-                                                if (sourceFormT.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                                if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                                 {
 
                                                     formCopyT = (PlacedObject)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
@@ -256,7 +257,7 @@ namespace ESLifyEverything.PluginHandles
                                         {
                                             foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                             {
-                                                if (sourceFormT.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                                if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                                 {
 
                                                     formCopyT = (APlacedTrap)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
@@ -304,7 +305,7 @@ namespace ESLifyEverything.PluginHandles
                         var formCopy = sourceForm.DeepCopy();
                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                         {
-                            if (sourceForm.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                            if (sourceForm.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                             {
 
                                 formCopy = sourceForm.Duplicate(formHandler.CreateCompactedFormKey());
@@ -337,7 +338,7 @@ namespace ESLifyEverything.PluginHandles
                             {
                                 foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                 {
-                                    if (sourceForm.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                    if (sourceForm.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                     {
 
                                         formCopy = sourceForm.Duplicate(formHandler.CreateCompactedFormKey());
@@ -362,7 +363,7 @@ namespace ESLifyEverything.PluginHandles
                                     {
                                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                         {
-                                            if (sourceFormP.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                            if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                             {
                                                 formCopyP = (PlacedNpc)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
                                                 EditedFormP = true;
@@ -389,7 +390,7 @@ namespace ESLifyEverything.PluginHandles
                                     {
                                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                         {
-                                            if (sourceFormP.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                            if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                             {
                                                 formCopyP = (PlacedObject)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
                                                 EditedFormP = true;
@@ -416,7 +417,7 @@ namespace ESLifyEverything.PluginHandles
                                     {
                                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                         {
-                                            if (sourceFormP.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                            if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                             {
 
                                                 formCopyP = (APlacedTrap)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
@@ -451,7 +452,7 @@ namespace ESLifyEverything.PluginHandles
                                     {
                                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                         {
-                                            if (sourceFormT.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                            if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                             {
 
                                                 formCopyT = (PlacedNpc)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
@@ -479,7 +480,7 @@ namespace ESLifyEverything.PluginHandles
                                     {
                                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                         {
-                                            if (sourceFormT.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                            if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                             {
 
                                                 formCopyT = (PlacedObject)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
@@ -507,7 +508,7 @@ namespace ESLifyEverything.PluginHandles
                                     {
                                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
                                         {
-                                            if (sourceFormT.FormKey.IDString().Equals(formHandler.OrigonalFormID))// check if the mod still uses one of the origonal formIDs
+                                            if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                             {
 
                                                 formCopyT = (APlacedTrap)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());

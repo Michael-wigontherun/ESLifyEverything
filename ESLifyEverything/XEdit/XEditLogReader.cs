@@ -10,6 +10,7 @@ namespace ESLifyEverything.XEdit
     {
         public static XEditLog xEditLog = new XEditLog();
         
+        //Directly reads and splits up the sessions to find only the needed data from the log
         public static void ReadLog(string logPath)
         {
             string[] xEditLogTextArr = File.ReadAllLines(logPath);

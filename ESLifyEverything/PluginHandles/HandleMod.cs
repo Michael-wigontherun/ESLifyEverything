@@ -7,8 +7,12 @@ namespace ESLifyEverything.PluginHandles
 {
     public static partial class HandleMod
     {
+        //Lambda get for the Program.CompactedModDataD located in the Program data
         public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataD;
 
+        //Uses the Plugin name to find and read the plugin
+        //Changing FormKeys on Forms are handled by HandleSubFormHeaders() and HandleUniformFormHeaders()
+        //FormLinks are handled using RemapLinks()
         public static async Task<int> HandleSkyrimMod(string pluginName)
         {
             string path = Path.Combine(GF.Settings.DataFolderPath, pluginName);
@@ -68,12 +72,13 @@ namespace ESLifyEverything.PluginHandles
             return await Task.FromResult(2);
         }
 
-		public static FormKey HandleFormKeyFix(FormKey OrgFormKey, CompactedModData compactedModData, out bool changed)
+        //Gets the the Compacted FormKey that the Original was changed to
+        public static FormKey HandleFormKeyFix(FormKey OrgFormKey, CompactedModData compactedModData, out bool changed)
 		{
 			changed = false;
 			foreach (FormHandler formHandler in compactedModData.CompactedModFormList)
 			{
-				if (OrgFormKey.IDString().Equals(formHandler.OrigonalFormID))
+				if (OrgFormKey.IDString().Equals(formHandler.OriginalFormID))
 				{
 					changed = true;
 					return formHandler.CreateCompactedFormKey();
