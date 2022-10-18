@@ -5,11 +5,11 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESLifyEverything", "ESLifyEverything\ESLifyEverything.csproj", "{E7776B56-C6E0-4652-AA43-35EDB3512630}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESLifyEverythingGlobalDataLibrary", "ESLifyEverythingGlobalDataLibrary\ESLifyEverythingGlobalDataLibrary.csproj", "{630E9A9D-FA6B-40DB-B831-857E8F9C4925}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESLifyEverythingGlobalDataLibrary", "ESLifyEverythingGlobalDataLibrary\ESLifyEverythingGlobalDataLibrary.csproj", "{630E9A9D-FA6B-40DB-B831-857E8F9C4925}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{927F0BC8-BD4B-4A0D-BF7E-2F15EA05ECEA}"
 	ProjectSection(SolutionItems) = preProject
-		changelog.txt = changelog.txt
+		ESLifyEverything-changelog.txt = ESLifyEverything-changelog.txt
 	EndProjectSection
 EndProject
 Global
