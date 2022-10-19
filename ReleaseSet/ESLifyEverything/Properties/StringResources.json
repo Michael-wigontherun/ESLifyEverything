@@ -155,6 +155,14 @@
     "RunPluginRecompactionMenu3": "If it says something like that its likely that the author changed formIDs.",
     "RunPluginRecompactionEnterPrompt": "Enter Y to procced. Any other input will skip this and ESLify Everything will not use the Compacted Mod Data. Until it detects rereads it from xEdit",
     "NewMO2FoldersWarning": "New MO2 folders were generated. Please refresh your MO2 mods list and enable new mods.",
-    "HowToDisableMO2Folders": "If you do not want ESLify Everything to create new folders disable MO2 Support."
+    "HowToDisableMO2Folders": "If you do not want ESLify Everything to create new folders disable MO2 Support.",
+    "SkippingImport": "Skipping import of {0}",
+    "MergeFound": "Found Merge at: ",
+    "NoChangedFormsFor": "there were no forms changed inside {0} in merge {1}.",
+    "SetToIgnore": "Setting {0} to ignore, you can saftly delete {0}",
+    "MapNotFound": "The map.json was not found for {0}",
+    "StartingMergeCache": "Building and Updating zMerge Data References",
+    "ImportingMergeCache": "Getting merge data from ",
+    "ImportingMergeCompactedModData": "Found compacted mod data for "
   }
 }
