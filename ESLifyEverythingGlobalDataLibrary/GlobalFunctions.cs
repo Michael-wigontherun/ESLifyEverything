@@ -6,6 +6,13 @@ using System.Text.Json;
 
 namespace ESLifyEverythingGlobalDataLibrary
 {
+    //For errors in startup causing things not to run
+    public enum StartupError
+    {
+        OK = 0,                 //Everything should run fine
+        xEditLogNotFound = 1    //Did not find the xEdit log inside the XEditFolderPath
+    }
+
     public static partial class GF
     {
         //readonly property to identify what settings version ESLify uses to update settings properly
@@ -22,6 +29,18 @@ namespace ESLifyEverythingGlobalDataLibrary
 
         //readonly property to direct to where I wish for the Source code to be decompiled and read from.
         public static readonly string SourceSubPath = "Source\\Scripts";
+
+        //readonly property to get the extension for all CompactedFormJson
+        public static readonly string CompactedFormExtension = "_ESlEverything.json";
+
+        //readonly property to get the extension for CompactedFormJson that needs to be ignored
+        public static readonly string CompactedFormIgnoreExtension = "_ESLifyEverything.ignore";
+
+        //readonly property to get the extension for all Merge Caches
+        public static readonly string MergeCacheExtension = "_ESlEverythingMergeCache.json";
+
+        //readonly property to get the extension for Merge Caches that needs to be ignored
+        public static readonly string MergeCacheIgnoreExtension = "_ESlEverythingMergeCache.ignore";
 
         //The settings object that the program functions off of
         public static AppSettings Settings = new AppSettings();
@@ -57,17 +76,18 @@ namespace ESLifyEverythingGlobalDataLibrary
         public static bool StartUpInitialized = false;
 
         //Checks whether all AppSettings are valid and should work as intended so long as paths are directed to the correct folders
-        public static bool Startup(out int startupError, string ProgramLogName)
+        public static bool Startup(out StartupError startupError, string ProgramLogName)
         {
             logName = ProgramLogName;
             File.Create(logName).Close();
-            startupError = 0;
+            startupError = StartupError.OK;
 
             if (!File.Exists("AppSettings.json"))
             {
-                startupError = 1;
+
                 IConfiguration stringResorsConfig = new ConfigurationBuilder().AddJsonFile(".\\Properties\\StringResources.json").AddEnvironmentVariables().Build();
                 stringLoggingData = stringResorsConfig.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
+                GF.GenerateSettingsFileError();
                 return false;
             }
 
@@ -95,13 +115,13 @@ namespace ESLifyEverythingGlobalDataLibrary
                 string version = config.GetRequiredSection("SettingsVersion").Get<string>();
                 if (!version.Equals(GF.SettingsVersion))
                 {
-                    startupError = 3;
+                    GF.UpdateSettingsFile();
                     return false;
                 }
             }
             catch (Exception)
             {
-                startupError = 1;
+                GF.GenerateSettingsFileError();
                 return false;
             }
 
@@ -112,6 +132,7 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             if (File.Exists("DevAppSettings.json"))
             {
+                Console.WriteLine("DevAppSettings found");
                 DevSettings = JsonSerializer.Deserialize<DevAppSettings>(File.ReadAllText("DevAppSettings.json"))!;
             }
 
@@ -151,7 +172,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             if (!File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
             {
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFound);
-                startupError = 2;
+                startupError = StartupError.xEditLogNotFound;
             }
 
             if (!File.Exists(".\\Champollion\\Champollion.exe"))
@@ -284,9 +305,9 @@ namespace ESLifyEverythingGlobalDataLibrary
         }
 
         //Writes a console line or file line when logging is set to true
-        public static void WriteLine(string logLine, bool consoleLog = true, bool fileLogging = true)
+        public static void WriteLine(string logLine, bool consoleLog = true, bool fileLogging = true, bool devOverride = false)
         {
-            if (GF.DevSettings.DevLogging)
+            if (GF.DevSettings.DevLogging && !devOverride)
             {
                 Console.WriteLine(logLine);
                 using (StreamWriter stream = File.AppendText(logName))
@@ -310,16 +331,16 @@ namespace ESLifyEverythingGlobalDataLibrary
         }
 
         //Writes a list of FormHandler's to console line or file line when logging is set to true
-        public static void WriteLine(IEnumerable<IFormHandler> logData, bool consoleLog = true, bool fileLogging = true)
+        public static void WriteLine(IEnumerable<IFormHandler> logData, bool consoleLog = true, bool fileLogging = true, bool devOverride = false)
         {
-            if (GF.DevSettings.DevLogging)
+            if (GF.DevSettings.DevLogging && !devOverride)
             {
                 foreach (IFormHandler item in logData)
                 {
                     Console.WriteLine(item);
                     using (StreamWriter stream = File.AppendText(logName))
                     {
-                        stream.WriteLine(item);
+                        stream.WriteLine(item!.ToString());
                     }
                 }
                 return;
@@ -500,7 +521,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             string oldCompactedFormsFolder = Path.Combine(GF.Settings.OutputFolder, "CompactedForms");
             if (Directory.Exists(oldCompactedFormsFolder))
             {
-                IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(oldCompactedFormsFolder, "*_ESlEverything.json", SearchOption.TopDirectoryOnly);
+                IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(oldCompactedFormsFolder, "*" + GF.CompactedFormExtension, SearchOption.TopDirectoryOnly);
 
                 foreach (string files in compactedFormsModFiles)
                 {

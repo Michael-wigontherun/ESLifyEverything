@@ -23,27 +23,37 @@ namespace ESLifyEverything.PluginHandles
             }
 
             ISkyrimModGetter orgMod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
+            DevLog.Log("Handling " + orgMod.ModKey.ToString());
             SkyrimMod mod = new SkyrimMod(orgMod.ModKey, SkyrimRelease.SkyrimSE);
             mod.DeepCopyIn(orgMod);
+            DevLog.Log("Coppied " + mod.ModKey.ToString() + " for handling comparison.");
             //SkyrimMod mod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
 
             bool ModEdited = false;
 
             mod = HandleUniformFormHeaders(mod, out bool ModEditedU);
+            DevLog.Log("Finnished handling uniform keys in " + mod.ModKey.ToString());
+
             mod = HandleSubFormHeaders(mod, out bool ModEditedS);
+            DevLog.Log("Finnished handling sub form keys in " + mod.ModKey.ToString());
 
-            if (ModEditedS || ModEditedU) ModEdited = true;
-
+            if (ModEditedS || ModEditedU)
+            {
+                ModEdited = true;
+                DevLog.Log(mod.ModKey.ToString() + " was changed.");
+            }
             foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToHashSet())
             {
                 foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
                     if (masterReference.Master.ToString().Equals(compactedModData.ModName))
                     {
+                        DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + compactedModData.ModName);
                         mod.RemapLinks(compactedModData.ToDictionary());
                     }
                     if (compactedModData.ModName.Equals(mod.ModKey.ToString()))
                     {
+                        DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + compactedModData.ModName);
                         mod.RemapLinks(compactedModData.ToDictionary());
                     }
                 }
@@ -51,6 +61,7 @@ namespace ESLifyEverything.PluginHandles
 
             if (!mod.Equals(orgMod))
             {
+                DevLog.Log(mod.ModKey.ToString() + " was changed.");
                 ModEdited = true;
             }
 
@@ -69,6 +80,8 @@ namespace ESLifyEverything.PluginHandles
 
                 return await Task.FromResult(1);
             }
+
+            GF.WriteLine(mod.ModKey.ToString() + " was not output.", GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
 
             return await Task.FromResult(2);
         }

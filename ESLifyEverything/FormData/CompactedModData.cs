@@ -34,7 +34,7 @@ namespace ESLifyEverything.FormData
             ModName = modName;
             CompactedModFormList = compactedModFormList;
         }
-        
+
         //Checks the plugin to see if it is still Compacted
         public bool IsCompacted(bool usePluginOutputLocation)
         {
@@ -60,6 +60,7 @@ namespace ESLifyEverything.FormData
                         {
                             if (!recordsDict.TryResolve(form.CreateCompactedFormKey(), out IMajorRecordGetter? rec))
                             {
+                                DevLog.Log(form + " Not Found.");
                                 return false;
                             }
                         }
@@ -72,6 +73,7 @@ namespace ESLifyEverything.FormData
                             {
                                 if (form.FormKey.ID < validMin && form.FormKey.ID > validMax)
                                 {
+                                    DevLog.Log(form.FormKey.ToString() + " out of bounds.");
                                     return false;
                                 }
                             }
@@ -111,7 +113,7 @@ namespace ESLifyEverything.FormData
                 }
                 return false;
             }
-            string CompactedFormPath = Path.Combine(GF.CompactedFormsFolder, ModName + "_ESlEverything.json");
+            string CompactedFormPath = Path.Combine(GF.CompactedFormsFolder, ModName + GF.CompactedFormExtension);
             if (checkPreviousIfExists)
             {
                 if (File.Exists(CompactedFormPath))
@@ -122,6 +124,7 @@ namespace ESLifyEverything.FormData
                     {
                         if (!ContainsFormID(form))
                         {
+                            DevLog.Log(form, "Found and adding to compacted mod data.");
                             CompactedModFormList.Add(form);
                         }
                     }
@@ -148,8 +151,8 @@ namespace ESLifyEverything.FormData
         //Writes CompactedModData to log file
         public void Write()
         {
-            GF.WriteLine(ModName, false, GF.Settings.VerboseFileLoging);
-            GF.WriteLine(CompactedModFormList, false, GF.Settings.VerboseFileLoging);
+            GF.WriteLine(ModName, false, GF.Settings.VerboseFileLoging, GF.DevSettings.DevLoggingOverrideSome);
+            GF.WriteLine(CompactedModFormList, false, GF.Settings.VerboseFileLoging, GF.DevSettings.DevLoggingOverrideSome);
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ESLifyEverythingGlobalDataLibrary.Properties
+﻿namespace ESLifyEverythingGlobalDataLibrary.Properties
 {
     public sealed class StringResources
     {
@@ -52,6 +46,7 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
         public string OriganalPath { get; set; } = "";
         public string NewPath { get; set; } = "";
         public string FileChanged { get; set; } = "";
+        public string SkippingImport { get; set; } = "";
 
         //startup
         public string DataFolderNotFound { get; set; } = "";
@@ -199,6 +194,15 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
 
         //Default Switch Error Messege
         public string PluginSwitchDefaultMessage { get; set; } = "";
+
+        //Merge data
+        public string StartingMergeCache { get; set; } = "";
+        public string MergeFound { get; set; } = "";
+        public string NoChangedFormsFor { get; set; } = "";
+        public string SetToIgnore { get; set; } = "";
+        public string MapNotFound { get; set; } = "";
+        public string ImportingMergeCache { get; set; } = "";
+        public string ImportingMergeCompactedModData { get; set; } = "";
 
         //End Report
         public string EnterToExit { get; set; } = "";

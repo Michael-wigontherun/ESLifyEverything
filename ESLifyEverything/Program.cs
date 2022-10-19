@@ -52,7 +52,7 @@ namespace ESLifyEverything
         {
             try
             {
-                if (GF.Startup(out int StartupError, "ESLifyEverything_Log.txt"))
+                if (StartUp(out StartupError StartupError, "ESLifyEverything_Log.txt"))
                 {
                     Console.WriteLine("Sucessful startup");
                     if (StartupError == 0)
@@ -64,17 +64,30 @@ namespace ESLifyEverything
                         GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
                     }
 
+                    DevLog.Pause("After Log Reader Pause");
+
                     GF.MoveCompactedModDataJsons();
+
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
+                    BuildMergedData();
+
+                    DevLog.Pause("After zMerge Reader Pause");
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.ImportingAllModData);
                     ImportModData(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms"));
                     ImportModData(GF.CompactedFormsFolder);
+
+                    DevLog.Pause("After CompactedForms Import Pause");
+
                     Console.WriteLine("\n\n\n\n");
                     Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
                     Task bsamod = LoadOrderBSAData();
                     bsamod.Wait();
                     bsamod.Dispose();
+
+                    DevLog.Pause("After BSA Proccesing Pause");
 
                     if (!GF.Settings.AutoRunESLify)
                     {
@@ -82,13 +95,19 @@ namespace ESLifyEverything
                         GF.WriteLine(GF.stringLoggingData.StartingVoiceESLify);
                         VoiceESlIfyMenu();
 
+                        DevLog.Pause("After Voice ESLify Menu Pause");
+
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingFaceGenESLify);
                         FaceGenESlIfyMenu();
 
+                        DevLog.Pause("After FaceGen ESLify Menu Pause");
+
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
                         ESLifyDataFilesMainMenu();
+
+                        DevLog.Pause("After Data File ESLify Menu Pause");
                     }
                     //Auto Run
                     else
@@ -97,27 +116,22 @@ namespace ESLifyEverything
                         GF.WriteLine(GF.stringLoggingData.StartingVoiceESLify);
                         VoiceESLifyEverything();
 
+                        DevLog.Pause("After Voice ESLify AutoRun Pause");
+
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingFaceGenESLify);
                         FaceGenESLifyEverything();
+
+                        DevLog.Pause("After FaceGen ESLify AutoRun Pause");
 
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
                         GetESLifyModConfigurationFiles();
                         ESLifyAllDataFiles();
+                        InternallyCodedDataFileConfigurations();
+
+                        DevLog.Pause("After Data File ESLify AutoRun Pause");
                     }
-
-                    //Console.ReadLine();
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
-                    RaceMenuESLify();
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
-                    Task CustomSkills = CustomSkillsFramework();
-                    CustomSkills.Wait();
-                    CustomSkills.Dispose();
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
@@ -125,31 +139,33 @@ namespace ESLifyEverything
                     Scripts.Wait();
                     Scripts.Dispose();
 
+                    DevLog.Pause("After Script ESLify Pause");
+
                     if (GF.Settings.RunSubPluginCompaction)
                     {
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartPluginReader);
                         ReadLoadOrder();
+
+                        DevLog.Pause("After Plugin ESLify Pause");
                     }
+
 
                 }
                 switch (StartupError)
                 {
-                    case 1:
-                        GF.GenerateSettingsFileError();
+                    case StartupError.OK:
                         break;
-                    case 2:
+                    case StartupError.xEditLogNotFound:
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.xEditlogNotFound);
-                        break;
-                    case 3:
-                        GF.UpdateSettingsFile();
                         break;
                     default:
                         break;
                 }
             }
-            catch(AggregateException e)
+            #region Catch
+            catch (AggregateException e)
             {
                 Console.WriteLine("\n\n\n\n");
                 GF.WriteLine("AggregateException. Please report to GitHub with log file.");
@@ -169,7 +185,8 @@ namespace ESLifyEverything
                 GF.WriteLine(e.ToString());
                 GF.WriteLine(e.Message);
             }
-
+            #endregion Catch
+            
             if (EditedFaceGen)
             {
                 Console.WriteLine();
@@ -218,18 +235,7 @@ namespace ESLifyEverything
             Console.ReadLine();
         }
         
-        private static bool StartUp(out int startupError, string ProgramLogName)
-        {
-            bool startup = GF.Startup(out startupError, ProgramLogName);
-            if (startup)
-            {
-                BSAData.GetBSAData();
-            }
-            return startup;
-        }
-
-
-
+        
 
     }
 }

@@ -29,7 +29,7 @@ namespace ESLifyEverything.PluginHandles
                             {
                                 if (sourceForm.Responses[i].FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
                                 {
-                                    responsesC.Add(sourceForm.Responses[i]);
+                                    responsesS.Add(sourceForm.Responses[i]);
                                     responsesC.Add(sourceForm.Responses[i].Duplicate(formHandler.CreateCompactedFormKey()));
                                     break;
                                 }
@@ -38,7 +38,9 @@ namespace ESLifyEverything.PluginHandles
                     }
                     for(int i = 0; i < responsesS.Count; i++)
                     {
+                        DevLog.Log("Removing Response " + responsesS[i].FormKey.ToString());
                         sourceForm.Responses.Remove(responsesS[i]);
+                        DevLog.Log("Duplicating to Response " + responsesC[i].FormKey.ToString());
                         sourceForm.Responses.Add(responsesC[i]);
                         ModEdited = true;
                     }
@@ -53,7 +55,9 @@ namespace ESLifyEverything.PluginHandles
                             {
 
                                 var formCopy = sourceForm.Duplicate(formHandler.CreateCompactedFormKey());
+                                DevLog.Log("Removing DialogTopic " + sourceForm.FormKey.ToString());
                                 mod.Remove(sourceForm.FormKey);
+                                DevLog.Log("Duplicating to DialogTopic " + formCopy.FormKey.ToString());
                                 mod.DialogTopics.Add(formCopy);
                                 ModEdited = true;
                                 break;
@@ -125,7 +129,9 @@ namespace ESLifyEverything.PluginHandles
                                     }
                                     if (EditedFormP)
                                     {
+                                        DevLog.Log("Removing W PlacedNpc P " + sourceFormP.FormKey.ToString());
                                         formCopy.Persistent.Remove(sourceFormP);
+                                        DevLog.Log("Duplicating to W PlacedNpc P " + formCopyP.FormKey.ToString());
                                         formCopy.Persistent.Add(formCopyP);
                                         ModEdited = true;
                                     }
@@ -152,7 +158,9 @@ namespace ESLifyEverything.PluginHandles
                                     }
                                     if (EditedFormP)
                                     {
+                                        DevLog.Log("Removing W PlacedObject P " + sourceFormP.FormKey.ToString());
                                         formCopy.Persistent.Remove(sourceFormP);
+                                        DevLog.Log("Duplicating to W PlacedObject P " + formCopyP.FormKey.ToString());
                                         formCopy.Persistent.Add(formCopyP);
                                         ModEdited = true;
                                     }
@@ -180,7 +188,9 @@ namespace ESLifyEverything.PluginHandles
                                     }
                                     if (EditedFormP)
                                     {
+                                        DevLog.Log("Removing W APlacedTrap P " + sourceFormP.FormKey.ToString());
                                         formCopy.Persistent.Remove(sourceFormP);
+                                        DevLog.Log("Duplicating to W APlacedTrap P " + formCopyP.FormKey.ToString());
                                         formCopy.Persistent.Add(formCopyP);
                                         ModEdited = true;
                                     }
@@ -215,7 +225,9 @@ namespace ESLifyEverything.PluginHandles
                                     }
                                     if (EditedFormT)
                                     {
+                                        DevLog.Log("Removing W PlacedNpc T " + sourceFormT.FormKey.ToString());
                                         formCopy.Temporary.Remove(sourceFormT);
+                                        DevLog.Log("Duplicating to W PlacedNpc T " + formCopyT.FormKey.ToString());
                                         formCopy.Temporary.Add(formCopyT);
                                         ModEdited = true;
                                     }
@@ -243,7 +255,9 @@ namespace ESLifyEverything.PluginHandles
                                     }
                                     if (EditedFormT)
                                     {
+                                        DevLog.Log("Removing W PlacedObject T " + sourceFormT.FormKey.ToString());
                                         formCopy.Temporary.Remove(sourceFormT);
+                                        DevLog.Log("Duplicating to W PlacedObject T " + formCopyT.FormKey.ToString());
                                         formCopy.Temporary.Add(formCopyT);
                                         ModEdited = true;
                                     }
@@ -271,7 +285,9 @@ namespace ESLifyEverything.PluginHandles
                                     }
                                     if (EditedFormT)
                                     {
+                                        DevLog.Log("Removing W APlacedTrap T " + sourceFormT.FormKey.ToString());
                                         formCopy.Temporary.Remove(sourceFormT);
+                                        DevLog.Log("Duplicating to W APlacedTrap T " + formCopyT.FormKey.ToString());
                                         formCopy.Temporary.Add(formCopyT);
                                         ModEdited = true;
                                     }
@@ -288,7 +304,9 @@ namespace ESLifyEverything.PluginHandles
                         }
                         for (int i = 0; i < cellsS.Count; i++)
                         {
+                            DevLog.Log("Removing " + cellsS[i].FormKey.ToString());
                             worldSpace.SubCells[d].Items[e].Items.Remove(cellsS[i]);
+                            DevLog.Log("Duplicating to " + cellsC[i].FormKey.ToString());
                             worldSpace.SubCells[d].Items[e].Items.Add(cellsC[i]);
                         }
                     }
@@ -310,7 +328,9 @@ namespace ESLifyEverything.PluginHandles
                             {
 
                                 formCopy = sourceForm.Duplicate(formHandler.CreateCompactedFormKey());
+                                DevLog.Log("Removing WorldSpace Cell " + sourceForm.FormKey.ToString());
                                 mod.Remove(sourceForm.FormKey);
+                                DevLog.Log("Duplicating to WorldSpace Cell " + formCopy.FormKey.ToString());
                                 mod.Worldspaces.Add(formCopy);
                                 ModEdited = true;
                                 break;
@@ -376,7 +396,9 @@ namespace ESLifyEverything.PluginHandles
                                 }
                                 if (EditedFormP)
                                 {
+                                    DevLog.Log("Removing PlacedNpc P " + sourceFormP.FormKey.ToString());
                                     formCopy.Persistent.Remove(sourceFormP);
+                                    DevLog.Log("Duplicating to PlacedNpc P " + formCopyP.FormKey.ToString());
                                     formCopy.Persistent.Add(formCopyP);
                                     ModEdited = true;
                                 }
@@ -403,7 +425,9 @@ namespace ESLifyEverything.PluginHandles
                                 }
                                 if (EditedFormP)
                                 {
+                                    DevLog.Log("Removing PlacedObject P " + sourceFormP.FormKey.ToString());
                                     formCopy.Persistent.Remove(sourceFormP);
+                                    DevLog.Log("Duplicating to PlacedObject P " + formCopyP.FormKey.ToString());
                                     formCopy.Persistent.Add(formCopyP);
                                     ModEdited = true;
                                 }
@@ -431,7 +455,9 @@ namespace ESLifyEverything.PluginHandles
                                 }
                                 if (EditedFormP)
                                 {
+                                    DevLog.Log("Removing APlacedTrap P " + sourceFormP.FormKey.ToString());
                                     formCopy.Persistent.Remove(sourceFormP);
+                                    DevLog.Log("Duplicating to APlacedTrap P " + formCopyP.FormKey.ToString());
                                     formCopy.Persistent.Add(formCopyP);
                                     ModEdited = true;
                                 }
@@ -466,7 +492,9 @@ namespace ESLifyEverything.PluginHandles
                                 }
                                 if (EditedFormT)
                                 {
+                                    DevLog.Log("Removing PlacedNpc T " + sourceFormT.FormKey.ToString());
                                     formCopy.Temporary.Remove(sourceFormT);
+                                    DevLog.Log("Duplicating to PlacedNpc T " + formCopyT.FormKey.ToString());
                                     formCopy.Temporary.Add(formCopyT);
                                     ModEdited = true;
                                 }
@@ -494,7 +522,9 @@ namespace ESLifyEverything.PluginHandles
                                 }
                                 if (EditedFormT)
                                 {
+                                    DevLog.Log("Removing PlacedObject T " + sourceFormT.FormKey.ToString());
                                     formCopy.Temporary.Remove(sourceFormT);
+                                    DevLog.Log("Duplicating to PlacedObject T " + formCopyT.FormKey.ToString());
                                     formCopy.Temporary.Add(formCopyT);
                                     ModEdited = true;
                                 }
@@ -522,7 +552,9 @@ namespace ESLifyEverything.PluginHandles
                                 }
                                 if (EditedFormT)
                                 {
+                                    DevLog.Log("Removing APlacedTrap T " + sourceFormT.FormKey.ToString());
                                     formCopy.Temporary.Remove(sourceFormT);
+                                    DevLog.Log("Duplicating to APlacedTrap T " + formCopyT.FormKey.ToString());
                                     formCopy.Temporary.Add(formCopyT);
                                     ModEdited = true;
                                 }
@@ -539,7 +571,9 @@ namespace ESLifyEverything.PluginHandles
                     }
                     for (int c = 0; c < cellsS.Count; c++)
                     {
+                        DevLog.Log("Removing Cell " + cellsS[c].FormKey.ToString());
                         mod.Cells.Records[i].SubBlocks[a].Cells.Remove(cellsS[c]);
+                        DevLog.Log("Duplicating to Cell " + cellsC[c].FormKey.ToString());
                         mod.Cells.Records[i].SubBlocks[a].Cells.Add(cellsC[c]);
                     }
                 }

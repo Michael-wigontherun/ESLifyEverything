@@ -2,6 +2,7 @@
 using ESLifyEverythingGlobalDataLibrary;
 using ESLifyEverythingGlobalDataLibrary.FormData;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
+using System.Text.RegularExpressions;
 
 namespace ESLifyEverything.FormData
 {
@@ -16,9 +17,25 @@ namespace ESLifyEverything.FormData
             CreateCompactedForm(xEditLogCompactedLine);
         }
         
+        public FormHandler(string modName, string orgId, string compID)
+        {
+            ModName = modName;
+            OriginalFormID = orgId;
+            CompactedFormID = compID;
+            IsModified = !(OriginalFormID.Equals(CompactedFormID));
+        }
+
+        //changes the CompactedID
+        public void ChangeCompactedID(string newCompactedID)
+        {
+            CompactedFormID = newCompactedID;
+            IsModified = !(OriginalFormID.Equals(CompactedFormID));
+        }
+
         //Creates the Form Data from a xEditLogLine
         public void CreateCompactedForm(string xEditLogCompactedLine)
         {
+            DevLog.Log(xEditLogCompactedLine);
             string logLineFilter = GF.stringsResources.xEditCompactedFormFilter;
             OriginalFormID = xEditLogCompactedLine.Substring(xEditLogCompactedLine.IndexOf(logLineFilter) + logLineFilter.Length + 2, 6);
             
@@ -46,6 +63,10 @@ namespace ESLifyEverything.FormData
             if (len > 3)
             {
                 len = 3;
+            }
+            if (len < CompactedFormID.TrimStart('0').Length)
+            {
+                len = 6 - CompactedFormID.TrimStart('0').Length;
             }
             return CompactedFormID.Substring(len);
         }
@@ -86,12 +107,6 @@ namespace ESLifyEverything.FormData
                 return modName + separator.FormKeySeparator + GetCompactedFormIDTrimmed();
             }
             return GetCompactedFormIDTrimmed() + separator.FormKeySeparator + modName;
-        }
-
-        //Creates a string of the Object's data for logging usually
-        public new string ToString()
-        {
-            return "Mod Name: " + ModName + " | Origonal FormID: " + OriginalFormID + " | Compacted FormID: " + CompactedFormID + " | IsModified: " + IsModified;
         }
 
         //Creates the Mutagen FormKey related to the Origonal Form

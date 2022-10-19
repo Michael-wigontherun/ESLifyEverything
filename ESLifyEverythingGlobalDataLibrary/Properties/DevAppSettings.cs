@@ -9,5 +9,6 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
     public class DevAppSettings
     {
         public bool DevLogging { get; set; } = false;
+        public bool DevLoggingOverrideSome { get; set; } = false;
     }
 }

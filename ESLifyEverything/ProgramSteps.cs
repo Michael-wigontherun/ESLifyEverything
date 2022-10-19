@@ -7,11 +7,23 @@ using System.Diagnostics;
 using System.Text.Json;
 using ESLifyEverythingGlobalDataLibrary;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
+using Microsoft.Extensions.Configuration;
 
 namespace ESLifyEverything
 {
     public static partial class Program
     {
+        //Extra Startup stuff that ESLify Everything needs
+        private static bool StartUp(out StartupError startupError, string ProgramLogName)
+        {
+            bool startup = GF.Startup(out startupError, ProgramLogName);
+            if (startup)
+            {
+                BSAData.GetBSAData();
+            }
+            return startup;
+        }
+
         //Region for reading the xEdit log
         #region xEdit Log
         //Parses the xEdit log and readys it for output
@@ -74,6 +86,110 @@ namespace ESLifyEverything
         }
         #endregion xEdit Log
 
+        public static void BuildMergedData()
+        {
+            IEnumerable<string> mergeFolders = Directory.EnumerateDirectories(
+                GF.Settings.DataFolderPath,
+                "merge - *",
+                SearchOption.TopDirectoryOnly);
+            foreach(string folder in mergeFolders)
+            {
+                string mergeJsonPath = Path.Combine(folder, "merge.json");
+                if (File.Exists(mergeJsonPath))
+                {
+                    GF.WriteLine(GF.stringLoggingData.MergeFound + folder, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    CompactedMergeData mergeData = new CompactedMergeData(mergeJsonPath, out bool success);
+                    if (success)
+                    {
+                        string potentialMergeDataCachPath = Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.MergeCacheExtension);
+
+                        if (File.Exists(potentialMergeDataCachPath))
+                        {
+                            CompactedMergeData previouslyCachedMergeData = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(potentialMergeDataCachPath))!;
+                            if (previouslyCachedMergeData.AlreadyCached())
+                            {
+                                GF.WriteLine(mergeData.MergeName + GF.stringLoggingData.PluginCheckPrev, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                GF.WriteLine(string.Format(GF.stringLoggingData.SkippingImport, mergeData.MergeName + GF.MergeCacheExtension), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                continue;
+                            }
+                        }
+
+                        string mapPath = Path.Combine(folder, "map.json");
+
+                        if (File.Exists(mapPath))
+                        {
+                            if (mergeData.CompactedModDataD != null)
+                            {
+                                CompactedModData? outputtedCompactedModData = null;
+                                string potentialCompactedModDataPath = Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormExtension);
+                                if (File.Exists(potentialCompactedModDataPath))
+                                {
+                                    GF.WriteLine(GF.stringLoggingData.GetCompDataLog + potentialCompactedModDataPath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                    outputtedCompactedModData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(potentialCompactedModDataPath))!;
+                                }
+
+                                IConfiguration mergeMap = new ConfigurationBuilder()
+                                    .AddJsonFile(mapPath)
+                                    .AddEnvironmentVariables().Build();
+                                foreach (string key in mergeData.CompactedModDataD.Keys)
+                                {
+                                    if(mergeData.CompactedModDataD.TryGetValue(key, out CompactedModData? compactedModData))
+                                    {
+                                        try
+                                        {
+                                            foreach (KeyValuePair<string, string> mapping in mergeMap.GetRequiredSection(compactedModData.ModName).Get<Dictionary<string, string>>())
+                                            {
+                                                FormHandler form = new FormHandler(mergeData.MergeName, mapping.Key, mapping.Value);
+
+                                                if (outputtedCompactedModData != null)
+                                                {
+                                                    foreach (FormHandler formHandler in outputtedCompactedModData.CompactedModFormList)
+                                                    {
+                                                        if (formHandler.OriginalFormID.Equals(mapping.Value))
+                                                        {
+                                                            form.ChangeCompactedID(formHandler.CompactedFormID);
+                                                        }
+                                                    }
+                                                }
+
+                                                if (form.IsModified)
+                                                {
+                                                    compactedModData.CompactedModFormList.Add(form);
+                                                }
+                                            }
+                                            mergeData.CompactedModDatas.Add(compactedModData);
+                                        }
+                                        catch(InvalidOperationException)
+                                        {
+                                            GF.WriteLine(String.Format(GF.stringLoggingData.NoChangedFormsFor, key, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                        }
+                                        catch(Exception e)
+                                        {
+                                            GF.WriteLine(mapPath);
+                                            GF.WriteLine(e.Message);
+                                        }
+                                    }
+                                }
+
+                                if (outputtedCompactedModData != null)
+                                {
+                                    GF.WriteLine(string.Format(GF.stringLoggingData.SetToIgnore, mergeData.MergeName + GF.CompactedFormExtension, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
+                                    File.Move(potentialCompactedModDataPath, Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
+                                }
+
+                                mergeData.OutputModData(true);
+                            }
+                        }
+                        else
+                        {
+                            GF.WriteLine(string.Format(GF.stringLoggingData.MapNotFound, mergeData.MergeName + GF.MergeCacheExtension), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                            GF.WriteLine(string.Format(GF.stringLoggingData.SkippingImport, mergeData.MergeName + GF.MergeCacheExtension), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        }
+                    }
+                }
+            }
+        }
+
         //Region for importing Compacted Mod Data Files
         #region Import Mod Data
         //Imports all _CompactedModData.json files for ESLify Everything
@@ -85,9 +201,11 @@ namespace ESLifyEverything
                 return;
             }
 
+            ImportMergeData();
+
             IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(
                 compactedFormsLocation,
-                "*_ESlEverything.json",
+                "*" + GF.CompactedFormExtension,
                 SearchOption.AllDirectories);
 
             if (!compactedFormsModFiles.Any())
@@ -106,7 +224,7 @@ namespace ESLifyEverything
                     GF.WriteLine(String.Format(GF.stringLoggingData.PluginNotFoundImport, compactedFormsModFile));
                     continue;
                 }
-
+                
                 if (modData.Recheck == true)
                 {
                     if (modData.PluginLastModifiedValidation is null)
@@ -129,10 +247,39 @@ namespace ESLifyEverything
                         CompactedModDataD.TryAdd(modData.ModName, modData);
                     }
                 }
+                else
+                {
+                    GF.WriteLine(string.Format(GF.stringLoggingData.SkippingImport, modData.ModName + GF.CompactedFormExtension));
+                }
                 
             }
         }
-        
+
+        public static void ImportMergeData()
+        {
+            IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(
+                GF.CompactedFormsFolder,
+                "*" + GF.MergeCacheExtension,
+                SearchOption.AllDirectories);
+            foreach(string file in compactedFormsModFiles)
+            {
+                CompactedMergeData mergeData = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(file))!;
+                string pluginPath = Path.Combine(GF.Settings.DataFolderPath, mergeData.MergeName);
+                if (File.Exists(pluginPath))
+                {
+                    if (mergeData.AlreadyCached())
+                    {
+                        GF.WriteLine(GF.stringLoggingData.ImportingMergeCache + file);
+                        foreach(CompactedModData compactedModData in mergeData.CompactedModDatas)
+                        {
+                            GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                            CompactedModDataD.TryAdd(compactedModData.ModName, compactedModData);
+                        }
+                    }
+                }
+            }
+        }
+
         //Validates whether the CompactedModData is still valid compared to the Plugin
         public static CompactedModData ValidateCompactedModDataJson(CompactedModData modData)
         {
@@ -141,14 +288,12 @@ namespace ESLifyEverything
                 modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
                 modData.Enabled = true;
                 modData.Recheck = true;
-                modData.OutputModData(false, false);
             }
             else if (modData.IsCompacted(true))
             {
                 modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
                 modData.Enabled = true;
                 modData.Recheck = true;
-                modData.OutputModData(false, false);
             }
             else
             {
@@ -157,7 +302,7 @@ namespace ESLifyEverything
                 GF.WriteLine("", false, true);
                 GF.WriteLine("", false, true);
                 modData.Enabled = false;
-                GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData1, modData.ModName + "_ESlEverything.json"));
+                GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData1, modData.ModName + GF.CompactedFormExtension));
                 Console.WriteLine();
 
                 bool notReCompactedFully = true;
@@ -207,8 +352,8 @@ namespace ESLifyEverything
                 GF.WriteLine("", false, true);
                 GF.WriteLine("", false, true);
                 GF.WriteLine("");
-                modData.OutputModData(false, false);
             }
+            modData.OutputModData(false, false);
             return modData;
         }
 
@@ -531,7 +676,7 @@ namespace ESLifyEverything
                 {
                     IEnumerable<string> FaceGenTexFilePaths = Directory.EnumerateFiles(
                         Path.Combine(dataStartPath, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\", modData.ModName),
-                        "*" + form.OriginalFormID + ".dds",
+                        "*" + form.OriginalFormID + "*.dds",
                         SearchOption.AllDirectories);
                     foreach (string FaceGenFilePath in FaceGenTexFilePaths)
                     {
@@ -547,7 +692,7 @@ namespace ESLifyEverything
 
                     IEnumerable<string> FaceGenFilePaths = Directory.EnumerateFiles(
                         Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName),
-                        "*" + form.OriginalFormID + ".nif",
+                        "*" + form.OriginalFormID + "*.nif",
                         SearchOption.AllDirectories);
 
                     foreach (string FaceGenFilePath in FaceGenFilePaths)
@@ -599,9 +744,10 @@ namespace ESLifyEverything
                 default:
                     break;
             }
+            InternallyCodedDataFileConfigurations();
         }
         
-        //Runs all Compacted Mod Data
+        //Runs all Mod Configurations
         public static void ESLifyAllDataFiles()
         {
             foreach (var modConfiguration in BasicSingleModConfigurations)
@@ -624,6 +770,24 @@ namespace ESLifyEverything
             {
                 HandleConfigurationType(modConfiguration);
             }
+        }
+
+        //Runs the Internally coded Mod Configurations
+        public static void InternallyCodedDataFileConfigurations()
+        {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
+            RaceMenuESLify();
+
+            DevLog.Pause("After RaceMenu ESLify Pause");
+
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
+            Task CustomSkills = CustomSkillsFramework();
+            CustomSkills.Wait();
+            CustomSkills.Dispose();
+
+            DevLog.Pause("After Custom Skills Framework ESLify Pause");
         }
 
         //Gets the Mod Configuration files for ESLifying Data Files

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace ESLifyEverythingGlobalDataLibrary.FormData
 {
@@ -17,6 +12,12 @@ namespace ESLifyEverythingGlobalDataLibrary.FormData
         public string CompactedFormID { get; protected set; } = "000000";
         [JsonInclude]
         public bool IsModified { get; protected set; } = true;
+
+        //Creates a string of the Object's data for logging usually
+        public new string ToString()
+        {
+            return "Mod Name: " + ModName + " | Origonal FormID: " + OriginalFormID + " | Compacted FormID: " + CompactedFormID + " | IsModified: " + IsModified;
+        }
 
     }
 }
