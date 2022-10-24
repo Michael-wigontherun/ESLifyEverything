@@ -116,8 +116,9 @@ namespace ESLifyEverything
                         }
 
                         string mapPath = Path.Combine(folder, "map.json");
+                        string fidCachePath = Path.Combine(folder, "fidCache.json");
 
-                        if (File.Exists(mapPath))
+                        if (File.Exists(mapPath) && File.Exists(fidCachePath))
                         {
                             if (mergeData.CompactedModDataD != null)
                             {
@@ -128,6 +129,10 @@ namespace ESLifyEverything
                                     GF.WriteLine(GF.stringLoggingData.GetCompDataLog + potentialCompactedModDataPath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                                     outputtedCompactedModData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(potentialCompactedModDataPath))!;
                                 }
+
+                                IConfiguration fidCache = new ConfigurationBuilder()
+                                    .AddJsonFile(fidCachePath)
+                                    .AddEnvironmentVariables().Build();
 
                                 IConfiguration mergeMap = new ConfigurationBuilder()
                                     .AddJsonFile(mapPath)
@@ -153,12 +158,8 @@ namespace ESLifyEverything
                                                     }
                                                 }
 
-                                                if (form.IsModified)
-                                                {
-                                                    compactedModData.CompactedModFormList.Add(form);
-                                                }
+                                                compactedModData.CompactedModFormList.Add(form);
                                             }
-                                            mergeData.CompactedModDatas.Add(compactedModData);
                                         }
                                         catch(InvalidOperationException)
                                         {
@@ -169,14 +170,44 @@ namespace ESLifyEverything
                                             GF.WriteLine(mapPath);
                                             GF.WriteLine(e.Message);
                                         }
+
+                                        try
+                                        {
+                                            foreach (string fidCacheKP in fidCache.GetRequiredSection(compactedModData.ModName).Get<HashSet<string>>())
+                                            {
+                                                FormHandler form = new FormHandler(mergeData.MergeName, fidCacheKP, fidCacheKP);
+                                                if (outputtedCompactedModData != null)
+                                                {
+                                                    foreach (FormHandler formHandler in outputtedCompactedModData.CompactedModFormList)
+                                                    {
+                                                        if (formHandler.OriginalFormID.Equals(fidCacheKP))
+                                                        {
+                                                            form.ChangeCompactedID(formHandler.CompactedFormID);
+                                                        }
+                                                    }
+                                                }
+                                                compactedModData.AddIfMissing(form);
+                                                
+                                            }
+                                        }
+                                        catch (InvalidOperationException)
+                                        {
+                                            GF.WriteLine(String.Format(GF.stringLoggingData.NoChangedFormsFor, key, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                        }
+
+                                        mergeData.CompactedModDatas.Add(compactedModData);
                                     }
+
+                                    
                                 }
 
                                 if (outputtedCompactedModData != null)
                                 {
                                     GF.WriteLine(string.Format(GF.stringLoggingData.SetToIgnore, mergeData.MergeName + GF.CompactedFormExtension, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
-                                    File.Move(potentialCompactedModDataPath, Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
+                                    //File.Move(potentialCompactedModDataPath, Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
                                 }
+
+                                
 
                                 mergeData.OutputModData(true);
                             }

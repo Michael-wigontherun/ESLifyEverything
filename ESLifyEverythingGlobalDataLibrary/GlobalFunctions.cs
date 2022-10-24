@@ -34,7 +34,7 @@ namespace ESLifyEverythingGlobalDataLibrary
         public static readonly string CompactedFormExtension = "_ESlEverything.json";
 
         //readonly property to get the extension for CompactedFormJson that needs to be ignored
-        public static readonly string CompactedFormIgnoreExtension = "_ESLifyEverything.ignore";
+        public static readonly string CompactedFormIgnoreExtension = "_ESLEverything.ignore";
 
         //readonly property to get the extension for all Merge Caches
         public static readonly string MergeCacheExtension = "_ESlEverythingMergeCache.json";

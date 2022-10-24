@@ -35,6 +35,15 @@ namespace ESLifyEverything.FormData
             CompactedModFormList = compactedModFormList;
         }
 
+        public void AddIfMissing(FormHandler form)
+        {
+            if (!ContainsFormID(form))
+            {
+                DevLog.Log(form, "Not found and adding to compacted mod data.");
+                CompactedModFormList.Add(form);
+            }
+        }
+
         //Checks the plugin to see if it is still Compacted
         public bool IsCompacted(bool usePluginOutputLocation)
         {
@@ -98,21 +107,7 @@ namespace ESLifyEverything.FormData
         //checkPreviousIfExists = true will reimport previous outputed _ESlEverything.json data if it exists
         public void OutputModData(bool write, bool checkPreviousIfExists)
         {
-            bool ContainsFormID(FormHandler previousForm)
-            {
-                foreach (FormHandler form in CompactedModFormList)
-                {
-                    if (form.OriginalFormID.Equals(previousForm.OriginalFormID))
-                    {
-                        return true;
-                    }
-                    if (form.CompactedFormID.Equals(previousForm.CompactedFormID))
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
+            
             string CompactedFormPath = Path.Combine(GF.CompactedFormsFolder, ModName + GF.CompactedFormExtension);
             if (checkPreviousIfExists)
             {
@@ -124,7 +119,7 @@ namespace ESLifyEverything.FormData
                     {
                         if (!ContainsFormID(form))
                         {
-                            DevLog.Log(form, "Found and adding to compacted mod data.");
+                            DevLog.Log(form, "Not found and adding to compacted mod data.");
                             CompactedModFormList.Add(form);
                         }
                     }
@@ -133,6 +128,22 @@ namespace ESLifyEverything.FormData
             if (write) Write();
             GF.WriteLine(GF.stringLoggingData.OutputtingTo + CompactedFormPath);
             File.WriteAllText(CompactedFormPath, JsonSerializer.Serialize(this, GF.JsonSerializerOptions));
+        }
+
+        public bool ContainsFormID(FormHandler previousForm)
+        {
+            foreach (FormHandler form in CompactedModFormList)
+            {
+                if (form.OriginalFormID.Equals(previousForm.OriginalFormID))
+                {
+                    return true;
+                }
+                if (form.CompactedFormID.Equals(previousForm.CompactedFormID))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         //Creates a FormKey Dictionary for Remaping FormLinks inside of plugins

@@ -160,7 +160,7 @@
     "MergeFound": "Found Merge at: ",
     "NoChangedFormsFor": "there were no forms changed inside {0} in merge {1}.",
     "SetToIgnore": "Setting {0} to ignore, you can saftly delete {0}",
-    "MapNotFound": "The map.json was not found for {0}",
+    "MapNotFound": "The map.json or fidCache,json was not found in {0}",
     "StartingMergeCache": "Building and Updating zMerge Data References",
     "ImportingMergeCache": "Getting merge data from ",
     "ImportingMergeCompactedModData": "Found compacted mod data for "

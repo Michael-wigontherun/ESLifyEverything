@@ -77,31 +77,33 @@ namespace ESLifyEverything
             {
                 exactHexValueTrimmed = null;
                 Regex fullStringCheck = new Regex("GetFormFromFile\\([0-9]+,", RegexOptions.IgnoreCase);
-                string stringDecimal = fullStringCheck.Match(line).Value;
-                stringDecimal = stringDecimal.Replace("GetFormFromFile(", "");
-                stringDecimal = stringDecimal.Replace(",", "");
-                //GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                try
+                if (fullStringCheck.IsMatch(line))
                 {
-                    if (long.TryParse(stringDecimal, out long value))
+                    string stringDecimal = fullStringCheck.Match(line).Value;
+                    stringDecimal = stringDecimal.Replace("GetFormFromFile(", "");
+                    stringDecimal = stringDecimal.Replace(",", "");
+                    //GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    try
                     {
-                        string hexNum = string.Format("{0:x}", value);
-                        if (hexNum.Length > 6)
+                        if (long.TryParse(stringDecimal, out long value))
                         {
-                            hexNum = hexNum.Substring(hexNum.Length - 6).TrimStart('0');
-                            exactHexValueTrimmed = hexNum;
+                            string hexNum = string.Format("{0:x}", value);
+                            if (hexNum.Length > 6)
+                            {
+                                hexNum = hexNum.Substring(hexNum.Length - 6).TrimStart('0');
+                                exactHexValueTrimmed = hexNum;
+                            }
+                            string hex = "0x" + hexNum;
+                            line = line.Replace(stringDecimal, hex, StringComparison.OrdinalIgnoreCase);
                         }
-                        string hex = "0x" + hexNum;
-                        line = line.Replace(stringDecimal, hex, StringComparison.OrdinalIgnoreCase);
+                    }
+                    catch (Exception e)
+                    {
+                        GF.WriteLine(GF.stringLoggingData.FixDecToHexError);
+                        GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        GF.WriteLine(e.Message);
                     }
                 }
-                catch (Exception e)
-                {
-                    GF.WriteLine(GF.stringLoggingData.FixDecToHexError);
-                    GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                    GF.WriteLine(e.Message);
-                }
-                
                 return line;
             }
             

@@ -201,6 +201,7 @@
         public string NoChangedFormsFor { get; set; } = "";
         public string SetToIgnore { get; set; } = "";
         public string MapNotFound { get; set; } = "";
+        public string FidCacheNotFound { get; set; } = "";
         public string ImportingMergeCache { get; set; } = "";
         public string ImportingMergeCompactedModData { get; set; } = "";
 
