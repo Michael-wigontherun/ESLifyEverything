@@ -27,7 +27,7 @@ namespace ESLifyEverything
         //Region for reading the xEdit log
         #region xEdit Log
         //Parses the xEdit log and readys it for output
-        public static void XEditSession()
+        private static void XEditSession()
         {
             XEditLogReader.ReadLog(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName));
             int xEditSessionsCount = XEditLogReader.xEditLog.xEditSessions?.Length ?? 0;
@@ -60,7 +60,7 @@ namespace ESLifyEverything
         }
 
         //Menu to pick which sessions to output
-        public static void XEditSessionMenu()
+        private static void XEditSessionMenu()
         {
             int xEditSessionsCount = XEditLogReader.xEditLog.xEditSessions?.Length ?? 0;
             Console.WriteLine("\n\n\n\n");
@@ -77,7 +77,7 @@ namespace ESLifyEverything
         }
 
         //Outputs all xEdit sessions to output to Compacted Mod Data
-        public static void XEditSessionAutoAll()
+        private static void XEditSessionAutoAll()
         {
             foreach (XEditSession session in XEditLogReader.xEditLog.xEditSessions!)
             {
@@ -86,7 +86,8 @@ namespace ESLifyEverything
         }
         #endregion xEdit Log
 
-        public static void BuildMergedData()
+        //Trys to locate and then build a zMerge cache
+        private static void BuildMergedData()
         {
             IEnumerable<string> mergeFolders = Directory.EnumerateDirectories(
                 GF.Settings.DataFolderPath,
@@ -186,6 +187,11 @@ namespace ESLifyEverything
                             GF.WriteLine(string.Format(GF.stringLoggingData.SkippingImport, mergeData.MergeName + GF.MergeCacheExtension), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                         }
                     }
+                    else
+                    {
+                        GF.WriteLine(String.Format(GF.stringLoggingData.PluginNotFoundImport, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        GF.WriteLine(String.Format(GF.stringLoggingData.SkippingImport, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    }
                 }
             }
         }
@@ -193,7 +199,7 @@ namespace ESLifyEverything
         //Region for importing Compacted Mod Data Files
         #region Import Mod Data
         //Imports all _CompactedModData.json files for ESLify Everything
-        public static void ImportModData(string compactedFormsLocation)
+        private static void ImportModData(string compactedFormsLocation)
         {
             if (!Directory.Exists(compactedFormsLocation))
             {
@@ -255,7 +261,7 @@ namespace ESLifyEverything
             }
         }
 
-        public static void ImportMergeData()
+        private static void ImportMergeData()
         {
             IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(
                 GF.CompactedFormsFolder,
@@ -277,11 +283,16 @@ namespace ESLifyEverything
                         }
                     }
                 }
+                else
+                {
+                    GF.WriteLine(String.Format(GF.stringLoggingData.PluginNotFoundImport, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    GF.WriteLine(String.Format(GF.stringLoggingData.SkippingImport, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                }
             }
         }
 
         //Validates whether the CompactedModData is still valid compared to the Plugin
-        public static CompactedModData ValidateCompactedModDataJson(CompactedModData modData)
+        private static CompactedModData ValidateCompactedModDataJson(CompactedModData modData)
         {
             if (modData.IsCompacted(false))
             {
@@ -359,7 +370,7 @@ namespace ESLifyEverything
 
         //Recompacts the known Forms that relate to the CompactedModData
         //This does not change Forms that are not known inside the CompactedModData
-        public static void RunRecompact(string pluginName)
+        private static void RunRecompact(string pluginName)
         {
             Task<int> handlePluginTask = HandleMod.HandleSkyrimMod(pluginName);
             handlePluginTask.Wait();
@@ -382,7 +393,7 @@ namespace ESLifyEverything
         #endregion Import Mod Data
 
         //Parses the BSA's in the Data folder
-        public static async Task<int> LoadOrderBSAData()
+        private static async Task<int> LoadOrderBSAData()
         {
             string loadorderFilePath = Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "loadorder.txt");
             if (!File.Exists(loadorderFilePath))
@@ -429,7 +440,7 @@ namespace ESLifyEverything
         //Region for Voice Eslify
         #region Voice Eslify
         //Voice Eslify Main Menu
-        public static void VoiceESlIfyMenu()
+        private static void VoiceESlIfyMenu()
         {
             GF.WriteLine(GF.stringLoggingData.VoiceESLMenuHeader);
             GF.WriteLine($"1. {GF.stringLoggingData.ESLEveryMod}{GF.stringLoggingData.WithCompactedForms}", true, false);//with a _ESlEverything.json attached to it inside of the CompactedForms folders.
@@ -459,7 +470,7 @@ namespace ESLifyEverything
         }
 
         //Runs all Compacted Mod Data
-        public static bool VoiceESLifyEverything()
+        private static bool VoiceESLifyEverything()
         {
             foreach (CompactedModData modData in CompactedModDataD.Values)
             {
@@ -469,7 +480,7 @@ namespace ESLifyEverything
         }
 
         //Voice Eslify menu to select which Compacted Mod Data to check
-        public static void VoiceESLifySingleMod()
+        private static void VoiceESLifySingleMod()
         {
             bool whileContinue = true;
             string input;
@@ -492,7 +503,7 @@ namespace ESLifyEverything
         }
 
         //Runs all needed methods to acuretly find Voice lines from the Compacted Mod Data
-        public static void VoiceESLifyMod(CompactedModData modData)
+        private static void VoiceESLifyMod(CompactedModData modData)
         {
             Task v = ExtractBSAVoiceData(modData.ModName);
             v.Wait();
@@ -502,7 +513,7 @@ namespace ESLifyEverything
         }
 
         //Extracts Voice Lines from BSA with Voice lines connected to the plugin
-        public static async Task<int> ExtractBSAVoiceData(string pluginName)
+        private static async Task<int> ExtractBSAVoiceData(string pluginName)
         {
             foreach (string plugin in LoadOrderNoExtensions)
             {
@@ -528,7 +539,7 @@ namespace ESLifyEverything
         }
 
         //Checks the given Compacted Mod Data for Voice lines and fixes them from targeted locations
-        public static void VoiceESLifyModData(CompactedModData modData, string dataStartPath)
+        private static void VoiceESLifyModData(CompactedModData modData, string dataStartPath)
         {
             if (Directory.Exists(Path.Combine(dataStartPath, "sound\\voice", modData.ModName)))
             {
@@ -558,7 +569,7 @@ namespace ESLifyEverything
         //Region for FaceGen Eslify
         #region FaceGen Eslify
         //FaceGen Eslify Main Menu
-        public static void FaceGenESlIfyMenu()
+        private static void FaceGenESlIfyMenu()
         {
             GF.WriteLine(GF.stringLoggingData.FaceGenESLMenuHeader);
             GF.WriteLine($"1. {GF.stringLoggingData.ESLEveryMod}{GF.stringLoggingData.WithCompactedForms}",true, false);//with a _ESlEverything.json attached to it inside of the CompactedForms folders.
@@ -588,7 +599,7 @@ namespace ESLifyEverything
         }
 
         //Runs all Compacted Mod Data
-        public static bool FaceGenESLifyEverything()
+        private static bool FaceGenESLifyEverything()
         {
             foreach (CompactedModData modData in CompactedModDataD.Values)
             {
@@ -598,7 +609,7 @@ namespace ESLifyEverything
         }
 
         //FaceGen Eslify menu to select which Compacted Mod Data to check
-        public static void FaceGenESLifySingleMod()
+        private static void FaceGenESLifySingleMod()
         {
             bool whileContinue = true;
             string input;
@@ -621,7 +632,7 @@ namespace ESLifyEverything
         }
 
         //Runs all needed methods to acuretly find FaceGen from the Compacted Mod Data
-        public static void FaceGenESLifyMod(CompactedModData modData)
+        private static void FaceGenESLifyMod(CompactedModData modData)
         {
             Task f = ExtractBSAFaceGenData(modData.ModName);
             f.Wait();
@@ -632,7 +643,7 @@ namespace ESLifyEverything
         }
 
         //Extracts Voice Lines from BSA with FaceGen connected to the plugin
-        public static async Task<int> ExtractBSAFaceGenData(string pluginName)
+        private static async Task<int> ExtractBSAFaceGenData(string pluginName)
         {
             foreach (string plugin in LoadOrderNoExtensions)
             {
@@ -668,7 +679,7 @@ namespace ESLifyEverything
         }
 
         //Checks the given Compacted Mod Data for FaceGen and fixes them from targeted locations
-        public static void FaceGenEslifyModData(CompactedModData modData, string dataStartPath)
+        private static void FaceGenEslifyModData(CompactedModData modData, string dataStartPath)
         {
             if (Directory.Exists(Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName)))
             {
@@ -720,7 +731,7 @@ namespace ESLifyEverything
         //Region for Eslifying Data files
         #region ESLify Data Files
         //Data Files Eslify Main Menu
-        public static void ESLifyDataFilesMainMenu()
+        private static void ESLifyDataFilesMainMenu()
         {
             GetESLifyModConfigurationFiles();
 
@@ -746,9 +757,9 @@ namespace ESLifyEverything
             }
             InternallyCodedDataFileConfigurations();
         }
-        
+
         //Runs all Mod Configurations
-        public static void ESLifyAllDataFiles()
+        private static void ESLifyAllDataFiles()
         {
             foreach (var modConfiguration in BasicSingleModConfigurations)
             {
@@ -773,7 +784,7 @@ namespace ESLifyEverything
         }
 
         //Runs the Internally coded Mod Configurations
-        public static void InternallyCodedDataFileConfigurations()
+        private static void InternallyCodedDataFileConfigurations()
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
@@ -791,7 +802,7 @@ namespace ESLifyEverything
         }
 
         //Gets the Mod Configuration files for ESLifying Data Files
-        public static void GetESLifyModConfigurationFiles()
+        private static void GetESLifyModConfigurationFiles()
         {
             //                 BasicSingleFile
             IEnumerable<string> basicSingleFilesModConfigurations = Directory.EnumerateFiles(
@@ -928,7 +939,7 @@ namespace ESLifyEverything
         }
 
         //Handles Logging for BasicSingleFile
-        public static void HandleConfigurationType(BasicSingleFile ModConfiguration)
+        private static void HandleConfigurationType(BasicSingleFile ModConfiguration)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
@@ -936,7 +947,7 @@ namespace ESLifyEverything
         }
 
         //Handles Logging for BasicDirectFolder
-        public static void HandleConfigurationType(BasicDirectFolder ModConfiguration)
+        private static void HandleConfigurationType(BasicDirectFolder ModConfiguration)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
@@ -944,7 +955,7 @@ namespace ESLifyEverything
         }
 
         //Handles Logging for BasicDataSubfolder
-        public static void HandleConfigurationType(BasicDataSubfolder ModConfiguration)
+        private static void HandleConfigurationType(BasicDataSubfolder ModConfiguration)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
@@ -954,7 +965,7 @@ namespace ESLifyEverything
         }
 
         //Handles Logging for ComplexTOML
-        public static void HandleConfigurationType(ComplexTOML ModConfiguration)
+        private static void HandleConfigurationType(ComplexTOML ModConfiguration)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
@@ -964,7 +975,7 @@ namespace ESLifyEverything
         }
 
         //Handles Logging for DelimitedFormKeys
-        public static void HandleConfigurationType(DelimitedFormKeys ModConfiguration)
+        private static void HandleConfigurationType(DelimitedFormKeys ModConfiguration)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(ModConfiguration.StartingLogLine);
@@ -972,7 +983,7 @@ namespace ESLifyEverything
         }
 
         //Menu for selecting what Mod Configuration to check to run on Data Files
-        public static void ESLifySelectedDataFilesMenu()
+        private static void ESLifySelectedDataFilesMenu()
         {
             bool endMenu = false;
             string[] modConMenuList = GetModConList();
@@ -1040,7 +1051,7 @@ namespace ESLifyEverything
         }
 
         //Runs the selected Mod Configuration over Data Files
-        public static void RunSelectedModConfig(string[] modConMenuList, int selectedMenuItem)
+        private static void RunSelectedModConfig(string[] modConMenuList, int selectedMenuItem)
         {
             foreach (var modConfiguration in BasicSingleModConfigurations)
             {
@@ -1080,9 +1091,9 @@ namespace ESLifyEverything
 
         }
         #endregion ESLify Data Files
-        
+
         //Region for RaceMenu Eslify
-        public static void RaceMenuESLify()
+        private static void RaceMenuESLify()
         {
             if (Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, "SKSE\\Plugins\\CharGen\\Presets")))
             {
@@ -1146,7 +1157,7 @@ namespace ESLifyEverything
         }
 
         //Region for Custom Skills Framework Eslify
-        public static async Task<int> CustomSkillsFramework()
+        private static async Task<int> CustomSkillsFramework()
         {
             string startSearchPath = Path.Combine(GF.Settings.DataFolderPath, "NetScriptFramework\\Plugins");
             if (Directory.Exists(startSearchPath))
@@ -1209,7 +1220,7 @@ namespace ESLifyEverything
         //Region for fixing records and references inside of plugins
         #region Plugins
         //Starts the chack for Master file and runs what was selected in SelectCompactedModsMenu()
-        public static void ReadLoadOrder()
+        private static void ReadLoadOrder()
         {
             HashSet<string> checkPlugins = SelectCompactedModsMenu();
 
@@ -1265,7 +1276,7 @@ namespace ESLifyEverything
         }
 
         //Menu to select Compacted Mod Data to check over load order
-        public static HashSet<string> SelectCompactedModsMenu()
+        private static HashSet<string> SelectCompactedModsMenu()
         {
             HashSet<string> slectedCompactedMods = new HashSet<string>();
             List<string> menuList = new List<string>();

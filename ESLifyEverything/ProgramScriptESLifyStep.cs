@@ -11,7 +11,7 @@ namespace ESLifyEverything
     public static partial class Program
     {
         //Menu to AutoRun or Ask if extraction and decompile is necessary
-        public static bool ExtractScriptsMenu()
+        private static bool ExtractScriptsMenu()
         {
             if (GF.Settings.AutoRunScriptDecompile)
             {
@@ -38,7 +38,7 @@ namespace ESLifyEverything
         }
 
         //Extracts scripts from BSA's in the order of your load order
-        public static async Task<int> ExtractScripts()
+        private static async Task<int> ExtractScripts()
         {
             if (ExtractScriptsMenu())
             {
@@ -105,7 +105,7 @@ namespace ESLifyEverything
         }
 
         //Runs BSA Browser to extract scripts from BSA path
-        public static async Task<int> ExtractBSAScripts(string bsaPath)
+        private static async Task<int> ExtractBSAScripts(string bsaPath)
         {
             Process p = new Process();
             p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
@@ -118,7 +118,7 @@ namespace ESLifyEverything
         }
 
         //Runs Champolion on script path and outputting to the "ExtractedBSAModData\Source\Scripts" folder
-        public static async Task<int> DecompileScripts(string startPath)
+        private static async Task<int> DecompileScripts(string startPath)
         {
             Process p = new Process();
             p.StartInfo.FileName = ".\\Champollion\\champollion.exe";
@@ -132,7 +132,7 @@ namespace ESLifyEverything
         }
 
         //Fixes script Form Keys and Compiles them if Compiler is enabled
-        public static async Task<int> ReadAndCompileScripts()
+        private static async Task<int> ReadAndCompileScripts()
         {
             string startFolder = $"{GF.ExtractedBSAModDataPath}\\{GF.SourceSubPath}";
             if (!Directory.Exists(startFolder))

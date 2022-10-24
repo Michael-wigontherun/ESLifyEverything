@@ -26,8 +26,14 @@ namespace ESLifyEverything.FormData
             success = false;
             try
             {
+                success = true;
                 JSONFile = JsonSerializer.Deserialize<MergeJSON>(File.ReadAllText(mergeJsonPath))!;
                 MergeName = JSONFile.filename;
+                if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, MergeName)))
+                {
+                    success = false;
+                    return;
+                }
                 LastModified = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, this.MergeName));
                 CompactedModDataD = new Dictionary<string, CompactedModData>();
                 foreach (MergeJSONPlugin plugin in JSONFile.plugins)
@@ -35,7 +41,6 @@ namespace ESLifyEverything.FormData
                     CompactedModDataD.TryAdd(plugin.filename, new CompactedModData(plugin.filename));
                 }
                 JSONFile = null;
-                success = true;
             }
             catch(Exception e)
             {

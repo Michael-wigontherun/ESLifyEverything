@@ -72,6 +72,8 @@ namespace ESLifyEverything.PluginHandles
                 {
                     rec.IsCompressed = false;
                 }
+
+
                 string outputPath = Program.GetPluginModOutputPath(pluginName);
 
                 mod.WriteToBinary(Path.Combine(outputPath, pluginName));

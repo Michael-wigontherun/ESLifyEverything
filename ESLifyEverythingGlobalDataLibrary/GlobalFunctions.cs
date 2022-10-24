@@ -330,41 +330,6 @@ namespace ESLifyEverythingGlobalDataLibrary
             }
         }
 
-        //Writes a list of FormHandler's to console line or file line when logging is set to true
-        public static void WriteLine(IEnumerable<IFormHandler> logData, bool consoleLog = true, bool fileLogging = true, bool devOverride = false)
-        {
-            if (GF.DevSettings.DevLogging && !devOverride)
-            {
-                foreach (IFormHandler item in logData)
-                {
-                    Console.WriteLine(item);
-                    using (StreamWriter stream = File.AppendText(logName))
-                    {
-                        stream.WriteLine(item!.ToString());
-                    }
-                }
-                return;
-            }
-
-            if (consoleLog)
-            {
-                foreach (IFormHandler item in logData)
-                {
-                    Console.WriteLine(item!.ToString());
-                }
-            }
-            if (fileLogging)
-            {
-                using (StreamWriter stream = File.AppendText(logName))
-                {
-                    foreach (IFormHandler item in logData)
-                    {
-                        stream.WriteLine(item!.ToString());
-                    }
-                }
-            }
-        }
-
         //returns true when a valid input is inputed
         //-1 = return exit code in selectedMenuItem
         public static bool WhileMenuSelect(int menuMaxNum, out int selectedMenuItem, int MenuMinNum = 0)

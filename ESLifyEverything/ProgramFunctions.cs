@@ -2,6 +2,7 @@
 using System.Text;
 using ESLifyEverythingGlobalDataLibrary;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
+using System.Text.RegularExpressions;
 
 namespace ESLifyEverything
 {
@@ -72,20 +73,29 @@ namespace ESLifyEverything
         //Parses Script files
         public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed)
         {
-            string FixLineToHex(string line)
+            string FixLineToHex(string line, out string? exactHexValueTrimmed)
             {
-                string afterGetFormFromFile = line.Substring(line.IndexOf("GetFormFromFile(") + "GetFormFromFile(".Length);
-                string stringDecimal = afterGetFormFromFile.Substring(0, afterGetFormFromFile.IndexOf(','));
+                exactHexValueTrimmed = null;
+                Regex fullStringCheck = new Regex("GetFormFromFile\\([0-9]+,", RegexOptions.IgnoreCase);
+                string stringDecimal = fullStringCheck.Match(line).Value;
+                stringDecimal = stringDecimal.Replace("GetFormFromFile(", "");
+                stringDecimal = stringDecimal.Replace(",", "");
                 //GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                 try
                 {
                     if (long.TryParse(stringDecimal, out long value))
                     {
-                        string hex = "0x" + string.Format("{0:x}", value);
+                        string hexNum = string.Format("{0:x}", value);
+                        if (hexNum.Length > 6)
+                        {
+                            hexNum = hexNum.Substring(hexNum.Length - 6).TrimStart('0');
+                            exactHexValueTrimmed = hexNum;
+                        }
+                        string hex = "0x" + hexNum;
                         line = line.Replace(stringDecimal, hex, StringComparison.OrdinalIgnoreCase);
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     GF.WriteLine(GF.stringLoggingData.FixDecToHexError);
                     GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
@@ -100,9 +110,10 @@ namespace ESLifyEverything
             {
                 if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (fileLines[i].Contains("GetFormFromFile("))
+                    string? exactHexValueTrimmed = null;
+                    if (fileLines[i].Contains("GetFormFromFile(", StringComparison.OrdinalIgnoreCase))
                     {
-                        fileLines[i] = FixLineToHex(fileLines[i]);
+                        fileLines[i] = FixLineToHex(fileLines[i], out exactHexValueTrimmed);
                     }
                     foreach (CompactedModData modData in CompactedModDataD.Values)
                     {
@@ -110,10 +121,21 @@ namespace ESLifyEverything
                         {
                             foreach (FormHandler form in modData.CompactedModFormList)
                             {
-                                if (fileLines[i].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
+                                if(exactHexValueTrimmed != null)
+                                {
+                                    if (exactHexValueTrimmed.Equals(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                        fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormIDTrimmed(), StringComparison.OrdinalIgnoreCase);
+                                        fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
+                                        GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                        changed = true;
+                                    }
+                                }
+                                else if (fileLines[i].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
                                 {
                                     GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
-                                    fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.CompactedFormID, StringComparison.OrdinalIgnoreCase);
+                                    fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
                                     fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
                                     GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                     changed = true;

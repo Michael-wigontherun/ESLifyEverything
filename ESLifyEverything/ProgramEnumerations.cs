@@ -6,7 +6,7 @@ namespace ESLifyEverything
     public static partial class Program
     {
         //Unumerates BasicSingleFile Mod Configurations
-        public static void SingleBasicFile(BasicSingleFile basicSingleFile)
+        private static void SingleBasicFile(BasicSingleFile basicSingleFile)
         {
             //string path = Path.Combine(GF.Settings.DataFolderPath, "autoBody\\Config\\morphs.ini");
             if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, basicSingleFile.DataPath)))
@@ -34,7 +34,7 @@ namespace ESLifyEverything
         }
 
         //Unumerates BasicDirectFolder Mod Configurations
-        public static void EnumDirectFolder(BasicDirectFolder basicDirectFolder)
+        private static void EnumDirectFolder(BasicDirectFolder basicDirectFolder)
         {
             if (!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, basicDirectFolder.StartFolder)))
             {
@@ -55,7 +55,7 @@ namespace ESLifyEverything
         }
 
         //Unumerates BasicDataSubfolder Mod Configurations
-        public static async Task<int> EnumDataSubfolder(BasicDataSubfolder basicDataSubfolder)
+        private static async Task<int> EnumDataSubfolder(BasicDataSubfolder basicDataSubfolder)
         {
             if (!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, basicDataSubfolder.StartDataSubFolder)))
             {
@@ -86,7 +86,7 @@ namespace ESLifyEverything
         }
 
         //Unumerates ComplexTOML Mod Configurations
-        public static async Task<int> EnumToml(ComplexTOML complexTOML)
+        private static async Task<int> EnumToml(ComplexTOML complexTOML)
         {
             if (!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, complexTOML.StartFolder)))
             {
@@ -117,7 +117,7 @@ namespace ESLifyEverything
         }
 
         //Unumerates DelimitedFormKeys Mod Configurations
-        public static void EnumDelimitedFormKeys(DelimitedFormKeys delimitedFormKeys)
+        private static void EnumDelimitedFormKeys(DelimitedFormKeys delimitedFormKeys)
         {
             if (!Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, delimitedFormKeys.StartFolder)))
             {

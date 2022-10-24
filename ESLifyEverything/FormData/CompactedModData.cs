@@ -152,7 +152,10 @@ namespace ESLifyEverything.FormData
         public void Write()
         {
             GF.WriteLine(ModName, false, GF.Settings.VerboseFileLoging, GF.DevSettings.DevLoggingOverrideSome);
-            GF.WriteLine(CompactedModFormList, false, GF.Settings.VerboseFileLoging, GF.DevSettings.DevLoggingOverrideSome);
+            foreach(FormHandler handler in CompactedModFormList)
+            {
+                GF.WriteLine(handler.ToString(), false, GF.Settings.VerboseFileLoging, GF.DevSettings.DevLoggingOverrideSome);
+            }
         }
     }
 }
