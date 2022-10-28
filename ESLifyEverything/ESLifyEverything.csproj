@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ESLifyEverythingGlobalDataLibrary\ESLifyEverythingGlobalDataLibrary.csproj" />
+    <ProjectReference Include="..\ESLifySplitModInterpreter\ESLifySplitModInterpreter.csproj" />
   </ItemGroup>
 
   <ItemGroup>

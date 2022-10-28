@@ -12,8 +12,8 @@ namespace ESLifyEverything.PluginHandles
             ModEdited = false;
 
             //DialogTopics
-            var DialogTopicsItemSet = mod.DialogTopics.ToHashSet();
-            foreach (var sourceForm in DialogTopicsItemSet)
+            //var DialogTopicsItemSet = mod.DialogTopics.ToHashSet();
+            foreach (var sourceForm in mod.DialogTopics.ToArray())
             {
                 foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
                 {
@@ -67,7 +67,7 @@ namespace ESLifyEverything.PluginHandles
 
                 }
             }
-            DialogTopicsItemSet.Clear();
+            //DialogTopicsItemSet.Clear();
 
             //Worldspaces
             var WorldspacesItemSet = mod.Worldspaces.ToHashSet();
@@ -313,8 +313,8 @@ namespace ESLifyEverything.PluginHandles
                 }
             }
             WorldspacesItemSet.Clear();
-            WorldspacesItemSet = mod.Worldspaces.ToHashSet();
-            foreach (var sourceForm in WorldspacesItemSet)
+            //WorldspacesItemSet = mod.Worldspaces.ToHashSet();
+            foreach (var sourceForm in mod.Worldspaces.ToArray())
             {
                 //sourceForm.SubCells[1].Items[1].Items[1]
                 foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
@@ -339,7 +339,7 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            WorldspacesItemSet.Clear();
+            //WorldspacesItemSet.Clear();
 
             //Cells
             for (int i = 0; i < mod.Cells.Records.Count; i++)

@@ -23,6 +23,7 @@
         public string ESLifyEverythingIsNotSetUpForSkyrim { get; set; } = "";
         public string MO2ModsFolderDoesNotExist { get; set; } = "";
         public string NoCMDinDataFolder { get; set; } = "";
+        public string PluginNotFoundImport { get; set; } = "";
 
         //General Menu
         public string ExitCodeInput { get; set; } = "";
@@ -86,7 +87,6 @@
         //ImportModData
         public string ImportingAllModData { get; set; } = "";
         public string GetCompDataLog { get; set; } = "";
-        public string PluginNotFoundImport { get; set; } = "";
         public string OutOfDateCMData1 { get; set; } = "";
         public string OutOfDateCMData2 { get; set; } = "";
         public string OutOfDateCMData3 { get; set; } = "";
@@ -205,7 +205,18 @@
         public string ImportingMergeCache { get; set; } = "";
         public string ImportingMergeCompactedModData { get; set; } = "";
 
-        //End Report
+        //ESLifySplitModInterpreter
+        public string ReadOrgData { get; set; } = "";
+        public string ReadSplitData { get; set; } = "";
+        public string IncorrectDataLine { get; set; } = "";
+        public string EDIDImportedAlready { get; set; } = "";
+        public string SkippingOutput { get; set; } = "";
+        public string OrgDataNotFound { get; set; } = "";
+        public string SplitDataNotFound { get; set; } = "";
+
+        //End
         public string EnterToExit { get; set; } = "";
+
+
     }
 }

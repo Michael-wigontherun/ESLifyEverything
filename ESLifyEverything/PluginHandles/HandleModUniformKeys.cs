@@ -12,8 +12,8 @@ namespace ESLifyEverything.PluginHandles
         {
             ModEdited = false;
             //GameSettings
-            var GameSettingsItemSet = mod.GameSettings.ToHashSet();
-            foreach (var sourceForm in GameSettingsItemSet)
+            //var GameSettingsItemSet = mod.GameSettings.ToHashSet();
+            foreach (var sourceForm in mod.GameSettings.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -30,10 +30,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            GameSettingsItemSet.Clear();
+            //GameSettingsItemSet.Clear();
             //Keywords
-            var KeywordsItemSet = mod.Keywords.ToHashSet();
-            foreach (var sourceForm in KeywordsItemSet)
+            //var KeywordsItemSet = mod.Keywords.ToHashSet();
+            foreach (var sourceForm in mod.Keywords.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -50,10 +50,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            KeywordsItemSet.Clear();
+            //KeywordsItemSet.Clear();
             //LocationReferenceTypes
-            var LocationReferenceTypesItemSet = mod.LocationReferenceTypes.ToHashSet();
-            foreach (var sourceForm in LocationReferenceTypesItemSet)
+            //var LocationReferenceTypesItemSet = mod.LocationReferenceTypes.ToHashSet();
+            foreach (var sourceForm in mod.LocationReferenceTypes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -70,10 +70,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LocationReferenceTypesItemSet.Clear();
+            //LocationReferenceTypesItemSet.Clear();
             //Actions
-            var ActionsItemSet = mod.Actions.ToHashSet();
-            foreach (var sourceForm in ActionsItemSet)
+            //var ActionsItemSet = mod.Actions.ToHashSet();
+            foreach (var sourceForm in mod.Actions.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -90,10 +90,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ActionsItemSet.Clear();
+            //ActionsItemSet.Clear();
             //TextureSets
-            var TextureSetsItemSet = mod.TextureSets.ToHashSet();
-            foreach (var sourceForm in TextureSetsItemSet)
+            //var TextureSetsItemSet = mod.TextureSets.ToHashSet();
+            foreach (var sourceForm in mod.TextureSets.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -110,10 +110,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            TextureSetsItemSet.Clear();
+            //TextureSetsItemSet.Clear();
             //Globals
-            var GlobalsItemSet = mod.Globals.ToHashSet();
-            foreach (var sourceForm in GlobalsItemSet)
+            //var GlobalsItemSet = mod.Globals.ToHashSet();
+            foreach (var sourceForm in mod.Globals.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -130,10 +130,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            GlobalsItemSet.Clear();
+            //GlobalsItemSet.Clear();
             //Classes
-            var ClassesItemSet = mod.Classes.ToHashSet();
-            foreach (var sourceForm in ClassesItemSet)
+            //var ClassesItemSet = mod.Classes.ToHashSet();
+            foreach (var sourceForm in mod.Classes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -150,10 +150,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ClassesItemSet.Clear();
+            //ClassesItemSet.Clear();
             //Factions
-            var FactionsItemSet = mod.Factions.ToHashSet();
-            foreach (var sourceForm in FactionsItemSet)
+            //var FactionsItemSet = mod.Factions.ToHashSet();
+            foreach (var sourceForm in mod.Factions.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -170,10 +170,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            FactionsItemSet.Clear();
+            //FactionsItemSet.Clear();
             //HeadParts
-            var HeadPartsItemSet = mod.HeadParts.ToHashSet();
-            foreach (var sourceForm in HeadPartsItemSet)
+            //var HeadPartsItemSet = mod.HeadParts.ToHashSet();
+            foreach (var sourceForm in mod.HeadParts.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -190,10 +190,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            HeadPartsItemSet.Clear();
+            //HeadPartsItemSet.Clear();
             //Hairs
-            var HairsItemSet = mod.Hairs.ToHashSet();
-            foreach (var sourceForm in HairsItemSet)
+            //var HairsItemSet = mod.Hairs.ToHashSet();
+            foreach (var sourceForm in mod.Hairs.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -210,10 +210,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            HairsItemSet.Clear();
+            //HairsItemSet.Clear();
             //Eyes
-            var EyesItemSet = mod.Eyes.ToHashSet();
-            foreach (var sourceForm in EyesItemSet)
+            //var EyesItemSet = mod.Eyes.ToHashSet();
+            foreach (var sourceForm in mod.Eyes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -230,10 +230,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            EyesItemSet.Clear();
+            //EyesItemSet.Clear();
             //Races
-            var RacesItemSet = mod.Races.ToHashSet();
-            foreach (var sourceForm in RacesItemSet)
+            //var RacesItemSet = mod.Races.ToHashSet();
+            foreach (var sourceForm in mod.Races.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -250,10 +250,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            RacesItemSet.Clear();
+            //RacesItemSet.Clear();
             //SoundMarkers
-            var SoundMarkersItemSet = mod.SoundMarkers.ToHashSet();
-            foreach (var sourceForm in SoundMarkersItemSet)
+            //var SoundMarkersItemSet = mod.SoundMarkers.ToHashSet();
+            foreach (var sourceForm in mod.SoundMarkers.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -270,10 +270,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            SoundMarkersItemSet.Clear();
+            //SoundMarkersItemSet.Clear();
             //AcousticSpaces
-            var AcousticSpacesItemSet = mod.AcousticSpaces.ToHashSet();
-            foreach (var sourceForm in AcousticSpacesItemSet)
+            //var AcousticSpacesItemSet = mod.AcousticSpaces.ToHashSet();
+            foreach (var sourceForm in mod.AcousticSpaces.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -290,10 +290,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            AcousticSpacesItemSet.Clear();
+            //AcousticSpacesItemSet.Clear();
             //MagicEffects
-            var MagicEffectsItemSet = mod.MagicEffects.ToHashSet();
-            foreach (var sourceForm in MagicEffectsItemSet)
+            //var MagicEffectsItemSet = mod.MagicEffects.ToHashSet();
+            foreach (var sourceForm in mod.MagicEffects.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -310,10 +310,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MagicEffectsItemSet.Clear();
+            //MagicEffectsItemSet.Clear();
             //LandscapeTextures
-            var LandscapeTexturesItemSet = mod.LandscapeTextures.ToHashSet();
-            foreach (var sourceForm in LandscapeTexturesItemSet)
+            //var LandscapeTexturesItemSet = mod.LandscapeTextures.ToHashSet();
+            foreach (var sourceForm in mod.LandscapeTextures.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -330,10 +330,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LandscapeTexturesItemSet.Clear();
+            //LandscapeTexturesItemSet.Clear();
             //ObjectEffects
-            var ObjectEffectsItemSet = mod.ObjectEffects.ToHashSet();
-            foreach (var sourceForm in ObjectEffectsItemSet)
+            //var ObjectEffectsItemSet = mod.ObjectEffects.ToHashSet();
+            foreach (var sourceForm in mod.ObjectEffects.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -350,10 +350,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ObjectEffectsItemSet.Clear();
+            //ObjectEffectsItemSet.Clear();
             //Spells
-            var SpellsItemSet = mod.Spells.ToHashSet();
-            foreach (var sourceForm in SpellsItemSet)
+            //var SpellsItemSet = mod.Spells.ToHashSet();
+            foreach (var sourceForm in mod.Spells.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -370,10 +370,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            SpellsItemSet.Clear();
+            //SpellsItemSet.Clear();
             //Scrolls
-            var ScrollsItemSet = mod.Scrolls.ToHashSet();
-            foreach (var sourceForm in ScrollsItemSet)
+            //var ScrollsItemSet = mod.Scrolls.ToHashSet();
+            foreach (var sourceForm in mod.Scrolls.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -390,10 +390,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ScrollsItemSet.Clear();
+            //ScrollsItemSet.Clear();
             //Activators
-            var ActivatorsItemSet = mod.Activators.ToHashSet();
-            foreach (var sourceForm in ActivatorsItemSet)
+            //var ActivatorsItemSet = mod.Activators.ToHashSet();
+            foreach (var sourceForm in mod.Activators.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -410,10 +410,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ActivatorsItemSet.Clear();
+            //ActivatorsItemSet.Clear();
             //TalkingActivators
-            var TalkingActivatorsItemSet = mod.TalkingActivators.ToHashSet();
-            foreach (var sourceForm in TalkingActivatorsItemSet)
+            //var TalkingActivatorsItemSet = mod.TalkingActivators.ToHashSet();
+            foreach (var sourceForm in mod.TalkingActivators.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -430,10 +430,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            TalkingActivatorsItemSet.Clear();
+            //TalkingActivatorsItemSet.Clear();
             //Armors
-            var ArmorsItemSet = mod.Armors.ToHashSet();
-            foreach (var sourceForm in ArmorsItemSet)
+            //var ArmorsItemSet = mod.Armors.ToHashSet();
+            foreach (var sourceForm in mod.Armors.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -450,10 +450,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ArmorsItemSet.Clear();
+            //ArmorsItemSet.Clear();
             //Books
-            var BooksItemSet = mod.Books.ToHashSet();
-            foreach (var sourceForm in BooksItemSet)
+            //var BooksItemSet = mod.Books.ToHashSet();
+            foreach (var sourceForm in mod.Books.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -470,10 +470,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            BooksItemSet.Clear();
+            //BooksItemSet.Clear();
             //Containers
-            var ContainersItemSet = mod.Containers.ToHashSet();
-            foreach (var sourceForm in ContainersItemSet)
+            //var ContainersItemSet = mod.Containers.ToHashSet();
+            foreach (var sourceForm in mod.Containers.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -490,10 +490,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ContainersItemSet.Clear();
+            //ContainersItemSet.Clear();
             //Doors
-            var DoorsItemSet = mod.Doors.ToHashSet();
-            foreach (var sourceForm in DoorsItemSet)
+            //var DoorsItemSet = mod.Doors.ToHashSet();
+            foreach (var sourceForm in mod.Doors.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -510,10 +510,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            DoorsItemSet.Clear();
+            //DoorsItemSet.Clear();
             //Ingredients
-            var IngredientsItemSet = mod.Ingredients.ToHashSet();
-            foreach (var sourceForm in IngredientsItemSet)
+            //var IngredientsItemSet = mod.Ingredients.ToHashSet();
+            foreach (var sourceForm in mod.Ingredients.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -530,10 +530,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            IngredientsItemSet.Clear();
+            //IngredientsItemSet.Clear();
             //Lights
-            var LightsItemSet = mod.Lights.ToHashSet();
-            foreach (var sourceForm in LightsItemSet)
+            //var LightsItemSet = mod.Lights.ToHashSet();
+            foreach (var sourceForm in mod.Lights.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -550,10 +550,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LightsItemSet.Clear();
+            //LightsItemSet.Clear();
             //MiscItems
-            var MiscItemsItemSet = mod.MiscItems.ToHashSet();
-            foreach (var sourceForm in MiscItemsItemSet)
+            //var MiscItemsItemSet = mod.MiscItems.ToHashSet();
+            foreach (var sourceForm in mod.MiscItems.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -570,10 +570,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MiscItemsItemSet.Clear();
+            //MiscItemsItemSet.Clear();
             //AlchemicalApparatuses
-            var AlchemicalApparatusesItemSet = mod.AlchemicalApparatuses.ToHashSet();
-            foreach (var sourceForm in AlchemicalApparatusesItemSet)
+            //var AlchemicalApparatusesItemSet = mod.AlchemicalApparatuses.ToHashSet();
+            foreach (var sourceForm in mod.AlchemicalApparatuses.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -590,10 +590,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            AlchemicalApparatusesItemSet.Clear();
+            //AlchemicalApparatusesItemSet.Clear();
             //Statics
-            var StaticsItemSet = mod.Statics.ToHashSet();
-            foreach (var sourceForm in StaticsItemSet)
+            //var StaticsItemSet = mod.Statics.ToHashSet();
+            foreach (var sourceForm in mod.Statics.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -610,10 +610,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            StaticsItemSet.Clear();
+            //StaticsItemSet.Clear();
             //MoveableStatics
-            var MoveableStaticsItemSet = mod.MoveableStatics.ToHashSet();
-            foreach (var sourceForm in MoveableStaticsItemSet)
+            //var MoveableStaticsItemSet = mod.MoveableStatics.ToHashSet();
+            foreach (var sourceForm in mod.MoveableStatics.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -630,10 +630,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MoveableStaticsItemSet.Clear();
+            //MoveableStaticsItemSet.Clear();
             //Grasses
-            var GrassesItemSet = mod.Grasses.ToHashSet();
-            foreach (var sourceForm in GrassesItemSet)
+            //var GrassesItemSet = mod.Grasses.ToHashSet();
+            foreach (var sourceForm in mod.Grasses.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -650,10 +650,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            GrassesItemSet.Clear();
+            //GrassesItemSet.Clear();
             //Trees
-            var TreesItemSet = mod.Trees.ToHashSet();
-            foreach (var sourceForm in TreesItemSet)
+            //var TreesItemSet = mod.Trees.ToHashSet();
+            foreach (var sourceForm in mod.Trees.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -670,10 +670,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            TreesItemSet.Clear();
+            //TreesItemSet.Clear();
             //Florae
-            var FloraeItemSet = mod.Florae.ToHashSet();
-            foreach (var sourceForm in FloraeItemSet)
+            //var FloraeItemSet = mod.Florae.ToHashSet();
+            foreach (var sourceForm in mod.Florae.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -690,10 +690,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            FloraeItemSet.Clear();
+            //FloraeItemSet.Clear();
             //Furniture
-            var FurnitureItemSet = mod.Furniture.ToHashSet();
-            foreach (var sourceForm in FurnitureItemSet)
+            //var FurnitureItemSet = mod.Furniture.ToHashSet();
+            foreach (var sourceForm in mod.Furniture.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -710,10 +710,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            FurnitureItemSet.Clear();
+            //FurnitureItemSet.Clear();
             //Weapons
-            var WeaponsItemSet = mod.Weapons.ToHashSet();
-            foreach (var sourceForm in WeaponsItemSet)
+            //var WeaponsItemSet = mod.Weapons.ToHashSet();
+            foreach (var sourceForm in mod.Weapons.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -730,10 +730,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            WeaponsItemSet.Clear();
+            //WeaponsItemSet.Clear();
             //Ammunitions
-            var AmmunitionsItemSet = mod.Ammunitions.ToHashSet();
-            foreach (var sourceForm in AmmunitionsItemSet)
+            //var AmmunitionsItemSet = mod.Ammunitions.ToHashSet();
+            foreach (var sourceForm in mod.Ammunitions.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -750,10 +750,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            AmmunitionsItemSet.Clear();
+            //AmmunitionsItemSet.Clear();
             //Npcs
-            var NpcsItemSet = mod.Npcs.ToHashSet();
-            foreach (var sourceForm in NpcsItemSet)
+            //var NpcsItemSet = mod.Npcs.ToHashSet();
+            foreach (var sourceForm in mod.Npcs.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -770,10 +770,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            NpcsItemSet.Clear();
+            //NpcsItemSet.Clear();
             //LeveledNpcs
-            var LeveledNpcsItemSet = mod.LeveledNpcs.ToHashSet();
-            foreach (var sourceForm in LeveledNpcsItemSet)
+            //var LeveledNpcsItemSet = mod.LeveledNpcs.ToHashSet();
+            foreach (var sourceForm in mod.LeveledNpcs.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -790,10 +790,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LeveledNpcsItemSet.Clear();
+            //LeveledNpcsItemSet.Clear();
             //Keys
-            var KeysItemSet = mod.Keys.ToHashSet();
-            foreach (var sourceForm in KeysItemSet)
+            //var KeysItemSet = mod.Keys.ToHashSet();
+            foreach (var sourceForm in mod.Keys.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -810,10 +810,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            KeysItemSet.Clear();
+            //KeysItemSet.Clear();
             //Ingestibles
-            var IngestiblesItemSet = mod.Ingestibles.ToHashSet();
-            foreach (var sourceForm in IngestiblesItemSet)
+            //var IngestiblesItemSet = mod.Ingestibles.ToHashSet();
+            foreach (var sourceForm in mod.Ingestibles.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -830,10 +830,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            IngestiblesItemSet.Clear();
+            //IngestiblesItemSet.Clear();
             //IdleMarkers
-            var IdleMarkersItemSet = mod.IdleMarkers.ToHashSet();
-            foreach (var sourceForm in IdleMarkersItemSet)
+            //var IdleMarkersItemSet = mod.IdleMarkers.ToHashSet();
+            foreach (var sourceForm in mod.IdleMarkers.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -850,10 +850,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            IdleMarkersItemSet.Clear();
+            //IdleMarkersItemSet.Clear();
             //ConstructibleObjects
-            var ConstructibleObjectsItemSet = mod.ConstructibleObjects.ToHashSet();
-            foreach (var sourceForm in ConstructibleObjectsItemSet)
+            //var ConstructibleObjectsItemSet = mod.ConstructibleObjects.ToHashSet();
+            foreach (var sourceForm in mod.ConstructibleObjects.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -870,10 +870,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ConstructibleObjectsItemSet.Clear();
+            //ConstructibleObjectsItemSet.Clear();
             //Projectiles
-            var ProjectilesItemSet = mod.Projectiles.ToHashSet();
-            foreach (var sourceForm in ProjectilesItemSet)
+            //var ProjectilesItemSet = mod.Projectiles.ToHashSet();
+            foreach (var sourceForm in mod.Projectiles.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -890,10 +890,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ProjectilesItemSet.Clear();
+            //ProjectilesItemSet.Clear();
             //Hazards
-            var HazardsItemSet = mod.Hazards.ToHashSet();
-            foreach (var sourceForm in HazardsItemSet)
+            //var HazardsItemSet = mod.Hazards.ToHashSet();
+            foreach (var sourceForm in mod.Hazards.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -910,10 +910,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            HazardsItemSet.Clear();
+            //HazardsItemSet.Clear();
             //SoulGems
-            var SoulGemsItemSet = mod.SoulGems.ToHashSet();
-            foreach (var sourceForm in SoulGemsItemSet)
+            //var SoulGemsItemSet = mod.SoulGems.ToHashSet();
+            foreach (var sourceForm in mod.SoulGems.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -930,10 +930,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            SoulGemsItemSet.Clear();
+            //SoulGemsItemSet.Clear();
             //LeveledItems
-            var LeveledItemsItemSet = mod.LeveledItems.ToHashSet();
-            foreach (var sourceForm in LeveledItemsItemSet)
+            //var LeveledItemsItemSet = mod.LeveledItems.ToHashSet();
+            foreach (var sourceForm in mod.LeveledItems.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -950,10 +950,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LeveledItemsItemSet.Clear();
+            //LeveledItemsItemSet.Clear();
             //Weathers
-            var WeathersItemSet = mod.Weathers.ToHashSet();
-            foreach (var sourceForm in WeathersItemSet)
+            //var WeathersItemSet = mod.Weathers.ToHashSet();
+            foreach (var sourceForm in mod.Weathers.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -970,10 +970,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            WeathersItemSet.Clear();
+            //WeathersItemSet.Clear();
             //Climates
-            var ClimatesItemSet = mod.Climates.ToHashSet();
-            foreach (var sourceForm in ClimatesItemSet)
+            //var ClimatesItemSet = mod.Climates.ToHashSet();
+            foreach (var sourceForm in mod.Climates.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -990,10 +990,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ClimatesItemSet.Clear();
+            //ClimatesItemSet.Clear();
             //ShaderParticleGeometries
-            var ShaderParticleGeometriesItemSet = mod.ShaderParticleGeometries.ToHashSet();
-            foreach (var sourceForm in ShaderParticleGeometriesItemSet)
+            //var ShaderParticleGeometriesItemSet = mod.ShaderParticleGeometries.ToHashSet();
+            foreach (var sourceForm in mod.ShaderParticleGeometries.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1010,10 +1010,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ShaderParticleGeometriesItemSet.Clear();
+            //ShaderParticleGeometriesItemSet.Clear();
             //VisualEffects
-            var VisualEffectsItemSet = mod.VisualEffects.ToHashSet();
-            foreach (var sourceForm in VisualEffectsItemSet)
+            //var VisualEffectsItemSet = mod.VisualEffects.ToHashSet();
+            foreach (var sourceForm in mod.VisualEffects.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1030,10 +1030,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            VisualEffectsItemSet.Clear();
+            //VisualEffectsItemSet.Clear();
             //Regions
-            var RegionsItemSet = mod.Regions.ToHashSet();
-            foreach (var sourceForm in RegionsItemSet)
+            //var RegionsItemSet = mod.Regions.ToHashSet();
+            foreach (var sourceForm in mod.Regions.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1050,10 +1050,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            RegionsItemSet.Clear();
+            //RegionsItemSet.Clear();
             //NavigationMeshInfoMaps
-            var NavigationMeshInfoMapsItemSet = mod.NavigationMeshInfoMaps.ToHashSet();
-            foreach (var sourceForm in NavigationMeshInfoMapsItemSet)
+            //var NavigationMeshInfoMapsItemSet = mod.NavigationMeshInfoMaps.ToHashSet();
+            foreach (var sourceForm in mod.NavigationMeshInfoMaps.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1070,10 +1070,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            NavigationMeshInfoMapsItemSet.Clear();
+            //NavigationMeshInfoMapsItemSet.Clear();
             //Quests
-            var QuestsItemSet = mod.Quests.ToHashSet();
-            foreach (var sourceForm in QuestsItemSet)
+            //var QuestsItemSet = mod.Quests.ToHashSet();
+            foreach (var sourceForm in mod.Quests.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1090,10 +1090,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            QuestsItemSet.Clear();
+            //QuestsItemSet.Clear();
             //IdleAnimations
-            var IdleAnimationsItemSet = mod.IdleAnimations.ToHashSet();
-            foreach (var sourceForm in IdleAnimationsItemSet)
+            //var IdleAnimationsItemSet = mod.IdleAnimations.ToHashSet();
+            foreach (var sourceForm in mod.IdleAnimations.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1110,10 +1110,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            IdleAnimationsItemSet.Clear();
+            //IdleAnimationsItemSet.Clear();
             //Packages
-            var PackagesItemSet = mod.Packages.ToHashSet();
-            foreach (var sourceForm in PackagesItemSet)
+            //var PackagesItemSet = mod.Packages.ToHashSet();
+            foreach (var sourceForm in mod.Packages.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1130,10 +1130,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            PackagesItemSet.Clear();
+            //PackagesItemSet.Clear();
             //CombatStyles
-            var CombatStylesItemSet = mod.CombatStyles.ToHashSet();
-            foreach (var sourceForm in CombatStylesItemSet)
+            //var CombatStylesItemSet = mod.CombatStyles.ToHashSet();
+            foreach (var sourceForm in mod.CombatStyles.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1150,10 +1150,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            CombatStylesItemSet.Clear();
+            //CombatStylesItemSet.Clear();
             //LoadScreens
-            var LoadScreensItemSet = mod.LoadScreens.ToHashSet();
-            foreach (var sourceForm in LoadScreensItemSet)
+            //var LoadScreensItemSet = mod.LoadScreens.ToHashSet();
+            foreach (var sourceForm in mod.LoadScreens.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1170,10 +1170,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LoadScreensItemSet.Clear();
+            //LoadScreensItemSet.Clear();
             //LeveledSpells
-            var LeveledSpellsItemSet = mod.LeveledSpells.ToHashSet();
-            foreach (var sourceForm in LeveledSpellsItemSet)
+            //var LeveledSpellsItemSet = mod.LeveledSpells.ToHashSet();
+            foreach (var sourceForm in mod.LeveledSpells.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1190,10 +1190,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LeveledSpellsItemSet.Clear();
+            //LeveledSpellsItemSet.Clear();
             //AnimatedObjects
-            var AnimatedObjectsItemSet = mod.AnimatedObjects.ToHashSet();
-            foreach (var sourceForm in AnimatedObjectsItemSet)
+            //var AnimatedObjectsItemSet = mod.AnimatedObjects.ToHashSet();
+            foreach (var sourceForm in mod.AnimatedObjects.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1210,10 +1210,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            AnimatedObjectsItemSet.Clear();
+            //AnimatedObjectsItemSet.Clear();
             //Waters
-            var WatersItemSet = mod.Waters.ToHashSet();
-            foreach (var sourceForm in WatersItemSet)
+            //var WatersItemSet = mod.Waters.ToHashSet();
+            foreach (var sourceForm in mod.Waters.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1230,10 +1230,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            WatersItemSet.Clear();
+            //WatersItemSet.Clear();
             //EffectShaders
-            var EffectShadersItemSet = mod.EffectShaders.ToHashSet();
-            foreach (var sourceForm in EffectShadersItemSet)
+            //var EffectShadersItemSet = mod.EffectShaders.ToHashSet();
+            foreach (var sourceForm in mod.EffectShaders.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1250,10 +1250,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            EffectShadersItemSet.Clear();
+            //EffectShadersItemSet.Clear();
             //Explosions
-            var ExplosionsItemSet = mod.Explosions.ToHashSet();
-            foreach (var sourceForm in ExplosionsItemSet)
+            //var ExplosionsItemSet = mod.Explosions.ToHashSet();
+            foreach (var sourceForm in mod.Explosions.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1270,10 +1270,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ExplosionsItemSet.Clear();
+            //ExplosionsItemSet.Clear();
             //Debris
-            var DebrisItemSet = mod.Debris.ToHashSet();
-            foreach (var sourceForm in DebrisItemSet)
+            //var DebrisItemSet = mod.Debris.ToHashSet();
+            foreach (var sourceForm in mod.Debris.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1290,10 +1290,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            DebrisItemSet.Clear();
+            //DebrisItemSet.Clear();
             //ImageSpaces
-            var ImageSpacesItemSet = mod.ImageSpaces.ToHashSet();
-            foreach (var sourceForm in ImageSpacesItemSet)
+            //var ImageSpacesItemSet = mod.ImageSpaces.ToHashSet();
+            foreach (var sourceForm in mod.ImageSpaces.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1310,10 +1310,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ImageSpacesItemSet.Clear();
+            //ImageSpacesItemSet.Clear();
             //ImageSpaceAdapters
-            var ImageSpaceAdaptersItemSet = mod.ImageSpaceAdapters.ToHashSet();
-            foreach (var sourceForm in ImageSpaceAdaptersItemSet)
+            //var ImageSpaceAdaptersItemSet = mod.ImageSpaceAdapters.ToHashSet();
+            foreach (var sourceForm in mod.ImageSpaceAdapters.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1330,10 +1330,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ImageSpaceAdaptersItemSet.Clear();
+            //ImageSpaceAdaptersItemSet.Clear();
             //FormLists
-            var FormListsItemSet = mod.FormLists.ToHashSet();
-            foreach (var sourceForm in FormListsItemSet)
+            //var FormListsItemSet = mod.FormLists.ToHashSet();
+            foreach (var sourceForm in mod.FormLists.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1350,10 +1350,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            FormListsItemSet.Clear();
+            //FormListsItemSet.Clear();
             //Perks
-            var PerksItemSet = mod.Perks.ToHashSet();
-            foreach (var sourceForm in PerksItemSet)
+            //var PerksItemSet = mod.Perks.ToHashSet();
+            foreach (var sourceForm in mod.Perks.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1370,10 +1370,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            PerksItemSet.Clear();
+            //PerksItemSet.Clear();
             //BodyParts
-            var BodyPartsItemSet = mod.BodyParts.ToHashSet();
-            foreach (var sourceForm in BodyPartsItemSet)
+            //var BodyPartsItemSet = mod.BodyParts.ToHashSet();
+            foreach (var sourceForm in mod.BodyParts.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1390,10 +1390,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            BodyPartsItemSet.Clear();
+            //BodyPartsItemSet.Clear();
             //AddonNodes
-            var AddonNodesItemSet = mod.AddonNodes.ToHashSet();
-            foreach (var sourceForm in AddonNodesItemSet)
+            //var AddonNodesItemSet = mod.AddonNodes.ToHashSet();
+            foreach (var sourceForm in mod.AddonNodes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1410,10 +1410,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            AddonNodesItemSet.Clear();
+            //AddonNodesItemSet.Clear();
             //ActorValueInformation
-            var ActorValueInformationItemSet = mod.ActorValueInformation.ToHashSet();
-            foreach (var sourceForm in ActorValueInformationItemSet)
+            //var ActorValueInformationItemSet = mod.ActorValueInformation.ToHashSet();
+            foreach (var sourceForm in mod.ActorValueInformation.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1430,10 +1430,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ActorValueInformationItemSet.Clear();
+            //ActorValueInformationItemSet.Clear();
             //CameraShots
-            var CameraShotsItemSet = mod.CameraShots.ToHashSet();
-            foreach (var sourceForm in CameraShotsItemSet)
+            //var CameraShotsItemSet = mod.CameraShots.ToHashSet();
+            foreach (var sourceForm in mod.CameraShots.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1450,10 +1450,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            CameraShotsItemSet.Clear();
+            //CameraShotsItemSet.Clear();
             //CameraPaths
-            var CameraPathsItemSet = mod.CameraPaths.ToHashSet();
-            foreach (var sourceForm in CameraPathsItemSet)
+            //var CameraPathsItemSet = mod.CameraPaths.ToHashSet();
+            foreach (var sourceForm in mod.CameraPaths.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1470,10 +1470,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            CameraPathsItemSet.Clear();
+            //CameraPathsItemSet.Clear();
             //VoiceTypes
-            var VoiceTypesItemSet = mod.VoiceTypes.ToHashSet();
-            foreach (var sourceForm in VoiceTypesItemSet)
+            //var VoiceTypesItemSet = mod.VoiceTypes.ToHashSet();
+            foreach (var sourceForm in mod.VoiceTypes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1490,10 +1490,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            VoiceTypesItemSet.Clear();
+            //VoiceTypesItemSet.Clear();
             //MaterialTypes
-            var MaterialTypesItemSet = mod.MaterialTypes.ToHashSet();
-            foreach (var sourceForm in MaterialTypesItemSet)
+            //var MaterialTypesItemSet = mod.MaterialTypes.ToHashSet();
+            foreach (var sourceForm in mod.MaterialTypes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1510,10 +1510,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MaterialTypesItemSet.Clear();
+            //MaterialTypesItemSet.Clear();
             //Impacts
-            var ImpactsItemSet = mod.Impacts.ToHashSet();
-            foreach (var sourceForm in ImpactsItemSet)
+            //var ImpactsItemSet = mod.Impacts.ToHashSet();
+            foreach (var sourceForm in mod.Impacts.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1530,10 +1530,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ImpactsItemSet.Clear();
+            //ImpactsItemSet.Clear();
             //ImpactDataSets
-            var ImpactDataSetsItemSet = mod.ImpactDataSets.ToHashSet();
-            foreach (var sourceForm in ImpactDataSetsItemSet)
+            //var ImpactDataSetsItemSet = mod.ImpactDataSets.ToHashSet();
+            foreach (var sourceForm in mod.ImpactDataSets.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1550,10 +1550,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ImpactDataSetsItemSet.Clear();
+            //ImpactDataSetsItemSet.Clear();
             //ArmorAddons
-            var ArmorAddonsItemSet = mod.ArmorAddons.ToHashSet();
-            foreach (var sourceForm in ArmorAddonsItemSet)
+            //var ArmorAddonsItemSet = mod.ArmorAddons.ToHashSet();
+            foreach (var sourceForm in mod.ArmorAddons.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1570,10 +1570,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ArmorAddonsItemSet.Clear();
+            //ArmorAddonsItemSet.Clear();
             //EncounterZones
-            var EncounterZonesItemSet = mod.EncounterZones.ToHashSet();
-            foreach (var sourceForm in EncounterZonesItemSet)
+            //var EncounterZonesItemSet = mod.EncounterZones.ToHashSet();
+            foreach (var sourceForm in mod.EncounterZones.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1590,10 +1590,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            EncounterZonesItemSet.Clear();
+            //EncounterZonesItemSet.Clear();
             //Locations
-            var LocationsItemSet = mod.Locations.ToHashSet();
-            foreach (var sourceForm in LocationsItemSet)
+            //var LocationsItemSet = mod.Locations.ToHashSet();
+            foreach (var sourceForm in mod.Locations.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1610,10 +1610,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LocationsItemSet.Clear();
+            //LocationsItemSet.Clear();
             //Messages
-            var MessagesItemSet = mod.Messages.ToHashSet();
-            foreach (var sourceForm in MessagesItemSet)
+            //var MessagesItemSet = mod.Messages.ToHashSet();
+            foreach (var sourceForm in mod.Messages.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1630,10 +1630,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MessagesItemSet.Clear();
+            //MessagesItemSet.Clear();
             //DefaultObjectManagers
-            var DefaultObjectManagersItemSet = mod.DefaultObjectManagers.ToHashSet();
-            foreach (var sourceForm in DefaultObjectManagersItemSet)
+            //var DefaultObjectManagersItemSet = mod.DefaultObjectManagers.ToHashSet();
+            foreach (var sourceForm in mod.DefaultObjectManagers.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1650,10 +1650,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            DefaultObjectManagersItemSet.Clear();
+            //DefaultObjectManagersItemSet.Clear();
             //LightingTemplates
-            var LightingTemplatesItemSet = mod.LightingTemplates.ToHashSet();
-            foreach (var sourceForm in LightingTemplatesItemSet)
+            //var LightingTemplatesItemSet = mod.LightingTemplates.ToHashSet();
+            foreach (var sourceForm in mod.LightingTemplates.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1670,10 +1670,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            LightingTemplatesItemSet.Clear();
+            //LightingTemplatesItemSet.Clear();
             //MusicTypes
-            var MusicTypesItemSet = mod.MusicTypes.ToHashSet();
-            foreach (var sourceForm in MusicTypesItemSet)
+            //var MusicTypesItemSet = mod.MusicTypes.ToHashSet();
+            foreach (var sourceForm in mod.MusicTypes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1690,10 +1690,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MusicTypesItemSet.Clear();
+            //MusicTypesItemSet.Clear();
             //Footsteps
-            var FootstepsItemSet = mod.Footsteps.ToHashSet();
-            foreach (var sourceForm in FootstepsItemSet)
+            //var FootstepsItemSet = mod.Footsteps.ToHashSet();
+            foreach (var sourceForm in mod.Footsteps.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1710,10 +1710,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            FootstepsItemSet.Clear();
+            //FootstepsItemSet.Clear();
             //FootstepSets
-            var FootstepSetsItemSet = mod.FootstepSets.ToHashSet();
-            foreach (var sourceForm in FootstepSetsItemSet)
+            //var FootstepSetsItemSet = mod.FootstepSets.ToHashSet();
+            foreach (var sourceForm in mod.FootstepSets.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1730,10 +1730,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            FootstepSetsItemSet.Clear();
+            //FootstepSetsItemSet.Clear();
             //StoryManagerBranchNodes
-            var StoryManagerBranchNodesItemSet = mod.StoryManagerBranchNodes.ToHashSet();
-            foreach (var sourceForm in StoryManagerBranchNodesItemSet)
+            //var StoryManagerBranchNodesItemSet = mod.StoryManagerBranchNodes.ToHashSet();
+            foreach (var sourceForm in mod.StoryManagerBranchNodes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1750,10 +1750,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            StoryManagerBranchNodesItemSet.Clear();
+            //StoryManagerBranchNodesItemSet.Clear();
             //StoryManagerQuestNodes
-            var StoryManagerQuestNodesItemSet = mod.StoryManagerQuestNodes.ToHashSet();
-            foreach (var sourceForm in StoryManagerQuestNodesItemSet)
+            //var StoryManagerQuestNodesItemSet = mod.StoryManagerQuestNodes.ToHashSet();
+            foreach (var sourceForm in mod.StoryManagerQuestNodes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1770,10 +1770,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            StoryManagerQuestNodesItemSet.Clear();
+            //StoryManagerQuestNodesItemSet.Clear();
             //StoryManagerEventNodes
-            var StoryManagerEventNodesItemSet = mod.StoryManagerEventNodes.ToHashSet();
-            foreach (var sourceForm in StoryManagerEventNodesItemSet)
+            //var StoryManagerEventNodesItemSet = mod.StoryManagerEventNodes.ToHashSet();
+            foreach (var sourceForm in mod.StoryManagerEventNodes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1790,10 +1790,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            StoryManagerEventNodesItemSet.Clear();
+            //StoryManagerEventNodesItemSet.Clear();
             //DialogBranches
-            var DialogBranchesItemSet = mod.DialogBranches.ToHashSet();
-            foreach (var sourceForm in DialogBranchesItemSet)
+            //var DialogBranchesItemSet = mod.DialogBranches.ToHashSet();
+            foreach (var sourceForm in mod.DialogBranches.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1810,10 +1810,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            DialogBranchesItemSet.Clear();
+            //DialogBranchesItemSet.Clear();
             //MusicTracks
-            var MusicTracksItemSet = mod.MusicTracks.ToHashSet();
-            foreach (var sourceForm in MusicTracksItemSet)
+            //var MusicTracksItemSet = mod.MusicTracks.ToHashSet();
+            foreach (var sourceForm in mod.MusicTracks.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1830,10 +1830,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MusicTracksItemSet.Clear();
+            //MusicTracksItemSet.Clear();
             //DialogViews
-            var DialogViewsItemSet = mod.DialogViews.ToHashSet();
-            foreach (var sourceForm in DialogViewsItemSet)
+            //var DialogViewsItemSet = mod.DialogViews.ToHashSet();
+            foreach (var sourceForm in mod.DialogViews.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1850,10 +1850,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            DialogViewsItemSet.Clear();
+            //DialogViewsItemSet.Clear();
             //WordsOfPower
-            var WordsOfPowerItemSet = mod.WordsOfPower.ToHashSet();
-            foreach (var sourceForm in WordsOfPowerItemSet)
+            //var WordsOfPowerItemSet = mod.WordsOfPower.ToHashSet();
+            foreach (var sourceForm in mod.WordsOfPower.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1870,10 +1870,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            WordsOfPowerItemSet.Clear();
+            //WordsOfPowerItemSet.Clear();
             //Shouts
-            var ShoutsItemSet = mod.Shouts.ToHashSet();
-            foreach (var sourceForm in ShoutsItemSet)
+            //var ShoutsItemSet = mod.Shouts.ToHashSet();
+            foreach (var sourceForm in mod.Shouts.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1890,10 +1890,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ShoutsItemSet.Clear();
+            //ShoutsItemSet.Clear();
             //EquipTypes
-            var EquipTypesItemSet = mod.EquipTypes.ToHashSet();
-            foreach (var sourceForm in EquipTypesItemSet)
+            //var EquipTypesItemSet = mod.EquipTypes.ToHashSet();
+            foreach (var sourceForm in mod.EquipTypes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1910,10 +1910,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            EquipTypesItemSet.Clear();
+            //EquipTypesItemSet.Clear();
             //Relationships
-            var RelationshipsItemSet = mod.Relationships.ToHashSet();
-            foreach (var sourceForm in RelationshipsItemSet)
+            //var RelationshipsItemSet = mod.Relationships.ToHashSet();
+            foreach (var sourceForm in mod.Relationships.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1930,10 +1930,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            RelationshipsItemSet.Clear();
+            //RelationshipsItemSet.Clear();
             //Scenes
-            var ScenesItemSet = mod.Scenes.ToHashSet();
-            foreach (var sourceForm in ScenesItemSet)
+            //var ScenesItemSet = mod.Scenes.ToHashSet();
+            foreach (var sourceForm in mod.Scenes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1950,10 +1950,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ScenesItemSet.Clear();
+            //ScenesItemSet.Clear();
             //AssociationTypes
-            var AssociationTypesItemSet = mod.AssociationTypes.ToHashSet();
-            foreach (var sourceForm in AssociationTypesItemSet)
+            //var AssociationTypesItemSet = mod.AssociationTypes.ToHashSet();
+            foreach (var sourceForm in mod.AssociationTypes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1970,10 +1970,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            AssociationTypesItemSet.Clear();
+            //AssociationTypesItemSet.Clear();
             //Outfits
-            var OutfitsItemSet = mod.Outfits.ToHashSet();
-            foreach (var sourceForm in OutfitsItemSet)
+            //var OutfitsItemSet = mod.Outfits.ToHashSet();
+            foreach (var sourceForm in mod.Outfits.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -1990,10 +1990,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            OutfitsItemSet.Clear();
+            //OutfitsItemSet.Clear();
             //ArtObjects
-            var ArtObjectsItemSet = mod.ArtObjects.ToHashSet();
-            foreach (var sourceForm in ArtObjectsItemSet)
+            //var ArtObjectsItemSet = mod.ArtObjects.ToHashSet();
+            foreach (var sourceForm in mod.ArtObjects.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2010,10 +2010,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ArtObjectsItemSet.Clear();
+            //ArtObjectsItemSet.Clear();
             //MaterialObjects
-            var MaterialObjectsItemSet = mod.MaterialObjects.ToHashSet();
-            foreach (var sourceForm in MaterialObjectsItemSet)
+            //var MaterialObjectsItemSet = mod.MaterialObjects.ToHashSet();
+            foreach (var sourceForm in mod.MaterialObjects.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2030,10 +2030,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MaterialObjectsItemSet.Clear();
+            //MaterialObjectsItemSet.Clear();
             //MovementTypes
-            var MovementTypesItemSet = mod.MovementTypes.ToHashSet();
-            foreach (var sourceForm in MovementTypesItemSet)
+            //var MovementTypesItemSet = mod.MovementTypes.ToHashSet();
+            foreach (var sourceForm in mod.MovementTypes.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2050,10 +2050,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            MovementTypesItemSet.Clear();
+            //MovementTypesItemSet.Clear();
             //SoundDescriptors
-            var SoundDescriptorsItemSet = mod.SoundDescriptors.ToHashSet();
-            foreach (var sourceForm in SoundDescriptorsItemSet)
+            //var SoundDescriptorsItemSet = mod.SoundDescriptors.ToHashSet();
+            foreach (var sourceForm in mod.SoundDescriptors.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2070,10 +2070,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            SoundDescriptorsItemSet.Clear();
+            //SoundDescriptorsItemSet.Clear();
             //DualCastData
-            var DualCastDataItemSet = mod.DualCastData.ToHashSet();
-            foreach (var sourceForm in DualCastDataItemSet)
+            //var DualCastDataItemSet = mod.DualCastData.ToHashSet();
+            foreach (var sourceForm in mod.DualCastData.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2090,10 +2090,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            DualCastDataItemSet.Clear();
+            //DualCastDataItemSet.Clear();
             //SoundCategories
-            var SoundCategoriesItemSet = mod.SoundCategories.ToHashSet();
-            foreach (var sourceForm in SoundCategoriesItemSet)
+            //var SoundCategoriesItemSet = mod.SoundCategories.ToHashSet();
+            foreach (var sourceForm in mod.SoundCategories.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2110,10 +2110,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            SoundCategoriesItemSet.Clear();
+            //SoundCategoriesItemSet.Clear();
             //SoundOutputModels
-            var SoundOutputModelsItemSet = mod.SoundOutputModels.ToHashSet();
-            foreach (var sourceForm in SoundOutputModelsItemSet)
+            //var SoundOutputModelsItemSet = mod.SoundOutputModels.ToHashSet();
+            foreach (var sourceForm in mod.SoundOutputModels.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2130,10 +2130,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            SoundOutputModelsItemSet.Clear();
+            //SoundOutputModelsItemSet.Clear();
             //CollisionLayers
-            var CollisionLayersItemSet = mod.CollisionLayers.ToHashSet();
-            foreach (var sourceForm in CollisionLayersItemSet)
+            //var CollisionLayersItemSet = mod.CollisionLayers.ToHashSet();
+            foreach (var sourceForm in mod.CollisionLayers.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2150,10 +2150,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            CollisionLayersItemSet.Clear();
+            //CollisionLayersItemSet.Clear();
             //Colors
-            var ColorsItemSet = mod.Colors.ToHashSet();
-            foreach (var sourceForm in ColorsItemSet)
+            //var ColorsItemSet = mod.Colors.ToHashSet();
+            foreach (var sourceForm in mod.Colors.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2170,10 +2170,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ColorsItemSet.Clear();
+            //ColorsItemSet.Clear();
             //ReverbParameters
-            var ReverbParametersItemSet = mod.ReverbParameters.ToHashSet();
-            foreach (var sourceForm in ReverbParametersItemSet)
+            //var ReverbParametersItemSet = mod.ReverbParameters.ToHashSet();
+            foreach (var sourceForm in mod.ReverbParameters.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2190,10 +2190,10 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            ReverbParametersItemSet.Clear();
+            //ReverbParametersItemSet.Clear();
             //VolumetricLightings
-            var VolumetricLightingsItemSet = mod.VolumetricLightings.ToHashSet();
-            foreach (var sourceForm in VolumetricLightingsItemSet)
+            //var VolumetricLightingsItemSet = mod.VolumetricLightings.ToHashSet();
+            foreach (var sourceForm in mod.VolumetricLightings.ToArray())
             {
                 if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
                 {
@@ -2210,7 +2210,8 @@ namespace ESLifyEverything.PluginHandles
                     }
                 }
             }
-            VolumetricLightingsItemSet.Clear();
+            //VolumetricLightingsItemSet.Clear();
+
 
 
 

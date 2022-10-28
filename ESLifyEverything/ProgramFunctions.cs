@@ -310,22 +310,6 @@ namespace ESLifyEverything
             }
         }
 
-        //Gets the output folder for where plugins need to be outputed to
-        public static string GetPluginModOutputPath(string pluginName)
-        {
-            if (GF.Settings.MO2Support)
-            {
-                string masterExtentions = pluginName;
-                NewMO2FolderPaths = true;
-                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, $"{masterExtentions}_ESlEverything");
-                Directory.CreateDirectory(OutputPath);
-                return OutputPath;
-            }
-            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
-            {
-                return GF.Settings.DataFolderPath;
-            }
-            return GF.Settings.OutputFolder;
-        }
+        
     }
 }

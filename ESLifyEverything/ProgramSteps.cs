@@ -281,6 +281,18 @@ namespace ESLifyEverything
                 {
                     if (modData.PluginLastModifiedValidation is not null)
                     {
+                        string splitModDataPath = Path.Combine(compactedFormsLocation, modData.ModName + GF.ModSplitDataExtension);
+                        if (File.Exists(splitModDataPath))
+                        {
+                            CompactedModData splitModData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(splitModDataPath))!;
+                            if (splitModData.PluginLastModifiedValidation.Equals(modData.PluginLastModifiedValidation))
+                            {
+                                foreach(FormHandler form in splitModData.CompactedModFormList)
+                                {
+                                    modData.CompactedModFormList.Add(form);
+                                }
+                            }
+                        }
                         CompactedModDataD.TryAdd(modData.ModName, modData);
                     }
                 }
@@ -821,15 +833,11 @@ namespace ESLifyEverything
             GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
             RaceMenuESLify();
 
-            DevLog.Pause("After RaceMenu ESLify Pause");
-
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
             Task CustomSkills = CustomSkillsFramework();
             CustomSkills.Wait();
             CustomSkills.Dispose();
-
-            DevLog.Pause("After Custom Skills Framework ESLify Pause");
         }
 
         //Gets the Mod Configuration files for ESLifying Data Files

@@ -163,6 +163,13 @@
     "MapNotFound": "The map.json or fidCache,json was not found in {0}",
     "StartingMergeCache": "Building and Updating zMerge Data References",
     "ImportingMergeCache": "Getting merge data from ",
-    "ImportingMergeCompactedModData": "Found compacted mod data for "
+    "ImportingMergeCompactedModData": "Found compacted mod data for ",
+    "ReadOrgData": "Reading Original Data.",
+    "ReadSplitData": "Reading Split Data.",
+    "IncorrectDataLine": "Line had extra data or no data",
+    "EDIDImportedAlready": "EDID already imported: {0}",
+    "SkippingOutput": "Skipping output for {0}",
+    "OrgDataNotFound": "OriginalData.csv was not created from xEdit script \"_ESLifyModSplit_Step1.pas\"",
+    "SplitDataNotFound": "SplitData.csv was not created from xEdit script \"_ESLifyModSplit_Step2.pas\""
   }
 }

@@ -3,6 +3,10 @@ using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Skyrim;
 using ESLifyEverythingGlobalDataLibrary;
+using Mutagen.Bethesda.Plugins.Binary.Parameters;
+using Mutagen.Bethesda.Plugins.Order;
+using Mutagen.Bethesda;
+using Noggog;
 
 namespace ESLifyEverything.PluginHandles
 {
@@ -37,7 +41,7 @@ namespace ESLifyEverything.PluginHandles
             mod = HandleSubFormHeaders(mod, out bool ModEditedS);
             DevLog.Log("Finnished handling sub form keys in " + mod.ModKey.ToString());
 
-            if (ModEditedS || ModEditedU)
+            if (ModEditedU || ModEditedS)
             {
                 ModEdited = true;
                 DevLog.Log(mod.ModKey.ToString() + " was changed.");
@@ -73,10 +77,14 @@ namespace ESLifyEverything.PluginHandles
                     rec.IsCompressed = false;
                 }
 
+                string outputPath = GF.GetPluginModOutputPath(pluginName);
 
-                string outputPath = Program.GetPluginModOutputPath(pluginName);
-
-                mod.WriteToBinary(Path.Combine(outputPath, pluginName));
+                mod.WriteToBinary(Path.Combine(outputPath, pluginName),
+                new BinaryWriteParameters()
+                {
+                    MastersListOrdering = 
+                    new MastersListOrderingByLoadOrder(LoadOrder.GetLoadOrderListings(GameRelease.SkyrimSE, new DirectoryPath(GF.Settings.DataFolderPath)).ToLoadOrder())
+                });
 
                 GF.WriteLine(String.Format(GF.stringLoggingData.PluginOutputTo, pluginName, outputPath));
 

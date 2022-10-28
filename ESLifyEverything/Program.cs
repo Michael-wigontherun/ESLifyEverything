@@ -40,9 +40,6 @@ namespace ESLifyEverything
         //End identifier to prompt that ESLify Everything output BSAs were Extracted
         public static bool BSAExtracted = false;
 
-        //End identifier to prompt that ESLify Everything output edited plugins to MO2 mods folder
-        public static bool NewMO2FolderPaths = false;
-
         //identifier for ESLify Everything detected new mods and it needs to run Script ESLify
         public static bool NewOrUpdatedMods = false;
 
@@ -201,7 +198,7 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.RunOrReport);
             }
 
-            if (NewMO2FolderPaths)
+            if (GF.NewMO2FolderPaths)
             {
                 GF.WriteLine(GF.stringLoggingData.NewMO2FoldersWarning);
                 GF.WriteLine(GF.stringLoggingData.HowToDisableMO2Folders);

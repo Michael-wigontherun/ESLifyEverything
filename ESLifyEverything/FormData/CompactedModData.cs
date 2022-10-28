@@ -5,20 +5,21 @@ using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Plugins.Records;
 using Mutagen.Bethesda.Plugins.Cache.Internals.Implementations;
 using ESLifyEverythingGlobalDataLibrary;
+using ESLifyEverythingGlobalDataLibrary.FormData;
 
 namespace ESLifyEverything.FormData
 {
     //Class to store Compacted Mod Data
-    public class CompactedModData
+    public class CompactedModData : IPluginData
     {
         [JsonInclude]
         public bool Enabled { get; set; } = true;
+        //[JsonInclude]
+        //public string ModName = "";
         [JsonInclude]
-        public string ModName = "";
-        [JsonInclude]
-        public HashSet<FormHandler> CompactedModFormList = new HashSet<FormHandler>();
-        [JsonInclude]
-        public DateTime? PluginLastModifiedValidation { get; set; }
+        public new HashSet<FormHandler> CompactedModFormList = new HashSet<FormHandler>();
+        //[JsonInclude]
+        //public DateTime? PluginLastModifiedValidation { get; set; }
         [JsonInclude]
         public bool Recheck { get; set; } = true;
 
@@ -105,7 +106,7 @@ namespace ESLifyEverything.FormData
 
         //Outputs the CompactedModData to a _ESlEverything.json file.
         //checkPreviousIfExists = true will reimport previous outputed _ESlEverything.json data if it exists
-        public void OutputModData(bool write, bool checkPreviousIfExists)
+        public override void OutputModData(bool write, bool checkPreviousIfExists)
         {
             
             string CompactedFormPath = Path.Combine(GF.CompactedFormsFolder, ModName + GF.CompactedFormExtension);
@@ -160,7 +161,7 @@ namespace ESLifyEverything.FormData
         }
 
         //Writes CompactedModData to log file
-        public void Write()
+        public override void Write()
         {
             GF.WriteLine(ModName, false, GF.Settings.VerboseFileLoging, GF.DevSettings.DevLoggingOverrideSome);
             foreach(FormHandler handler in CompactedModFormList)

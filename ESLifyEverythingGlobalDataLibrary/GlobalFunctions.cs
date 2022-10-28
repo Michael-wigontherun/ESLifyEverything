@@ -13,6 +13,25 @@ namespace ESLifyEverythingGlobalDataLibrary
         xEditLogNotFound = 1    //Did not find the xEdit log inside the XEditFolderPath
     }
 
+    //Global File Extentions
+    public static partial class GF
+    {
+        //readonly property to get the extension for all CompactedFormJson
+        public static readonly string CompactedFormExtension = "_ESlEverything.json";
+
+        //readonly property to get the extension for CompactedFormJson that needs to be ignored
+        public static readonly string CompactedFormIgnoreExtension = "_ESLEverything.ignore";
+
+        //readonly property to get the extension for all Merge Caches
+        public static readonly string MergeCacheExtension = "_ESlEverythingMergeCache.json";
+
+        //readonly property to get the extension for Merge Caches that needs to be ignored
+        public static readonly string MergeCacheIgnoreExtension = "_ESlEverythingMergeCache.ignore";
+
+        //readonly property to get the extension for Merge Caches that needs to be ignored
+        public static readonly string ModSplitDataExtension = "_ESlEverythingSplitData.json";
+    }
+
     public static partial class GF
     {
         //readonly property to identify what settings version ESLify uses to update settings properly
@@ -29,18 +48,6 @@ namespace ESLifyEverythingGlobalDataLibrary
 
         //readonly property to direct to where I wish for the Source code to be decompiled and read from.
         public static readonly string SourceSubPath = "Source\\Scripts";
-
-        //readonly property to get the extension for all CompactedFormJson
-        public static readonly string CompactedFormExtension = "_ESlEverything.json";
-
-        //readonly property to get the extension for CompactedFormJson that needs to be ignored
-        public static readonly string CompactedFormIgnoreExtension = "_ESLEverything.ignore";
-
-        //readonly property to get the extension for all Merge Caches
-        public static readonly string MergeCacheExtension = "_ESlEverythingMergeCache.json";
-
-        //readonly property to get the extension for Merge Caches that needs to be ignored
-        public static readonly string MergeCacheIgnoreExtension = "_ESlEverythingMergeCache.ignore";
 
         //The settings object that the program functions off of
         public static AppSettings Settings = new AppSettings();
@@ -71,6 +78,9 @@ namespace ESLifyEverythingGlobalDataLibrary
 
         //Path to the face gen fix list for the xEdit script
         public static string FaceGenFileFixPath = "";
+
+        //End identifier to prompt that ESLify Everything output edited plugins to MO2 mods folder
+        public static bool NewMO2FolderPaths = false;
 
         //Identifier to start object logging
         public static bool StartUpInitialized = false;
@@ -497,5 +507,22 @@ namespace ESLifyEverythingGlobalDataLibrary
 
         }
 
+        //Gets the output folder for where plugins need to be outputed to
+        public static string GetPluginModOutputPath(string pluginName)
+        {
+            if (GF.Settings.MO2Support)
+            {
+                string masterExtentions = pluginName;
+                GF.NewMO2FolderPaths = true;
+                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, $"{masterExtentions}_ESlEverything");
+                Directory.CreateDirectory(OutputPath);
+                return OutputPath;
+            }
+            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
+            {
+                return GF.Settings.DataFolderPath;
+            }
+            return GF.Settings.OutputFolder;
+        }
     }
 }

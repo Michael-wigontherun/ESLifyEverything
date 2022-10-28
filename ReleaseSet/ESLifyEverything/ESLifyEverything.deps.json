@@ -9,6 +9,7 @@
       "ESLifyEverything/1.0.0": {
         "dependencies": {
           "ESLifyEverythingGlobalDataLibrary": "1.0.0",
+          "ESLifySplitModInterpreter": "1.0.0",
           "Microsoft.Extensions.Configuration.Binder": "6.0.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.0",
           "Microsoft.Extensions.Configuration.Json": "6.0.0",
@@ -496,6 +497,14 @@
         "runtime": {
           "ESLifyEverythingGlobalDataLibrary.dll": {}
         }
+      },
+      "ESLifySplitModInterpreter/1.0.0": {
+        "dependencies": {
+          "ESLifyEverythingGlobalDataLibrary": "1.0.0"
+        },
+        "runtime": {
+          "ESLifySplitModInterpreter.dll": {}
+        }
       }
     }
   },
@@ -821,6 +830,11 @@
       "hashPath": "system.windows.extensions.4.7.0.nupkg.sha512"
     },
     "ESLifyEverythingGlobalDataLibrary/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ESLifySplitModInterpreter/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
