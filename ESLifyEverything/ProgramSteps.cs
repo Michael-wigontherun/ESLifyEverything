@@ -35,7 +35,7 @@ namespace ESLifyEverything
             {
                 GF.WriteLine(GF.stringLoggingData.NoxEditSessions);
             }
-            else if (GF.Settings.AutoReadAllxEditSeesion)
+            else if (GF.Settings.AutoReadAllxEditSession)
             {
                 string fileName = Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName);
                 FileInfo fi = new FileInfo(fileName);
@@ -44,12 +44,12 @@ namespace ESLifyEverything
                     GF.WriteLine(GF.stringLoggingData.XEditLogFileSizeWarning);
                 }
                 XEditSessionAutoAll();
-                if (GF.Settings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion)
+                if (GF.Settings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession)
                 {
                     File.Delete(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName));
                 }
             }
-            else if (GF.Settings.AutoReadNewestxEditSeesion)
+            else if (GF.Settings.AutoReadNewestxEditSession)
             {
                 XEditLogReader.xEditLog.xEditSessions![xEditSessionsCount - 1].GenerateCompactedModDatas();
             }

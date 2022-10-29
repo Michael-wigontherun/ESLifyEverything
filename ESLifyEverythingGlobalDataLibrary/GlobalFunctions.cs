@@ -35,7 +35,7 @@ namespace ESLifyEverythingGlobalDataLibrary
     public static partial class GF
     {
         //readonly property to identify what settings version ESLify uses to update settings properly
-        public static readonly string SettingsVersion = "3.2.0";
+        public static readonly string SettingsVersion = "3.5.0";
 
         //readonly property to direct to where the Changed Scripts are stored
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
@@ -148,9 +148,9 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             StartUpInitialized = true;
 
-            if (GF.Settings.AutoReadAllxEditSeesion == false)
+            if (GF.Settings.AutoReadAllxEditSession == false)
             {
-                GF.Settings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion = false;
+                GF.Settings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession = false;
             }
 
             if (!Directory.Exists(GF.Settings.DataFolderPath))
@@ -265,12 +265,12 @@ namespace ESLifyEverythingGlobalDataLibrary
                 }
             }
 
-            if (GF.Settings.MO2Support)
+            if (GF.Settings.MO2.MO2Support)
             {
-                if (!Directory.Exists(GF.Settings.MO2ModFolder))
+                if (!Directory.Exists(GF.Settings.MO2.MO2ModFolder))
                 {
                     GF.WriteLine(GF.stringLoggingData.MO2ModsFolderDoesNotExist);
-                    GF.Settings.MO2Support = false;
+                    GF.Settings.MO2.MO2Support = false;
                 }
             }
 
@@ -391,6 +391,11 @@ namespace ESLifyEverythingGlobalDataLibrary
                     GF.WriteLine(GF.stringLoggingData.EditYourSettings);
                     UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings3>()).Build();
                     break;
+                case "3.2.0":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings320>()).Build();
+                    break;
                 default:
                     GenerateSettingsFileError();
                     break;
@@ -510,11 +515,11 @@ namespace ESLifyEverythingGlobalDataLibrary
         //Gets the output folder for where plugins need to be outputed to
         public static string GetPluginModOutputPath(string pluginName)
         {
-            if (GF.Settings.MO2Support)
+            if (GF.Settings.MO2.MO2Support)
             {
                 string masterExtentions = pluginName;
                 GF.NewMO2FolderPaths = true;
-                string OutputPath = Path.Combine(GF.Settings.MO2ModFolder, $"{masterExtentions}_ESlEverything");
+                string OutputPath = Path.Combine(GF.Settings.MO2.MO2ModFolder, $"{masterExtentions}_ESlEverything");
                 Directory.CreateDirectory(OutputPath);
                 return OutputPath;
             }

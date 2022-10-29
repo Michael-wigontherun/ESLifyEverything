@@ -72,8 +72,12 @@ namespace ESLifyEverything.FormData
         }
 
         //Gets the Compacted FormID without extra 0's infront of the FormID
-        public string GetCompactedFormIDTrimmed()
+        public string GetCompactedFormID(bool trim = true)
         {
+            if (!trim)
+            {
+                return CompactedFormID;
+            }
             return CompactedFormID.TrimStart('0');
         }
 
@@ -104,9 +108,9 @@ namespace ESLifyEverything.FormData
 
             if (separator.IDIsSecond)
             {
-                return modName + separator.FormKeySeparator + GetCompactedFormIDTrimmed();
+                return modName + separator.FormKeySeparator + GetCompactedFormID(separator.TrimStart);
             }
-            return GetCompactedFormIDTrimmed() + separator.FormKeySeparator + modName;
+            return GetCompactedFormID(separator.TrimStart) + separator.FormKeySeparator + modName;
         }
 
         //Creates the Mutagen FormKey related to the Origonal Form

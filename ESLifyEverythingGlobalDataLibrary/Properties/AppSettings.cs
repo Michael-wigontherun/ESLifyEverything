@@ -15,11 +15,11 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
             appSettings.PapyrusFlag = appSettings19.PapyrusFlag;
             appSettings.VerboseConsoleLoging = appSettings19.VerboseConsoleLoging;
             appSettings.VerboseFileLoging = appSettings19.VerboseFileLoging;
-            appSettings.AutoReadNewestxEditSeesion = appSettings19.AutoReadNewestxEditSeesion;
-            appSettings.AutoReadAllxEditSeesion = appSettings19.AutoReadAllxEditSeesion;
+            appSettings.AutoReadNewestxEditSession = appSettings19.AutoReadNewestxEditSeesion;
+            appSettings.AutoReadAllxEditSession = appSettings19.AutoReadAllxEditSeesion;
             appSettings.AutoRunESLify = appSettings19.AutoRunESLify;
             appSettings.AutoRunScriptDecompile = appSettings19.AutoRunScriptDecompile;
-            appSettings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion = appSettings19.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion;
+            appSettings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession = appSettings19.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion;
             appSettings.XEditFolderPath = appSettings19.XEditFolderPath;
             appSettings.DataFolderPath = appSettings19.DataFolderPath;
             appSettings.OutputFolder = appSettings19.OutputFolder;
@@ -33,18 +33,41 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
             appSettings.PapyrusFlag = appSettings3.PapyrusFlag;
             appSettings.VerboseConsoleLoging = appSettings3.VerboseConsoleLoging;
             appSettings.VerboseFileLoging = appSettings3.VerboseFileLoging;
-            appSettings.AutoReadNewestxEditSeesion = appSettings3.AutoReadNewestxEditSeesion;
-            appSettings.AutoReadAllxEditSeesion = appSettings3.AutoReadAllxEditSeesion;
+            appSettings.AutoReadNewestxEditSession = appSettings3.AutoReadNewestxEditSeesion;
+            appSettings.AutoReadAllxEditSession = appSettings3.AutoReadAllxEditSeesion;
             appSettings.AutoRunESLify = appSettings3.AutoRunESLify;
             appSettings.AutoRunScriptDecompile = appSettings3.AutoRunScriptDecompile;
-            appSettings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion = appSettings3.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion;
+            appSettings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession = appSettings3.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion;
             appSettings.RunSubPluginCompaction = appSettings3.RunSubPluginCompaction;
             appSettings.ChangedPluginsOutputToDataFolder = appSettings3.ChangedPluginsOutputToDataFolder;
-            appSettings.MO2Support = appSettings3.MO2Support;
-            appSettings.MO2ModFolder = appSettings3.MO2ModFolder;
+            appSettings.MO2.MO2Support = appSettings3.MO2Support;
+            appSettings.MO2.MO2ModFolder = appSettings3.MO2ModFolder;
             appSettings.XEditFolderPath = appSettings3.XEditFolderPath;
             appSettings.DataFolderPath = appSettings3.DataFolderPath;
             appSettings.OutputFolder = appSettings3.OutputFolder;
+            return appSettings;
+        }
+
+        public static AppSettings AppSettings(AppSettings320 appSettings320)
+        {
+            AppSettings appSettings = new AppSettings();
+            appSettings.XEditLogFileName = appSettings320.XEditLogFileName;
+            appSettings.PapyrusFlag = appSettings320.PapyrusFlag;
+            appSettings.VerboseConsoleLoging = appSettings320.VerboseConsoleLoging;
+            appSettings.VerboseFileLoging = appSettings320.VerboseFileLoging;
+            appSettings.AutoReadNewestxEditSession = appSettings320.AutoReadNewestxEditSeesion;
+            appSettings.AutoReadAllxEditSession = appSettings320.AutoReadAllxEditSeesion;
+            appSettings.AutoRunESLify = appSettings320.AutoRunESLify;
+            appSettings.AutoRunScriptDecompile = appSettings320.AutoRunScriptDecompile;
+            appSettings.EnableCompiler = appSettings320.EnableCompiler;
+            appSettings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession = appSettings320.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion;
+            appSettings.RunSubPluginCompaction = appSettings320.RunSubPluginCompaction;
+            appSettings.ChangedPluginsOutputToDataFolder = appSettings320.ChangedPluginsOutputToDataFolder;
+            appSettings.MO2.MO2Support = appSettings320.MO2Support;
+            appSettings.MO2.MO2ModFolder = appSettings320.MO2ModFolder;
+            appSettings.XEditFolderPath = appSettings320.XEditFolderPath;
+            appSettings.DataFolderPath = appSettings320.DataFolderPath;
+            appSettings.OutputFolder = appSettings320.OutputFolder;
             return appSettings;
         }
     }
@@ -52,6 +75,7 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
     public partial class AppSettings
     {
         public AppSettings() { }
+
 
         public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
 
@@ -61,9 +85,9 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
 
         public bool VerboseFileLoging { get; set; } = true;
 
-        public bool AutoReadNewestxEditSeesion { get; set; } = false;
+        public bool AutoReadNewestxEditSession { get; set; } = false;
 
-        public bool AutoReadAllxEditSeesion { get; set; } = false;
+        public bool AutoReadAllxEditSession { get; set; } = false;
 
         public bool AutoRunESLify { get; set; } = false;
 
@@ -71,7 +95,7 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
 
         public bool EnableCompiler { get; set; } = true;
 
-        public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion { get; set; } = false;
+        public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession { get; set; } = false;
 
         public bool RunSubPluginCompaction { get; set; } = false;
 
@@ -101,22 +125,26 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
             }
         }
 
-        public bool MO2Support { get; set; } = false;
-
-        public string MO2ModFolder { get; set; } = "MO2\\Mods";
-
         public string XEditFolderPath { get; set; } = "xEditFolderPath";
 
         public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
 
-        public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
+        public string OutputFolder { get; set; } = "MO2\\Mods\\OutputFolder";
 
+        public MO2SupportSettings MO2 { get; set; } = new MO2SupportSettings();
         //Outputs the AppSettings.json
         public void Build()
         {
             File.WriteAllText("AppSettings.json", JsonSerializer.Serialize(new GeneratedAppSettings(this), GF.JsonSerializerOptions));
         }
 
+    }
+
+    public class MO2SupportSettings
+    {
+        public bool MO2Support { get; set; } = false;
+
+        public string MO2ModFolder { get; set; } = "MO2\\Mods";
     }
 
     [Obsolete("Only used for Updating")]
@@ -183,6 +211,44 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
         [JsonInclude]
         public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
         [JsonInclude]
+        public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
+    }
+
+    [Obsolete("Only used for Updating")]
+    public class AppSettings320
+    {
+        public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
+
+        public string PapyrusFlag { get; set; } = "TESV_Papyrus_Flags.flg";
+
+        public bool VerboseConsoleLoging { get; set; } = true;
+
+        public bool VerboseFileLoging { get; set; } = true;
+
+        public bool AutoReadNewestxEditSeesion { get; set; } = false;
+
+        public bool AutoReadAllxEditSeesion { get; set; } = false;
+
+        public bool AutoRunESLify { get; set; } = false;
+
+        public bool AutoRunScriptDecompile { get; set; } = false;
+
+        public bool EnableCompiler { get; set; } = true;
+
+        public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSeesion { get; set; } = false;
+
+        public bool RunSubPluginCompaction { get; set; } = false;
+
+        public bool ChangedPluginsOutputToDataFolder { get; set; } = false;
+
+        public bool MO2Support { get; set; } = false;
+
+        public string MO2ModFolder { get; set; } = "MO2\\Mods";
+
+        public string XEditFolderPath { get; set; } = "xEditFolderPath";
+
+        public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
+
         public string OutputFolder { get; set; } = "MO2\\Mods\\OuputFolder";
     }
 

@@ -12,6 +12,7 @@ namespace ESLifyEverything
         public static string[] FormInFileLineReader(string[] fileLines, Separator? SeparatorData, out bool changed)
         {
             changed = false;
+            Console.WriteLine(fileLines[0]);
             for (int i = 0; i < fileLines.Length; i++)
             {
                 if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
@@ -33,9 +34,9 @@ namespace ESLifyEverything
 
                                             if (SeparatorData.IDIsSecond)
                                             {
-                                                line = RemoveExtraFormHex(fileLines[i], form.GetOriginalFormID(), SeparatorData.FormKeySeparator);
+                                                line = RemoveExtraFormHex(fileLines[i], form.OriginalFormID, SeparatorData.FormKeySeparator);
                                             }
-                                            
+
                                             string orgFormKey = form.GetOriginalFileLineFormKey(SeparatorData, modData.ModName);
                                             if (line.Contains(orgFormKey))
                                             {
@@ -128,7 +129,7 @@ namespace ESLifyEverything
                                     if (exactHexValueTrimmed.Equals(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
                                     {
                                         GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
-                                        fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormIDTrimmed(), StringComparison.OrdinalIgnoreCase);
+                                        fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
                                         fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
                                         GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                         changed = true;
@@ -276,6 +277,8 @@ namespace ESLifyEverything
         //Removes the extra hex data infront of the FormID and after the separator
         public static string RemoveExtraFormHex(string line, string orgFormID, string separator)
         {
+            line = line.Replace(orgFormID, orgFormID.TrimStart('0'));
+            orgFormID = orgFormID.TrimStart('0');
             if (separator.Length > 1)
             {
                 string startString = line.Substring(line.IndexOf(separator) + separator.Length);
@@ -291,6 +294,7 @@ namespace ESLifyEverything
 
                 return line.Replace(startString.Substring(0, i), "");
             }
+            
             return line;
         }
 

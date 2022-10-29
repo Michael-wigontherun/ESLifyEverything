@@ -8,7 +8,8 @@
       "FormKeySeparator": "~",
       "IDIsSecond": false,
       "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting SPID Eslify",
     "FileAtLogLine": "SPID file found at ",
@@ -24,7 +25,8 @@
       "FormKeySeparator": "~",
       "IDIsSecond": false,
       "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting Base Object Swapper Eslify",
     "FileAtLogLine": "BOSwap file found at ",
@@ -40,7 +42,8 @@
       "FormKeySeparator": "~",
       "IDIsSecond": false,
       "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting KID Eslify",
     "FileAtLogLine": "KID file found at ",
@@ -56,7 +59,8 @@
       "FormKeySeparator": "~",
       "IDIsSecond": false,
       "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting FLM Eslify",
     "FileAtLogLine": "FLM file found at ",
@@ -72,7 +76,8 @@
       "FormKeySeparator": "~",
       "IDIsSecond": false,
       "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting AnimObject Eslify",
     "FileAtLogLine": "AnimObject file found at ",
@@ -88,7 +93,8 @@
       "FormKeySeparator": "~",
       "IDIsSecond": false,
       "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting ENB Lights For Effect Shaders Eslify",
     "FileAtLogLine": "ENBLightsForEffectShaders file found at ",
@@ -104,7 +110,8 @@
       "FormKeySeparator": "|",
       "IDIsSecond": false,
       "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting Payload Interpreter Eslify",
     "FileAtLogLine": "PayloadInterpreter file found at ",
@@ -120,11 +127,29 @@
       "FormKeySeparator": "|",
       "IDIsSecond": true,
       "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting CoMap Eslify",
     "FileAtLogLine": "CoMap file found at ",
     "FileUnchangedLogLine": "CoMap file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "SRD",
+    "StartFolder": "",
+    "FileNameFilter": "*_SRD.json*",
+    "SeparatorData": {
+      "FormKeySeparator": "|",
+      "IDIsSecond": true,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
+    },
+    "StartingLogLine": "Starting SRD Eslify",
+    "FileAtLogLine": "SRD file found at ",
+    "FileUnchangedLogLine": "SRD file unchanged: ",
     "SeachLevel": 0
   }
 ]

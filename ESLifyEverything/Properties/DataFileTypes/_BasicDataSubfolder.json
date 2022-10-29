@@ -9,7 +9,8 @@
       "FormKeySeparator": " | 0x",
       "IDIsSecond": true,
       "ModNameAsString": true,
-      "ModNameStringCharater": "\u0022"
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
     },
     "StartingLogLine": "Starting DAR Eslify",
     "FileAtLogLine": "DAR file found at ",
