@@ -122,11 +122,26 @@ namespace ESLifyEverything
                     {
                         if (fileLines[i].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
                         {
-                            foreach (FormHandler form in modData.CompactedModFormList)
+                            if (fileLines[i].Contains("GetModByName", StringComparison.OrdinalIgnoreCase))
                             {
-                                if(exactHexValueTrimmed != null)
+                                fileLines[i] = fileLines[i].Replace(modData.ModName, modData.CompactedModFormList.First().ModName);
+                            }
+                            else
+                            {
+                                foreach (FormHandler form in modData.CompactedModFormList)
                                 {
-                                    if (exactHexValueTrimmed.Equals(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
+                                    if (exactHexValueTrimmed != null)
+                                    {
+                                        if (exactHexValueTrimmed.Equals(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                            fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
+                                            fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
+                                            GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                            changed = true;
+                                        }
+                                    }
+                                    else if (fileLines[i].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
                                     {
                                         GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                         fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
@@ -134,14 +149,6 @@ namespace ESLifyEverything
                                         GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
                                         changed = true;
                                     }
-                                }
-                                else if (fileLines[i].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
-                                {
-                                    GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
-                                    fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
-                                    fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
-                                    GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
-                                    changed = true;
                                 }
                             }
                         }
