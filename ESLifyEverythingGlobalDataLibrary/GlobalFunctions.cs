@@ -35,7 +35,7 @@ namespace ESLifyEverythingGlobalDataLibrary
     public static partial class GF
     {
         //readonly property to identify what settings version ESLify uses to update settings properly
-        public static readonly string SettingsVersion = "3.5.0";
+        public static readonly string SettingsVersion = "3.5.2";
 
         //readonly property to direct to where the Changed Scripts are stored
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
@@ -48,6 +48,9 @@ namespace ESLifyEverythingGlobalDataLibrary
 
         //readonly property to direct to where I wish for the Source code to be decompiled and read from.
         public static readonly string SourceSubPath = "Source\\Scripts";
+
+        //readonly property for how many new records are inside of a merge for it to be a large mod
+        public static readonly int LargeMergeCount = 10000;
 
         //The settings object that the program functions off of
         public static AppSettings Settings = new AppSettings();
@@ -395,6 +398,11 @@ namespace ESLifyEverythingGlobalDataLibrary
                     GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
                     GF.WriteLine(GF.stringLoggingData.EditYourSettings);
                     UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings320>()).Build();
+                    break;
+                case "3.5.0":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings350>()).Build();
                     break;
                 default:
                     GenerateSettingsFileError();

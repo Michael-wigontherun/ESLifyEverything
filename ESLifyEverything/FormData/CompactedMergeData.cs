@@ -18,6 +18,9 @@ namespace ESLifyEverything.FormData
         [JsonInclude]
         public HashSet<CompactedModData> CompactedModDatas = new HashSet<CompactedModData>();
 
+        [JsonInclude]
+        public int? NewRecordCount;
+
         public CompactedMergeData() { }
 
         //Reads and caches any nessessary data from the merge.json
@@ -46,6 +49,17 @@ namespace ESLifyEverything.FormData
             {
                 GF.WriteLine(e.Message);
             }
+        }
+
+        //Counts how many records are inside of a merge cache 
+        public int CoundNewRecords()
+        {
+            int newRecordCount = 0;
+            foreach(CompactedModData compactedModData in CompactedModDatas)
+            {
+                newRecordCount += compactedModData.CompactedModFormList.Count();
+            }
+            return newRecordCount;
         }
 
         //Checks the stored and the current file time of the merged plugin

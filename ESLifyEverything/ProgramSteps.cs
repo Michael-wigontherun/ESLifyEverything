@@ -204,10 +204,10 @@ namespace ESLifyEverything
                                 if (outputtedCompactedModData != null)
                                 {
                                     GF.WriteLine(string.Format(GF.stringLoggingData.SetToIgnore, mergeData.MergeName + GF.CompactedFormExtension, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
-                                    //File.Move(potentialCompactedModDataPath, Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
+                                    File.Move(potentialCompactedModDataPath, Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
                                 }
 
-                                
+                                mergeData.NewRecordCount = mergeData.CoundNewRecords();
 
                                 mergeData.OutputModData(true);
                             }
@@ -314,6 +314,31 @@ namespace ESLifyEverything
             {
                 CompactedMergeData mergeData = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(file))!;
                 string pluginPath = Path.Combine(GF.Settings.DataFolderPath, mergeData.MergeName);
+                if(mergeData.NewRecordCount != null)
+                {
+                    if (mergeData.NewRecordCount >= GF.LargeMergeCount)
+                    {
+                        if (!GF.Settings.EnableLargeMerges)
+                        {
+                            GF.WriteLine(GF.stringLoggingData.SkippingMergeCache + mergeData.MergeName);
+                            continue;
+                        }
+                    }
+                }
+                else
+                {
+                    mergeData.NewRecordCount = mergeData.CoundNewRecords();
+                    if(mergeData.NewRecordCount >= GF.LargeMergeCount)
+                    {
+                        if (!GF.Settings.EnableLargeMerges)
+                        {
+                            GF.WriteLine(GF.stringLoggingData.SkippingMergeCache + mergeData.MergeName);
+                            continue;
+                        }
+                    }
+                    mergeData.OutputModData(false);
+                }
+
                 if (File.Exists(pluginPath))
                 {
                     if (mergeData.AlreadyCached())
@@ -551,8 +576,12 @@ namespace ESLifyEverything
             Task v = ExtractBSAVoiceData(modData.ModName);
             v.Wait();
             v.Dispose();
-            VoiceESLifyModData(modData, GF.ExtractedBSAModDataPath);
-            VoiceESLifyModData(modData, GF.Settings.DataFolderPath);
+            Task e = VoiceESLifyModData(modData, GF.ExtractedBSAModDataPath);
+            e.Wait();
+            e.Dispose();
+            Task l = VoiceESLifyModData(modData, GF.Settings.DataFolderPath);
+            l.Wait();
+            l.Dispose();
         }
 
         //Extracts Voice Lines from BSA with Voice lines connected to the plugin
@@ -582,10 +611,12 @@ namespace ESLifyEverything
         }
 
         //Checks the given Compacted Mod Data for Voice lines and fixes them from targeted locations
-        private static void VoiceESLifyModData(CompactedModData modData, string dataStartPath)
+        private static async Task<int> VoiceESLifyModData(CompactedModData modData, string dataStartPath)
         {
+            DevLog.Log("Voice ESLify: " + modData.ModName);
             if (Directory.Exists(Path.Combine(dataStartPath, "sound\\voice", modData.ModName)))
             {
+                DevLog.Log("Voice Lines Found: " + modData.ModName);
                 foreach (FormHandler form in modData.CompactedModFormList)
                 {
                     IEnumerable<string> voiceFilePaths = Directory.EnumerateFiles(
@@ -606,6 +637,7 @@ namespace ESLifyEverything
                     }
                 }
             }
+            return await Task.FromResult(1);
         }
         #endregion Voice Eslify
 
@@ -680,9 +712,13 @@ namespace ESLifyEverything
             Task f = ExtractBSAFaceGenData(modData.ModName);
             f.Wait();
             f.Dispose();
-            FaceGenEslifyModData(modData, GF.ExtractedBSAModDataPath);
-            FaceGenEslifyModData(modData, GF.Settings.DataFolderPath);
-            
+            Task e = FaceGenEslifyModData(modData, GF.ExtractedBSAModDataPath);
+            e.Wait();
+            e.Dispose();
+            Task l = FaceGenEslifyModData(modData, GF.Settings.DataFolderPath);
+            l.Wait();
+            l.Dispose();
+
         }
 
         //Extracts Voice Lines from BSA with FaceGen connected to the plugin
@@ -722,10 +758,12 @@ namespace ESLifyEverything
         }
 
         //Checks the given Compacted Mod Data for FaceGen and fixes them from targeted locations
-        private static void FaceGenEslifyModData(CompactedModData modData, string dataStartPath)
+        private static async Task<int> FaceGenEslifyModData(CompactedModData modData, string dataStartPath)
         {
+            DevLog.Log("FaceGen ESLify: " + modData.ModName);
             if (Directory.Exists(Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName)))
             {
+                DevLog.Log("FaceGen Lines Found: " + modData.ModName);
                 foreach (FormHandler form in modData.CompactedModFormList)
                 {
                     IEnumerable<string> FaceGenTexFilePaths = Directory.EnumerateFiles(
@@ -768,6 +806,7 @@ namespace ESLifyEverything
 
                 }
             }
+            return await Task.FromResult(1);
         }
         #endregion FaceGen Eslify
 

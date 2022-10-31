@@ -203,6 +203,7 @@
         public string MapNotFound { get; set; } = "";
         public string FidCacheNotFound { get; set; } = "";
         public string ImportingMergeCache { get; set; } = "";
+        public string SkippingMergeCache { get; set; } = "";
         public string ImportingMergeCompactedModData { get; set; } = "";
 
         //ESLifySplitModInterpreter

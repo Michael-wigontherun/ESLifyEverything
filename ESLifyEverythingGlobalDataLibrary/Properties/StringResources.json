@@ -163,6 +163,7 @@
     "MapNotFound": "The map.json or fidCache,json was not found in {0}",
     "StartingMergeCache": "Building and Updating zMerge Data References",
     "ImportingMergeCache": "Getting merge data from ",
+    "SkippingMergeCache": "Large amount of records in merge cache detected\nSkipping merge data import from ",
     "ImportingMergeCompactedModData": "Found compacted mod data for ",
     "ReadOrgData": "Reading Original Data.",
     "ReadSplitData": "Reading Split Data.",

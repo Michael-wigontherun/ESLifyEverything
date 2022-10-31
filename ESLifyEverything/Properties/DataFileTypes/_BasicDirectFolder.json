@@ -139,7 +139,7 @@
     "Enabled": true,
     "Name": "SRD",
     "StartFolder": "",
-    "FileNameFilter": "*_SRD.json*",
+    "FileNameFilter": "*_SRD.*",
     "SeparatorData": {
       "FormKeySeparator": "|",
       "IDIsSecond": true,
