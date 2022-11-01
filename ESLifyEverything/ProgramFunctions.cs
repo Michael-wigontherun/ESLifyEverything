@@ -12,7 +12,6 @@ namespace ESLifyEverything
         public static string[] FormInFileLineReader(string[] fileLines, Separator? SeparatorData, out bool changed)
         {
             changed = false;
-            Console.WriteLine(fileLines[0]);
             for (int i = 0; i < fileLines.Length; i++)
             {
                 if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
