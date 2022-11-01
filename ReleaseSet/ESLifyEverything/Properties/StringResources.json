@@ -171,6 +171,9 @@
     "EDIDImportedAlready": "EDID already imported: {0}",
     "SkippingOutput": "Skipping output for {0}",
     "OrgDataNotFound": "OriginalData.csv was not created from xEdit script \"_ESLifyModSplit_Step1.pas\"",
-    "SplitDataNotFound": "SplitData.csv was not created from xEdit script \"_ESLifyModSplit_Step2.pas\""
+    "SplitDataNotFound": "SplitData.csv was not created from xEdit script \"_ESLifyModSplit_Step2.pas\"",
+    "FinalizingDataHeader": "Finalizing CompactedModData and Merge caches.",
+    "WhyMustYouChangeMyStuff": "Please do not change the file names of merge cache files or CompactedModData files.",
+    "ImportAllCompactedModDataTrueWarning": "ImportAllCompactedModData detected true. Disabling AutoRunESLify."
   }
 }

@@ -63,6 +63,7 @@
         public string ClearYourOutputFolderScripts { get; set; } = "";
         public string PotectOrigonalScripts { get; set; } = "";
         public string OutputFolderWarning { get; set; } = "";
+        public string ImportAllCompactedModDataTrueWarning { get; set; } = "";
 
         //Gen AppSettings
         public string SettingsFileNotFound { get; set; } = "";
@@ -217,6 +218,8 @@
 
         //End
         public string EnterToExit { get; set; } = "";
+        public string FinalizingDataHeader { get; set; } = "";
+        public string WhyMustYouChangeMyStuff { get; set; } = "";
 
 
     }

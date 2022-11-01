@@ -82,7 +82,7 @@ namespace ESLifyEverything.PluginHandles
                 mod.WriteToBinary(Path.Combine(outputPath, pluginName),
                 new BinaryWriteParameters()
                 {
-                    MastersListOrdering = 
+                    MastersListOrdering =
                     new MastersListOrderingByLoadOrder(LoadOrder.GetLoadOrderListings(GameRelease.SkyrimSE, new DirectoryPath(GF.Settings.DataFolderPath)).ToLoadOrder())
                 });
 

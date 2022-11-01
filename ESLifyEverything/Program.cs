@@ -148,6 +148,8 @@ namespace ESLifyEverything
                     }
 
 
+
+                    FinalizeData();
                 }
                 switch (StartupError)
                 {

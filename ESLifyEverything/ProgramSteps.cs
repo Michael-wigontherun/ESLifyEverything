@@ -281,19 +281,22 @@ namespace ESLifyEverything
                 {
                     if (modData.PluginLastModifiedValidation is not null)
                     {
-                        string splitModDataPath = Path.Combine(compactedFormsLocation, modData.ModName + GF.ModSplitDataExtension);
-                        if (File.Exists(splitModDataPath))
+                        if (!modData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData)
                         {
-                            CompactedModData splitModData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(splitModDataPath))!;
-                            if (splitModData.PluginLastModifiedValidation.Equals(modData.PluginLastModifiedValidation))
+                            string splitModDataPath = Path.Combine(compactedFormsLocation, modData.ModName + GF.ModSplitDataExtension);
+                            if (File.Exists(splitModDataPath))
                             {
-                                foreach(FormHandler form in splitModData.CompactedModFormList)
+                                CompactedModData splitModData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(splitModDataPath))!;
+                                if (splitModData.PluginLastModifiedValidation.Equals(modData.PluginLastModifiedValidation))
                                 {
-                                    modData.CompactedModFormList.Add(form);
+                                    foreach (FormHandler form in splitModData.CompactedModFormList)
+                                    {
+                                        modData.CompactedModFormList.Add(form);
+                                    }
                                 }
                             }
+                            CompactedModDataD.TryAdd(modData.ModName, modData);
                         }
-                        CompactedModDataD.TryAdd(modData.ModName, modData);
                     }
                 }
                 else
@@ -341,13 +344,18 @@ namespace ESLifyEverything
 
                 if (File.Exists(pluginPath))
                 {
-                    if (mergeData.AlreadyCached())
+                    if(!mergeData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData)
                     {
-                        GF.WriteLine(GF.stringLoggingData.ImportingMergeCache + file);
-                        foreach(CompactedModData compactedModData in mergeData.CompactedModDatas)
+                        if (mergeData.AlreadyCached())
                         {
-                            GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                            CompactedModDataD.TryAdd(compactedModData.ModName, compactedModData);
+                            GF.WriteLine(GF.stringLoggingData.ImportingMergeCache + file);
+                            foreach (CompactedModData compactedModData in mergeData.CompactedModDatas)
+                            {
+                                compactedModData.FromMerge = true;
+                                compactedModData.MergeName = mergeData.MergeName;
+                                GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                CompactedModDataD.TryAdd(compactedModData.ModName, compactedModData);
+                            }
                         }
                     }
                 }
@@ -376,6 +384,7 @@ namespace ESLifyEverything
             }
             else
             {
+                modData.PreviouslyESLified = false;
                 modData.PluginLastModifiedValidation = null;
                 GF.WriteLine("");
                 GF.WriteLine("", false, true);
@@ -621,7 +630,7 @@ namespace ESLifyEverything
                 {
                     IEnumerable<string> voiceFilePaths = Directory.EnumerateFiles(
                         Path.Combine(dataStartPath, "sound\\voice", modData.ModName),
-                        "*" + form.GetOriginalFormID() + "*",
+                        "*" + form.OriginalFormID + "*",
                         SearchOption.AllDirectories);
                     foreach (string voiceFilePath in voiceFilePaths)
                     {
@@ -630,7 +639,7 @@ namespace ESLifyEverything
 
                         string newStartPath = Path.Combine(GF.Settings.OutputFolder, $"sound\\voice\\{form.ModName}\\{pathArr[pathArr.Length - 2]}");
                         Directory.CreateDirectory(newStartPath);
-                        string newPath = Path.Combine(newStartPath, pathArr[pathArr.Length - 1].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase));
+                        string newPath = Path.Combine(newStartPath, pathArr[pathArr.Length - 1].Replace(form.OriginalFormID, form.CompactedFormID, StringComparison.OrdinalIgnoreCase));
 
                         File.Copy(voiceFilePath, newPath, true);
                         GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
@@ -1401,6 +1410,54 @@ namespace ESLifyEverything
             return slectedCompactedMods;
         }
         #endregion Plugins
+
+        private static void FinalizeData()
+        {
+            GF.WriteLine(GF.stringLoggingData.FinalizingDataHeader);
+            HashSet<string> mergeDatasNames = new HashSet<string>();
+            foreach(CompactedModData compactedModData in CompactedModDataD.Values)
+            {
+                if (compactedModData.FromMerge)
+                {
+                    mergeDatasNames.Add(compactedModData.MergeName);
+                }
+                else
+                {
+                    compactedModData.PreviouslyESLified = true;
+                    compactedModData.OutputModData(false, false);
+                }
+            }
+
+            foreach(string mergeName in mergeDatasNames)
+            {
+                string path = Path.Combine(GF.CompactedFormsFolder, mergeName + GF.MergeCacheExtension);
+                if (File.Exists(path))
+                {
+                    CompactedMergeData mergeData = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(path))!;
+                    mergeData.PreviouslyESLified = true;
+                    mergeData.OutputModData(false);
+                }
+                else
+                {
+                    GF.WriteLine(GF.stringLoggingData.WhyMustYouChangeMyStuff);
+                    IEnumerable<string> compactedFormsModFiles = Directory.EnumerateFiles(
+                        GF.CompactedFormsFolder,
+                        "*" + GF.MergeCacheExtension,
+                        SearchOption.AllDirectories);
+                    foreach(string file in compactedFormsModFiles)
+                    {
+                        CompactedMergeData mergeData = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(file))!;
+                        if (mergeName.Equals(mergeData.MergeName))
+                        {
+                            File.Delete(file);
+                            mergeData.PreviouslyESLified = true;
+                            mergeData.OutputModData(false);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace ESLifyEverythingGlobalDataLibrary.Properties
@@ -7,6 +8,45 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
     //Static class to update settings
     public static class UAppSettings
     {
+        //Updates and logs the AppSettings.json file
+        public static void UpdateSettingsFile()
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("AppSettings.json")
+                .AddEnvironmentVariables().Build();
+            switch (config.GetRequiredSection("SettingsVersion").Get<string>())
+            {
+                case "1.9":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings19>()).Build();
+                    break;
+                case "3.0.0":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings3>()).Build();
+                    break;
+                case "3.2.0":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings320>()).Build();
+                    break;
+                case "3.5.0":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings350>()).Build();
+                    break;
+                case "3.5.2":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings352>()).Build();
+                    break;
+                default:
+                    GF.GenerateSettingsFileError();
+                    break;
+            }
+        }
+
         public static AppSettings AppSettings(AppSettings19 appSettings19)
 
         {
@@ -93,14 +133,8 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
             appSettings.MO2.MO2ModFolder = appSettings350.MO2.MO2ModFolder;
             return appSettings;
         }
-    }
-#pragma warning restore CS0618 // Type or member is obsolete
 
-    public partial class AppSettings
-    {
-        public AppSettings() { }
-
-        public AppSettings(AppSettings appSettings352)
+        public static AppSettings AppSettings(AppSettings352 appSettings352)
         {
             AppSettings appSettings = new AppSettings();
             appSettings.XEditLogFileName = appSettings352.XEditLogFileName;
@@ -121,6 +155,38 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
             appSettings.OutputFolder = appSettings352.OutputFolder;
             appSettings.MO2.MO2Support = appSettings352.MO2.MO2Support;
             appSettings.MO2.MO2ModFolder = appSettings352.MO2.MO2ModFolder;
+            return appSettings;
+        }
+
+    }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+    public partial class AppSettings
+    {
+        public AppSettings() { }
+
+        public AppSettings(AppSettings appSettings360)
+        {
+            AppSettings appSettings = new AppSettings();
+            appSettings.XEditLogFileName = appSettings360.XEditLogFileName;
+            appSettings.PapyrusFlag = appSettings360.PapyrusFlag;
+            appSettings.VerboseConsoleLoging = appSettings360.VerboseConsoleLoging;
+            appSettings.VerboseFileLoging = appSettings360.VerboseFileLoging;
+            appSettings.AutoReadNewestxEditSession = appSettings360.AutoReadNewestxEditSession;
+            appSettings.AutoReadAllxEditSession = appSettings360.AutoReadAllxEditSession;
+            appSettings.AutoRunESLify = appSettings360.AutoRunESLify;
+            appSettings.AutoRunScriptDecompile = appSettings360.AutoRunScriptDecompile;
+            appSettings.EnableCompiler = appSettings360.EnableCompiler;
+            appSettings.EnableLargeMerges = appSettings360.EnableLargeMerges;
+            appSettings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession = appSettings360.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession;
+            appSettings.RunSubPluginCompaction = appSettings360.RunSubPluginCompaction;
+            appSettings.ChangedPluginsOutputToDataFolder = appSettings360.ChangedPluginsOutputToDataFolder;
+            appSettings.XEditFolderPath = appSettings360.XEditFolderPath;
+            appSettings.DataFolderPath = appSettings360.DataFolderPath;
+            appSettings.OutputFolder = appSettings360.OutputFolder;
+            appSettings.MO2.MO2Support = appSettings360.MO2.MO2Support;
+            appSettings.MO2.MO2ModFolder = appSettings360.MO2.MO2ModFolder;
+            appSettings.ImportAllCompactedModData = appSettings360.ImportAllCompactedModData;
             //return appSettings;
         }
 
@@ -131,6 +197,8 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
         public bool VerboseConsoleLoging { get; set; } = false;
 
         public bool VerboseFileLoging { get; set; } = true;
+
+        public bool ImportAllCompactedModData { get; set; } = true;
 
         public bool AutoReadNewestxEditSession { get; set; } = false;
 
@@ -337,6 +405,44 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
 
         public MO2SupportSettings MO2 { get; set; } = new MO2SupportSettings();
 
+    }
+
+    [Obsolete("Only used for Updating")]
+    public class AppSettings352
+    {
+        public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
+
+        public string PapyrusFlag { get; set; } = "TESV_Papyrus_Flags.flg";
+
+        public bool VerboseConsoleLoging { get; set; } = false;
+
+        public bool VerboseFileLoging { get; set; } = true;
+
+        public bool AutoReadNewestxEditSession { get; set; } = false;
+
+        public bool AutoReadAllxEditSession { get; set; } = false;
+
+        public bool AutoRunESLify { get; set; } = false;
+
+        public bool AutoRunScriptDecompile { get; set; } = false;
+
+        public bool EnableCompiler { get; set; } = true;
+
+        public bool EnableLargeMerges { get; set; } = false;
+
+        public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession { get; set; } = false;
+
+        public bool RunSubPluginCompaction { get; set; } = false;
+
+        public bool ChangedPluginsOutputToDataFolder = false;
+
+        public string XEditFolderPath { get; set; } = "xEditFolderPath";
+
+        public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
+
+        public string OutputFolder { get; set; } = "MO2\\Mods\\OutputFolder";
+
+        public MO2SupportSettings MO2 { get; set; } = new MO2SupportSettings();
     }
 
     //Class for generate the AppSettings.Json

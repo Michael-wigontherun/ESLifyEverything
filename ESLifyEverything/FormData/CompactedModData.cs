@@ -22,7 +22,9 @@ namespace ESLifyEverything.FormData
         //public DateTime? PluginLastModifiedValidation { get; set; }
         [JsonInclude]
         public bool Recheck { get; set; } = true;
-
+        [JsonInclude]
+        public bool PreviouslyESLified { get; set; } = false;
+        
         public CompactedModData() { }
 
         public CompactedModData(string modName) 
@@ -169,5 +171,10 @@ namespace ESLifyEverything.FormData
                 GF.WriteLine(handler.ToString(), false, GF.Settings.VerboseFileLoging, GF.DevSettings.DevLoggingOverrideSome);
             }
         }
+
+        [JsonIgnore]
+        public bool FromMerge { get; set; } = false;
+        [JsonIgnore]
+        public string MergeName { get; set; } = "";
     }
 }

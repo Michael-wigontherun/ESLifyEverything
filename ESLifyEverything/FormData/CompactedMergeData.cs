@@ -17,9 +17,10 @@ namespace ESLifyEverything.FormData
         public DateTime? LastModified { get; set; }
         [JsonInclude]
         public HashSet<CompactedModData> CompactedModDatas = new HashSet<CompactedModData>();
-
         [JsonInclude]
         public int? NewRecordCount;
+        [JsonInclude]
+        public bool PreviouslyESLified { get; set; } = false;
 
         public CompactedMergeData() { }
 

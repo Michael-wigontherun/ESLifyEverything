@@ -35,7 +35,7 @@ namespace ESLifyEverythingGlobalDataLibrary
     public static partial class GF
     {
         //readonly property to identify what settings version ESLify uses to update settings properly
-        public static readonly string SettingsVersion = "3.5.2";
+        public static readonly string SettingsVersion = "3.6.0";
 
         //readonly property to direct to where the Changed Scripts are stored
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
@@ -128,7 +128,7 @@ namespace ESLifyEverythingGlobalDataLibrary
                 string version = config.GetRequiredSection("SettingsVersion").Get<string>();
                 if (!version.Equals(GF.SettingsVersion))
                 {
-                    GF.UpdateSettingsFile();
+                    UAppSettings.UpdateSettingsFile();
                     return false;
                 }
             }
@@ -277,6 +277,12 @@ namespace ESLifyEverythingGlobalDataLibrary
                 }
             }
 
+            if (GF.Settings.ImportAllCompactedModData)
+            {
+                GF.WriteLine(GF.stringLoggingData.ImportAllCompactedModDataTrueWarning);
+                GF.Settings.AutoRunESLify = false;
+            }
+
             Directory.CreateDirectory(GF.ExtractedBSAModDataPath);
             Directory.CreateDirectory(GF.ChangedScriptsPath);
             GF.ClearChangedScripts();
@@ -374,42 +380,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             new AppSettings().Build();
         }
 
-        //Updates and logs the AppSettings.json file
-        public static void UpdateSettingsFile()
-        {
-            IConfiguration config = new ConfigurationBuilder()
-                .AddJsonFile("AppSettings.json")
-                .AddEnvironmentVariables().Build();
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            switch (config.GetRequiredSection("SettingsVersion").Get<string>())
-            {
-                case "1.9":
-                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
-                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
-                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings19>()).Build();
-                    break;
-                case "3.0.0":
-                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
-                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
-                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings3>()).Build();
-                    break;
-                case "3.2.0":
-                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
-                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
-                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings320>()).Build();
-                    break;
-                case "3.5.0":
-                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
-                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
-                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings350>()).Build();
-                    break;
-                default:
-                    GenerateSettingsFileError();
-                    break;
-            }
-#pragma warning restore CS0618 // Type or member is obsolete
-        }
+        
 
         public static string FixOuputPath(string origonalPath)
         {
