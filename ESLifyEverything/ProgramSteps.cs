@@ -775,47 +775,74 @@ namespace ESLifyEverything
                 DevLog.Log("FaceGen Lines Found: " + modData.ModName);
                 foreach (FormHandler form in modData.CompactedModFormList)
                 {
-                    IEnumerable<string> FaceGenTexFilePaths = Directory.EnumerateFiles(
-                        Path.Combine(dataStartPath, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\", modData.ModName),
-                        "*" + form.OriginalFormID + "*.dds",
-                        SearchOption.AllDirectories);
-                    foreach (string FaceGenFilePath in FaceGenTexFilePaths)
+                    //IEnumerable<string> FaceGenTexFilePaths = Directory.EnumerateFiles(
+                    //    Path.Combine(dataStartPath, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\", modData.ModName),
+                    //    "*" + form.OriginalFormID + "*.dds",
+                    //    SearchOption.AllDirectories);
+                    string FaceTintFilePath = Path.Combine(dataStartPath, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\", modData.ModName + "\\00" + form.OriginalFormID + ".dds");
+                    //foreach (string FaceTintFilePath in FaceGenTexFilePaths)
+                    if(File.Exists(FaceTintFilePath))
                     {
-                        GF.WriteLine(GF.stringLoggingData.OriganalPath + FaceGenFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        GF.WriteLine(GF.stringLoggingData.OriganalPath + FaceTintFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
 
                         string newStartPath = Path.Combine(GF.Settings.OutputFolder, "Textures\\Actors\\Character\\FaceGenData\\FaceTint\\" + form.ModName);
                         Directory.CreateDirectory(newStartPath);
                         string newPath = Path.Combine(newStartPath, "00" + form.CompactedFormID + ".dds");
 
-                        File.Copy(FaceGenFilePath, newPath, true);
+                        File.Copy(FaceTintFilePath, newPath, true);
                         GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
                     }
 
-                    IEnumerable<string> FaceGenFilePaths = Directory.EnumerateFiles(
-                        Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName),
-                        "*" + form.OriginalFormID + "*.nif",
-                        SearchOption.AllDirectories);
-
-                    foreach (string FaceGenFilePath in FaceGenFilePaths)
+                    //IEnumerable<string> FaceGenFilePaths = Directory.EnumerateFiles(
+                    //    Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName),
+                    //    "*" + form.OriginalFormID + "*.nif",
+                    //    SearchOption.AllDirectories);
+                    string FaceGenFilePath = Path.Combine(dataStartPath, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\", modData.ModName + "\\00" + form.OriginalFormID + ".nif");
+                    //foreach (string FaceGenFilePath in FaceGenFilePaths)
+                    if(File.Exists(FaceGenFilePath))
                     {
                         GF.WriteLine(GF.stringLoggingData.OriganalPath + FaceGenFilePath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+
+                        NifFileWrapper OrigonalNifFile = new NifFileWrapper(FaceGenFilePath);
+                        OrigonalNifFile = PatchNif(OrigonalNifFile, form.OriginalFormID, modData.ModName, form.CompactedFormID, form.ModName);
 
                         string newStartPath = Path.Combine(GF.Settings.OutputFolder, "Meshes\\Actors\\Character\\FaceGenData\\FaceGeom\\" + form.ModName);
                         Directory.CreateDirectory(newStartPath);
                         string newPath = Path.Combine(newStartPath, "00" + form.CompactedFormID + ".nif");
 
-                        File.Copy(FaceGenFilePath, newPath, true);
+                        OrigonalNifFile.SaveAs(newPath, true);
+
                         GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
-                        EditedFaceGen = true;
-                        using (StreamWriter stream = File.AppendText(GF.FaceGenFileFixPath))
-                        {
-                            stream.WriteLine(Path.GetFullPath(newPath) + ";" + form.OriginalFormID + ";" + form.CompactedFormID);
-                        }
+
+                        //File.Copy(FaceGenFilePath, newPath, true);
+                        //EditedFaceGen = true;
+                        //using (StreamWriter stream = File.AppendText(GF.FaceGenFileFixPath))
+                        //{
+                        //    stream.WriteLine(Path.GetFullPath(newPath) + ";" + form.OriginalFormID + ";" + form.CompactedFormID);
+                        //}
                     }
 
                 }
             }
             return await Task.FromResult(1);
+        }
+
+        //Changes the OrigonalFormID to the CompactedFormID
+        //mostly from https://github.com/Jampi0n/Skyrim-NifPatcher/blob/f71a5e5a532cf011790a978d20406b4a3208d856/NifPatcher/RuleParser.cs#L424
+        public static NifFileWrapper PatchNif(NifFileWrapper nif, string OrgID, string OrgPluginName, string CompID, string CompPluginName)
+        {
+            for (var i = 0; i < nif.GetNumShapes(); ++i)
+            {
+                var shape = nif.GetShape(i);
+                var subSurface = shape.SubsurfaceMap.ToLower();
+                if (subSurface.Contains(OrgID, StringComparison.OrdinalIgnoreCase))
+                {
+                    subSurface = subSurface.Replace($"00{OrgID}.dds", $"00{CompID}.dds", StringComparison.OrdinalIgnoreCase);
+                    subSurface = subSurface.Replace(OrgPluginName, CompPluginName);
+                    shape.SubsurfaceMap = subSurface;
+                }
+            }
+            return nif;
         }
         #endregion FaceGen Eslify
 

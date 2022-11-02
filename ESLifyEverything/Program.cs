@@ -34,8 +34,9 @@ namespace ESLifyEverything
         //Populated by script names that failed to compile during Script ESLify
         public static HashSet<string> FailedToCompile = new HashSet<string>();
 
-        //End identifier to prompt that ESLify Everything output FaceGen data
-        public static bool EditedFaceGen = false;
+        //Obsolete
+        ////End identifier to prompt that ESLify Everything output FaceGen data
+        ////public static bool EditedFaceGen = false;
 
         //End identifier to prompt that ESLify Everything output BSAs were Extracted
         public static bool BSAExtracted = false;
@@ -186,12 +187,12 @@ namespace ESLifyEverything
             }
             #endregion Catch
             
-            if (EditedFaceGen)
-            {
-                Console.WriteLine();
-                GF.WriteLine(GF.stringLoggingData.EditedFaceGen);
-                GF.RunFaceGenFix();
-            }
+            //if (EditedFaceGen)
+            //{
+            //    Console.WriteLine();
+            //    GF.WriteLine(GF.stringLoggingData.EditedFaceGen);
+            //    GF.RunFaceGenFix();
+            //}
 
             if (BSAExtracted)
             {

@@ -198,7 +198,7 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
 
         public bool VerboseFileLoging { get; set; } = true;
 
-        public bool ImportAllCompactedModData { get; set; } = true;
+        public bool ImportAllCompactedModData { get; set; } = false;
 
         public bool AutoReadNewestxEditSession { get; set; } = false;
 

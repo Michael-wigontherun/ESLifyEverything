@@ -79,8 +79,9 @@ namespace ESLifyEverythingGlobalDataLibrary
         //ESLify Everything's log name
         public static string logName = "log.txt";
 
-        //Path to the face gen fix list for the xEdit script
-        public static string FaceGenFileFixPath = "";
+        //Obsolete
+        ////Path to the face gen fix list for the xEdit script
+        //public static string FaceGenFileFixPath = "";
 
         //End identifier to prompt that ESLify Everything output edited plugins to MO2 mods folder
         public static bool NewMO2FolderPaths = false;
@@ -176,11 +177,11 @@ namespace ESLifyEverythingGlobalDataLibrary
                 GF.WriteLine(GF.stringLoggingData.IntendedForSSE);
             }
 
-            if (Directory.Exists(GF.Settings.XEditFolderPath))
-            {
-                FaceGenFileFixPath = Path.Combine(GF.Settings.XEditFolderPath, "FaceGenEslIfyFix.txt");
-                File.Create(FaceGenFileFixPath).Close();
-            }
+            //if (Directory.Exists(GF.Settings.XEditFolderPath))
+            //{
+            //    FaceGenFileFixPath = Path.Combine(GF.Settings.XEditFolderPath, "FaceGenEslIfyFix.txt");
+            //    File.Create(FaceGenFileFixPath).Close();
+            //}
 
             if (!File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
             {
@@ -275,12 +276,34 @@ namespace ESLifyEverythingGlobalDataLibrary
                     GF.WriteLine(GF.stringLoggingData.MO2ModsFolderDoesNotExist);
                     GF.Settings.MO2.MO2Support = false;
                 }
+                else
+                {
+                    if (GF.Settings.MO2.MO2ModFolder.ElementAt(GF.Settings.MO2.MO2ModFolder.Length - 1).Equals('\\'))
+                    {
+                        GF.Settings.MO2.MO2ModFolder = GF.Settings.MO2.MO2ModFolder.Remove(GF.Settings.MO2.MO2ModFolder.Length - 1);
+                    }
+                }
             }
 
             if (GF.Settings.ImportAllCompactedModData)
             {
                 GF.WriteLine(GF.stringLoggingData.ImportAllCompactedModDataTrueWarning);
                 GF.Settings.AutoRunESLify = false;
+            }
+
+            if(GF.Settings.DataFolderPath.ElementAt(GF.Settings.DataFolderPath.Length - 1).Equals('\\'))
+            {
+                GF.Settings.DataFolderPath = GF.Settings.DataFolderPath.Remove(GF.Settings.DataFolderPath.Length - 1);
+            }
+
+            if (GF.Settings.OutputFolder.ElementAt(GF.Settings.OutputFolder.Length - 1).Equals('\\'))
+            {
+                GF.Settings.OutputFolder = GF.Settings.OutputFolder.Remove(GF.Settings.OutputFolder.Length - 1);
+            }
+
+            if (GF.Settings.XEditFolderPath.ElementAt(GF.Settings.XEditFolderPath.Length - 1).Equals('\\'))
+            {
+                GF.Settings.XEditFolderPath = GF.Settings.XEditFolderPath.Remove(GF.Settings.XEditFolderPath.Length - 1);
             }
 
             Directory.CreateDirectory(GF.ExtractedBSAModDataPath);
@@ -380,8 +403,6 @@ namespace ESLifyEverythingGlobalDataLibrary
             new AppSettings().Build();
         }
 
-        
-
         public static string FixOuputPath(string origonalPath)
         {
             string newPath = origonalPath.Replace(GF.Settings.DataFolderPath, "");
@@ -406,72 +427,6 @@ namespace ESLifyEverythingGlobalDataLibrary
         public static string GetSkyrimRootFolder()
         {
             return Path.GetFullPath(GF.Settings.DataFolderPath).Replace("\\Data", "");
-        }
-
-        //Auto Runs the xEdit script to fix FaceGen nif files
-        public static void RunFaceGenFix()
-        {
-            string loadorder = Path.GetFullPath(".\\Properties\\JustSkyrimLO.txt");
-            string gameType = "-SSE";
-            if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "Edit Scripts\\_ESLifyEverythingFaceGenFix.pas")))
-            {
-                bool run = true;
-                Process RunXEditFaceGenFix = new Process();
-                if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit64.exe")))
-                {
-                    RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit64.exe");
-                }
-                else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit.exe")))
-                {
-                    RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit.exe");
-                }
-                else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit64.exe")))
-                {
-                    loadorder = Path.GetFullPath(".\\Properties\\JustFalloutLO.txt");
-                    gameType = "-fo4";
-                    RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit64.exe");
-                }
-                else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit.exe")))
-                {
-                    loadorder = Path.GetFullPath(".\\Properties\\JustFalloutLO.txt");
-                    gameType = "-fo4";
-                    RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit.exe");
-                }
-                else
-                {
-                    GF.WriteLine(GF.stringLoggingData.NoxEditEXE);
-                    run = false;
-                }
-
-                if (run)
-                {
-                    if (File.Exists(Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "Skyrim.ini")))
-                    {
-                        RunXEditFaceGenFix.StartInfo.Arguments = $"{gameType} " +
-                        $"-D:\"{GF.Settings.DataFolderPath}\" " +
-                        $"-I:\"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "Skyrim.ini")}\" " +
-                        $" {loadorder}" +
-                        "-script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
-                        GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
-                        RunXEditFaceGenFix.Start();
-                        RunXEditFaceGenFix.WaitForExit();
-                    }
-                    else
-                    {
-                        RunXEditFaceGenFix.StartInfo.Arguments = "-TES5 -script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
-                        GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
-                        RunXEditFaceGenFix.Start();
-                        RunXEditFaceGenFix.WaitForExit();
-                    }
-                }
-                RunXEditFaceGenFix.Dispose();
-
-            }
-            else
-            {
-                GF.WriteLine(GF.stringLoggingData.FixFaceGenScriptNotFound);
-            }
-
         }
 
         //Moves Compacted Mod Data files from the Data folder to the new folder in ESLify Everything
@@ -510,3 +465,69 @@ namespace ESLifyEverythingGlobalDataLibrary
         }
     }
 }
+//Obsolete
+////Auto Runs the xEdit script to fix FaceGen nif files
+//public static void RunFaceGenFix()
+//{
+//    string loadorder = Path.GetFullPath(".\\Properties\\JustSkyrimLO.txt");
+//    string gameType = "-SSE";
+//    if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "Edit Scripts\\_ESLifyEverythingFaceGenFix.pas")))
+//    {
+//        bool run = true;
+//        Process RunXEditFaceGenFix = new Process();
+//        if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit64.exe")))
+//        {
+//            RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit64.exe");
+//        }
+//        else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit.exe")))
+//        {
+//            RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "SSEEdit.exe");
+//        }
+//        else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit64.exe")))
+//        {
+//            loadorder = Path.GetFullPath(".\\Properties\\JustFalloutLO.txt");
+//            gameType = "-fo4";
+//            RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit64.exe");
+//        }
+//        else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit.exe")))
+//        {
+//            loadorder = Path.GetFullPath(".\\Properties\\JustFalloutLO.txt");
+//            gameType = "-fo4";
+//            RunXEditFaceGenFix.StartInfo.FileName = Path.Combine(GF.Settings.XEditFolderPath, "FO4Edit.exe");
+//        }
+//        else
+//        {
+//            GF.WriteLine(GF.stringLoggingData.NoxEditEXE);
+//            run = false;
+//        }
+
+//        if (run)
+//        {
+//            if (File.Exists(Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "Skyrim.ini")))
+//            {
+//                RunXEditFaceGenFix.StartInfo.Arguments = $"{gameType} " +
+//                $"-D:\"{GF.Settings.DataFolderPath}\" " +
+//                $"-I:\"{Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "Skyrim.ini")}\" " +
+//                $" {loadorder}" +
+//                "-script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
+//                GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
+//                RunXEditFaceGenFix.Start();
+//                RunXEditFaceGenFix.WaitForExit();
+//            }
+//            else
+//            {
+//                RunXEditFaceGenFix.StartInfo.Arguments = "-TES5 -script:\"_ESLifyEverythingFaceGenFix.pas\" -autoload";
+//                GF.WriteLine(GF.stringLoggingData.RunningxEditEXE);
+//                RunXEditFaceGenFix.Start();
+//                RunXEditFaceGenFix.WaitForExit();
+//            }
+//        }
+//        RunXEditFaceGenFix.Dispose();
+
+//    }
+//    else
+//    {
+//        GF.WriteLine(GF.stringLoggingData.FixFaceGenScriptNotFound);
+//    }
+
+//}

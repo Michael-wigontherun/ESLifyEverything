@@ -188,10 +188,10 @@
         public string ChangedScriptsLocated { get; set; } = "";
 
         //Run FaceGenFix
-        public string EditedFaceGen { get; set; } = "";
-        public string NoxEditEXE { get; set; } = "";
-        public string RunningxEditEXE { get; set; } = "";
-        public string FixFaceGenScriptNotFound { get; set; } = "";
+        //public string EditedFaceGen { get; set; } = ""; "EditedFaceGen": FaceGen Data has been edited please run \"_ESPFEEverythingFaceGenFix.pas\" in xEdit. So you don't have the black face bug."
+        //public string NoxEditEXE { get; set; } = ""; "NoxEditEXE": "No xEdit executable found, Please run \"_ESLifyEverythingFaceGenFix.pas\" in xEdit.",
+        //public string RunningxEditEXE { get; set; } = ""; "RunningxEditEXE": "Running xEdit with \"_ESLifyEverythingFaceGenFix.pas\". Please wait untill xEdit is finished",
+        //public string FixFaceGenScriptNotFound { get; set; } = ""; "FixFaceGenScriptNotFound": "\"_ESLifyEverythingFaceGenFix.pas\" not found inside of Edit Scripts folder of xEdit. Please install the script and run it in xEdit.",
 
         //Default Switch Error Messege
         public string PluginSwitchDefaultMessage { get; set; } = "";

@@ -51,6 +51,7 @@ namespace ESLifyEverything
                 bool changed = false;
                 string[] fileLines = FormInFileLineReader(File.ReadAllLines(file), basicDirectFolder.SeparatorData, out changed);
                 OuputDataFileToOutputFolder(changed, file, fileLines, basicDirectFolder.FileUnchangedLogLine);
+
             }
         }
 
