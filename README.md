@@ -119,8 +119,6 @@ To leave a menu or skip it enter "XXX", this is not case sensitive.
 
 10.  Wait until ESLify Everything ends. "Press Enter to exit..." this is what you should see at the end of the code. Please verify that you did not get any errors at the end of the console.
 
-11. Run xEdit once more and run the "_ESLifyEverythingFaceGenFix.pas" script, this fixes all the FaceMesh paths inside the mesh files that ESLify Everything just outputted.
-
 ## Extra Directions
 Before each run of Eslify everything, you need to clear the outputted scripts. This needs to happen in order to protect data integrity. Script Eslify needs to decompile the BSA scripts and the Loose scripts in order to Eslify and decompile, because there is no way I could incorporate a optimized and scripted intellisense to find what scripts need to be decompiled and recompiled each run.
 
