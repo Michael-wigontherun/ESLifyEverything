@@ -96,11 +96,10 @@ namespace ESLifyEverythingGlobalDataLibrary
             File.Create(logName).Close();
             startupError = StartupError.OK;
 
+            GetStringResources();
+
             if (!File.Exists("AppSettings.json"))
             {
-
-                IConfiguration stringResorsConfig = new ConfigurationBuilder().AddJsonFile(".\\Properties\\StringResources.json").AddEnvironmentVariables().Build();
-                stringLoggingData = stringResorsConfig.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
                 GF.GenerateSettingsFileError();
                 return false;
             }
@@ -109,7 +108,6 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             IConfigurationBuilder? configurationBuilder = new ConfigurationBuilder()
                 .AddJsonFile("AppSettings.json")
-                .AddJsonFile(".\\Properties\\StringResources.json")
                 .AddJsonFile(".\\Properties\\DefaultBSAs.json")
                 .AddJsonFile(".\\Properties\\IgnoredPugins.json");
 
@@ -122,7 +120,6 @@ namespace ESLifyEverythingGlobalDataLibrary
             }
 
             IConfiguration config = configurationBuilder.AddEnvironmentVariables().Build();
-            stringLoggingData = config.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
 
             try
             {
@@ -140,7 +137,6 @@ namespace ESLifyEverythingGlobalDataLibrary
             }
 
             Settings = config.GetRequiredSection("Settings").Get<AppSettings>();
-            stringsResources = config.GetRequiredSection("StringResources").Get<StringResources>();
             DefaultScriptBSAs = config.GetRequiredSection("DefaultScriptBSAs").Get<string[]>();
             IgnoredPlugins = config.GetRequiredSection("IgnoredPugins").Get<HashSet<string>>();
 
@@ -462,6 +458,15 @@ namespace ESLifyEverythingGlobalDataLibrary
                 return GF.Settings.DataFolderPath;
             }
             return GF.Settings.OutputFolder;
+        }
+
+        //Gets stringLoggingData and stringsResources so there does not need to be multiple exeption calls for this process
+        public static void GetStringResources()
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile(".\\Properties\\StringResources.json").AddEnvironmentVariables().Build();
+            stringLoggingData = config.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
+            stringsResources = config.GetRequiredSection("StringResources").Get<StringResources>();
         }
     }
 }

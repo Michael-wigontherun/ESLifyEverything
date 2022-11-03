@@ -1,6 +1,8 @@
 ﻿using ESLifyEverything.FormData;
 using ESLifyEverythingGlobalDataLibrary;
+using ESLifyEverythingGlobalDataLibrary.Properties;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
+using System.ComponentModel.Design;
 
 namespace ESLifyEverything
 {
@@ -34,6 +36,9 @@ namespace ESLifyEverything
         //Populated by script names that failed to compile during Script ESLify
         public static HashSet<string> FailedToCompile = new HashSet<string>();
 
+        //Imports any CompactedModData or MergeCache's with names matching
+        public static HashSet<string> AlwaysImportList = new HashSet<string>();
+
         //Obsolete
         ////End identifier to prompt that ESLify Everything output FaceGen data
         ////public static bool EditedFaceGen = false;
@@ -44,12 +49,16 @@ namespace ESLifyEverything
         //identifier for ESLify Everything detected new mods and it needs to run Script ESLify
         public static bool NewOrUpdatedMods = false;
 
+        //Imports all CompactedModData and MergeCache's
+        public static bool ImportEverything = false;
+
         //Main method that starts all features for eslify
         //Currently there are no Console Arguments, I will be adding some eventually
         static void Main(string[] args)
         {
             try
             {
+                HandleArgs(args);
                 if (StartUp(out StartupError StartupError, "ESLifyEverything_Log.txt"))
                 {
                     Console.WriteLine("Sucessful startup");
@@ -165,6 +174,7 @@ namespace ESLifyEverything
                 }
             }
             #region Catch
+            catch (ArgumentHelpException) { }
             catch (AggregateException e)
             {
                 Console.WriteLine("\n\n\n\n");
@@ -186,14 +196,13 @@ namespace ESLifyEverything
                 GF.WriteLine(e.Message);
             }
             #endregion Catch
-            
+
             //if (EditedFaceGen)
             //{
             //    Console.WriteLine();
             //    GF.WriteLine(GF.stringLoggingData.EditedFaceGen);
             //    GF.RunFaceGenFix();
             //}
-
             if (BSAExtracted)
             {
                 Console.WriteLine();
@@ -234,8 +243,68 @@ namespace ESLifyEverything
             GF.WriteLine(GF.stringLoggingData.EnterToExit);
             Console.ReadLine();
         }
-        
-        
 
+        private static void HandleArgs(string[] args)
+        {
+            foreach(string arg in args)
+            {
+                if(arg.Equals("-h", StringComparison.OrdinalIgnoreCase) || arg.Equals("-help", StringComparison.OrdinalIgnoreCase))
+                {
+                    GF.GetStringResources();
+                    Help();
+                    throw new ArgumentHelpException();
+                }
+                else if (arg.Equals("-i=a"))
+                {
+                    ImportEverything = true;
+                    DevLog.Log("ImportEverything: true");
+                }
+                else if(arg.IndexOf("-i=", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    DevLog.Log(arg);
+                    arg.Replace("-i=", "");
+                    string[] importCMD = arg.Replace("-i=", "").Split(',');
+                    foreach(string cmd in importCMD)
+                    {
+                        AlwaysImportList.Add(cmd.Trim());
+                    }
+                }
+                else if (arg.IndexOf("-import=", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    DevLog.Log(arg);
+                    arg.Replace("-import=", "");
+                    string[] importCMD = arg.Replace("-import=", "").Split(',');
+                    foreach (string cmd in importCMD)
+                    {
+                        AlwaysImportList.Add(cmd.Trim());
+                    }
+                }
+            }
+        }
+
+        private static void Help()
+        {
+            Console.WriteLine("Case does not matter for any of the following.");
+            Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
+            Console.WriteLine("-h  or -help       Prints this message output and cancels other processes");
+            Console.WriteLine();
+            Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
+            Console.WriteLine("-i= or -import=    followed by a plugin name will import the corresponding CompactedModData.");
+            Console.WriteLine();
+            Console.WriteLine("Example: -i=\"Magically mine.esp\" will always import the CompactedModData associated with Magically mine.esp.");
+            Console.WriteLine("Or if it was a Merge it would import the merge.");
+            Console.WriteLine();
+            Console.WriteLine("You have 2 options you can do repeated -i=\"[plugin name]\" or you can add them delimit them with \",\".");
+            Console.WriteLine();
+            Console.WriteLine("Example: -i=\"Magically mine.esp\" -i=\"GIST soul trap.esp\" -i=\"Castle Volkihar Rebuilt.esp\"");
+            Console.WriteLine("Example: -i=\"Magically mine.esp, GIST soul trap.esp, Castle Volkihar Rebuilt.esp\"");
+            Console.WriteLine("* The second is preferred");
+            Console.WriteLine("* Spaces are not necessary after comma's.");
+            Console.WriteLine();
+            Console.WriteLine("If you want to bypass ImportAllCompactedModData and use AutoRunESLify then set -i=a");
+            Console.WriteLine("This will import all mod data without disabling AutoRunESlify.");
+            Console.WriteLine("You must set ImportAllCompactedModData to false and AutoRunESlify to true for this to take effect.");
+            Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
+        }
     }
 }

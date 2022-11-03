@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using nifly;
+﻿using nifly;
 using System.Drawing;
-using System.IO;
 
 //Source from Jampi0n's Github Respitory Skyrim-NifPatcher
 //https://github.com/Jampi0n

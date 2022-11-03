@@ -281,7 +281,7 @@ namespace ESLifyEverything
                 {
                     if (modData.PluginLastModifiedValidation is not null)
                     {
-                        if (!modData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData)
+                        if (!modData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData || ImportModDataCheck(modData.ModName))
                         {
                             string splitModDataPath = Path.Combine(compactedFormsLocation, modData.ModName + GF.ModSplitDataExtension);
                             if (File.Exists(splitModDataPath))
@@ -344,7 +344,7 @@ namespace ESLifyEverything
 
                 if (File.Exists(pluginPath))
                 {
-                    if(!mergeData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData)
+                    if(!mergeData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData || ImportModDataCheck(mergeData.MergeName))
                     {
                         if (mergeData.AlreadyCached())
                         {
@@ -365,6 +365,15 @@ namespace ESLifyEverything
                     GF.WriteLine(String.Format(GF.stringLoggingData.SkippingImport, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                 }
             }
+        }
+
+        private static bool ImportModDataCheck(string modName)
+        {
+            if (ImportEverything)
+            {
+                return true;
+            }
+            return AlwaysImportList.Contains(modName);
         }
 
         //Validates whether the CompactedModData is still valid compared to the Plugin

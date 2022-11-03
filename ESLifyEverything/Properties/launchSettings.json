@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ESLifyEverything": {
+      "commandName": "Project",
+      "commandLineArgs": "-h -i=a -i=\"Magically mine.esp , GIST soul trap.esp\""
+    }
+  }
+}
