@@ -13,7 +13,7 @@ namespace ESLifyEverything.PluginHandles
     public static partial class HandleMod
     {
         //Lambda get for the Program.CompactedModDataD located in the Program data
-        public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataD;
+        public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataDScriptAndPlugins;
 
         //Uses the Plugin name to find and read the plugin
         //Changing FormKeys on Forms are handled by HandleSubFormHeaders() and HandleUniformFormHeaders()

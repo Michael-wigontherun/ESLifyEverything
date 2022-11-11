@@ -12,6 +12,9 @@ namespace ESLifyEverything
         //The entire program functions using this.
         public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
 
+        //List of dictionary of all enabled and valid CompactedModData to be used by Script ESLify and the SubPluginCompactor.
+        public static Dictionary<string, CompactedModData> CompactedModDataDScriptAndPlugins = new Dictionary<string, CompactedModData>();
+
         //When populated it holds all plugin names parsed from your plugins.txt file from your my games folder
         public static string[] LoadOrder = new string[0];
 
@@ -254,31 +257,29 @@ namespace ESLifyEverything
                     Help();
                     throw new ArgumentHelpException();
                 }
-                else if (arg.Equals("-i=a"))
-                {
-                    ImportEverything = true;
-                    DevLog.Log("ImportEverything: true");
-                }
-                else if(arg.IndexOf("-i=", StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    DevLog.Log(arg);
-                    arg.Replace("-i=", "");
-                    string[] importCMD = arg.Replace("-i=", "").Split(',');
-                    foreach(string cmd in importCMD)
-                    {
-                        AlwaysImportList.Add(cmd.Trim());
-                    }
-                }
-                else if (arg.IndexOf("-import=", StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    DevLog.Log(arg);
-                    arg.Replace("-import=", "");
-                    string[] importCMD = arg.Replace("-import=", "").Split(',');
-                    foreach (string cmd in importCMD)
-                    {
-                        AlwaysImportList.Add(cmd.Trim());
-                    }
-                }
+                //else if (arg.Equals("-i=a"))
+                //{
+                //    ImportEverything = true;
+                //    DevLog.Log("ImportEverything: true");
+                //}
+                //else if(arg.IndexOf("-i=", StringComparison.OrdinalIgnoreCase) == 0)
+                //{
+                //    DevLog.Log(arg);
+                //    string[] importCMD = arg.Replace("-i=", "").Split(',');
+                //    foreach(string cmd in importCMD)
+                //    {
+                //        AlwaysImportList.Add(cmd.Trim());
+                //    }
+                //}
+                //else if (arg.IndexOf("-import=", StringComparison.OrdinalIgnoreCase) == 0)
+                //{
+                //    DevLog.Log(arg);
+                //    string[] importCMD = arg.Replace("-import=", "").Split(',');
+                //    foreach (string cmd in importCMD)
+                //    {
+                //        AlwaysImportList.Add(cmd.Trim());
+                //    }
+                //}
             }
         }
 
@@ -298,13 +299,14 @@ namespace ESLifyEverything
             Console.WriteLine();
             Console.WriteLine("Example: -i=\"Magically mine.esp\" -i=\"GIST soul trap.esp\" -i=\"Castle Volkihar Rebuilt.esp\"");
             Console.WriteLine("Example: -i=\"Magically mine.esp, GIST soul trap.esp, Castle Volkihar Rebuilt.esp\"");
-            Console.WriteLine("* The second is preferred");
-            Console.WriteLine("* Spaces are not necessary after comma's.");
+            Console.WriteLine("  * The second is preferred");
+            Console.WriteLine("  * Spaces are not necessary after comma's.");
             Console.WriteLine();
             Console.WriteLine("If you want to bypass ImportAllCompactedModData and use AutoRunESLify then set -i=a");
             Console.WriteLine("This will import all mod data without disabling AutoRunESlify.");
             Console.WriteLine("You must set ImportAllCompactedModData to false and AutoRunESlify to true for this to take effect.");
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
+
         }
     }
 }

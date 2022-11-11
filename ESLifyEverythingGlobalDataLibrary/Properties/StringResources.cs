@@ -87,7 +87,9 @@
 
         //ImportModData
         public string ImportingAllModData { get; set; } = "";
-        public string GetCompDataLog { get; set; } = "";
+        public string ReadingCompDataLog { get; set; } = "";
+        public string ImportingCompDataLog { get; set; } = "";
+        public string ImportingCompDataLogOSP { get; set; } = "";
         public string OutOfDateCMData1 { get; set; } = "";
         public string OutOfDateCMData2 { get; set; } = "";
         public string OutOfDateCMData3 { get; set; } = "";
@@ -181,6 +183,14 @@
         public string ScriptESLifyMenuY { get; set; } = "";
         public string RunningChampBSA { get; set; } = "";
         public string EndedChampBSA { get; set; } = "";
+
+        public string ChampCrash1 { get; set; } = "";
+        public string ChampCrash2 { get; set; } = "";
+        public string ChampCrash3 { get; set; } = "";
+        public string ChampCrash4 { get; set; } = "";
+        public string ChampCrash5 { get; set; } = "";
+        public string ChampCrash6 { get; set; } = "";
+
         public string RunningChampLoose { get; set; } = "";
         public string EndedChampLoose { get; set; } = "";
         public string FixDecToHexError { get; set; } = "";
@@ -204,6 +214,7 @@
         public string MapNotFound { get; set; } = "";
         public string FidCacheNotFound { get; set; } = "";
         public string ImportingMergeCache { get; set; } = "";
+        public string ImportingMergeCacheOSP { get; set; } = "";
         public string SkippingMergeCache { get; set; } = "";
         public string ImportingMergeCompactedModData { get; set; } = "";
 

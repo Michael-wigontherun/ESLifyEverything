@@ -126,7 +126,7 @@ namespace ESLifyEverything
                                 string potentialCompactedModDataPath = Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormExtension);
                                 if (File.Exists(potentialCompactedModDataPath))
                                 {
-                                    GF.WriteLine(GF.stringLoggingData.GetCompDataLog + potentialCompactedModDataPath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                    GF.WriteLine(GF.stringLoggingData.ReadingCompDataLog + potentialCompactedModDataPath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                                     outputtedCompactedModData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(potentialCompactedModDataPath))!;
                                 }
 
@@ -253,7 +253,7 @@ namespace ESLifyEverything
 
             foreach (string compactedFormsModFile in compactedFormsModFiles)
             {
-                GF.WriteLine(GF.stringLoggingData.GetCompDataLog + compactedFormsModFile);
+                GF.WriteLine(GF.stringLoggingData.ReadingCompDataLog + compactedFormsModFile);
                 CompactedModData modData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(compactedFormsModFile))!;
                 modData.Write();
                 if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, modData.ModName)))
@@ -281,22 +281,31 @@ namespace ESLifyEverything
                 {
                     if (modData.PluginLastModifiedValidation is not null)
                     {
-                        if (!modData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData || ImportModDataCheck(modData.ModName))
+                        string splitModDataPath = Path.Combine(compactedFormsLocation, modData.ModName + GF.ModSplitDataExtension);
+                        if (File.Exists(splitModDataPath))
                         {
-                            string splitModDataPath = Path.Combine(compactedFormsLocation, modData.ModName + GF.ModSplitDataExtension);
-                            if (File.Exists(splitModDataPath))
+                            CompactedModData splitModData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(splitModDataPath))!;
+                            if (splitModData.PluginLastModifiedValidation.Equals(modData.PluginLastModifiedValidation))
                             {
-                                CompactedModData splitModData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(splitModDataPath))!;
-                                if (splitModData.PluginLastModifiedValidation.Equals(modData.PluginLastModifiedValidation))
+                                foreach (FormHandler form in splitModData.CompactedModFormList)
                                 {
-                                    foreach (FormHandler form in splitModData.CompactedModFormList)
-                                    {
-                                        modData.CompactedModFormList.Add(form);
-                                    }
+                                    modData.CompactedModFormList.Add(form);
                                 }
                             }
+                        }
+
+                        if (!modData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData || ImportModDataCheck(modData.ModName))
+                        {
+                            GF.WriteLine(GF.stringLoggingData.ImportingCompDataLog + modData.ModName);
                             CompactedModDataD.TryAdd(modData.ModName, modData);
                         }
+                        else
+                        {
+                            GF.WriteLine(GF.stringLoggingData.ImportingCompDataLogOSP + modData.ModName);
+                        }
+                        
+                        CompactedModDataDScriptAndPlugins.TryAdd(modData.ModName, modData);
+
                     }
                 }
                 else
@@ -344,19 +353,38 @@ namespace ESLifyEverything
 
                 if (File.Exists(pluginPath))
                 {
-                    if(!mergeData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData || ImportModDataCheck(mergeData.MergeName))
+                    if (mergeData.AlreadyCached())
                     {
-                        if (mergeData.AlreadyCached())
+                        if (!mergeData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData || ImportModDataCheck(mergeData.MergeName))
                         {
                             GF.WriteLine(GF.stringLoggingData.ImportingMergeCache + file);
                             foreach (CompactedModData compactedModData in mergeData.CompactedModDatas)
                             {
-                                compactedModData.FromMerge = true;
-                                compactedModData.MergeName = mergeData.MergeName;
-                                GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                                CompactedModDataD.TryAdd(compactedModData.ModName, compactedModData);
+                                if (compactedModData.CompactedModFormList.Any())
+                                {
+                                    compactedModData.FromMerge = true;
+                                    compactedModData.MergeName = mergeData.MergeName;
+                                    GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                    CompactedModDataD.TryAdd(compactedModData.ModName, compactedModData);
+                                    CompactedModDataDScriptAndPlugins.TryAdd(compactedModData.ModName, compactedModData);
+                                }
                             }
                         }
+                        else
+                        {
+                            GF.WriteLine(GF.stringLoggingData.ImportingMergeCacheOSP + file);
+                            foreach (CompactedModData compactedModData in mergeData.CompactedModDatas)
+                            {
+                                if (compactedModData.CompactedModFormList.Any())
+                                {
+                                    compactedModData.FromMerge = true;
+                                    compactedModData.MergeName = mergeData.MergeName;
+                                    GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                    CompactedModDataDScriptAndPlugins.TryAdd(compactedModData.ModName, compactedModData);
+                                }
+                            }
+                        }
+
                     }
                 }
                 else
@@ -367,6 +395,7 @@ namespace ESLifyEverything
             }
         }
 
+        //Not used
         private static bool ImportModDataCheck(string modName)
         {
             if (ImportEverything)
@@ -614,13 +643,34 @@ namespace ESLifyEverything
                     {
                         if (connectedVoice.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
                         {
+                            string line = "";
                             GF.WriteLine(String.Format(GF.stringLoggingData.BSAContainsData, bsa.BSAName_NoExtention, pluginName));
-                            Process m = new Process();
-                            m.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
-                            m.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
-                            m.Start();
-                            m.WaitForExit();
-                            m.Dispose();
+                            Process p = new Process();
+                            p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+                            p.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
+                            if (GF.DevSettings.DevLogging)
+                            {
+                                p.StartInfo.UseShellExecute = false;
+                                p.StartInfo.RedirectStandardOutput = true;
+                                p.StartInfo.RedirectStandardError = true;
+                                p.StartInfo.CreateNoWindow = true;
+                                p.Start();
+                                while (!p.StandardOutput.EndOfStream)
+                                {
+                                    string tempLine = p.StandardOutput.ReadLine()!;
+                                    if (tempLine != string.Empty)
+                                    {
+                                        line = tempLine;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                p.Start();
+                            }
+                            p.WaitForExit();
+                            p.Dispose();
+                            DevLog.Log(line);
                         }
                     }
                 }
@@ -749,24 +799,65 @@ namespace ESLifyEverything
                 {
                     foreach (string connectedFaceGen in bsa.FaceGenModConnections)
                     {
-
                         if (connectedFaceGen.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
                         {
+                            string line = "";
                             GF.WriteLine(String.Format(GF.stringLoggingData.BSAContainsData, bsa.BSAName_NoExtention, pluginName));
                             Process m = new Process();
                             m.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
                             m.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
-                            m.Start();
+                            if (GF.DevSettings.DevLogging)
+                            {
+                                m.StartInfo.UseShellExecute = false;
+                                m.StartInfo.RedirectStandardOutput = true;
+                                m.StartInfo.RedirectStandardError = true;
+                                m.StartInfo.CreateNoWindow = true;
+                                m.Start();
+                                while (!m.StandardOutput.EndOfStream)
+                                {
+                                    string tempLine = m.StandardOutput.ReadLine()!;
+                                    if (tempLine != string.Empty)
+                                    {
+                                        line = tempLine;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                m.Start();
+                            }
                             m.WaitForExit();
                             m.Dispose();
+                            DevLog.Log(line);
                             if (bsa.HasTextureBSA)
                             {
+                                line = "";
                                 Process t = new Process();
                                 t.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
                                 t.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + " - Textures.bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
-                                t.Start();
+                                if (GF.DevSettings.DevLogging)
+                                {
+                                    t.StartInfo.UseShellExecute = false;
+                                    t.StartInfo.RedirectStandardOutput = true;
+                                    t.StartInfo.RedirectStandardError = true;
+                                    t.StartInfo.CreateNoWindow = true;
+                                    t.Start();
+                                    while (!t.StandardOutput.EndOfStream)
+                                    {
+                                        string tempLine = t.StandardOutput.ReadLine()!;
+                                        if (tempLine != string.Empty)
+                                        {
+                                            line = tempLine;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    t.Start();
+                                }
                                 t.WaitForExit();
                                 t.Dispose();
+                                DevLog.Log(line);
                             }
                         }
                     }
@@ -1403,7 +1494,7 @@ namespace ESLifyEverything
         {
             HashSet<string> slectedCompactedMods = new HashSet<string>();
             List<string> menuList = new List<string>();
-            menuList.AddRange(CompactedModDataD.Keys);
+            menuList.AddRange(CompactedModDataDScriptAndPlugins.Keys);
             bool exit = false;
             int menuModifier = 3;//1 is for offsetting the 0. in the menu add one for each extra menu item.
             do
@@ -1427,7 +1518,7 @@ namespace ESLifyEverything
                     else if (selectedMenuItem == 1)
                     {
                         GF.WriteLine(GF.stringLoggingData.RunAllPluginChecks + GF.stringLoggingData.SingleWordSelected);
-                        return CompactedModDataD.Keys.ToHashSet();
+                        return CompactedModDataDScriptAndPlugins.Keys.ToHashSet();
                     }
                     else if (selectedMenuItem == 2)
                     {
@@ -1451,7 +1542,7 @@ namespace ESLifyEverything
         {
             GF.WriteLine(GF.stringLoggingData.FinalizingDataHeader);
             HashSet<string> mergeDatasNames = new HashSet<string>();
-            foreach(CompactedModData compactedModData in CompactedModDataD.Values)
+            foreach (CompactedModData compactedModData in CompactedModDataD.Values)
             {
                 if (compactedModData.FromMerge)
                 {
@@ -1464,7 +1555,7 @@ namespace ESLifyEverything
                 }
             }
 
-            foreach(string mergeName in mergeDatasNames)
+            foreach (string mergeName in mergeDatasNames)
             {
                 string path = Path.Combine(GF.CompactedFormsFolder, mergeName + GF.MergeCacheExtension);
                 if (File.Exists(path))
@@ -1480,7 +1571,7 @@ namespace ESLifyEverything
                         GF.CompactedFormsFolder,
                         "*" + GF.MergeCacheExtension,
                         SearchOption.AllDirectories);
-                    foreach(string file in compactedFormsModFiles)
+                    foreach (string file in compactedFormsModFiles)
                     {
                         CompactedMergeData mergeData = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(file))!;
                         if (mergeName.Equals(mergeData.MergeName))
@@ -1493,6 +1584,8 @@ namespace ESLifyEverything
                     }
                 }
             }
+
+
         }
 
     }

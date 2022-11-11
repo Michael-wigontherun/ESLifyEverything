@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ESLifyEverything.FormData;
 using ESLifyEverythingGlobalDataLibrary;
 
 namespace ESLifyEverything
@@ -80,6 +82,8 @@ namespace ESLifyEverything
                     Console.WriteLine();
                 }
 
+                DevLog.Pause("After Script BSA Extraction");
+
                 GF.WriteLine(GF.stringLoggingData.RunningChampBSA);
                 Task BSAChamp = DecompileScripts(GF.ExtractedBSAModDataPath);
                 BSAChamp.Wait();
@@ -93,6 +97,8 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.EndedChampLoose);
 
                 Console.WriteLine(GF.stringLoggingData.IgnoreAbove);
+
+                DevLog.Pause("After Script Decompilers");
             }
 
             
@@ -107,12 +113,33 @@ namespace ESLifyEverything
         //Runs BSA Browser to extract scripts from BSA path
         private static async Task<int> ExtractBSAScripts(string bsaPath)
         {
+            string line = "";
             Process p = new Process();
             p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
             p.StartInfo.Arguments = $"\"{Path.GetFullPath(bsaPath)}\" -f \".pex\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
-            p.Start();
+            if (GF.DevSettings.DevLogging)
+            {
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+                while (!p.StandardOutput.EndOfStream)
+                {
+                    string tempLine = p.StandardOutput.ReadLine()!;
+                    if (tempLine != string.Empty)
+                    {
+                        line = tempLine;
+                    }
+                }
+            }
+            else
+            {
+                p.Start();
+            }
             p.WaitForExit();
             p.Dispose();
+            DevLog.Log(line);
 
             return await Task.FromResult(0);
         }
@@ -120,13 +147,53 @@ namespace ESLifyEverything
         //Runs Champolion on script path and outputting to the "ExtractedBSAModData\Source\Scripts" folder
         private static async Task<int> DecompileScripts(string startPath)
         {
+            string line = "";
+            string scriptsFolder = Path.Combine(Path.GetFullPath(startPath), "Scripts");
+            DevLog.Log(scriptsFolder);
             Process p = new Process();
             p.StartInfo.FileName = ".\\Champollion\\champollion.exe";
-            p.StartInfo.Arguments = $"\"{Path.GetFullPath(startPath)}\\Scripts\" -p \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -t";
-            p.StartInfo.UseShellExecute = true;
+            p.StartInfo.Arguments = $"\"{scriptsFolder}\" -p \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -t";//files processed
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
             p.Start();
+            if (GF.DevSettings.DevLogging)
+            {
+                using (StreamWriter stream = File.AppendText(GF.logName))
+                {
+                    while (!p.StandardOutput.EndOfStream)
+                    {
+                        line = p.StandardOutput.ReadLine()!;
+                        stream.WriteLine(line);
+                    }
+                }
+            }
+            else
+            {
+                while (!p.StandardOutput.EndOfStream)
+                {
+                    line = p.StandardOutput.ReadLine()!;
+                }
+            }
             p.WaitForExit();
             p.Dispose();
+
+            if (line.Contains("files processed"))
+            {
+                GF.WriteLine("Champollion: " + line);
+            }
+            else
+            {
+                GF.WriteLine(GF.stringLoggingData.ChampCrash1);
+                GF.WriteLine(GF.stringLoggingData.ChampCrash2);
+                GF.WriteLine(line);
+                GF.WriteLine(GF.stringLoggingData.ChampCrash3);
+                GF.WriteLine(GF.stringLoggingData.ChampCrash4);
+                GF.WriteLine(GF.stringLoggingData.ChampCrash5);
+                GF.WriteLine(GF.stringLoggingData.ChampCrash6);
+
+            }
 
             return await Task.FromResult(0);
         }
@@ -179,7 +246,24 @@ namespace ESLifyEverything
                         Process p = new Process();
                         p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
                         p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"TESV_Papyrus_Flags.flg\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
+                        p.StartInfo.UseShellExecute = false;
+                        p.StartInfo.RedirectStandardOutput = true;
+                        p.StartInfo.RedirectStandardError = true;
+                        p.StartInfo.CreateNoWindow = true;
                         p.Start();
+                        using (StreamWriter stream = File.AppendText(GF.logName))
+                        {
+                            while (!p.StandardOutput.EndOfStream)
+                            {
+                                string line = p.StandardOutput.ReadLine()!;
+                                Console.WriteLine(line);
+                                if (!line.Equals(string.Empty))
+                                {
+                                    stream.WriteLine(line);
+                                }
+
+                            }
+                        }
                         p.WaitForExit();
                         p.Dispose();
                         Console.WriteLine();
@@ -213,6 +297,92 @@ namespace ESLifyEverything
 
             return await Task.FromResult(0);
         }
+        
+        //Parses Script files
+        public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed)
+        {
+            string FixLineToHex(string line, out string? exactHexValueTrimmed)
+            {
+                exactHexValueTrimmed = null;
+                Regex fullStringCheck = new Regex("GetFormFromFile\\([0-9]+,", RegexOptions.IgnoreCase);
+                if (fullStringCheck.IsMatch(line))
+                {
+                    string stringDecimal = fullStringCheck.Match(line).Value;
+                    stringDecimal = stringDecimal.Replace("GetFormFromFile(", "");
+                    stringDecimal = stringDecimal.Replace(",", "");
+                    //GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    try
+                    {
+                        if (long.TryParse(stringDecimal, out long value))
+                        {
+                            string hexNum = string.Format("{0:x}", value);
+                            if (hexNum.Length > 6)
+                            {
+                                hexNum = hexNum.Substring(hexNum.Length - 6).TrimStart('0');
+                                exactHexValueTrimmed = hexNum;
+                            }
+                            string hex = "0x" + hexNum;
+                            line = line.Replace(stringDecimal, hex, StringComparison.OrdinalIgnoreCase);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        GF.WriteLine(GF.stringLoggingData.FixDecToHexError);
+                        GF.WriteLine(line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        GF.WriteLine(e.Message);
+                    }
+                }
+                return line;
+            }
 
+            changed = false;
+            for (int i = 0; i < fileLines.Length; i++)
+            {
+                if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
+                {
+                    string? exactHexValueTrimmed = null;
+                    if (fileLines[i].Contains("GetFormFromFile(", StringComparison.OrdinalIgnoreCase))
+                    {
+                        fileLines[i] = FixLineToHex(fileLines[i], out exactHexValueTrimmed);
+                    }
+                    foreach (CompactedModData modData in CompactedModDataDScriptAndPlugins.Values)
+                    {
+                        if (fileLines[i].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (fileLines[i].Contains("GetModByName", StringComparison.OrdinalIgnoreCase))
+                            {
+                                fileLines[i] = fileLines[i].Replace(modData.ModName, modData.CompactedModFormList.First().ModName);
+                            }
+                            else
+                            {
+                                foreach (FormHandler form in modData.CompactedModFormList)
+                                {
+                                    if (exactHexValueTrimmed != null)
+                                    {
+                                        if (exactHexValueTrimmed.Equals(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                            fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
+                                            fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
+                                            GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                            changed = true;
+                                        }
+                                    }
+                                    else if (fileLines[i].Contains(form.GetOriginalFormID(), StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                        fileLines[i] = fileLines[i].Replace(form.GetOriginalFormID(), form.GetCompactedFormID(), StringComparison.OrdinalIgnoreCase);
+                                        fileLines[i] = fileLines[i].Replace(modData.ModName, form.ModName, StringComparison.OrdinalIgnoreCase);
+                                        GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                        changed = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return fileLines;
+        }
     }
 }
