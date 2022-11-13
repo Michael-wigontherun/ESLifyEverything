@@ -116,6 +116,7 @@
         public string PluginFixed { get; set; } = "";
         public string PluginOutputTo { get; set; } = "";
         public string PluginNotChanged { get; set; } = "";
+        public string PluginMissingMasterFile { get; set; } = "";
         public string RunAllPluginChecks { get; set; } = "";
         public string SelectCompactedModsMenuHeader { get; set; } = "";
         public string PluginEditorDisabled { get; set; } = "";
@@ -183,6 +184,8 @@
         public string ScriptESLifyMenuY { get; set; } = "";
         public string RunningChampBSA { get; set; } = "";
         public string EndedChampBSA { get; set; } = "";
+        public string RunningChampLoose { get; set; } = "";
+        public string RunningChampFailsafe { get; set; } = "";
 
         public string ChampCrash1 { get; set; } = "";
         public string ChampCrash2 { get; set; } = "";
@@ -191,7 +194,6 @@
         public string ChampCrash5 { get; set; } = "";
         public string ChampCrash6 { get; set; } = "";
 
-        public string RunningChampLoose { get; set; } = "";
         public string EndedChampLoose { get; set; } = "";
         public string FixDecToHexError { get; set; } = "";
         public string CompilerIsDisabled { get; set; } = "";

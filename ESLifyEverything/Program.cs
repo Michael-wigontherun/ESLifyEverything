@@ -143,6 +143,8 @@ namespace ESLifyEverything
                         DevLog.Pause("After Data File ESLify AutoRun Pause");
                     }
 
+                    MergeDictionaries();
+
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
                     Task Scripts = ExtractScripts();

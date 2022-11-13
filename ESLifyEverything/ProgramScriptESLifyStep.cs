@@ -85,15 +85,40 @@ namespace ESLifyEverything
                 DevLog.Pause("After Script BSA Extraction");
 
                 GF.WriteLine(GF.stringLoggingData.RunningChampBSA);
-                Task BSAChamp = DecompileScripts(GF.ExtractedBSAModDataPath);
+                Task<int> BSAChamp = DecompileScripts(GF.ExtractedBSAModDataPath);
                 BSAChamp.Wait();
-                BSAChamp.Dispose();
+                if(BSAChamp.Result == 0)
+                {
+                    BSAChamp.Dispose();
+
+                    GF.WriteLine(GF.stringLoggingData.RunningChampFailsafe);
+                    Task<int> BSAChampSlow = DecompileScriptsSlow(GF.ExtractedBSAModDataPath);
+                    BSAChampSlow.Wait();
+                    BSAChampSlow.Dispose();
+                }
+                else
+                {
+                    BSAChamp.Dispose();
+                }
                 GF.WriteLine(GF.stringLoggingData.EndedChampBSA);
 
                 GF.WriteLine(GF.stringLoggingData.RunningChampLoose);
-                Task SourceChamp = DecompileScripts(GF.Settings.DataFolderPath);
+                Task<int> SourceChamp = DecompileScripts(GF.Settings.DataFolderPath);
                 SourceChamp.Wait();
-                SourceChamp.Dispose();
+                if (SourceChamp.Result == 0)
+                {
+                    BSAChamp.Dispose();
+
+                    GF.WriteLine(GF.stringLoggingData.RunningChampFailsafe);
+                    Task<int> BSAChampSlow = DecompileScriptsSlow(GF.Settings.DataFolderPath);
+                    BSAChampSlow.Wait();
+                    BSAChampSlow.Dispose();
+                }
+                else
+                {
+                    SourceChamp.Dispose();
+                }
+
                 GF.WriteLine(GF.stringLoggingData.EndedChampLoose);
 
                 Console.WriteLine(GF.stringLoggingData.IgnoreAbove);
@@ -158,7 +183,7 @@ namespace ESLifyEverything
             p.StartInfo.RedirectStandardError = true;
             p.StartInfo.CreateNoWindow = true;
             p.Start();
-            if (GF.DevSettings.DevLogging)
+            if (GF.Settings.VerboseFileLoging || GF.DevSettings.DevLogging)
             {
                 using (StreamWriter stream = File.AppendText(GF.logName))
                 {
@@ -192,10 +217,58 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.ChampCrash4);
                 GF.WriteLine(GF.stringLoggingData.ChampCrash5);
                 GF.WriteLine(GF.stringLoggingData.ChampCrash6);
+                return await Task.FromResult(0);
 
             }
 
-            return await Task.FromResult(0);
+            return await Task.FromResult(1);
+        }
+
+        private static async Task<int> DecompileScriptsSlow(string startPath)
+        {
+            string line = "";
+            string scriptsFolder = Path.Combine(Path.GetFullPath(startPath), "Scripts");
+            DevLog.Log(scriptsFolder);
+            IEnumerable<string> scripts = Directory.EnumerateFiles(
+                        scriptsFolder,
+                        "*.pex",
+                        SearchOption.TopDirectoryOnly);
+            using (StreamWriter stream = File.AppendText(GF.logName))
+            {
+                foreach (string script in scripts)
+                {
+                    Process p = new Process();
+                    p.StartInfo.FileName = ".\\Champollion\\champollion.exe";
+                    p.StartInfo.Arguments = $"\"{Path.GetFullPath(script)}\" -p \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -t";//files processed
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.Start();
+
+                    
+                    while (!p.StandardOutput.EndOfStream)
+                    {
+                        line = p.StandardOutput.ReadLine()!;
+                        if (!line.Contains("1 files processed in "))
+                        {
+                            stream.WriteLine(line);
+                        }
+                    }
+
+
+                    p.WaitForExit();
+                    p.Dispose();
+
+                    if (!line.Contains("1 files processed in "))
+                    {
+                        Console.WriteLine(script);
+                        Console.WriteLine(line);
+
+                    }
+                }
+            }
+            return await Task.FromResult(1);
         }
 
         //Fixes script Form Keys and Compiles them if Compiler is enabled
@@ -345,7 +418,7 @@ namespace ESLifyEverything
                     {
                         fileLines[i] = FixLineToHex(fileLines[i], out exactHexValueTrimmed);
                     }
-                    foreach (CompactedModData modData in CompactedModDataDScriptAndPlugins.Values)
+                    foreach (CompactedModData modData in CompactedModDataD.Values)
                     {
                         if (fileLines[i].Contains(modData.ModName, StringComparison.OrdinalIgnoreCase))
                         {

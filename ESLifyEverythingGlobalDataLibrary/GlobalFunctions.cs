@@ -70,6 +70,9 @@ namespace ESLifyEverythingGlobalDataLibrary
         //Reads from .\\Properties\\DefaultBSAs.json, it is a list of the default BSAs from the base game
         public static string[] DefaultScriptBSAs = new string[0];
 
+        //Reads from .\\Properties\\DefaultPlugins.json, it is a list of the defauly plugins that do not apear inside of plugins.txt
+        public static string[] DefaultPlugins = new string[0];
+
         //Reads from .\\Properties\\IgnoredPugins.json and .\\Properties\\CustomIgnoredPugins.json, if it exists
         //It is a list that holds what plugins should not be looked at by ESLify Everything
         //The base game plugins and a few large mod's plugins are included in IgnoredPugins.json
@@ -109,7 +112,8 @@ namespace ESLifyEverythingGlobalDataLibrary
             IConfigurationBuilder? configurationBuilder = new ConfigurationBuilder()
                 .AddJsonFile("AppSettings.json")
                 .AddJsonFile(".\\Properties\\DefaultBSAs.json")
-                .AddJsonFile(".\\Properties\\IgnoredPugins.json");
+                .AddJsonFile(".\\Properties\\IgnoredPugins.json")
+                .AddJsonFile(".\\Properties\\DefaultPlugins.json");
 
             bool customIgnoredPlugins = false;
 
@@ -138,6 +142,7 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             Settings = config.GetRequiredSection("Settings").Get<AppSettings>();
             DefaultScriptBSAs = config.GetRequiredSection("DefaultScriptBSAs").Get<string[]>();
+            DefaultPlugins = config.GetRequiredSection("DefaultPlugins").Get<string[]>();
             IgnoredPlugins = config.GetRequiredSection("IgnoredPugins").Get<HashSet<string>>();
 
             if (File.Exists("DevAppSettings.json"))
@@ -467,6 +472,33 @@ namespace ESLifyEverythingGlobalDataLibrary
                 .AddJsonFile(".\\Properties\\StringResources.json").AddEnvironmentVariables().Build();
             stringLoggingData = config.GetRequiredSection("StringLoggingData").Get<StringLoggingData>();
             stringsResources = config.GetRequiredSection("StringResources").Get<StringResources>();
+        }
+
+        //Filters out unactive plugins inside of the plugins.txt and returns the list of active plugins
+        public static string[] FilterForActiveLoadOrder(string pluginsPath, bool fallout4 = false)
+        {
+            string[] plugins = File.ReadAllLines(pluginsPath);
+
+            List<string> filteredLoadOrder = new List<string>();
+            
+            foreach(string plugin in DefaultPlugins)
+            {
+                if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, plugin)))
+                {
+                    Console.WriteLine(plugin);
+                    filteredLoadOrder.Add(plugin);
+                }
+            }
+
+            foreach (string loadOrderItem in plugins)
+            {
+                if (loadOrderItem.Contains("*"))
+                {
+                    filteredLoadOrder.Add(loadOrderItem.Replace("*", ""));
+                }
+            }
+
+            return filteredLoadOrder.ToArray();
         }
     }
 }

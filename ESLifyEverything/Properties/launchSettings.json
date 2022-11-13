@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ESLifyEverything": {
-      "commandName": "Project",
-      "commandLineArgs": "-i=a"
-    }
-  }
-}

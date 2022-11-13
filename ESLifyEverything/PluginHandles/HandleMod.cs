@@ -13,7 +13,7 @@ namespace ESLifyEverything.PluginHandles
     public static partial class HandleMod
     {
         //Lambda get for the Program.CompactedModDataD located in the Program data
-        public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataDScriptAndPlugins;
+        public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataD;
 
         //Uses the Plugin name to find and read the plugin
         //Changing FormKeys on Forms are handled by HandleSubFormHeaders() and HandleUniformFormHeaders()
@@ -27,6 +27,15 @@ namespace ESLifyEverything.PluginHandles
             }
 
             ISkyrimModGetter orgMod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
+
+            foreach (IMasterReferenceGetter masterReference in orgMod.ModHeader.MasterReferences.ToHashSet())
+            {
+                if (!Program.LoadOrder.Contains(masterReference.Master.ToString()))
+                {
+                    return await Task.FromResult(3);
+                }
+            }
+
             DevLog.Log("Handling " + orgMod.ModKey.ToString());
             SkyrimMod mod = new SkyrimMod(orgMod.ModKey, SkyrimRelease.SkyrimSE);
             mod.DeepCopyIn(orgMod);

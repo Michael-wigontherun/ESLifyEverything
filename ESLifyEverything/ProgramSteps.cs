@@ -204,7 +204,7 @@ namespace ESLifyEverything
                                 if (outputtedCompactedModData != null)
                                 {
                                     GF.WriteLine(string.Format(GF.stringLoggingData.SetToIgnore, mergeData.MergeName + GF.CompactedFormExtension, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
-                                    File.Move(potentialCompactedModDataPath, Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormIgnoreExtension));
+                                    File.Move(potentialCompactedModDataPath, Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormIgnoreExtension), true);
                                 }
 
                                 mergeData.NewRecordCount = mergeData.CoundNewRecords();
@@ -366,7 +366,7 @@ namespace ESLifyEverything
                                     compactedModData.MergeName = mergeData.MergeName;
                                     GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                                     CompactedModDataD.TryAdd(compactedModData.ModName, compactedModData);
-                                    CompactedModDataDScriptAndPlugins.TryAdd(compactedModData.ModName, compactedModData);
+                                    //CompactedModDataDScriptAndPlugins.TryAdd(compactedModData.ModName, compactedModData);
                                 }
                             }
                         }
@@ -395,7 +395,7 @@ namespace ESLifyEverything
             }
         }
 
-        //Not used
+        
         private static bool ImportModDataCheck(string modName)
         {
             if (ImportEverything)
@@ -492,15 +492,18 @@ namespace ESLifyEverything
             switch (handlePluginTask.Result)
             {
                 case 0:
-                    Console.WriteLine(pluginName + GF.stringLoggingData.PluginNotFound);
+                    GF.WriteLine(pluginName + GF.stringLoggingData.PluginNotFound);
                     break;
                 case 1:
                     break;
                 case 2:
-                    Console.WriteLine(pluginName + GF.stringLoggingData.PluginNotChanged);
+                    GF.WriteLine(pluginName + GF.stringLoggingData.PluginNotChanged);
+                    break;
+                case 3:
+                    GF.WriteLine(pluginName + GF.stringLoggingData.PluginMissingMasterFile);
                     break;
                 default:
-                    Console.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
+                    GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
                     break;
             }
             handlePluginTask.Dispose();
@@ -510,16 +513,16 @@ namespace ESLifyEverything
         //Parses the BSA's in the Data folder
         private static async Task<int> LoadOrderBSAData()
         {
-            string loadorderFilePath = Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "loadorder.txt");
-            if (!File.Exists(loadorderFilePath))
+            string pluginsFilePath = Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "plugins.txt");
+            if (!File.Exists(pluginsFilePath))
             {
-                loadorderFilePath = "loadorder.txt";
+                pluginsFilePath = "plugins.txt";
             }
 
-            if (File.Exists(loadorderFilePath))
+            if (File.Exists(pluginsFilePath))
             {
-                LoadOrder = File.ReadAllLines(loadorderFilePath);
-
+                LoadOrder = GF.FilterForActiveLoadOrder(pluginsFilePath, false);
+                
                 foreach (string plugin in LoadOrder)
                 {
                     string pluginNoExtension = Path.ChangeExtension(plugin, null);
@@ -1431,6 +1434,16 @@ namespace ESLifyEverything
             return await Task.FromResult(0);
         }
 
+        private static void MergeDictionaries()
+        {
+            foreach(KeyValuePair<string, CompactedModData> modData in CompactedModDataDScriptAndPlugins)
+            {
+                CompactedModDataD.TryAdd(modData.Key, modData.Value);
+            }
+
+            CompactedModDataDScriptAndPlugins.Clear();
+        }
+
         //Region for fixing records and references inside of plugins
         #region Plugins
         //Starts the chack for Master file and runs what was selected in SelectCompactedModsMenu()
@@ -1480,6 +1493,9 @@ namespace ESLifyEverything
                     case 2:
                         GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                         break;
+                    case 3:
+                        GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginMissingMasterFile);
+                        break;
                     default:
                         GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
                         break;
@@ -1494,7 +1510,7 @@ namespace ESLifyEverything
         {
             HashSet<string> slectedCompactedMods = new HashSet<string>();
             List<string> menuList = new List<string>();
-            menuList.AddRange(CompactedModDataDScriptAndPlugins.Keys);
+            menuList.AddRange(CompactedModDataD.Keys);
             bool exit = false;
             int menuModifier = 3;//1 is for offsetting the 0. in the menu add one for each extra menu item.
             do
@@ -1518,7 +1534,7 @@ namespace ESLifyEverything
                     else if (selectedMenuItem == 1)
                     {
                         GF.WriteLine(GF.stringLoggingData.RunAllPluginChecks + GF.stringLoggingData.SingleWordSelected);
-                        return CompactedModDataDScriptAndPlugins.Keys.ToHashSet();
+                        return CompactedModDataD.Keys.ToHashSet();
                     }
                     else if (selectedMenuItem == 2)
                     {
