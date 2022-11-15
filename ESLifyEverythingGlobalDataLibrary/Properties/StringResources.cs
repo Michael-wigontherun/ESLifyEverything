@@ -60,7 +60,9 @@
         public string ChampollionMissing { get; set; } = "";
         public string OutputFolderNotFound { get; set; } = "";
         public string OutputFolderIsRequired { get; set; } = "";
-        public string ClearYourOutputFolderScripts { get; set; } = "";
+        public string ClearYourOutputFolderScripts1 { get; set; } = "";
+        public string ClearYourOutputFolderScripts2 { get; set; } = "";
+        public string ClearYourOutputFolderScripts3 { get; set; } = "";
         public string PotectOrigonalScripts { get; set; } = "";
         public string OutputFolderWarning { get; set; } = "";
         public string ImportAllCompactedModDataTrueWarning { get; set; } = "";
@@ -114,6 +116,7 @@
         public string PluginAttemptFix { get; set; } = "";
         public string PluginNotFound { get; set; } = "";
         public string PluginFixed { get; set; } = "";
+        public string MissingMaster { get; set; } = "";
         public string PluginOutputTo { get; set; } = "";
         public string PluginNotChanged { get; set; } = "";
         public string PluginMissingMasterFile { get; set; } = "";

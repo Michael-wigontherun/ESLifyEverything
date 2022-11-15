@@ -15,6 +15,10 @@ namespace ESLifyEverything.PluginHandles
         //Lambda get for the Program.CompactedModDataD located in the Program data
         public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataD;
 
+        //Dictionary of Plugin Names and Output Locations
+        //                        \/        \/
+        public static Dictionary<string, string> CustomPluginOutputLocations = new Dictionary<string, string>();
+
         //Uses the Plugin name to find and read the plugin
         //Changing FormKeys on Forms are handled by HandleSubFormHeaders() and HandleUniformFormHeaders()
         //FormLinks are handled using RemapLinks()
@@ -32,6 +36,7 @@ namespace ESLifyEverything.PluginHandles
             {
                 if (!Program.LoadOrder.Contains(masterReference.Master.ToString()))
                 {
+                    GF.WriteLine(GF.stringLoggingData.MissingMaster + masterReference.Master.ToString());
                     return await Task.FromResult(3);
                 }
             }
@@ -86,7 +91,7 @@ namespace ESLifyEverything.PluginHandles
                     rec.IsCompressed = false;
                 }
 
-                string outputPath = GF.GetPluginModOutputPath(pluginName);
+                string outputPath = GetPluginModOutputPath(pluginName);
 
                 mod.WriteToBinary(Path.Combine(outputPath, pluginName),
                 new BinaryWriteParameters()
@@ -103,6 +108,36 @@ namespace ESLifyEverything.PluginHandles
             GF.WriteLine(mod.ModKey.ToString() + " was not output.", GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
 
             return await Task.FromResult(2);
+        }
+
+        //Gets the output folder for where plugins need to be outputed to
+        public static string GetPluginModOutputPath(string pluginName)
+        {
+            if (CustomPluginOutputLocations.TryGetValue(pluginName, out string? location))
+            {
+                if (GF.Settings.MO2.MO2Support)
+                {
+                    if (location.Contains("@mods"))
+                    {
+                        location = location.Replace("@mods", GF.Settings.MO2.MO2ModFolder);
+                    }
+                }
+                return location;
+            }
+
+            if (GF.Settings.MO2.MO2Support)
+            {
+                string masterExtentions = pluginName;
+                GF.NewMO2FolderPaths = true;
+                string OutputPath = Path.Combine(GF.Settings.MO2.MO2ModFolder, $"{masterExtentions}_ESlEverything");
+                Directory.CreateDirectory(OutputPath);
+                return OutputPath;
+            }
+            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
+            {
+                return GF.Settings.DataFolderPath;
+            }
+            return GF.Settings.OutputFolder;
         }
 
         //Gets the the Compacted FormKey that the Original was changed to

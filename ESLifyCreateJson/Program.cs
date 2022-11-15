@@ -33,6 +33,14 @@ namespace ESLifyCreateJson
             DelimitedFormKeysFilelist.Add(new DelimitedFormKeys());
             DelimitedFormKeysFilelist.Add(new DelimitedFormKeys());
 
+            Dictionary<string, string> CustomPluginOutputLocations = new Dictionary<string, string>();
+
+            CustomPluginOutputLocations.Add("Skyrim.esm", "E:\\SkyrimMods\\MO2\\mods\\Skyrim_plugin_override");
+            CustomPluginOutputLocations.Add("Dawnguard.esm", "@mods\\Dawnguard_plugin_override");
+            CustomPluginOutputLocations.Add("Dont do either of those", "They are examples");
+            CustomPluginOutputLocations.Add("Again \\ is nessessary", "inside json files");
+            CustomPluginOutputLocations.Add("Place and edit this", "inside of the Properties folder");
+
             string dfJSON = ".\\ESLifyEverythingDefaultJSON";
 
             Directory.CreateDirectory(dfJSON);
@@ -42,6 +50,8 @@ namespace ESLifyCreateJson
             File.WriteAllText($"{dfJSON}\\Template_BasicDataSubfolder.json", JsonSerializer.Serialize(BasicDataSubfolderlist, GF.JsonSerializerOptions));
             File.WriteAllText($"{dfJSON}\\Template_BasicDirectFolder.json", JsonSerializer.Serialize(BasicDirectFolderlist, GF.JsonSerializerOptions));
             File.WriteAllText($"{dfJSON}\\Template_BasicSingleFile.json", JsonSerializer.Serialize(BasicSingleFilelist, GF.JsonSerializerOptions));
+
+            File.WriteAllText($"{dfJSON}\\CustomPluginOutputLocations.json", JsonSerializer.Serialize(CustomPluginOutputLocations, GF.JsonSerializerOptions));
 
             File.WriteAllText($"{dfJSON}\\AppSettings.json", JsonSerializer.Serialize(new GeneratedAppSettings(), GF.JsonSerializerOptions));
             File.WriteAllText($"{dfJSON}\\DevAppSettings.json", JsonSerializer.Serialize(new DevAppSettings(), GF.JsonSerializerOptions));

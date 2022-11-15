@@ -16,32 +16,43 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESLifyCreateJson", "ESLifyC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FixCompactedModData", "FixCompactedModData\FixCompactedModData.csproj", "{50F2FCD5-8072-4B78-B1F0-E5950CC5207E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESLifySplitModInterpreter", "ESLifySplitModInterpreter\ESLifySplitModInterpreter.csproj", "{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESLifySplitModInterpreter", "ESLifySplitModInterpreter\ESLifySplitModInterpreter.csproj", "{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Personal|Any CPU = Personal|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E7776B56-C6E0-4652-AA43-35EDB3512630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E7776B56-C6E0-4652-AA43-35EDB3512630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7776B56-C6E0-4652-AA43-35EDB3512630}.Personal|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7776B56-C6E0-4652-AA43-35EDB3512630}.Personal|Any CPU.Build.0 = Debug|Any CPU
 		{E7776B56-C6E0-4652-AA43-35EDB3512630}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7776B56-C6E0-4652-AA43-35EDB3512630}.Release|Any CPU.Build.0 = Release|Any CPU
 		{630E9A9D-FA6B-40DB-B831-857E8F9C4925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{630E9A9D-FA6B-40DB-B831-857E8F9C4925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{630E9A9D-FA6B-40DB-B831-857E8F9C4925}.Personal|Any CPU.ActiveCfg = Release|Any CPU
+		{630E9A9D-FA6B-40DB-B831-857E8F9C4925}.Personal|Any CPU.Build.0 = Release|Any CPU
 		{630E9A9D-FA6B-40DB-B831-857E8F9C4925}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{630E9A9D-FA6B-40DB-B831-857E8F9C4925}.Release|Any CPU.Build.0 = Release|Any CPU
 		{82BDE186-02B2-4A07-9F54-22F6FFE5F79C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{82BDE186-02B2-4A07-9F54-22F6FFE5F79C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82BDE186-02B2-4A07-9F54-22F6FFE5F79C}.Personal|Any CPU.ActiveCfg = Release|Any CPU
+		{82BDE186-02B2-4A07-9F54-22F6FFE5F79C}.Personal|Any CPU.Build.0 = Release|Any CPU
 		{82BDE186-02B2-4A07-9F54-22F6FFE5F79C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82BDE186-02B2-4A07-9F54-22F6FFE5F79C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{50F2FCD5-8072-4B78-B1F0-E5950CC5207E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50F2FCD5-8072-4B78-B1F0-E5950CC5207E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50F2FCD5-8072-4B78-B1F0-E5950CC5207E}.Personal|Any CPU.ActiveCfg = Release|Any CPU
+		{50F2FCD5-8072-4B78-B1F0-E5950CC5207E}.Personal|Any CPU.Build.0 = Release|Any CPU
 		{50F2FCD5-8072-4B78-B1F0-E5950CC5207E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50F2FCD5-8072-4B78-B1F0-E5950CC5207E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Personal|Any CPU.ActiveCfg = Release|Any CPU
+		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Personal|Any CPU.Build.0 = Release|Any CPU
 		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

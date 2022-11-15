@@ -240,7 +240,15 @@ namespace ESLifyEverythingGlobalDataLibrary
                 if (scripts.Any())
                 {
                     startUp = false;
-                    GF.WriteLine(String.Format(GF.stringLoggingData.ClearYourOutputFolderScripts, GF.stringLoggingData.PotectOrigonalScripts));
+                    GF.WriteLine(String.Format(GF.stringLoggingData.ClearYourOutputFolderScripts1, GF.stringLoggingData.PotectOrigonalScripts));
+                    GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts2);
+                    Process ds = new Process();
+                    ds.StartInfo.FileName = "explorer.exe";
+                    ds.StartInfo.Arguments = Path.Combine(GF.Settings.OutputFolder, "scripts");
+                    ds.Start();
+                    ds.WaitForExit();
+                    ds.Dispose();
+                    GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts3);
                 }
             }
 
@@ -445,24 +453,6 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             }
 
-        }
-
-        //Gets the output folder for where plugins need to be outputed to
-        public static string GetPluginModOutputPath(string pluginName)
-        {
-            if (GF.Settings.MO2.MO2Support)
-            {
-                string masterExtentions = pluginName;
-                GF.NewMO2FolderPaths = true;
-                string OutputPath = Path.Combine(GF.Settings.MO2.MO2ModFolder, $"{masterExtentions}_ESlEverything");
-                Directory.CreateDirectory(OutputPath);
-                return OutputPath;
-            }
-            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
-            {
-                return GF.Settings.DataFolderPath;
-            }
-            return GF.Settings.OutputFolder;
         }
 
         //Gets stringLoggingData and stringsResources so there does not need to be multiple exeption calls for this process

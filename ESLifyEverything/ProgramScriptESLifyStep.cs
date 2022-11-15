@@ -192,6 +192,11 @@ namespace ESLifyEverything
                         line = p.StandardOutput.ReadLine()!;
                         stream.WriteLine(line);
                     }
+                    while (!p.StandardError.EndOfStream)
+                    {
+                        line = p.StandardError.ReadLine()!;
+                        stream.WriteLine(line);
+                    }
                 }
             }
             else
@@ -242,7 +247,6 @@ namespace ESLifyEverything
                     p.StartInfo.Arguments = $"\"{Path.GetFullPath(script)}\" -p \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -t";//files processed
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.RedirectStandardError = true;
                     p.StartInfo.CreateNoWindow = true;
                     p.Start();
 

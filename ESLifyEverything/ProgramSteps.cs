@@ -304,7 +304,7 @@ namespace ESLifyEverything
                             GF.WriteLine(GF.stringLoggingData.ImportingCompDataLogOSP + modData.ModName);
                         }
                         
-                        CompactedModDataDScriptAndPlugins.TryAdd(modData.ModName, modData);
+                        CompactedModDataDNoFaceVoice.TryAdd(modData.ModName, modData);
 
                     }
                 }
@@ -380,7 +380,7 @@ namespace ESLifyEverything
                                     compactedModData.FromMerge = true;
                                     compactedModData.MergeName = mergeData.MergeName;
                                     GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                                    CompactedModDataDScriptAndPlugins.TryAdd(compactedModData.ModName, compactedModData);
+                                    CompactedModDataDNoFaceVoice.TryAdd(compactedModData.ModName, compactedModData);
                                 }
                             }
                         }
@@ -1436,12 +1436,12 @@ namespace ESLifyEverything
 
         private static void MergeDictionaries()
         {
-            foreach(KeyValuePair<string, CompactedModData> modData in CompactedModDataDScriptAndPlugins)
+            foreach(KeyValuePair<string, CompactedModData> modData in CompactedModDataDNoFaceVoice)
             {
                 CompactedModDataD.TryAdd(modData.Key, modData.Value);
             }
 
-            CompactedModDataDScriptAndPlugins.Clear();
+            CompactedModDataDNoFaceVoice.Clear();
         }
 
         //Region for fixing records and references inside of plugins

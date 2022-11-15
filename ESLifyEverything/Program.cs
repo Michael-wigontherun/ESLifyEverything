@@ -1,8 +1,10 @@
 ﻿using ESLifyEverything.FormData;
+using ESLifyEverything.PluginHandles;
 using ESLifyEverythingGlobalDataLibrary;
 using ESLifyEverythingGlobalDataLibrary.Properties;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
 using System.ComponentModel.Design;
+using System.Text.Json;
 
 namespace ESLifyEverything
 {
@@ -12,8 +14,8 @@ namespace ESLifyEverything
         //The entire program functions using this.
         public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
 
-        //List of dictionary of all enabled and valid CompactedModData to be used by Script ESLify and the SubPluginCompactor.
-        public static Dictionary<string, CompactedModData> CompactedModDataDScriptAndPlugins = new Dictionary<string, CompactedModData>();
+        //List of dictionary of all enabled and valid CompactedModData that has already been run over Voice and FaceGen
+        public static Dictionary<string, CompactedModData> CompactedModDataDNoFaceVoice = new Dictionary<string, CompactedModData>();
 
         //When populated it holds all plugin names parsed from your plugins.txt file from your my games folder
         public static string[] LoadOrder = new string[0];
@@ -78,6 +80,19 @@ namespace ESLifyEverything
 
                     GF.MoveCompactedModDataJsons();
 
+                    if (File.Exists(".\\Properties\\CustomPluginOutputLocations.json"))
+                    {
+                        HandleMod.CustomPluginOutputLocations = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(".\\Properties\\CustomPluginOutputLocations.json"))!;
+                    }
+
+                    Console.WriteLine("\n\n\n\n");
+                    Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
+                    Task bsamod = LoadOrderBSAData();
+                    bsamod.Wait();
+                    bsamod.Dispose();
+
+                    DevLog.Pause("After BSA Proccesing Pause");
+
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
                     BuildMergedData();
@@ -90,14 +105,6 @@ namespace ESLifyEverything
                     ImportModData(GF.CompactedFormsFolder);
 
                     DevLog.Pause("After CompactedForms Import Pause");
-
-                    Console.WriteLine("\n\n\n\n");
-                    Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
-                    Task bsamod = LoadOrderBSAData();
-                    bsamod.Wait();
-                    bsamod.Dispose();
-
-                    DevLog.Pause("After BSA Proccesing Pause");
 
                     if (!GF.Settings.AutoRunESLify)
                     {
@@ -112,6 +119,8 @@ namespace ESLifyEverything
                         FaceGenESlIfyMenu();
 
                         DevLog.Pause("After FaceGen ESLify Menu Pause");
+
+                        MergeDictionaries();
 
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
@@ -134,6 +143,8 @@ namespace ESLifyEverything
 
                         DevLog.Pause("After FaceGen ESLify AutoRun Pause");
 
+                        MergeDictionaries();
+
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
                         GetESLifyModConfigurationFiles();
@@ -143,7 +154,6 @@ namespace ESLifyEverything
                         DevLog.Pause("After Data File ESLify AutoRun Pause");
                     }
 
-                    MergeDictionaries();
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);

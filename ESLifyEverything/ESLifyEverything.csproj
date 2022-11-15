@@ -5,6 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Personal</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ESLifyCreateJson\ESLifyCreateJson.csproj" />
     <ProjectReference Include="..\ESLifyEverythingGlobalDataLibrary\ESLifyEverythingGlobalDataLibrary.csproj" />
     <ProjectReference Include="..\ESLifySplitModInterpreter\ESLifySplitModInterpreter.csproj" />
   </ItemGroup>
