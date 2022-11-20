@@ -189,18 +189,20 @@
         public string EndedChampBSA { get; set; } = "";
         public string RunningChampLoose { get; set; } = "";
         public string RunningChampFailsafe { get; set; } = "";
-
         public string ChampCrash1 { get; set; } = "";
         public string ChampCrash2 { get; set; } = "";
         public string ChampCrash3 { get; set; } = "";
         public string ChampCrash4 { get; set; } = "";
         public string ChampCrash5 { get; set; } = "";
         public string ChampCrash6 { get; set; } = "";
-
         public string EndedChampLoose { get; set; } = "";
         public string FixDecToHexError { get; set; } = "";
         public string CompilerIsDisabled { get; set; } = "";
         public string ChangedScriptsLocated { get; set; } = "";
+        public string AttemptOneByOneCompiler { get; set; } = "";
+        public string CompiledSuccessfully { get; set; } = "";
+        public string CompiledUnsuccessfully { get; set; } = "";
+        public string FailedToCompileCompiler { get; set; } = "";
 
         //Run FaceGenFix
         //public string EditedFaceGen { get; set; } = ""; "EditedFaceGen": FaceGen Data has been edited please run \"_ESPFEEverythingFaceGenFix.pas\" in xEdit. So you don't have the black face bug."

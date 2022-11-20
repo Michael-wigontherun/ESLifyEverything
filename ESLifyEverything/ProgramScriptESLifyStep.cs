@@ -344,15 +344,22 @@ namespace ESLifyEverything
                         p.WaitForExit();
                         p.Dispose();
                         Console.WriteLine();
-                        GF.WriteLine(GF.stringLoggingData.ImportantAbove);
 
                         foreach (var changedFile in changedFiles)
                         {
                             if (!File.Exists(Path.Combine(GF.Settings.OutputFolder, "Scripts\\" + Path.ChangeExtension(Path.GetFileName(changedFile), null) + ".pex")))
                             {
-                                FailedToCompile.Add(Path.ChangeExtension(Path.GetFileName(changedFile), null));
+                                Console.WriteLine(GF.stringLoggingData.FailedToCompileCompiler + Path.GetFileName(changedFile));
+                                FailedToCompile.Add(Path.GetFileName(changedFile));
                             }
                         }
+
+                        if (FailedToCompile.Any())
+                        {
+                            CompileOneByOne();
+                        }
+
+                        GF.WriteLine(GF.stringLoggingData.ImportantAbove);
                     }
                     else
                     {
@@ -375,6 +382,45 @@ namespace ESLifyEverything
             return await Task.FromResult(0);
         }
         
+        public static void CompileOneByOne()
+        {
+            GF.WriteLine(GF.stringLoggingData.AttemptOneByOneCompiler);
+            foreach(string file in FailedToCompile)
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
+                p.StartInfo.Arguments = $"\"{Path.Combine(Path.GetFullPath(GF.ChangedScriptsPath), file)}\" -q -f=\"TESV_Papyrus_Flags.flg\" -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.Start();
+                using (StreamWriter stream = File.AppendText(GF.logName))
+                {
+                    while (!p.StandardOutput.EndOfStream)
+                    {
+                        string line = p.StandardOutput.ReadLine()!;
+                        Console.WriteLine(line);
+                        if (!line.Equals(string.Empty))
+                        {
+                            stream.WriteLine(line);
+                        }
+                    }
+                }
+                p.WaitForExit();
+                p.Dispose();
+                if (File.Exists(Path.Combine(GF.Settings.OutputFolder, "Scripts\\" + Path.ChangeExtension(file, null) + ".pex")))
+                {
+                    GF.WriteLine(GF.stringLoggingData.CompiledSuccessfully);
+                    FailedToCompile.Remove(file);
+                }
+                else
+                {
+                    GF.WriteLine(GF.stringLoggingData.CompiledUnsuccessfully);
+                }
+            }
+        }
+
         //Parses Script files
         public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed)
         {

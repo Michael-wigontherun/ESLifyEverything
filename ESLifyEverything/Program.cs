@@ -176,6 +176,10 @@ namespace ESLifyEverything
 
                     FinalizeData();
                 }
+                else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
+                {
+                    XEditSession();
+                }
                 switch (StartupError)
                 {
                     case StartupError.OK:
@@ -241,7 +245,7 @@ namespace ESLifyEverything
                 foreach(string error in FailedToCompile)
                 {
                     File.Copy(Path.Combine(GF.ChangedScriptsPath, error + ".psc"), Path.Combine(GF.Settings.OutputFolder, GF.SourceSubPath, error + ".psc"), true);
-                    GF.WriteLine(error + GF.stringLoggingData.ScriptFailedCompilation);
+                    GF.WriteLine(Path.ChangeExtension(error, null) + GF.stringLoggingData.ScriptFailedCompilation);
                     GF.WriteLine(String.Format(GF.stringLoggingData.ScriptFailedCompilation2, error));
                     Console.WriteLine();
                     
