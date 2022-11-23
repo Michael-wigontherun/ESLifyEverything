@@ -17,12 +17,12 @@ namespace ESLifyEverything.PluginHandles
 
         //Dictionary of Plugin Names and Output Locations
         //                        \/        \/
-        public static Dictionary<string, string> CustomPluginOutputLocations = new Dictionary<string, string>();
+        public static Dictionary<string, string> CustomPluginOutputLocations = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         //Uses the Plugin name to find and read the plugin
         //Changing FormKeys on Forms are handled by HandleSubFormHeaders() and HandleUniformFormHeaders()
         //FormLinks are handled using RemapLinks()
-        public static async Task<int> HandleSkyrimMod(string pluginName)
+        public static async Task<int> HandleSkyrimMod(string pluginName, string? customInternalOutputLocation = null)
         {
             string path = Path.Combine(GF.Settings.DataFolderPath, pluginName);
             if (!File.Exists(path))
@@ -30,12 +30,11 @@ namespace ESLifyEverything.PluginHandles
                 return await Task.FromResult(0);
             }
 
-            //ISkyrimModGetter orgMod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
             SkyrimMod mod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
 
             foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToHashSet())
             {
-                if (!Program.LoadOrder.Contains(masterReference.Master.ToString()))
+                if(!Program.LoadOrder.Contains(masterReference.Master.ToString(), StringComparer.OrdinalIgnoreCase))
                 {
                     GF.WriteLine(GF.stringLoggingData.MissingMaster + masterReference.Master.ToString());
                     return await Task.FromResult(3);
@@ -43,10 +42,6 @@ namespace ESLifyEverything.PluginHandles
             }
 
             DevLog.Log("Handling " + mod.ModKey.ToString());
-            //SkyrimMod mod = new SkyrimMod(orgMod.ModKey, SkyrimRelease.SkyrimSE);
-            //mod.DeepCopyIn(orgMod);
-            //DevLog.Log("Coppied " + mod.ModKey.ToString() + " for handling comparison.");
-            //SkyrimMod mod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
 
             bool ModEdited = false;
 
@@ -62,64 +57,41 @@ namespace ESLifyEverything.PluginHandles
                 DevLog.Log(mod.ModKey.ToString() + " was changed.");
             }
 
-            //foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToHashSet())
-            //{
-            //    foreach (CompactedModData compactedModData in CompactedModDataD.Values)
-            //    {
-            //        if (masterReference.Master.ToString().Equals(compactedModData.ModName))
-            //        {
-            //            DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + compactedModData.ModName);
-            //            mod.RemapLinks(compactedModData.ToDictionary());
-            //        }
-            //        if (compactedModData.ModName.Equals(mod.ModKey.ToString()))
-            //        {
-            //            DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + compactedModData.ModName);
-            //            mod.RemapLinks(compactedModData.ToDictionary());
-            //        }
-            //    }
-            //}
 
             HashSet<string> modNames = new HashSet<string>();
 
-            //if (CompactedModDataD.TryGetValue(mod.ModKey.ToString(), out CompactedModData? masterModData))
-            //{
-            //    mod.RemapLinks(masterModData.ToDictionary());
-            //    ModEdited = true;
-            //    DevLog.Log(mod.ModKey.ToString() + " was probably changed.");
-            //}
-
             foreach(IFormLinkGetter? link in mod.EnumerateFormLinks())
             {
-                FormKey formKey = link.FormKey; 
+                FormKey formKey = link.FormKey;
                 if (!modNames.Contains(formKey.ModKey.ToString()))
                 {
                     if (CompactedModDataD.TryGetValue(formKey.ModKey.ToString(), out CompactedModData? modData))
                     {
-                        foreach (FormHandler form in modData.CompactedModFormList)
+                        if (mod.ModKey.ToString().Equals(formKey.ModKey.ToString()) && modData.FromMerge)
                         {
-                            if (formKey.IDString().Equals(form.OriginalFormID))
-                            {
-                                modNames.Add(formKey.ModKey.ToString());
-                            }
+                            continue;
                         }
+                        else
+                        {
+                            foreach (FormHandler form in modData.CompactedModFormList)
+                            {
+                                if (formKey.IDString().Equals(form.OriginalFormID))
+                                {
+                                    modNames.Add(formKey.ModKey.ToString());
+                                }
+                            }
+                        } 
                     }
+                    
                 }
             }
-            
+
             foreach(string modName in modNames)
             {
                 DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modName);
                 mod.RemapLinks(CompactedModDataD[modName].ToDictionary());
                 ModEdited = true;
             }
-
-
-
-            //if (!mod.Equals(orgMod))
-            //{
-            //    DevLog.Log(mod.ModKey.ToString() + " was changed.");
-            //    ModEdited = true;
-            //}
 
             //ModEdited = true;
             if (ModEdited)
@@ -129,7 +101,7 @@ namespace ESLifyEverything.PluginHandles
                     rec.IsCompressed = false;
                 }
 
-                string outputPath = GetPluginModOutputPath(pluginName);
+                string outputPath = customInternalOutputLocation ?? GetPluginModOutputPath(pluginName);
 
                 mod.WriteToBinary(Path.Combine(outputPath, pluginName),
                 new BinaryWriteParameters()
@@ -153,17 +125,26 @@ namespace ESLifyEverything.PluginHandles
         {
             if (CustomPluginOutputLocations.TryGetValue(pluginName, out string? location))
             {
-                if (GF.Settings.MO2.MO2Support)
+                if (location.Contains("@mods", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (location.Contains("@mods", StringComparison.OrdinalIgnoreCase))
+                    if (GF.Settings.MO2.MO2Support)
                     {
                         location = location.Replace("@mods", GF.Settings.MO2.MO2ModFolder, StringComparison.OrdinalIgnoreCase);
                     }
+                    else
+                    {
+                        GF.WriteLine(GF.stringLoggingData.AtModsUnsupported);
+                        location = GF.Settings.OutputFolder;
+                    }
                 }
-                return location;
+
+                if (Directory.Exists(location))
+                {
+                    return location;
+                }
             }
 
-            if (GF.Settings.MO2.MO2Support)
+            if (GF.Settings.MO2.MO2Support && GF.Settings.MO2.OutputPluginsToSeperateFolders)
             {
                 string masterExtentions = pluginName;
                 GF.NewMO2FolderPaths = true;

@@ -1,0 +1,55 @@
+
+//foreach (var sourceForm in mod.DialogTopics.ToArray())
+//{
+//    foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//    {
+//        var responsesItemSet = sourceForm.Responses.ToHashSet();
+//        List<DialogResponses> responsesS = new List<DialogResponses>();
+//        List<DialogResponses> responsesC = new List<DialogResponses>();
+//        for (int i = 0; i < sourceForm.Responses.Count; i++)
+//        {
+//            if (sourceForm.Responses[i].FormKey.ModKey.Equals(compactedModData.ModName))
+//            {
+//                //var formCopy = sourceForm.Responses[i].DeepCopy();
+//                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                {
+//                    if (sourceForm.Responses[i].FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                    {
+//                        responsesS.Add(sourceForm.Responses[i]);
+//                        responsesC.Add(sourceForm.Responses[i].Duplicate(formHandler.CreateCompactedFormKey()));
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+//        for (int i = 0; i < responsesS.Count; i++)
+//        {
+//            DevLog.Log("Removing Response " + responsesS[i].FormKey.ToString());
+//            sourceForm.Responses.Remove(responsesS[i]);
+//            DevLog.Log("Duplicating to Response " + responsesC[i].FormKey.ToString());
+//            sourceForm.Responses.Add(responsesC[i]);
+//            ModEdited = true;
+//        }
+//        responsesS.Clear();
+//        responsesC.Clear();
+//        if (sourceForm.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//        {
+//            //var formCopy = sourceForm.DeepCopy();
+//            foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//            {
+//                if (sourceForm.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                {
+
+//                    var formCopy = sourceForm.Duplicate(formHandler.CreateCompactedFormKey());
+//                    DevLog.Log("Removing DialogTopic " + sourceForm.FormKey.ToString());
+//                    mod.Remove(sourceForm.FormKey);
+//                    DevLog.Log("Duplicating to DialogTopic " + formCopy.FormKey.ToString());
+//                    mod.DialogTopics.Add(formCopy);
+//                    ModEdited = true;
+//                    break;
+//                }
+//            }
+//        }
+
+//    }
+//}

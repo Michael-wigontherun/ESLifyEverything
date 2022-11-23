@@ -12,10 +12,10 @@ namespace ESLifyEverything
     {
         //List of dictionary of all enabled and valid CompactedModData.
         //The entire program functions using this.
-        public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>();
+        public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>(StringComparer.OrdinalIgnoreCase);
 
-        //List of dictionary of all enabled and valid CompactedModData that has already been run over Voice and FaceGen
-        public static Dictionary<string, CompactedModData> CompactedModDataDNoFaceVoice = new Dictionary<string, CompactedModData>();
+        ////List of dictionary of all enabled and valid CompactedModData that has already been run over Voice and FaceGen
+        //public static Dictionary<string, CompactedModData> CompactedModDataDNoFaceVoice = new Dictionary<string, CompactedModData>();
 
         //When populated it holds all plugin names parsed from your plugins.txt file from your my games folder
         public static string[] LoadOrder = new string[0];
@@ -42,7 +42,10 @@ namespace ESLifyEverything
         public static HashSet<string> FailedToCompile = new HashSet<string>();
 
         //Imports any CompactedModData or MergeCache's with names matching
-        public static HashSet<string> AlwaysImportList = new HashSet<string>();
+        public static HashSet<string> AlwaysImportList = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        //Stores what merges need to be rebuilt after a plugin that was merged into it was edited
+        public static HashSet<string> EditedMergedPluginNeedsRebuild = new HashSet<string>();
 
         //Obsolete
         ////End identifier to prompt that ESLify Everything output FaceGen data
@@ -120,7 +123,7 @@ namespace ESLifyEverything
 
                         DevLog.Pause("After FaceGen ESLify Menu Pause");
 
-                        MergeDictionaries();
+                        //MergeDictionaries();
 
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
@@ -143,7 +146,7 @@ namespace ESLifyEverything
 
                         DevLog.Pause("After FaceGen ESLify AutoRun Pause");
 
-                        MergeDictionaries();
+                        //MergeDictionaries();
 
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
@@ -256,6 +259,15 @@ namespace ESLifyEverything
                 Console.WriteLine();
                 GF.WriteLine(GF.stringLoggingData.ImportantAbove);
                 Console.WriteLine("\n\n\n\n");
+            }
+
+            if (EditedMergedPluginNeedsRebuild.Any())
+            {
+                GF.WriteLine("Please rebuild these merges, unless you know it doesn't need it.");
+                foreach(string plugin in EditedMergedPluginNeedsRebuild)
+                {
+                    GF.WriteLine(plugin);
+                }
             }
 
             Console.WriteLine();

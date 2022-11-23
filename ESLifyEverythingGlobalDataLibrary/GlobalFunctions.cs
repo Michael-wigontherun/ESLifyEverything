@@ -35,7 +35,7 @@ namespace ESLifyEverythingGlobalDataLibrary
     public static partial class GF
     {
         //readonly property to identify what settings version ESLify uses to update settings properly
-        public static readonly string SettingsVersion = "3.6.0";
+        public static readonly string SettingsVersion = "4.0.0";
 
         //readonly property to direct to where the Changed Scripts are stored
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";
@@ -77,7 +77,7 @@ namespace ESLifyEverythingGlobalDataLibrary
         //It is a list that holds what plugins should not be looked at by ESLify Everything
         //The base game plugins and a few large mod's plugins are included in IgnoredPugins.json
         //CustomIgnoredPugins.json is created by the user and populated with what you want to make ESLify Everything processing them
-        public static HashSet<string> IgnoredPlugins = new HashSet<string>();
+        public static HashSet<string> IgnoredPlugins = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         //ESLify Everything's log name
         public static string logName = "log.txt";
@@ -231,26 +231,26 @@ namespace ESLifyEverythingGlobalDataLibrary
                 GF.WriteLine(GF.stringLoggingData.OutputFolderWarning, true, false);
             }
 
-            if (Directory.Exists(Path.Combine(GF.Settings.OutputFolder, "scripts")))
-            {
-                IEnumerable<string> scripts = Directory.EnumerateFiles(
-                    Path.Combine(GF.Settings.OutputFolder, "scripts"),
-                    "*.pex",
-                    SearchOption.TopDirectoryOnly);
-                if (scripts.Any())
-                {
-                    startUp = false;
-                    GF.WriteLine(String.Format(GF.stringLoggingData.ClearYourOutputFolderScripts1, GF.stringLoggingData.PotectOrigonalScripts));
-                    GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts2);
-                    Process ds = new Process();
-                    ds.StartInfo.FileName = "explorer.exe";
-                    ds.StartInfo.Arguments = Path.Combine(GF.Settings.OutputFolder, "scripts");
-                    ds.Start();
-                    ds.WaitForExit();
-                    ds.Dispose();
-                    GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts3);
-                }
-            }
+            //if (Directory.Exists(Path.Combine(GF.Settings.OutputFolder, "scripts")))
+            //{
+            //    IEnumerable<string> scripts = Directory.EnumerateFiles(
+            //        Path.Combine(GF.Settings.OutputFolder, "scripts"),
+            //        "*.pex",
+            //        SearchOption.TopDirectoryOnly);
+            //    if (scripts.Any())
+            //    {
+            //        startUp = false;
+            //        GF.WriteLine(String.Format(GF.stringLoggingData.ClearYourOutputFolderScripts1, GF.stringLoggingData.PotectOrigonalScripts));
+            //        GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts2);
+            //        Process ds = new Process();
+            //        ds.StartInfo.FileName = "explorer.exe";
+            //        ds.StartInfo.Arguments = Path.Combine(GF.Settings.OutputFolder, "scripts");
+            //        ds.Start();
+            //        ds.WaitForExit();
+            //        ds.Dispose();
+            //        GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts3);
+            //    }
+            //}
 
             if (!startUp)
             {
@@ -294,7 +294,7 @@ namespace ESLifyEverythingGlobalDataLibrary
                 }
             }
 
-            if (GF.Settings.ImportAllCompactedModData)
+            if (GF.Settings.RunAllVoiceAndFaceGen)
             {
                 GF.WriteLine(GF.stringLoggingData.ImportAllCompactedModDataTrueWarning);
                 GF.Settings.AutoRunESLify = false;
@@ -317,21 +317,21 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             Directory.CreateDirectory(GF.ExtractedBSAModDataPath);
             Directory.CreateDirectory(GF.ChangedScriptsPath);
-            GF.ClearChangedScripts();
+            //GF.ClearChangedScripts();
 
             Directory.CreateDirectory(CompactedFormsFolder);
 
-            if (Directory.Exists(Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath)))
-            {
-                IEnumerable<string> scripts = Directory.EnumerateFiles(
-                    Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath),
-                    "*.psc",
-                    SearchOption.TopDirectoryOnly);
-                if (!scripts.Any())
-                {
-                    GF.Settings.AutoRunScriptDecompile = true;
-                }
-            }
+            //if (Directory.Exists(Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath)))
+            //{
+            //    IEnumerable<string> scripts = Directory.EnumerateFiles(
+            //        Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath),
+            //        "*.psc",
+            //        SearchOption.TopDirectoryOnly);
+            //    if (!scripts.Any())
+            //    {
+            //        GF.Settings.AutoRunScriptDecompile = true;
+            //    }
+            //}
 
 
 
@@ -339,21 +339,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             return startUp;
         }
 
-        //Clears the ChangedScripts folder from previous ESLify Everything session
-        private static void ClearChangedScripts()
-        {
-            IEnumerable<string> changedSouce = Directory.EnumerateFiles(
-                    GF.ChangedScriptsPath,
-                    "*.psc",
-                    SearchOption.TopDirectoryOnly);
-            if (changedSouce.Any())
-            {
-                foreach (string script in changedSouce)
-                {
-                    File.Delete(script);
-                }
-            }
-        }
+        
 
         //Writes a console line or file line when logging is set to true
         public static void WriteLine(string logLine, bool consoleLog = true, bool fileLogging = true, bool devOverride = false)

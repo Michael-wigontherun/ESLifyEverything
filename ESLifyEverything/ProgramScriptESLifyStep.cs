@@ -44,6 +44,8 @@ namespace ESLifyEverything
         {
             if (ExtractScriptsMenu())
             {
+                ClearChangedScripts();
+
                 Console.WriteLine(GF.stringLoggingData.IgnoreBelow);
 
                 for (int i = 0; i < GF.DefaultScriptBSAs.Length; i++)
@@ -91,7 +93,10 @@ namespace ESLifyEverything
                 {
                     BSAChamp.Dispose();
 
+                    Console.WriteLine();
                     GF.WriteLine(GF.stringLoggingData.RunningChampFailsafe);
+                    Console.WriteLine();
+
                     Task<int> BSAChampSlow = DecompileScriptsSlow(GF.ExtractedBSAModDataPath);
                     BSAChampSlow.Wait();
                     BSAChampSlow.Dispose();
@@ -107,18 +112,21 @@ namespace ESLifyEverything
                 SourceChamp.Wait();
                 if (SourceChamp.Result == 0)
                 {
-                    BSAChamp.Dispose();
+                    SourceChamp.Dispose();
 
+                    Console.WriteLine();
                     GF.WriteLine(GF.stringLoggingData.RunningChampFailsafe);
-                    Task<int> BSAChampSlow = DecompileScriptsSlow(GF.Settings.DataFolderPath);
-                    BSAChampSlow.Wait();
-                    BSAChampSlow.Dispose();
+                    Console.WriteLine();
+
+                    Task<int> SourceChampSlow = DecompileScriptsSlow(GF.Settings.DataFolderPath);
+                    SourceChampSlow.Wait();
+                    SourceChampSlow.Dispose();
                 }
                 else
                 {
                     SourceChamp.Dispose();
                 }
-
+                
                 GF.WriteLine(GF.stringLoggingData.EndedChampLoose);
 
                 Console.WriteLine(GF.stringLoggingData.IgnoreAbove);
@@ -215,13 +223,7 @@ namespace ESLifyEverything
             }
             else
             {
-                GF.WriteLine(GF.stringLoggingData.ChampCrash1);
-                GF.WriteLine(GF.stringLoggingData.ChampCrash2);
-                GF.WriteLine(line);
-                GF.WriteLine(GF.stringLoggingData.ChampCrash3);
-                GF.WriteLine(GF.stringLoggingData.ChampCrash4);
-                GF.WriteLine(GF.stringLoggingData.ChampCrash5);
-                GF.WriteLine(GF.stringLoggingData.ChampCrash6);
+                GF.WriteLine(GF.stringLoggingData.ChampCrash);
                 return await Task.FromResult(0);
 
             }
@@ -272,6 +274,8 @@ namespace ESLifyEverything
                     }
                 }
             }
+
+            Console.WriteLine("Ended one by one decompile.");
             return await Task.FromResult(1);
         }
 
@@ -284,6 +288,7 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.FolderNotFoundError + startFolder);
                 return await Task.FromResult(1);
             }
+
             bool tempLogging = GF.Settings.VerboseConsoleLoging;
             GF.Settings.VerboseConsoleLoging = false;
             IEnumerable<string> scripts = Directory.EnumerateFiles(
@@ -421,6 +426,22 @@ namespace ESLifyEverything
             }
         }
 
+        //Clears the ChangedScripts folder from previous ESLify Everything session
+        private static void ClearChangedScripts()
+        {
+            IEnumerable<string> changedSouce = Directory.EnumerateFiles(
+                    GF.ChangedScriptsPath,
+                    "*.psc",
+                    SearchOption.TopDirectoryOnly);
+            if (changedSouce.Any())
+            {
+                foreach (string script in changedSouce)
+                {
+                    File.Delete(script);
+                }
+            }
+        }
+
         //Parses Script files
         public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed)
         {
@@ -464,7 +485,7 @@ namespace ESLifyEverything
                 if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
                 {
                     string? exactHexValueTrimmed = null;
-                    if (fileLines[i].Contains("GetFormFromFile(", StringComparison.OrdinalIgnoreCase))
+                    if (fileLines[i].Contains("GetFormFromFile(", StringComparison.OrdinalIgnoreCase) && !fileLines[i].Contains("0x", StringComparison.OrdinalIgnoreCase))
                     {
                         fileLines[i] = FixLineToHex(fileLines[i], out exactHexValueTrimmed);
                     }

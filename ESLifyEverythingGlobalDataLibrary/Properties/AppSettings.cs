@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -40,6 +41,11 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
                     GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
                     GF.WriteLine(GF.stringLoggingData.EditYourSettings);
                     UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings352>()).Build();
+                    break;
+                case "3.6.0":
+                    GF.WriteLine(GF.stringLoggingData.GenSettingsFile);
+                    GF.WriteLine(GF.stringLoggingData.EditYourSettings);
+                    UAppSettings.AppSettings(config.GetRequiredSection("Settings").Get<AppSettings360>()).Build();
                     break;
                 default:
                     GF.GenerateSettingsFileError();
@@ -158,14 +164,7 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
             return appSettings;
         }
 
-    }
-#pragma warning restore CS0618 // Type or member is obsolete
-
-    public partial class AppSettings
-    {
-        public AppSettings() { }
-
-        public AppSettings(AppSettings appSettings360)
+        public static AppSettings AppSettings(AppSettings360 appSettings360)
         {
             AppSettings appSettings = new AppSettings();
             appSettings.XEditLogFileName = appSettings360.XEditLogFileName;
@@ -186,7 +185,39 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
             appSettings.OutputFolder = appSettings360.OutputFolder;
             appSettings.MO2.MO2Support = appSettings360.MO2.MO2Support;
             appSettings.MO2.MO2ModFolder = appSettings360.MO2.MO2ModFolder;
-            appSettings.ImportAllCompactedModData = appSettings360.ImportAllCompactedModData;
+            return appSettings;
+        }
+
+    }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+    public partial class AppSettings
+    {
+        public AppSettings() { }
+
+        public AppSettings(AppSettings appSettings400)
+        {
+            AppSettings appSettings = new AppSettings();
+            appSettings.XEditLogFileName = appSettings400.XEditLogFileName;
+            appSettings.PapyrusFlag = appSettings400.PapyrusFlag;
+            appSettings.VerboseConsoleLoging = appSettings400.VerboseConsoleLoging;
+            appSettings.VerboseFileLoging = appSettings400.VerboseFileLoging;
+            appSettings.AutoReadNewestxEditSession = appSettings400.AutoReadNewestxEditSession;
+            appSettings.AutoReadAllxEditSession = appSettings400.AutoReadAllxEditSession;
+            appSettings.AutoRunESLify = appSettings400.AutoRunESLify;
+            appSettings.AutoRunScriptDecompile = appSettings400.AutoRunScriptDecompile;
+            appSettings.EnableCompiler = appSettings400.EnableCompiler;
+            appSettings.EnableLargeMerges = appSettings400.EnableLargeMerges;
+            appSettings.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession = appSettings400.DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession;
+            appSettings.RunSubPluginCompaction = appSettings400.RunSubPluginCompaction;
+            appSettings.ChangedPluginsOutputToDataFolder = appSettings400.ChangedPluginsOutputToDataFolder;
+            appSettings.XEditFolderPath = appSettings400.XEditFolderPath;
+            appSettings.DataFolderPath = appSettings400.DataFolderPath;
+            appSettings.OutputFolder = appSettings400.OutputFolder;
+            appSettings.MO2.MO2Support = appSettings400.MO2.MO2Support;
+            appSettings.MO2.MO2ModFolder = appSettings400.MO2.MO2ModFolder;
+            appSettings.MO2.OutputPluginsToSeperateFolders = appSettings400.MO2.OutputPluginsToSeperateFolders;
+            appSettings.RunAllVoiceAndFaceGen = appSettings400.RunAllVoiceAndFaceGen;
             //return appSettings;
         }
 
@@ -198,7 +229,7 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
 
         public bool VerboseFileLoging { get; set; } = true;
 
-        public bool ImportAllCompactedModData { get; set; } = false;
+        public bool RunAllVoiceAndFaceGen { get; set; } = false;
 
         public bool AutoReadNewestxEditSession { get; set; } = false;
 
@@ -207,6 +238,8 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
         public bool AutoRunESLify { get; set; } = false;
 
         public bool AutoRunScriptDecompile { get; set; } = false;
+
+        public bool AutoRunMergedPluginFixer { get; set; } = true;
 
         public bool EnableCompiler { get; set; } = true;
 
@@ -254,6 +287,12 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
         public void Build()
         {
             File.WriteAllText("AppSettings.json", JsonSerializer.Serialize(new GeneratedAppSettings(this), GF.JsonSerializerOptions));
+
+            Process process = new Process();
+            process.StartInfo.FileName = "explorer.exe";
+            process.StartInfo.Arguments = Directory.GetCurrentDirectory();
+            process.Start();
+            process.Dispose();
         }
 
     }
@@ -261,6 +300,8 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
     public class MO2SupportSettings
     {
         public bool MO2Support { get; set; } = false;
+
+        public bool OutputPluginsToSeperateFolders { get; set; } = true;
 
         public string MO2ModFolder { get; set; } = "MO2\\Mods";
     }
@@ -435,6 +476,46 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties
         public bool RunSubPluginCompaction { get; set; } = false;
 
         public bool ChangedPluginsOutputToDataFolder = false;
+
+        public string XEditFolderPath { get; set; } = "xEditFolderPath";
+
+        public string DataFolderPath { get; set; } = "Skyrim Special Edition\\Data";
+
+        public string OutputFolder { get; set; } = "MO2\\Mods\\OutputFolder";
+
+        public MO2SupportSettings MO2 { get; set; } = new MO2SupportSettings();
+    }
+
+    [Obsolete("Only used for Updating")]
+    public class AppSettings360
+    {
+        public string XEditLogFileName { get; set; } = "SSEEdit_log.txt";
+
+        public string PapyrusFlag { get; set; } = "TESV_Papyrus_Flags.flg";
+
+        public bool VerboseConsoleLoging { get; set; } = false;
+
+        public bool VerboseFileLoging { get; set; } = true;
+
+        public bool ImportAllCompactedModData { get; set; } = false;
+
+        public bool AutoReadNewestxEditSession { get; set; } = false;
+
+        public bool AutoReadAllxEditSession { get; set; } = false;
+
+        public bool AutoRunESLify { get; set; } = false;
+
+        public bool AutoRunScriptDecompile { get; set; } = false;
+
+        public bool EnableCompiler { get; set; } = true;
+
+        public bool EnableLargeMerges { get; set; } = false;
+
+        public bool DeletexEditLogAfterRun_Requires_AutoReadAllxEditSession { get; set; } = false;
+
+        public bool RunSubPluginCompaction { get; set; } = false;
+
+        public bool ChangedPluginsOutputToDataFolder { get; set; } = false;
 
         public string XEditFolderPath { get; set; } = "xEditFolderPath";
 

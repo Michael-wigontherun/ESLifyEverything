@@ -125,6 +125,7 @@
         public string PluginEditorDisabled { get; set; } = "";
         public string NewMO2FoldersWarning { get; set; } = "";
         public string HowToDisableMO2Folders { get; set; } = "";
+        public string AtModsUnsupported { get; set; } = "";
 
         //BSAData & LoadOrderBSAData
         public string StartBSAExtract { get; set; } = "";
@@ -189,12 +190,7 @@
         public string EndedChampBSA { get; set; } = "";
         public string RunningChampLoose { get; set; } = "";
         public string RunningChampFailsafe { get; set; } = "";
-        public string ChampCrash1 { get; set; } = "";
-        public string ChampCrash2 { get; set; } = "";
-        public string ChampCrash3 { get; set; } = "";
-        public string ChampCrash4 { get; set; } = "";
-        public string ChampCrash5 { get; set; } = "";
-        public string ChampCrash6 { get; set; } = "";
+        public string ChampCrash { get; set; } = "";
         public string EndedChampLoose { get; set; } = "";
         public string FixDecToHexError { get; set; } = "";
         public string CompilerIsDisabled { get; set; } = "";
