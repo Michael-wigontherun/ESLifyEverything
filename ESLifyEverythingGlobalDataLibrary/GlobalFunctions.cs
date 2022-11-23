@@ -231,26 +231,26 @@ namespace ESLifyEverythingGlobalDataLibrary
                 GF.WriteLine(GF.stringLoggingData.OutputFolderWarning, true, false);
             }
 
-            //if (Directory.Exists(Path.Combine(GF.Settings.OutputFolder, "scripts")))
-            //{
-            //    IEnumerable<string> scripts = Directory.EnumerateFiles(
-            //        Path.Combine(GF.Settings.OutputFolder, "scripts"),
-            //        "*.pex",
-            //        SearchOption.TopDirectoryOnly);
-            //    if (scripts.Any())
-            //    {
-            //        startUp = false;
-            //        GF.WriteLine(String.Format(GF.stringLoggingData.ClearYourOutputFolderScripts1, GF.stringLoggingData.PotectOrigonalScripts));
-            //        GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts2);
-            //        Process ds = new Process();
-            //        ds.StartInfo.FileName = "explorer.exe";
-            //        ds.StartInfo.Arguments = Path.Combine(GF.Settings.OutputFolder, "scripts");
-            //        ds.Start();
-            //        ds.WaitForExit();
-            //        ds.Dispose();
-            //        GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts3);
-            //    }
-            //}
+            if (Directory.Exists(Path.Combine(GF.Settings.OutputFolder, "scripts")))
+            {
+                IEnumerable<string> scripts = Directory.EnumerateFiles(
+                    Path.Combine(GF.Settings.OutputFolder, "scripts"),
+                    "*.pex",
+                    SearchOption.TopDirectoryOnly);
+                if (scripts.Any())
+                {
+                    startUp = false;
+                    GF.WriteLine(String.Format(GF.stringLoggingData.ClearYourOutputFolderScripts1, GF.stringLoggingData.PotectOrigonalScripts));
+                    GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts2);
+                    Process ds = new Process();
+                    ds.StartInfo.FileName = "explorer.exe";
+                    ds.StartInfo.Arguments = Path.Combine(GF.Settings.OutputFolder, "scripts");
+                    ds.Start();
+                    ds.WaitForExit();
+                    ds.Dispose();
+                    GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts3);
+                }
+            }
 
             if (!startUp)
             {
@@ -321,17 +321,6 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             Directory.CreateDirectory(CompactedFormsFolder);
 
-            //if (Directory.Exists(Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath)))
-            //{
-            //    IEnumerable<string> scripts = Directory.EnumerateFiles(
-            //        Path.Combine(GF.ExtractedBSAModDataPath, GF.SourceSubPath),
-            //        "*.psc",
-            //        SearchOption.TopDirectoryOnly);
-            //    if (!scripts.Any())
-            //    {
-            //        GF.Settings.AutoRunScriptDecompile = true;
-            //    }
-            //}
 
 
 
