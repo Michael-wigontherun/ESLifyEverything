@@ -3,7 +3,6 @@ using ESLifyEverything.PluginHandles;
 using ESLifyEverythingGlobalDataLibrary;
 using ESLifyEverythingGlobalDataLibrary.Properties;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
-using System.ComponentModel.Design;
 using System.Text.Json;
 
 namespace ESLifyEverything
@@ -42,7 +41,7 @@ namespace ESLifyEverything
         public static HashSet<string> FailedToCompile = new HashSet<string>();
 
         //Imports any CompactedModData or MergeCache's with names matching
-        public static HashSet<string> AlwaysImportList = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        public static HashSet<string> AlwaysCheckList = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         //Stores what merges need to be rebuilt after a plugin that was merged into it was edited
         public static HashSet<string> EditedMergedPluginNeedsRebuild = new HashSet<string>();
@@ -58,7 +57,7 @@ namespace ESLifyEverything
         public static bool NewOrUpdatedMods = false;
 
         //Imports all CompactedModData and MergeCache's
-        public static bool ImportEverything = false;
+        public static bool CheckEverything = false;
 
         //Main method that starts all features for eslify
         //Currently there are no Console Arguments, I will be adding some eventually
@@ -194,6 +193,7 @@ namespace ESLifyEverything
                     default:
                         break;
                 }
+                
             }
             #region Catch
             catch (ArgumentHelpException) { }
@@ -225,6 +225,7 @@ namespace ESLifyEverything
             //    GF.WriteLine(GF.stringLoggingData.EditedFaceGen);
             //    GF.RunFaceGenFix();
             //}
+
             if (BSAExtracted)
             {
                 Console.WriteLine();
@@ -285,29 +286,39 @@ namespace ESLifyEverything
                     Help();
                     throw new ArgumentHelpException();
                 }
-                //else if (arg.Equals("-i=a"))
-                //{
-                //    ImportEverything = true;
-                //    DevLog.Log("ImportEverything: true");
-                //}
-                //else if(arg.IndexOf("-i=", StringComparison.OrdinalIgnoreCase) == 0)
-                //{
-                //    DevLog.Log(arg);
-                //    string[] importCMD = arg.Replace("-i=", "").Split(',');
-                //    foreach(string cmd in importCMD)
-                //    {
-                //        AlwaysImportList.Add(cmd.Trim());
-                //    }
-                //}
-                //else if (arg.IndexOf("-import=", StringComparison.OrdinalIgnoreCase) == 0)
-                //{
-                //    DevLog.Log(arg);
-                //    string[] importCMD = arg.Replace("-import=", "").Split(',');
-                //    foreach (string cmd in importCMD)
-                //    {
-                //        AlwaysImportList.Add(cmd.Trim());
-                //    }
-                //}
+                else if (arg.Equals("-c=a", StringComparison.OrdinalIgnoreCase))
+                {
+                    CheckEverything = true;
+                    DevLog.Log("CheckEverything: true");
+                }
+                else if (arg.Equals("-check=a", StringComparison.OrdinalIgnoreCase))
+                {
+                    CheckEverything = true;
+                    DevLog.Log("CheckEverything: true");
+                }
+                else if (arg.IndexOf("-c=", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    DevLog.Log(arg);
+                    string[] importCMD = arg.Replace("-c=", "").Split(',');
+                    foreach (string cmd in importCMD)
+                    {
+                        AlwaysCheckList.Add(cmd.Trim());
+                    }
+                }
+                else if (arg.IndexOf("-check=", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    DevLog.Log(arg);
+                    string[] importCMD = arg.Replace("-check=", "").Split(',');
+                    foreach (string cmd in importCMD)
+                    {
+                        AlwaysCheckList.Add(cmd.Trim());
+                    }
+                }
+                else
+                {
+                    GF.WriteLine($"Invalid Argument exception, {arg} not known.");
+                    throw new ArgumentHelpException();
+                }
             }
         }
 
@@ -318,23 +329,18 @@ namespace ESLifyEverything
             Console.WriteLine("-h  or -help       Prints this message output and cancels other processes");
             Console.WriteLine();
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
-            Console.WriteLine("-i= or -import=    followed by a plugin name will import the corresponding CompactedModData.");
+            Console.WriteLine("-c= or -check=    followed by a plugin name will check the corresponding CompactedModData on Face and Voice.");
             Console.WriteLine();
-            Console.WriteLine("Example: -i=\"Magically mine.esp\" will always import the CompactedModData associated with Magically mine.esp.");
-            Console.WriteLine("Or if it was a Merge it would import the merge.");
+            Console.WriteLine("Example: -c=\"DIVERSE SKYRIM.esp\" will always check the CompactedModData associated with DIVERSE SKYRIM.esp.");
+            Console.WriteLine("Or if it was a Merge it would check the merge.");
             Console.WriteLine();
             Console.WriteLine("You have 2 options you can do repeated -i=\"[plugin name]\" or you can add them delimit them with \",\".");
             Console.WriteLine();
-            Console.WriteLine("Example: -i=\"Magically mine.esp\" -i=\"GIST soul trap.esp\" -i=\"Castle Volkihar Rebuilt.esp\"");
-            Console.WriteLine("Example: -i=\"Magically mine.esp, GIST soul trap.esp, Castle Volkihar Rebuilt.esp\"");
+            Console.WriteLine("Example: -c=\"DIVERSE SKYRIM.esp\" -i=\"GIST soul trap.esp\" -c=\"Castle Volkihar Rebuilt.esp\"");
+            Console.WriteLine("Example: -c=\"DIVERSE SKYRIM.esp, GIST soul trap.esp, Castle Volkihar Rebuilt.esp\"");
             Console.WriteLine("  * The second is preferred");
             Console.WriteLine("  * Spaces are not necessary after comma's.");
-            Console.WriteLine();
-            Console.WriteLine("If you want to bypass ImportAllCompactedModData and use AutoRunESLify then set -i=a");
-            Console.WriteLine("This will import all mod data without disabling AutoRunESlify.");
-            Console.WriteLine("You must set ImportAllCompactedModData to false and AutoRunESlify to true for this to take effect.");
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
-
         }
     }
 }

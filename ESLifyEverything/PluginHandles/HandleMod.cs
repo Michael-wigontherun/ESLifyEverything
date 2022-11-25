@@ -152,7 +152,8 @@ namespace ESLifyEverything.PluginHandles
                 Directory.CreateDirectory(OutputPath);
                 return OutputPath;
             }
-            else if (GF.Settings.ChangedPluginsOutputToDataFolder)
+
+            if (GF.Settings.ChangedPluginsOutputToDataFolder)
             {
                 return GF.Settings.DataFolderPath;
             }

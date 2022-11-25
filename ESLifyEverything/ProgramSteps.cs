@@ -378,50 +378,27 @@ namespace ESLifyEverything
                             GF.WriteLine("Input: " + "Empty.String", false, true);
                         }
                     }
+
                     if (mergeData.AlreadyCached())
                     {
-                        //if (!mergeData.PreviouslyESLified || GF.Settings.ImportAllCompactedModData || ImportModDataCheck(mergeData.MergeName))
-                        //{
-                            GF.WriteLine(GF.stringLoggingData.ImportingMergeCache + file);
-                            foreach (CompactedModData compactedModData in mergeData.CompactedModDatas)
+                        GF.WriteLine(GF.stringLoggingData.ImportingMergeCache + file);
+                        foreach (CompactedModData compactedModData in mergeData.CompactedModDatas)
+                        {
+                            if (compactedModData.CompactedModFormList.Any())
                             {
-                                if (compactedModData.CompactedModFormList.Any())
+                                compactedModData.FromMerge = true;
+                                compactedModData.MergeName = mergeData.MergeName;
+                                GF.IgnoredPlugins.Add(compactedModData.ModName);
+                                GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                                if(!CompactedModDataD.TryAdd(compactedModData.ModName, compactedModData))
                                 {
-                                    compactedModData.FromMerge = true;
-                                    compactedModData.MergeName = mergeData.MergeName;
-                                    GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                                    if(!CompactedModDataD.TryAdd(compactedModData.ModName, compactedModData))
+                                    if(CompactedModDataD.ContainsKey(compactedModData.ModName))
                                     {
-                                        if(CompactedModDataD.ContainsKey(compactedModData.ModName))
-                                        {
-                                            CompactedModDataD[compactedModData.ModName] = compactedModData;
-                                        }
+                                        CompactedModDataD[compactedModData.ModName] = compactedModData;
                                     }
-                                    //CompactedModDataDScriptAndPlugins.TryAdd(compactedModData.ModName, compactedModData);
                                 }
                             }
-                        //}
-                        //else
-                        //{
-                        //    GF.WriteLine(GF.stringLoggingData.ImportingMergeCacheOSP + file);
-                        //    foreach (CompactedModData compactedModData in mergeData.CompactedModDatas)
-                        //    {
-                        //        if (compactedModData.CompactedModFormList.Any())
-                        //        {
-                        //            compactedModData.FromMerge = true;
-                        //            compactedModData.MergeName = mergeData.MergeName;
-                        //            GF.WriteLine(GF.stringLoggingData.ImportingMergeCompactedModData + compactedModData.ModName, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                        //            if(!CompactedModDataDNoFaceVoice.TryAdd(compactedModData.ModName, compactedModData))
-                        //            {
-                        //                if (CompactedModDataDNoFaceVoice.ContainsKey(compactedModData.ModName))
-                        //                {
-                        //                    CompactedModDataDNoFaceVoice[compactedModData.ModName] = compactedModData;
-                        //                }
-                        //            }
-                        //        }
-                        //    }
-                        //}
-
+                        }
                     }
                 }
                 else
@@ -430,15 +407,6 @@ namespace ESLifyEverything
                     GF.WriteLine(String.Format(GF.stringLoggingData.SkippingImport, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                 }
             }
-        }
-
-        private static bool ImportModDataCheck(string modName)
-        {
-            if (ImportEverything)
-            {
-                return true;
-            }
-            return AlwaysImportList.Contains(modName);
         }
 
         //Validates whether the CompactedModData is still valid compared to the Plugin
@@ -557,7 +525,7 @@ namespace ESLifyEverything
 
             if (File.Exists(pluginsFilePath))
             {
-                LoadOrder = GF.FilterForActiveLoadOrder(pluginsFilePath, false);
+                LoadOrder = GF.FilterForActiveLoadOrder(pluginsFilePath);
                 
                 foreach (string plugin in LoadOrder)
                 {
@@ -589,6 +557,15 @@ namespace ESLifyEverything
                 BSAExtracted = true;
             }
             return await Task.FromResult(0);
+        }
+
+        private static bool CheckModDataCheck(string modName)
+        {
+            if (CheckEverything)
+            {
+                return true;
+            }
+            return AlwaysCheckList.Contains(modName);
         }
 
         //Region for Voice Eslify
@@ -628,7 +605,7 @@ namespace ESLifyEverything
         {
             foreach (CompactedModData modData in CompactedModDataD.Values)
             {
-                if (!modData.PreviouslyESLified || GF.Settings.RunAllVoiceAndFaceGen || ImportModDataCheck(modData.ModName))
+                if (!modData.PreviouslyESLified || GF.Settings.RunAllVoiceAndFaceGen || CheckModDataCheck(modData.ModName))
                 {
                     VoiceESLifyMod(modData);
                 }
@@ -788,7 +765,7 @@ namespace ESLifyEverything
         {
             foreach (CompactedModData modData in CompactedModDataD.Values)
             {
-                if (!modData.PreviouslyESLified || GF.Settings.RunAllVoiceAndFaceGen || ImportModDataCheck(modData.ModName))
+                if (!modData.PreviouslyESLified || GF.Settings.RunAllVoiceAndFaceGen || CheckModDataCheck(modData.ModName))
                 {
                     FaceGenESLifyMod(modData);
                 }
@@ -1475,16 +1452,6 @@ namespace ESLifyEverything
             }
             return await Task.FromResult(0);
         }
-
-        //private static void MergeDictionaries()
-        //{
-        //    foreach(KeyValuePair<string, CompactedModData> modData in CompactedModDataDNoFaceVoice)
-        //    {
-        //        CompactedModDataD.TryAdd(modData.Key, modData.Value);
-        //    }
-
-        //    CompactedModDataDNoFaceVoice.Clear();
-        //}
 
         //Region for fixing records and references inside of plugins
         #region Plugins

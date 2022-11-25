@@ -143,7 +143,11 @@ namespace ESLifyEverythingGlobalDataLibrary
             Settings = config.GetRequiredSection("Settings").Get<AppSettings>();
             DefaultScriptBSAs = config.GetRequiredSection("DefaultScriptBSAs").Get<string[]>();
             DefaultPlugins = config.GetRequiredSection("DefaultPlugins").Get<string[]>();
-            IgnoredPlugins = config.GetRequiredSection("IgnoredPugins").Get<HashSet<string>>();
+
+            foreach(string plugin in config.GetRequiredSection("IgnoredPugins").Get<HashSet<string>>())
+            {
+                IgnoredPlugins.Add(plugin);
+            }
 
             if (File.Exists("DevAppSettings.json"))
             {
@@ -328,8 +332,6 @@ namespace ESLifyEverythingGlobalDataLibrary
             return startUp;
         }
 
-        
-
         //Writes a console line or file line when logging is set to true
         public static void WriteLine(string logLine, bool consoleLog = true, bool fileLogging = true, bool devOverride = false)
         {
@@ -440,7 +442,7 @@ namespace ESLifyEverythingGlobalDataLibrary
         }
 
         //Filters out unactive plugins inside of the plugins.txt and returns the list of active plugins
-        public static string[] FilterForActiveLoadOrder(string pluginsPath, bool fallout4 = false)
+        public static string[] FilterForActiveLoadOrder(string pluginsPath)
         {
             string[] plugins = File.ReadAllLines(pluginsPath);
 
@@ -450,7 +452,6 @@ namespace ESLifyEverythingGlobalDataLibrary
             {
                 if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, plugin)))
                 {
-                    Console.WriteLine(plugin);
                     filteredLoadOrder.Add(plugin);
                 }
             }
