@@ -36,8 +36,14 @@ namespace ESLifyEverything.PluginHandles
             {
                 if(!Program.LoadOrder.Contains(masterReference.Master.ToString(), StringComparer.OrdinalIgnoreCase))
                 {
-                    GF.WriteLine(GF.stringLoggingData.MissingMaster + masterReference.Master.ToString());
-                    return await Task.FromResult(3);
+                    if (CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
+                    {
+                        if (!modData.FromMerge)
+                        {
+                            GF.WriteLine(GF.stringLoggingData.MissingMaster + masterReference.Master.ToString());
+                            return await Task.FromResult(3);
+                        }
+                    }
                 }
             }
 

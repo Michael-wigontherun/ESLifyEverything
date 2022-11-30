@@ -9,8 +9,8 @@ namespace ESLifyEverythingGlobalDataLibrary
     //For errors in startup causing things not to run
     public enum StartupError
     {
-        OK = 0,                 //Everything should run fine
-        xEditLogNotFound = 1    //Did not find the xEdit log inside the XEditFolderPath
+        xEditLogNotFound,           //Did not find the xEdit log inside the XEditFolderPath
+        InvalidStartUp              //Startup was not successful can not run
     }
 
     //Global File Extentions
@@ -93,17 +93,18 @@ namespace ESLifyEverythingGlobalDataLibrary
         public static bool StartUpInitialized = false;
 
         //Checks whether all AppSettings are valid and should work as intended so long as paths are directed to the correct folders
-        public static bool Startup(out StartupError startupError, string ProgramLogName)
+        public static bool Startup(out HashSet<StartupError> startupError, string ProgramLogName)
         {
+            startupError = new HashSet<StartupError>();
             logName = ProgramLogName;
             File.Create(logName).Close();
-            startupError = StartupError.OK;
 
             GetStringResources();
 
             if (!File.Exists("AppSettings.json"))
             {
                 GF.GenerateSettingsFileError();
+                startupError.Add(StartupError.InvalidStartUp);
                 return false;
             }
 
@@ -131,12 +132,14 @@ namespace ESLifyEverythingGlobalDataLibrary
                 if (!version.Equals(GF.SettingsVersion))
                 {
                     UAppSettings.UpdateSettingsFile();
+                    startupError.Add(StartupError.InvalidStartUp);
                     return false;
                 }
             }
             catch (Exception)
             {
                 GF.GenerateSettingsFileError();
+                startupError.Add(StartupError.InvalidStartUp);
                 return false;
             }
 
@@ -165,12 +168,14 @@ namespace ESLifyEverythingGlobalDataLibrary
             if (!Directory.Exists(GF.Settings.DataFolderPath))
             {
                 GF.WriteLine(GF.stringLoggingData.DataFolderNotFound);
+                startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
             }
 
             if (!Directory.Exists(GF.Settings.XEditFolderPath))
             {
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFoundStartup);
+                startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
                 if (File.Exists(GF.Settings.XEditFolderPath))
                 {
@@ -191,17 +196,19 @@ namespace ESLifyEverythingGlobalDataLibrary
             if (!File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
             {
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFound);
-                startupError = StartupError.xEditLogNotFound;
+                startupError.Add(StartupError.xEditLogNotFound);
             }
 
             if (!File.Exists(".\\Champollion\\Champollion.exe"))
             {
+                startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
                 GF.WriteLine(GF.stringLoggingData.ChampollionMissing);
             }
 
             if (!File.Exists(Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe")))
             {
+                startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
                 GF.WriteLine(GF.stringLoggingData.PapyrusCompilerMissing);
                 GF.WriteLine(GF.stringLoggingData.PapyrusCompilerMissing2);
@@ -226,6 +233,7 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             if (!Directory.Exists(GF.Settings.OutputFolder))
             {
+                startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
                 GF.WriteLine(GF.stringLoggingData.OutputFolderNotFound);
                 GF.WriteLine(String.Format(GF.stringLoggingData.OutputFolderIsRequired, GF.stringLoggingData.PotectOrigonalScripts));
@@ -244,6 +252,7 @@ namespace ESLifyEverythingGlobalDataLibrary
                 if (scripts.Any())
                 {
                     startUp = false;
+                    startupError.Add(StartupError.InvalidStartUp);
                     GF.WriteLine(String.Format(GF.stringLoggingData.ClearYourOutputFolderScripts1, GF.stringLoggingData.PotectOrigonalScripts));
                     GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts2);
                     Process ds = new Process();
@@ -325,11 +334,17 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             Directory.CreateDirectory(CompactedFormsFolder);
 
-
-
-
-
             return startUp;
+        }
+
+        //Outputs logging for StartupErrors
+        public static void EndStartUpErrorLoggig(HashSet<StartupError> startupError)
+        {
+            if (startupError.Contains(StartupError.xEditLogNotFound))
+            {
+                Console.WriteLine("\n\n\n\n");
+                GF.WriteLine(GF.stringLoggingData.xEditlogNotFound);
+            }
         }
 
         //Writes a console line or file line when logging is set to true

@@ -24,7 +24,9 @@ namespace ESLifyEverything.FormData
         public bool Recheck { get; set; } = true;
         [JsonInclude]
         public bool PreviouslyESLified { get; set; } = false;
-        
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? NotCompactedData { get; set; } = null;
+
         public CompactedModData() { }
 
         public CompactedModData(string modName) 
@@ -70,7 +72,7 @@ namespace ESLifyEverything.FormData
                         
                         foreach (FormHandler form in CompactedModFormList)
                         {
-                            if (!recordsDict.TryResolve(form.CreateCompactedFormKey(), out IMajorRecordGetter? rec))
+                            if (recordsDict.TryResolve(form.CreateOriginalFormKey(ModName), out IMajorRecordGetter? rec))
                             {
                                 DevLog.Log(form + " Not Found.");
                                 return false;
@@ -83,7 +85,7 @@ namespace ESLifyEverything.FormData
                         {
                             if (form.FormKey.ModKey.ToString().Equals(this.ModName))
                             {
-                                if (form.FormKey.ID < validMin && form.FormKey.ID > validMax)
+                                if (form.FormKey.ID < validMin || form.FormKey.ID > validMax)
                                 {
                                     DevLog.Log(form.FormKey.ToString() + " out of bounds.");
                                     return false;

@@ -66,10 +66,10 @@ namespace ESLifyEverything
             try
             {
                 HandleArgs(args);
-                if (StartUp(out StartupError StartupError, "ESLifyEverything_Log.txt"))
+                if (StartUp(out HashSet<StartupError> startupError, "ESLifyEverything_Log.txt"))
                 {
                     Console.WriteLine("Sucessful startup");
-                    if (StartupError == 0)
+                    if (!startupError.Contains(StartupError.xEditLogNotFound))
                     {
                         XEditSession();
                     }
@@ -182,18 +182,10 @@ namespace ESLifyEverything
                 {
                     XEditSession();
                 }
-                switch (StartupError)
-                {
-                    case StartupError.OK:
-                        break;
-                    case StartupError.xEditLogNotFound:
-                        Console.WriteLine("\n\n\n\n");
-                        GF.WriteLine(GF.stringLoggingData.xEditlogNotFound);
-                        break;
-                    default:
-                        break;
-                }
                 
+                GF.EndStartUpErrorLoggig(startupError);
+
+
             }
             #region Catch
             catch (ArgumentHelpException) { }
@@ -274,6 +266,17 @@ namespace ESLifyEverything
             Console.WriteLine();
             GF.WriteLine(GF.stringLoggingData.EnterToExit);
             Console.ReadLine();
+        }
+
+        //Extra Startup stuff that ESLify Everything needs
+        private static bool StartUp(out HashSet<StartupError> startupError, string ProgramLogName)
+        {
+            bool startup = GF.Startup(out startupError, ProgramLogName);
+            if (startup)
+            {
+                BSAData.GetBSAData();
+            }
+            return startup;
         }
 
         private static void HandleArgs(string[] args)

@@ -6,10 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release;Personal</Configurations>
+    <ApplicationIcon>ESLifyEverythingIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Personal|AnyCPU'">
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Properties\skyrimicon.png" />
+    <Content Include="ESLifyEverythingIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,10 +29,6 @@
     <ProjectReference Include="..\ESLifyCreateJson\ESLifyCreateJson.csproj" />
     <ProjectReference Include="..\ESLifyEverythingGlobalDataLibrary\ESLifyEverythingGlobalDataLibrary.csproj" />
     <ProjectReference Include="..\ESLifySplitModInterpreter\ESLifySplitModInterpreter.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Properties\skyrimicon.png" />
   </ItemGroup>
 
   <ItemGroup>

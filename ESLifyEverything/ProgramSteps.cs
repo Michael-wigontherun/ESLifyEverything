@@ -14,17 +14,6 @@ namespace ESLifyEverything
 {
     public static partial class Program
     {
-        //Extra Startup stuff that ESLify Everything needs
-        private static bool StartUp(out StartupError startupError, string ProgramLogName)
-        {
-            bool startup = GF.Startup(out startupError, ProgramLogName);
-            if (startup)
-            {
-                BSAData.GetBSAData();
-            }
-            return startup;
-        }
-
         //Region for reading the xEdit log
         #region xEdit Log
         //Parses the xEdit log and readys it for output
@@ -412,7 +401,13 @@ namespace ESLifyEverything
         //Validates whether the CompactedModData is still valid compared to the Plugin
         private static CompactedModData ValidateCompactedModDataJson(CompactedModData modData)
         {
-            if (modData.IsCompacted(false))
+            if (modData.NotCompactedData.HasValue && modData.NotCompactedData.Value) 
+            {
+                modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
+                modData.Enabled = true;
+                modData.Recheck = true;
+            }
+            else if (modData.IsCompacted(false))
             {
                 modData.PluginLastModifiedValidation = File.GetLastWriteTime(Path.Combine(GF.Settings.DataFolderPath, modData.ModName));
                 modData.Enabled = true;
@@ -1520,6 +1515,16 @@ namespace ESLifyEverything
             HashSet<string> slectedCompactedMods = new HashSet<string>();
             List<string> menuList = new List<string>();
             menuList.AddRange(CompactedModDataD.Keys);
+
+            foreach(CompactedModData compactedModData in CompactedModDataD.Values)
+            {
+                if (!compactedModData.PreviouslyESLified)
+                {
+                    menuList.Remove(compactedModData.ModName);
+                    slectedCompactedMods.Add(compactedModData.ModName);
+                }
+            }
+
             bool exit = false;
             int menuModifier = 3;//1 is for offsetting the 0. in the menu add one for each extra menu item.
             do
@@ -1533,6 +1538,9 @@ namespace ESLifyEverything
                 {
                     Console.WriteLine($"{i + menuModifier}. {menuList.ElementAt(i)}");
                 }
+                Console.WriteLine();
+                Console.WriteLine("1. " + GF.stringLoggingData.RunAllPluginChecks);
+                Console.WriteLine("2. " + "Check the selected plugins");
                 if (GF.WhileMenuSelect(menuList.Count + menuModifier, out int selectedMenuItem, 1))
                 {
                     if (selectedMenuItem == -1)
