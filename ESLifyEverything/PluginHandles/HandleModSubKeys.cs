@@ -15,18 +15,21 @@ namespace ESLifyEverything.PluginHandles
             //DialogTopics
             foreach (var dialogTopic in mod.DialogTopics.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(dialogTopic.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(dialogTopic.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (dialogTopic.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = dialogTopic.Duplicate(formKey);
-                        DevLog.Log("DialogTopics: Removing " + dialogTopic.FormKey.ToString());
-                        mod.DialogTopics.Remove(dialogTopic.FormKey);
-                        DevLog.Log("DialogTopics: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.DialogTopics.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(dialogTopic.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = dialogTopic.Duplicate(formKey);
+                            DevLog.Log("DialogTopics: Removing " + dialogTopic.FormKey.ToString());
+                            mod.DialogTopics.Remove(dialogTopic.FormKey);
+                            DevLog.Log("DialogTopics: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.DialogTopics.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -35,18 +38,21 @@ namespace ESLifyEverything.PluginHandles
             {
                 foreach(DialogResponses? response in dialogTopic.Responses.ToArray())
                 {
-                    if (CompactedModDataD.TryGetValue(dialogTopic.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                    foreach(CompactedModData compactedModData in CompactedModDataD.Values)
                     {
-                        FormKey formKey = HandleFormKeyFix(dialogTopic.FormKey, compactedModData, out bool changed);
-                        if (changed)
+                        if (response.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                         {
-                            var formCopy = response.Duplicate(formKey);
-                            DevLog.Log("GameSettings: Removing " + dialogTopic.FormKey.ToString());
-                            dialogTopic.Responses.Remove(response);
-                            DevLog.Log("GameSettings: Duplicating to " + formCopy.FormKey.ToString());
-                            dialogTopic.Responses.Add(formCopy);
-                            ModEdited = true;
-                            break;
+                            FormKey formKey = HandleFormKeyFix(response.FormKey, compactedModData, out bool changed);
+                            if (changed)
+                            {
+                                var formCopy = response.Duplicate(formKey);
+                                DevLog.Log("GameSettings: Removing " + response.FormKey.ToString());
+                                dialogTopic.Responses.Remove(response);
+                                DevLog.Log("GameSettings: Duplicating to " + formCopy.FormKey.ToString());
+                                dialogTopic.Responses.Add(formCopy);
+                                ModEdited = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -58,7 +64,7 @@ namespace ESLifyEverything.PluginHandles
                 //sourceForm.SubCells[1].Items[1].Items[1]
                 foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
                 {
-                    if (worldspace.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+                    if (worldspace.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))// check if the form comes from the compacted mod
                     {
                         var formCopy = worldspace.DeepCopy();
                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
@@ -88,7 +94,7 @@ namespace ESLifyEverything.PluginHandles
                         {
                             foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                             {
-                                if (cell.FormKey.ModKey.Equals(compactedModData.ModName))
+                                if (cell.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                                 {
                                     var formCopy = cell.DeepCopy();
                                     foreach (FormHandler formHandler in compactedModData.CompactedModFormList)
@@ -123,7 +129,7 @@ namespace ESLifyEverything.PluginHandles
                             {
                                 foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                                 {
-                                    if (persistentRef.FormKey.ModKey.Equals(compactedModData.ModName))
+                                    if (persistentRef.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                                     {
                                         IPlaced formCopy = (IPlaced)persistentRef.DeepCopy();
                                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)
@@ -147,7 +153,7 @@ namespace ESLifyEverything.PluginHandles
                             {
                                 foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                                 {
-                                    if (temporaryRef.FormKey.ModKey.Equals(compactedModData.ModName))
+                                    if (temporaryRef.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                                     {
                                         IPlaced formCopy = (IPlaced)temporaryRef.DeepCopy();
                                         foreach (FormHandler formHandler in compactedModData.CompactedModFormList)
@@ -181,7 +187,7 @@ namespace ESLifyEverything.PluginHandles
                     {
                         foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                         {
-                            if (cell.FormKey.ModKey.Equals(compactedModData.ModName))
+                            if (cell.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                             {
                                 var formCopy = cell.DeepCopy();
                                 foreach (FormHandler formHandler in compactedModData.CompactedModFormList)
@@ -213,7 +219,7 @@ namespace ESLifyEverything.PluginHandles
                         {
                             foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                             {
-                                if (persistentRef.FormKey.ModKey.Equals(compactedModData.ModName))
+                                if (persistentRef.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                                 {
                                     IPlaced formCopy = (IPlaced)persistentRef.DeepCopy();
                                     foreach (FormHandler formHandler in compactedModData.CompactedModFormList)
@@ -237,7 +243,7 @@ namespace ESLifyEverything.PluginHandles
                         {
                             foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                             {
-                                if (temporaryRef.FormKey.ModKey.Equals(compactedModData.ModName))
+                                if (temporaryRef.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                                 {
                                     IPlaced formCopy = (IPlaced)temporaryRef.DeepCopy();
                                     foreach (FormHandler formHandler in compactedModData.CompactedModFormList)

@@ -17,7 +17,7 @@ namespace ESLifyEverything
         //public static Dictionary<string, CompactedModData> CompactedModDataDNoFaceVoice = new Dictionary<string, CompactedModData>();
 
         //When populated it holds all plugin names parsed from your plugins.txt file from your my games folder
-        public static string[] LoadOrder = new string[0];
+        public static string[] ActiveLoadOrder = new string[0];
 
         //When populated it holds the plugins with attached BSAs without the extention
         public static List<string> LoadOrderNoExtensions = new List<string>();
@@ -51,7 +51,7 @@ namespace ESLifyEverything
         ////public static bool EditedFaceGen = false;
 
         //End identifier to prompt that ESLify Everything output BSAs were Extracted
-        public static bool BSAExtracted = false;
+        public static bool BSANotExtracted = false;
 
         //identifier for ESLify Everything detected new mods and it needs to run Script ESLify
         public static bool NewOrUpdatedMods = false;
@@ -89,9 +89,19 @@ namespace ESLifyEverything
 
                     Console.WriteLine("\n\n\n\n");
                     Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
-                    Task bsamod = LoadOrderBSAData();
+                    Task<int> bsamod = LoadOrderBSAData();
                     bsamod.Wait();
+                    int bsamodResult = bsamod.Result;
                     bsamod.Dispose();
+                    switch (bsamodResult)
+                    {
+                        case 0:
+                            break;
+                        case 1:
+                            throw new MissingFileException();
+                        default:
+                            throw new Exception("How did you reach a default result in LoadOrderBSAData()? Please report this.");
+                    }
 
                     DevLog.Pause("After BSA Proccesing Pause");
 
@@ -174,13 +184,28 @@ namespace ESLifyEverything
                         DevLog.Pause("After Plugin ESLify Pause");
                     }
 
-
+                    Console.WriteLine();
+                    GF.WriteLine(GF.stringLoggingData.EnterToContinue);
+                    Console.ReadLine();
 
                     FinalizeData();
                 }
-                else if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
+                else
                 {
-                    XEditSession();
+                    if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
+                    {
+                        XEditSession();
+
+                        DevLog.Pause("After Startup Invalid Log Reader Pause");
+                    }
+                    if (Directory.Exists(GF.Settings.OutputFolder))
+                    {
+                        Console.WriteLine("\n\n\n\n");
+                        GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
+                        BuildMergedData();
+                        
+                        DevLog.Pause("After Startup Invalid zMerge Reader Pause");
+                    }
                 }
                 
                 GF.EndStartUpErrorLoggig(startupError);
@@ -189,6 +214,7 @@ namespace ESLifyEverything
             }
             #region Catch
             catch (ArgumentHelpException) { }
+            catch (MissingFileException) { }
             catch (AggregateException e)
             {
                 Console.WriteLine("\n\n\n\n");
@@ -218,7 +244,7 @@ namespace ESLifyEverything
             //    GF.RunFaceGenFix();
             //}
 
-            if (BSAExtracted)
+            if (BSANotExtracted)
             {
                 Console.WriteLine();
                 GF.WriteLine(GF.stringLoggingData.LoadOrderNotDetectedError);

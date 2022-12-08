@@ -32,9 +32,9 @@ namespace ESLifyEverything.PluginHandles
 
             SkyrimMod mod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
 
-            foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToHashSet())
+            foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
             {
-                if(!Program.LoadOrder.Contains(masterReference.Master.ToString(), StringComparer.OrdinalIgnoreCase))
+                if (!Program.ActiveLoadOrder.Contains(masterReference.Master.ToString(), StringComparer.OrdinalIgnoreCase))
                 {
                     if (CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
                     {
@@ -63,14 +63,12 @@ namespace ESLifyEverything.PluginHandles
                 DevLog.Log(mod.ModKey.ToString() + " was changed.");
             }
 
-
-            HashSet<string> modNames = new HashSet<string>();
-
-            foreach(IFormLinkGetter? link in mod.EnumerateFormLinks())
+            if(!ModEdited)
             {
-                FormKey formKey = link.FormKey;
-                if (!modNames.Contains(formKey.ModKey.ToString()))
+                HashSet<string> modNames = new HashSet<string>();
+                foreach (IFormLinkGetter? link in mod.EnumerateFormLinks())
                 {
+                    FormKey formKey = link.FormKey;
                     if (CompactedModDataD.TryGetValue(formKey.ModKey.ToString(), out CompactedModData? modData))
                     {
                         if (mod.ModKey.ToString().Equals(formKey.ModKey.ToString()) && modData.FromMerge)
@@ -86,17 +84,27 @@ namespace ESLifyEverything.PluginHandles
                                     modNames.Add(formKey.ModKey.ToString());
                                 }
                             }
-                        } 
+                        }
                     }
-                    
+                }
+
+                foreach (string modName in modNames)
+                {
+                    DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modName);
+                    mod.RemapLinks(CompactedModDataD[modName].ToDictionary());
+                    ModEdited = true;
                 }
             }
-
-            foreach(string modName in modNames)
+            else
             {
-                DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modName);
-                mod.RemapLinks(CompactedModDataD[modName].ToDictionary());
-                ModEdited = true;
+                foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
+                {
+                    if(CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
+                    {
+                        DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modData.ModName);
+                        mod.RemapLinks(modData.ToDictionary());
+                    }
+                }
             }
 
             //ModEdited = true;

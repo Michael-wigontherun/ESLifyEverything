@@ -90,7 +90,7 @@ namespace ESLifyEverything.FormData
             }
         }
 
-        public bool MergedPluginFixer()
+        public void MergedPluginFixer()
         {
             GF.WriteLine("");
             GF.WriteLine("");
@@ -128,7 +128,8 @@ namespace ESLifyEverything.FormData
                 }
             }
 
-            return false;
+            DevLog.Pause($"After MergedPluginFixer {MergeName} Pause.");
+
         }
 
         [JsonIgnore]

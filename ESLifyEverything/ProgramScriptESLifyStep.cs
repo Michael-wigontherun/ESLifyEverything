@@ -240,6 +240,11 @@ namespace ESLifyEverything
                         scriptsFolder,
                         "*.pex",
                         SearchOption.TopDirectoryOnly);
+            long scriptTotal = scripts.Count();
+            long scriptCounter = 1;
+
+            Console.WriteLine(string.Format("{0} of {1} finished decompiling.", scriptCounter, scriptTotal));
+
             using (StreamWriter stream = File.AppendText(GF.logName))
             {
                 foreach (string script in scripts)
@@ -262,16 +267,31 @@ namespace ESLifyEverything
                         }
                     }
 
-
                     p.WaitForExit();
                     p.Dispose();
 
+                    bool errorLineWrite = false;
                     if (!line.Contains("1 files processed in "))
                     {
                         Console.WriteLine(script);
+                        stream.WriteLine(script);
                         Console.WriteLine(line);
-
+                        stream.WriteLine(line);
+                        
+                        errorLineWrite = true;
                     }
+
+                    if (errorLineWrite)
+                    {
+                        Console.WriteLine(string.Format("{0} of {1} finished decompiling.", scriptCounter, scriptTotal));
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(0, Console.CursorTop - 1);
+                        Console.WriteLine(string.Format("{0} of {1} finished decompiling.", scriptCounter, scriptTotal));
+                    }
+                    scriptCounter++;
+
                 }
             }
 

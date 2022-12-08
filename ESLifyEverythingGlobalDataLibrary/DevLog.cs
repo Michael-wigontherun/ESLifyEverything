@@ -27,10 +27,11 @@ namespace ESLifyEverythingGlobalDataLibrary
             if (GF.DevSettings.DevLogging)
             {
                 Console.WriteLine(logLine);
-                using (StreamWriter stream = File.AppendText(GF.logName))
-                {
-                    stream.WriteLine(logLine);
-                }
+                FileWriteLineAsync(logLine).Wait();
+                //using (StreamWriter stream = File.AppendText(GF.logName))
+                //{
+                //    stream.WriteLine(logLine);
+                //}
             }
         }
 
@@ -48,10 +49,7 @@ namespace ESLifyEverythingGlobalDataLibrary
         {
             if (GF.DevSettings.DevLogging)
             {
-                using (StreamWriter stream = File.AppendText(GF.logName))
-                {
-                    stream.WriteLine(logLine);
-                }
+                FileWriteLineAsync(logLine).Wait();
             }
         }
 
@@ -61,19 +59,23 @@ namespace ESLifyEverythingGlobalDataLibrary
             if (GF.DevSettings.DevLogging)
             {
                 Console.WriteLine(form.ToString());
-                using (StreamWriter stream = File.AppendText(GF.logName))
-                {
-                    stream.WriteLine(form.ToString());
-                }
+                FileWriteLineAsync(form.ToString()).Wait();
+                
                 if(extraInfo != null)
                 {
                     Console.WriteLine(extraInfo);
-                    using (StreamWriter stream = File.AppendText(GF.logName))
-                    {
-                        stream.WriteLine(extraInfo);
-                    }
+                    FileWriteLineAsync(extraInfo).Wait();
                 }
             }
+        }
+
+        private static async Task<int> FileWriteLineAsync(string logLine)
+        {
+            using (StreamWriter stream = File.AppendText(GF.logName))
+            {
+                stream.WriteLine(logLine);
+            }
+            return await Task.FromResult(0);
         }
     }
 }

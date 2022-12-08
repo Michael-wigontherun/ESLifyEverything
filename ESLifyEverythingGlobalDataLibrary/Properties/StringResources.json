@@ -5,7 +5,7 @@
   },
   "StringLoggingData": {
     "LoadOrderNotDetectedError": "Load order not found. Files from BSA's can not be extracted correctly.",
-    "RunOrReport": "Run from MO2 or report where the \"loadorder.txt\" is and should be.",
+    "RunOrReport": "Loadorder not found, Run from MO2 or deploy mods through Vortex.",
     "SettingsFileNotFound": "AppSettings.json not found or can not update.",
     "GenSettingsFile": "Generating Default Settings file.",
     "EditYourSettings": "Please edit settings file according to your game set up and preferences.",

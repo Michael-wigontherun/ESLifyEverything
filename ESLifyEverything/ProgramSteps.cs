@@ -187,8 +187,6 @@ namespace ESLifyEverything
 
                                         mergeData.CompactedModDatas.Add(compactedModData);
                                     }
-
-                                    
                                 }
 
                                 if (outputtedCompactedModData != null)
@@ -341,7 +339,7 @@ namespace ESLifyEverything
                     mergeData.OutputModData(false);
                 }
 
-                if (File.Exists(pluginPath) && LoadOrder.Contains(mergeData.MergeName))
+                if (File.Exists(pluginPath) && ActiveLoadOrder.Contains(mergeData.MergeName))
                 {
                     if (GF.Settings.AutoRunMergedPluginFixer)
                     {
@@ -516,13 +514,33 @@ namespace ESLifyEverything
             if (!File.Exists(pluginsFilePath))
             {
                 pluginsFilePath = "plugins.txt";
+                if (File.Exists(pluginsFilePath))
+                {
+                    ActiveLoadOrder = GF.FilterForActiveLoadOrder(pluginsFilePath);
+                }
+                else
+                {
+                    GF.WriteLine(GF.stringLoggingData.LoadOrderNotDetectedError);
+                    GF.WriteLine(GF.stringLoggingData.RunOrReport);
+                    BSANotExtracted = true;
+                    return await Task.FromResult(1);
+                }
+            }
+            else
+            {
+                ActiveLoadOrder = GF.FilterForActiveLoadOrder(pluginsFilePath);
             }
 
-            if (File.Exists(pluginsFilePath))
+            string loadOrderFilePath = Path.Combine(Environment.GetEnvironmentVariable("LocalAppData")!, "Skyrim Special Edition", "loadorder.txt");
+            if (!File.Exists(pluginsFilePath))
             {
-                LoadOrder = GF.FilterForActiveLoadOrder(pluginsFilePath);
+                pluginsFilePath = "loadorder.txt";
+            }
+            if (File.Exists(loadOrderFilePath))
+            {
+                string[] loadOrder = File.ReadAllLines(loadOrderFilePath);
                 
-                foreach (string plugin in LoadOrder)
+                foreach (string plugin in loadOrder)
                 {
                     string pluginNoExtension = Path.ChangeExtension(plugin, null);
                     if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, pluginNoExtension + ".bsa")))
@@ -549,7 +567,8 @@ namespace ESLifyEverything
             {
                 GF.WriteLine(GF.stringLoggingData.LoadOrderNotDetectedError);
                 GF.WriteLine(GF.stringLoggingData.RunOrReport);
-                BSAExtracted = true;
+                BSANotExtracted = true;
+                return await Task.FromResult(1);
             }
             return await Task.FromResult(0);
         }
@@ -1456,29 +1475,29 @@ namespace ESLifyEverything
             HashSet<string> checkPlugins = SelectCompactedModsMenu();
 
             HashSet<string> runPlugins = new HashSet<string>();
-            for (int i = 1; i < LoadOrder.Length; i++)
+            for (int i = 1; i < ActiveLoadOrder.Length; i++)
             {
-                if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, LoadOrder[i])))
+                if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, ActiveLoadOrder[i])))
                 {
-                    if (!GF.IgnoredPlugins.Contains(LoadOrder[i]))
+                    if (!GF.IgnoredPlugins.Contains(ActiveLoadOrder[i]))
                     {
-                        GF.WriteLine(String.Format(GF.stringLoggingData.PluginCheckMod, LoadOrder[i]), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                        if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, LoadOrder[i])))
+                        GF.WriteLine(String.Format(GF.stringLoggingData.PluginCheckMod, ActiveLoadOrder[i]), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                        if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, ActiveLoadOrder[i])))
                         {
-                            MasterReferenceCollection? masterCollection = MasterReferenceCollection.FromPath(Path.Combine(GF.Settings.DataFolderPath, LoadOrder[i]), GameRelease.SkyrimSE);
+                            MasterReferenceCollection? masterCollection = MasterReferenceCollection.FromPath(Path.Combine(GF.Settings.DataFolderPath, ActiveLoadOrder[i]), GameRelease.SkyrimSE);
                             foreach (var master in masterCollection.Masters.ToHashSet())
                             {
                                 if (checkPlugins.Contains(master.Master.FileName))
                                 {
-                                    GF.WriteLine(String.Format(GF.stringLoggingData.PluginAttemptFix, LoadOrder[i]));
-                                    runPlugins.Add(LoadOrder[i]);
+                                    GF.WriteLine(String.Format(GF.stringLoggingData.PluginAttemptFix, ActiveLoadOrder[i]));
+                                    runPlugins.Add(ActiveLoadOrder[i]);
                                     break;
                                 }
                             }
                         }
                     }
                 }
-                GF.WriteLine(String.Format(GF.stringLoggingData.ProcessedPluginsLogCount, i, LoadOrder.Length, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging));
+                GF.WriteLine(String.Format(GF.stringLoggingData.ProcessedPluginsLogCount, i, ActiveLoadOrder.Length, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging));
             }
 
             //Fix and output plugins that still use uncompacted data

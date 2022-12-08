@@ -15,18 +15,21 @@ namespace ESLifyEverything.PluginHandles
             //var GameSettingsItemSet = mod.GameSettings.ToHashSet();
             foreach (var sourceForm in mod.GameSettings.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("GameSettings: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("GameSettings: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.GameSettings.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("GameSettings: Removing " + sourceForm.FormKey.ToString());
+                            mod.GameSettings.Remove(sourceForm.FormKey);
+                            DevLog.Log("GameSettings: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.GameSettings.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -35,18 +38,21 @@ namespace ESLifyEverything.PluginHandles
             //var KeywordsItemSet = mod.Keywords.ToHashSet();
             foreach (var sourceForm in mod.Keywords.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Keywords: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Keywords: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Keywords.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Keywords: Removing " + sourceForm.FormKey.ToString());
+                            mod.Keywords.Remove(sourceForm.FormKey);
+                            DevLog.Log("Keywords: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Keywords.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -55,18 +61,21 @@ namespace ESLifyEverything.PluginHandles
             //var LocationReferenceTypesItemSet = mod.LocationReferenceTypes.ToHashSet();
             foreach (var sourceForm in mod.LocationReferenceTypes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("LocationReferenceTypes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("LocationReferenceTypes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.LocationReferenceTypes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("LocationReferenceTypes: Removing " + sourceForm.FormKey.ToString());
+                            mod.LocationReferenceTypes.Remove(sourceForm.FormKey);
+                            DevLog.Log("LocationReferenceTypes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.LocationReferenceTypes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -75,18 +84,21 @@ namespace ESLifyEverything.PluginHandles
             //var ActionsItemSet = mod.Actions.ToHashSet();
             foreach (var sourceForm in mod.Actions.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Actions: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Actions: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Actions.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Actions: Removing " + sourceForm.FormKey.ToString());
+                            mod.Actions.Remove(sourceForm.FormKey);
+                            DevLog.Log("Actions: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Actions.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -95,18 +107,21 @@ namespace ESLifyEverything.PluginHandles
             //var TextureSetsItemSet = mod.TextureSets.ToHashSet();
             foreach (var sourceForm in mod.TextureSets.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("TextureSets: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("TextureSets: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.TextureSets.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("TextureSets: Removing " + sourceForm.FormKey.ToString());
+                            mod.TextureSets.Remove(sourceForm.FormKey);
+                            DevLog.Log("TextureSets: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.TextureSets.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -115,18 +130,21 @@ namespace ESLifyEverything.PluginHandles
             //var GlobalsItemSet = mod.Globals.ToHashSet();
             foreach (var sourceForm in mod.Globals.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Globals: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Globals: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Globals.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Globals: Removing " + sourceForm.FormKey.ToString());
+                            mod.Globals.Remove(sourceForm.FormKey);
+                            DevLog.Log("Globals: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Globals.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -135,18 +153,21 @@ namespace ESLifyEverything.PluginHandles
             //var ClassesItemSet = mod.Classes.ToHashSet();
             foreach (var sourceForm in mod.Classes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Classes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Classes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Classes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Classes: Removing " + sourceForm.FormKey.ToString());
+                            mod.Classes.Remove(sourceForm.FormKey);
+                            DevLog.Log("Classes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Classes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -155,18 +176,21 @@ namespace ESLifyEverything.PluginHandles
             //var FactionsItemSet = mod.Factions.ToHashSet();
             foreach (var sourceForm in mod.Factions.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Factions: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Factions: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Factions.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Factions: Removing " + sourceForm.FormKey.ToString());
+                            mod.Factions.Remove(sourceForm.FormKey);
+                            DevLog.Log("Factions: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Factions.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -175,18 +199,21 @@ namespace ESLifyEverything.PluginHandles
             //var HeadPartsItemSet = mod.HeadParts.ToHashSet();
             foreach (var sourceForm in mod.HeadParts.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("HeadParts: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("HeadParts: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.HeadParts.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("HeadParts: Removing " + sourceForm.FormKey.ToString());
+                            mod.HeadParts.Remove(sourceForm.FormKey);
+                            DevLog.Log("HeadParts: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.HeadParts.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -195,18 +222,21 @@ namespace ESLifyEverything.PluginHandles
             //var HairsItemSet = mod.Hairs.ToHashSet();
             foreach (var sourceForm in mod.Hairs.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Hairs: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Hairs: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Hairs.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Hairs: Removing " + sourceForm.FormKey.ToString());
+                            mod.Hairs.Remove(sourceForm.FormKey);
+                            DevLog.Log("Hairs: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Hairs.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -215,18 +245,21 @@ namespace ESLifyEverything.PluginHandles
             //var EyesItemSet = mod.Eyes.ToHashSet();
             foreach (var sourceForm in mod.Eyes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Eyes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Eyes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Eyes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Eyes: Removing " + sourceForm.FormKey.ToString());
+                            mod.Eyes.Remove(sourceForm.FormKey);
+                            DevLog.Log("Eyes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Eyes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -235,18 +268,21 @@ namespace ESLifyEverything.PluginHandles
             //var RacesItemSet = mod.Races.ToHashSet();
             foreach (var sourceForm in mod.Races.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Races: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Races: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Races.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Races: Removing " + sourceForm.FormKey.ToString());
+                            mod.Races.Remove(sourceForm.FormKey);
+                            DevLog.Log("Races: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Races.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -255,18 +291,21 @@ namespace ESLifyEverything.PluginHandles
             //var SoundMarkersItemSet = mod.SoundMarkers.ToHashSet();
             foreach (var sourceForm in mod.SoundMarkers.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("SoundMarkers: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("SoundMarkers: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.SoundMarkers.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("SoundMarkers: Removing " + sourceForm.FormKey.ToString());
+                            mod.SoundMarkers.Remove(sourceForm.FormKey);
+                            DevLog.Log("SoundMarkers: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.SoundMarkers.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -275,18 +314,21 @@ namespace ESLifyEverything.PluginHandles
             //var AcousticSpacesItemSet = mod.AcousticSpaces.ToHashSet();
             foreach (var sourceForm in mod.AcousticSpaces.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("AcousticSpaces: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("AcousticSpaces: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.AcousticSpaces.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("AcousticSpaces: Removing " + sourceForm.FormKey.ToString());
+                            mod.AcousticSpaces.Remove(sourceForm.FormKey);
+                            DevLog.Log("AcousticSpaces: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.AcousticSpaces.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -295,18 +337,21 @@ namespace ESLifyEverything.PluginHandles
             //var MagicEffectsItemSet = mod.MagicEffects.ToHashSet();
             foreach (var sourceForm in mod.MagicEffects.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("MagicEffects: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("MagicEffects: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.MagicEffects.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("MagicEffects: Removing " + sourceForm.FormKey.ToString());
+                            mod.MagicEffects.Remove(sourceForm.FormKey);
+                            DevLog.Log("MagicEffects: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.MagicEffects.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -315,18 +360,21 @@ namespace ESLifyEverything.PluginHandles
             //var LandscapeTexturesItemSet = mod.LandscapeTextures.ToHashSet();
             foreach (var sourceForm in mod.LandscapeTextures.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("LandscapeTextures: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("LandscapeTextures: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.LandscapeTextures.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("LandscapeTextures: Removing " + sourceForm.FormKey.ToString());
+                            mod.LandscapeTextures.Remove(sourceForm.FormKey);
+                            DevLog.Log("LandscapeTextures: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.LandscapeTextures.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -335,18 +383,21 @@ namespace ESLifyEverything.PluginHandles
             //var ObjectEffectsItemSet = mod.ObjectEffects.ToHashSet();
             foreach (var sourceForm in mod.ObjectEffects.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ObjectEffects: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ObjectEffects: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ObjectEffects.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ObjectEffects: Removing " + sourceForm.FormKey.ToString());
+                            mod.ObjectEffects.Remove(sourceForm.FormKey);
+                            DevLog.Log("ObjectEffects: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ObjectEffects.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -355,18 +406,21 @@ namespace ESLifyEverything.PluginHandles
             //var SpellsItemSet = mod.Spells.ToHashSet();
             foreach (var sourceForm in mod.Spells.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Spells: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Spells: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Spells.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Spells: Removing " + sourceForm.FormKey.ToString());
+                            mod.Spells.Remove(sourceForm.FormKey);
+                            DevLog.Log("Spells: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Spells.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -375,18 +429,21 @@ namespace ESLifyEverything.PluginHandles
             //var ScrollsItemSet = mod.Scrolls.ToHashSet();
             foreach (var sourceForm in mod.Scrolls.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Scrolls: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Scrolls: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Scrolls.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Scrolls: Removing " + sourceForm.FormKey.ToString());
+                            mod.Scrolls.Remove(sourceForm.FormKey);
+                            DevLog.Log("Scrolls: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Scrolls.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -395,18 +452,21 @@ namespace ESLifyEverything.PluginHandles
             //var ActivatorsItemSet = mod.Activators.ToHashSet();
             foreach (var sourceForm in mod.Activators.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Activators: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Activators: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Activators.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Activators: Removing " + sourceForm.FormKey.ToString());
+                            mod.Activators.Remove(sourceForm.FormKey);
+                            DevLog.Log("Activators: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Activators.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -415,18 +475,21 @@ namespace ESLifyEverything.PluginHandles
             //var TalkingActivatorsItemSet = mod.TalkingActivators.ToHashSet();
             foreach (var sourceForm in mod.TalkingActivators.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("TalkingActivators: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("TalkingActivators: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.TalkingActivators.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("TalkingActivators: Removing " + sourceForm.FormKey.ToString());
+                            mod.TalkingActivators.Remove(sourceForm.FormKey);
+                            DevLog.Log("TalkingActivators: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.TalkingActivators.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -435,18 +498,21 @@ namespace ESLifyEverything.PluginHandles
             //var ArmorsItemSet = mod.Armors.ToHashSet();
             foreach (var sourceForm in mod.Armors.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Armors: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Armors: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Armors.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Armors: Removing " + sourceForm.FormKey.ToString());
+                            mod.Armors.Remove(sourceForm.FormKey);
+                            DevLog.Log("Armors: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Armors.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -455,18 +521,21 @@ namespace ESLifyEverything.PluginHandles
             //var BooksItemSet = mod.Books.ToHashSet();
             foreach (var sourceForm in mod.Books.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Books: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Books: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Books.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Books: Removing " + sourceForm.FormKey.ToString());
+                            mod.Books.Remove(sourceForm.FormKey);
+                            DevLog.Log("Books: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Books.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -475,18 +544,21 @@ namespace ESLifyEverything.PluginHandles
             //var ContainersItemSet = mod.Containers.ToHashSet();
             foreach (var sourceForm in mod.Containers.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Containers: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Containers: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Containers.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Containers: Removing " + sourceForm.FormKey.ToString());
+                            mod.Containers.Remove(sourceForm.FormKey);
+                            DevLog.Log("Containers: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Containers.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -495,18 +567,21 @@ namespace ESLifyEverything.PluginHandles
             //var DoorsItemSet = mod.Doors.ToHashSet();
             foreach (var sourceForm in mod.Doors.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Doors: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Doors: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Doors.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Doors: Removing " + sourceForm.FormKey.ToString());
+                            mod.Doors.Remove(sourceForm.FormKey);
+                            DevLog.Log("Doors: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Doors.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -515,18 +590,21 @@ namespace ESLifyEverything.PluginHandles
             //var IngredientsItemSet = mod.Ingredients.ToHashSet();
             foreach (var sourceForm in mod.Ingredients.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Ingredients: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Ingredients: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Ingredients.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Ingredients: Removing " + sourceForm.FormKey.ToString());
+                            mod.Ingredients.Remove(sourceForm.FormKey);
+                            DevLog.Log("Ingredients: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Ingredients.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -535,18 +613,21 @@ namespace ESLifyEverything.PluginHandles
             //var LightsItemSet = mod.Lights.ToHashSet();
             foreach (var sourceForm in mod.Lights.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Lights: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Lights: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Lights.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Lights: Removing " + sourceForm.FormKey.ToString());
+                            mod.Lights.Remove(sourceForm.FormKey);
+                            DevLog.Log("Lights: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Lights.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -555,18 +636,21 @@ namespace ESLifyEverything.PluginHandles
             //var MiscItemsItemSet = mod.MiscItems.ToHashSet();
             foreach (var sourceForm in mod.MiscItems.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("MiscItems: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("MiscItems: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.MiscItems.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("MiscItems: Removing " + sourceForm.FormKey.ToString());
+                            mod.MiscItems.Remove(sourceForm.FormKey);
+                            DevLog.Log("MiscItems: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.MiscItems.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -575,18 +659,21 @@ namespace ESLifyEverything.PluginHandles
             //var AlchemicalApparatusesItemSet = mod.AlchemicalApparatuses.ToHashSet();
             foreach (var sourceForm in mod.AlchemicalApparatuses.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("AlchemicalApparatuses: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("AlchemicalApparatuses: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.AlchemicalApparatuses.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("AlchemicalApparatuses: Removing " + sourceForm.FormKey.ToString());
+                            mod.AlchemicalApparatuses.Remove(sourceForm.FormKey);
+                            DevLog.Log("AlchemicalApparatuses: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.AlchemicalApparatuses.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -595,18 +682,21 @@ namespace ESLifyEverything.PluginHandles
             //var StaticsItemSet = mod.Statics.ToHashSet();
             foreach (var sourceForm in mod.Statics.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Statics: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Statics: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Statics.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Statics: Removing " + sourceForm.FormKey.ToString());
+                            mod.Statics.Remove(sourceForm.FormKey);
+                            DevLog.Log("Statics: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Statics.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -615,18 +705,21 @@ namespace ESLifyEverything.PluginHandles
             //var MoveableStaticsItemSet = mod.MoveableStatics.ToHashSet();
             foreach (var sourceForm in mod.MoveableStatics.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("MoveableStatics: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("MoveableStatics: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.MoveableStatics.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("MoveableStatics: Removing " + sourceForm.FormKey.ToString());
+                            mod.MoveableStatics.Remove(sourceForm.FormKey);
+                            DevLog.Log("MoveableStatics: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.MoveableStatics.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -635,18 +728,21 @@ namespace ESLifyEverything.PluginHandles
             //var GrassesItemSet = mod.Grasses.ToHashSet();
             foreach (var sourceForm in mod.Grasses.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Grasses: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Grasses: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Grasses.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Grasses: Removing " + sourceForm.FormKey.ToString());
+                            mod.Grasses.Remove(sourceForm.FormKey);
+                            DevLog.Log("Grasses: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Grasses.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -655,18 +751,21 @@ namespace ESLifyEverything.PluginHandles
             //var TreesItemSet = mod.Trees.ToHashSet();
             foreach (var sourceForm in mod.Trees.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Trees: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Trees: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Trees.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Trees: Removing " + sourceForm.FormKey.ToString());
+                            mod.Trees.Remove(sourceForm.FormKey);
+                            DevLog.Log("Trees: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Trees.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -675,18 +774,21 @@ namespace ESLifyEverything.PluginHandles
             //var FloraeItemSet = mod.Florae.ToHashSet();
             foreach (var sourceForm in mod.Florae.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Florae: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Florae: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Florae.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Florae: Removing " + sourceForm.FormKey.ToString());
+                            mod.Florae.Remove(sourceForm.FormKey);
+                            DevLog.Log("Florae: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Florae.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -695,18 +797,21 @@ namespace ESLifyEverything.PluginHandles
             //var FurnitureItemSet = mod.Furniture.ToHashSet();
             foreach (var sourceForm in mod.Furniture.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Furniture: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Furniture: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Furniture.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Furniture: Removing " + sourceForm.FormKey.ToString());
+                            mod.Furniture.Remove(sourceForm.FormKey);
+                            DevLog.Log("Furniture: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Furniture.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -715,18 +820,21 @@ namespace ESLifyEverything.PluginHandles
             //var WeaponsItemSet = mod.Weapons.ToHashSet();
             foreach (var sourceForm in mod.Weapons.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Weapons: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Weapons: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Weapons.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Weapons: Removing " + sourceForm.FormKey.ToString());
+                            mod.Weapons.Remove(sourceForm.FormKey);
+                            DevLog.Log("Weapons: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Weapons.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -735,18 +843,21 @@ namespace ESLifyEverything.PluginHandles
             //var AmmunitionsItemSet = mod.Ammunitions.ToHashSet();
             foreach (var sourceForm in mod.Ammunitions.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Ammunitions: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Ammunitions: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Ammunitions.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Ammunitions: Removing " + sourceForm.FormKey.ToString());
+                            mod.Ammunitions.Remove(sourceForm.FormKey);
+                            DevLog.Log("Ammunitions: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Ammunitions.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -755,18 +866,21 @@ namespace ESLifyEverything.PluginHandles
             //var NpcsItemSet = mod.Npcs.ToHashSet();
             foreach (var sourceForm in mod.Npcs.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Npcs: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Npcs: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Npcs.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Npcs: Removing " + sourceForm.FormKey.ToString());
+                            mod.Npcs.Remove(sourceForm.FormKey);
+                            DevLog.Log("Npcs: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Npcs.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -775,18 +889,21 @@ namespace ESLifyEverything.PluginHandles
             //var LeveledNpcsItemSet = mod.LeveledNpcs.ToHashSet();
             foreach (var sourceForm in mod.LeveledNpcs.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("LeveledNpcs: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("LeveledNpcs: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.LeveledNpcs.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("LeveledNpcs: Removing " + sourceForm.FormKey.ToString());
+                            mod.LeveledNpcs.Remove(sourceForm.FormKey);
+                            DevLog.Log("LeveledNpcs: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.LeveledNpcs.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -795,18 +912,21 @@ namespace ESLifyEverything.PluginHandles
             //var KeysItemSet = mod.Keys.ToHashSet();
             foreach (var sourceForm in mod.Keys.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Keys: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Keys: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Keys.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Keys: Removing " + sourceForm.FormKey.ToString());
+                            mod.Keys.Remove(sourceForm.FormKey);
+                            DevLog.Log("Keys: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Keys.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -815,18 +935,21 @@ namespace ESLifyEverything.PluginHandles
             //var IngestiblesItemSet = mod.Ingestibles.ToHashSet();
             foreach (var sourceForm in mod.Ingestibles.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Ingestibles: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Ingestibles: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Ingestibles.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Ingestibles: Removing " + sourceForm.FormKey.ToString());
+                            mod.Ingestibles.Remove(sourceForm.FormKey);
+                            DevLog.Log("Ingestibles: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Ingestibles.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -835,18 +958,21 @@ namespace ESLifyEverything.PluginHandles
             //var IdleMarkersItemSet = mod.IdleMarkers.ToHashSet();
             foreach (var sourceForm in mod.IdleMarkers.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("IdleMarkers: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("IdleMarkers: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.IdleMarkers.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("IdleMarkers: Removing " + sourceForm.FormKey.ToString());
+                            mod.IdleMarkers.Remove(sourceForm.FormKey);
+                            DevLog.Log("IdleMarkers: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.IdleMarkers.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -855,18 +981,21 @@ namespace ESLifyEverything.PluginHandles
             //var ConstructibleObjectsItemSet = mod.ConstructibleObjects.ToHashSet();
             foreach (var sourceForm in mod.ConstructibleObjects.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ConstructibleObjects: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ConstructibleObjects: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ConstructibleObjects.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ConstructibleObjects: Removing " + sourceForm.FormKey.ToString());
+                            mod.ConstructibleObjects.Remove(sourceForm.FormKey);
+                            DevLog.Log("ConstructibleObjects: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ConstructibleObjects.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -875,18 +1004,21 @@ namespace ESLifyEverything.PluginHandles
             //var ProjectilesItemSet = mod.Projectiles.ToHashSet();
             foreach (var sourceForm in mod.Projectiles.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Projectiles: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Projectiles: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Projectiles.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Projectiles: Removing " + sourceForm.FormKey.ToString());
+                            mod.Projectiles.Remove(sourceForm.FormKey);
+                            DevLog.Log("Projectiles: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Projectiles.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -895,18 +1027,21 @@ namespace ESLifyEverything.PluginHandles
             //var HazardsItemSet = mod.Hazards.ToHashSet();
             foreach (var sourceForm in mod.Hazards.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Hazards: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Hazards: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Hazards.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Hazards: Removing " + sourceForm.FormKey.ToString());
+                            mod.Hazards.Remove(sourceForm.FormKey);
+                            DevLog.Log("Hazards: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Hazards.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -915,18 +1050,21 @@ namespace ESLifyEverything.PluginHandles
             //var SoulGemsItemSet = mod.SoulGems.ToHashSet();
             foreach (var sourceForm in mod.SoulGems.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("SoulGems: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("SoulGems: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.SoulGems.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("SoulGems: Removing " + sourceForm.FormKey.ToString());
+                            mod.SoulGems.Remove(sourceForm.FormKey);
+                            DevLog.Log("SoulGems: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.SoulGems.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -935,18 +1073,21 @@ namespace ESLifyEverything.PluginHandles
             //var LeveledItemsItemSet = mod.LeveledItems.ToHashSet();
             foreach (var sourceForm in mod.LeveledItems.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("LeveledItems: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("LeveledItems: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.LeveledItems.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("LeveledItems: Removing " + sourceForm.FormKey.ToString());
+                            mod.LeveledItems.Remove(sourceForm.FormKey);
+                            DevLog.Log("LeveledItems: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.LeveledItems.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -955,18 +1096,21 @@ namespace ESLifyEverything.PluginHandles
             //var WeathersItemSet = mod.Weathers.ToHashSet();
             foreach (var sourceForm in mod.Weathers.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Weathers: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Weathers: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Weathers.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Weathers: Removing " + sourceForm.FormKey.ToString());
+                            mod.Weathers.Remove(sourceForm.FormKey);
+                            DevLog.Log("Weathers: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Weathers.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -975,18 +1119,21 @@ namespace ESLifyEverything.PluginHandles
             //var ClimatesItemSet = mod.Climates.ToHashSet();
             foreach (var sourceForm in mod.Climates.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Climates: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Climates: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Climates.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Climates: Removing " + sourceForm.FormKey.ToString());
+                            mod.Climates.Remove(sourceForm.FormKey);
+                            DevLog.Log("Climates: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Climates.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -995,18 +1142,21 @@ namespace ESLifyEverything.PluginHandles
             //var ShaderParticleGeometriesItemSet = mod.ShaderParticleGeometries.ToHashSet();
             foreach (var sourceForm in mod.ShaderParticleGeometries.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ShaderParticleGeometries: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ShaderParticleGeometries: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ShaderParticleGeometries.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ShaderParticleGeometries: Removing " + sourceForm.FormKey.ToString());
+                            mod.ShaderParticleGeometries.Remove(sourceForm.FormKey);
+                            DevLog.Log("ShaderParticleGeometries: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ShaderParticleGeometries.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1015,18 +1165,21 @@ namespace ESLifyEverything.PluginHandles
             //var VisualEffectsItemSet = mod.VisualEffects.ToHashSet();
             foreach (var sourceForm in mod.VisualEffects.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("VisualEffects: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("VisualEffects: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.VisualEffects.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("VisualEffects: Removing " + sourceForm.FormKey.ToString());
+                            mod.VisualEffects.Remove(sourceForm.FormKey);
+                            DevLog.Log("VisualEffects: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.VisualEffects.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1035,18 +1188,21 @@ namespace ESLifyEverything.PluginHandles
             //var RegionsItemSet = mod.Regions.ToHashSet();
             foreach (var sourceForm in mod.Regions.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Regions: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Regions: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Regions.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Regions: Removing " + sourceForm.FormKey.ToString());
+                            mod.Regions.Remove(sourceForm.FormKey);
+                            DevLog.Log("Regions: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Regions.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1055,18 +1211,21 @@ namespace ESLifyEverything.PluginHandles
             //var NavigationMeshInfoMapsItemSet = mod.NavigationMeshInfoMaps.ToHashSet();
             foreach (var sourceForm in mod.NavigationMeshInfoMaps.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("NavigationMeshInfoMaps: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("NavigationMeshInfoMaps: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.NavigationMeshInfoMaps.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("NavigationMeshInfoMaps: Removing " + sourceForm.FormKey.ToString());
+                            mod.NavigationMeshInfoMaps.Remove(sourceForm.FormKey);
+                            DevLog.Log("NavigationMeshInfoMaps: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.NavigationMeshInfoMaps.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1075,18 +1234,21 @@ namespace ESLifyEverything.PluginHandles
             //var QuestsItemSet = mod.Quests.ToHashSet();
             foreach (var sourceForm in mod.Quests.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Quests: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Quests: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Quests.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Quests: Removing " + sourceForm.FormKey.ToString());
+                            mod.Quests.Remove(sourceForm.FormKey);
+                            DevLog.Log("Quests: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Quests.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1095,18 +1257,21 @@ namespace ESLifyEverything.PluginHandles
             //var IdleAnimationsItemSet = mod.IdleAnimations.ToHashSet();
             foreach (var sourceForm in mod.IdleAnimations.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("IdleAnimations: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("IdleAnimations: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.IdleAnimations.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("IdleAnimations: Removing " + sourceForm.FormKey.ToString());
+                            mod.IdleAnimations.Remove(sourceForm.FormKey);
+                            DevLog.Log("IdleAnimations: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.IdleAnimations.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1115,18 +1280,21 @@ namespace ESLifyEverything.PluginHandles
             //var PackagesItemSet = mod.Packages.ToHashSet();
             foreach (var sourceForm in mod.Packages.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Packages: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Packages: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Packages.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Packages: Removing " + sourceForm.FormKey.ToString());
+                            mod.Packages.Remove(sourceForm.FormKey);
+                            DevLog.Log("Packages: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Packages.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1135,18 +1303,21 @@ namespace ESLifyEverything.PluginHandles
             //var CombatStylesItemSet = mod.CombatStyles.ToHashSet();
             foreach (var sourceForm in mod.CombatStyles.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("CombatStyles: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("CombatStyles: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.CombatStyles.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("CombatStyles: Removing " + sourceForm.FormKey.ToString());
+                            mod.CombatStyles.Remove(sourceForm.FormKey);
+                            DevLog.Log("CombatStyles: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.CombatStyles.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1155,18 +1326,21 @@ namespace ESLifyEverything.PluginHandles
             //var LoadScreensItemSet = mod.LoadScreens.ToHashSet();
             foreach (var sourceForm in mod.LoadScreens.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("LoadScreens: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("LoadScreens: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.LoadScreens.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("LoadScreens: Removing " + sourceForm.FormKey.ToString());
+                            mod.LoadScreens.Remove(sourceForm.FormKey);
+                            DevLog.Log("LoadScreens: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.LoadScreens.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1175,18 +1349,21 @@ namespace ESLifyEverything.PluginHandles
             //var LeveledSpellsItemSet = mod.LeveledSpells.ToHashSet();
             foreach (var sourceForm in mod.LeveledSpells.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("LeveledSpells: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("LeveledSpells: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.LeveledSpells.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("LeveledSpells: Removing " + sourceForm.FormKey.ToString());
+                            mod.LeveledSpells.Remove(sourceForm.FormKey);
+                            DevLog.Log("LeveledSpells: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.LeveledSpells.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1195,18 +1372,21 @@ namespace ESLifyEverything.PluginHandles
             //var AnimatedObjectsItemSet = mod.AnimatedObjects.ToHashSet();
             foreach (var sourceForm in mod.AnimatedObjects.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("AnimatedObjects: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("AnimatedObjects: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.AnimatedObjects.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("AnimatedObjects: Removing " + sourceForm.FormKey.ToString());
+                            mod.AnimatedObjects.Remove(sourceForm.FormKey);
+                            DevLog.Log("AnimatedObjects: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.AnimatedObjects.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1215,18 +1395,21 @@ namespace ESLifyEverything.PluginHandles
             //var WatersItemSet = mod.Waters.ToHashSet();
             foreach (var sourceForm in mod.Waters.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Waters: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Waters: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Waters.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Waters: Removing " + sourceForm.FormKey.ToString());
+                            mod.Waters.Remove(sourceForm.FormKey);
+                            DevLog.Log("Waters: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Waters.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1235,18 +1418,21 @@ namespace ESLifyEverything.PluginHandles
             //var EffectShadersItemSet = mod.EffectShaders.ToHashSet();
             foreach (var sourceForm in mod.EffectShaders.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("EffectShaders: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("EffectShaders: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.EffectShaders.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("EffectShaders: Removing " + sourceForm.FormKey.ToString());
+                            mod.EffectShaders.Remove(sourceForm.FormKey);
+                            DevLog.Log("EffectShaders: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.EffectShaders.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1255,18 +1441,21 @@ namespace ESLifyEverything.PluginHandles
             //var ExplosionsItemSet = mod.Explosions.ToHashSet();
             foreach (var sourceForm in mod.Explosions.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Explosions: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Explosions: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Explosions.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Explosions: Removing " + sourceForm.FormKey.ToString());
+                            mod.Explosions.Remove(sourceForm.FormKey);
+                            DevLog.Log("Explosions: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Explosions.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1275,18 +1464,21 @@ namespace ESLifyEverything.PluginHandles
             //var DebrisItemSet = mod.Debris.ToHashSet();
             foreach (var sourceForm in mod.Debris.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Debris: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Debris: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Debris.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Debris: Removing " + sourceForm.FormKey.ToString());
+                            mod.Debris.Remove(sourceForm.FormKey);
+                            DevLog.Log("Debris: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Debris.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1295,18 +1487,21 @@ namespace ESLifyEverything.PluginHandles
             //var ImageSpacesItemSet = mod.ImageSpaces.ToHashSet();
             foreach (var sourceForm in mod.ImageSpaces.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ImageSpaces: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ImageSpaces: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ImageSpaces.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ImageSpaces: Removing " + sourceForm.FormKey.ToString());
+                            mod.ImageSpaces.Remove(sourceForm.FormKey);
+                            DevLog.Log("ImageSpaces: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ImageSpaces.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1315,18 +1510,21 @@ namespace ESLifyEverything.PluginHandles
             //var ImageSpaceAdaptersItemSet = mod.ImageSpaceAdapters.ToHashSet();
             foreach (var sourceForm in mod.ImageSpaceAdapters.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ImageSpaceAdapters: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ImageSpaceAdapters: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ImageSpaceAdapters.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ImageSpaceAdapters: Removing " + sourceForm.FormKey.ToString());
+                            mod.ImageSpaceAdapters.Remove(sourceForm.FormKey);
+                            DevLog.Log("ImageSpaceAdapters: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ImageSpaceAdapters.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1335,18 +1533,21 @@ namespace ESLifyEverything.PluginHandles
             //var FormListsItemSet = mod.FormLists.ToHashSet();
             foreach (var sourceForm in mod.FormLists.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("FormLists: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("FormLists: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.FormLists.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("FormLists: Removing " + sourceForm.FormKey.ToString());
+                            mod.FormLists.Remove(sourceForm.FormKey);
+                            DevLog.Log("FormLists: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.FormLists.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1355,18 +1556,21 @@ namespace ESLifyEverything.PluginHandles
             //var PerksItemSet = mod.Perks.ToHashSet();
             foreach (var sourceForm in mod.Perks.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Perks: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Perks: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Perks.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Perks: Removing " + sourceForm.FormKey.ToString());
+                            mod.Perks.Remove(sourceForm.FormKey);
+                            DevLog.Log("Perks: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Perks.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1375,18 +1579,21 @@ namespace ESLifyEverything.PluginHandles
             //var BodyPartsItemSet = mod.BodyParts.ToHashSet();
             foreach (var sourceForm in mod.BodyParts.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("BodyParts: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("BodyParts: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.BodyParts.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("BodyParts: Removing " + sourceForm.FormKey.ToString());
+                            mod.BodyParts.Remove(sourceForm.FormKey);
+                            DevLog.Log("BodyParts: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.BodyParts.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1395,18 +1602,21 @@ namespace ESLifyEverything.PluginHandles
             //var AddonNodesItemSet = mod.AddonNodes.ToHashSet();
             foreach (var sourceForm in mod.AddonNodes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("AddonNodes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("AddonNodes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.AddonNodes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("AddonNodes: Removing " + sourceForm.FormKey.ToString());
+                            mod.AddonNodes.Remove(sourceForm.FormKey);
+                            DevLog.Log("AddonNodes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.AddonNodes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1415,18 +1625,21 @@ namespace ESLifyEverything.PluginHandles
             //var ActorValueInformationItemSet = mod.ActorValueInformation.ToHashSet();
             foreach (var sourceForm in mod.ActorValueInformation.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ActorValueInformation: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ActorValueInformation: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ActorValueInformation.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ActorValueInformation: Removing " + sourceForm.FormKey.ToString());
+                            mod.ActorValueInformation.Remove(sourceForm.FormKey);
+                            DevLog.Log("ActorValueInformation: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ActorValueInformation.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1435,18 +1648,21 @@ namespace ESLifyEverything.PluginHandles
             //var CameraShotsItemSet = mod.CameraShots.ToHashSet();
             foreach (var sourceForm in mod.CameraShots.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("CameraShots: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("CameraShots: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.CameraShots.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("CameraShots: Removing " + sourceForm.FormKey.ToString());
+                            mod.CameraShots.Remove(sourceForm.FormKey);
+                            DevLog.Log("CameraShots: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.CameraShots.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1455,18 +1671,21 @@ namespace ESLifyEverything.PluginHandles
             //var CameraPathsItemSet = mod.CameraPaths.ToHashSet();
             foreach (var sourceForm in mod.CameraPaths.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("CameraPaths: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("CameraPaths: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.CameraPaths.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("CameraPaths: Removing " + sourceForm.FormKey.ToString());
+                            mod.CameraPaths.Remove(sourceForm.FormKey);
+                            DevLog.Log("CameraPaths: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.CameraPaths.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1475,18 +1694,21 @@ namespace ESLifyEverything.PluginHandles
             //var VoiceTypesItemSet = mod.VoiceTypes.ToHashSet();
             foreach (var sourceForm in mod.VoiceTypes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("VoiceTypes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("VoiceTypes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.VoiceTypes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("VoiceTypes: Removing " + sourceForm.FormKey.ToString());
+                            mod.VoiceTypes.Remove(sourceForm.FormKey);
+                            DevLog.Log("VoiceTypes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.VoiceTypes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1495,18 +1717,21 @@ namespace ESLifyEverything.PluginHandles
             //var MaterialTypesItemSet = mod.MaterialTypes.ToHashSet();
             foreach (var sourceForm in mod.MaterialTypes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("MaterialTypes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("MaterialTypes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.MaterialTypes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("MaterialTypes: Removing " + sourceForm.FormKey.ToString());
+                            mod.MaterialTypes.Remove(sourceForm.FormKey);
+                            DevLog.Log("MaterialTypes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.MaterialTypes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1515,18 +1740,21 @@ namespace ESLifyEverything.PluginHandles
             //var ImpactsItemSet = mod.Impacts.ToHashSet();
             foreach (var sourceForm in mod.Impacts.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Impacts: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Impacts: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Impacts.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Impacts: Removing " + sourceForm.FormKey.ToString());
+                            mod.Impacts.Remove(sourceForm.FormKey);
+                            DevLog.Log("Impacts: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Impacts.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1535,18 +1763,21 @@ namespace ESLifyEverything.PluginHandles
             //var ImpactDataSetsItemSet = mod.ImpactDataSets.ToHashSet();
             foreach (var sourceForm in mod.ImpactDataSets.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ImpactDataSets: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ImpactDataSets: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ImpactDataSets.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ImpactDataSets: Removing " + sourceForm.FormKey.ToString());
+                            mod.ImpactDataSets.Remove(sourceForm.FormKey);
+                            DevLog.Log("ImpactDataSets: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ImpactDataSets.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1555,18 +1786,21 @@ namespace ESLifyEverything.PluginHandles
             //var ArmorAddonsItemSet = mod.ArmorAddons.ToHashSet();
             foreach (var sourceForm in mod.ArmorAddons.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ArmorAddons: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ArmorAddons: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ArmorAddons.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ArmorAddons: Removing " + sourceForm.FormKey.ToString());
+                            mod.ArmorAddons.Remove(sourceForm.FormKey);
+                            DevLog.Log("ArmorAddons: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ArmorAddons.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1575,18 +1809,21 @@ namespace ESLifyEverything.PluginHandles
             //var EncounterZonesItemSet = mod.EncounterZones.ToHashSet();
             foreach (var sourceForm in mod.EncounterZones.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("EncounterZones: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("EncounterZones: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.EncounterZones.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("EncounterZones: Removing " + sourceForm.FormKey.ToString());
+                            mod.EncounterZones.Remove(sourceForm.FormKey);
+                            DevLog.Log("EncounterZones: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.EncounterZones.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1595,18 +1832,21 @@ namespace ESLifyEverything.PluginHandles
             //var LocationsItemSet = mod.Locations.ToHashSet();
             foreach (var sourceForm in mod.Locations.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Locations: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Locations: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Locations.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Locations: Removing " + sourceForm.FormKey.ToString());
+                            mod.Locations.Remove(sourceForm.FormKey);
+                            DevLog.Log("Locations: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Locations.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1615,18 +1855,21 @@ namespace ESLifyEverything.PluginHandles
             //var MessagesItemSet = mod.Messages.ToHashSet();
             foreach (var sourceForm in mod.Messages.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Messages: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Messages: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Messages.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Messages: Removing " + sourceForm.FormKey.ToString());
+                            mod.Messages.Remove(sourceForm.FormKey);
+                            DevLog.Log("Messages: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Messages.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1635,18 +1878,21 @@ namespace ESLifyEverything.PluginHandles
             //var DefaultObjectManagersItemSet = mod.DefaultObjectManagers.ToHashSet();
             foreach (var sourceForm in mod.DefaultObjectManagers.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("DefaultObjectManagers: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("DefaultObjectManagers: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.DefaultObjectManagers.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("DefaultObjectManagers: Removing " + sourceForm.FormKey.ToString());
+                            mod.DefaultObjectManagers.Remove(sourceForm.FormKey);
+                            DevLog.Log("DefaultObjectManagers: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.DefaultObjectManagers.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1655,18 +1901,21 @@ namespace ESLifyEverything.PluginHandles
             //var LightingTemplatesItemSet = mod.LightingTemplates.ToHashSet();
             foreach (var sourceForm in mod.LightingTemplates.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("LightingTemplates: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("LightingTemplates: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.LightingTemplates.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("LightingTemplates: Removing " + sourceForm.FormKey.ToString());
+                            mod.LightingTemplates.Remove(sourceForm.FormKey);
+                            DevLog.Log("LightingTemplates: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.LightingTemplates.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1675,18 +1924,21 @@ namespace ESLifyEverything.PluginHandles
             //var MusicTypesItemSet = mod.MusicTypes.ToHashSet();
             foreach (var sourceForm in mod.MusicTypes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("MusicTypes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("MusicTypes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.MusicTypes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("MusicTypes: Removing " + sourceForm.FormKey.ToString());
+                            mod.MusicTypes.Remove(sourceForm.FormKey);
+                            DevLog.Log("MusicTypes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.MusicTypes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1695,18 +1947,21 @@ namespace ESLifyEverything.PluginHandles
             //var FootstepsItemSet = mod.Footsteps.ToHashSet();
             foreach (var sourceForm in mod.Footsteps.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Footsteps: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Footsteps: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Footsteps.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Footsteps: Removing " + sourceForm.FormKey.ToString());
+                            mod.Footsteps.Remove(sourceForm.FormKey);
+                            DevLog.Log("Footsteps: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Footsteps.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1715,18 +1970,21 @@ namespace ESLifyEverything.PluginHandles
             //var FootstepSetsItemSet = mod.FootstepSets.ToHashSet();
             foreach (var sourceForm in mod.FootstepSets.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("FootstepSets: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("FootstepSets: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.FootstepSets.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("FootstepSets: Removing " + sourceForm.FormKey.ToString());
+                            mod.FootstepSets.Remove(sourceForm.FormKey);
+                            DevLog.Log("FootstepSets: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.FootstepSets.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1735,18 +1993,21 @@ namespace ESLifyEverything.PluginHandles
             //var StoryManagerBranchNodesItemSet = mod.StoryManagerBranchNodes.ToHashSet();
             foreach (var sourceForm in mod.StoryManagerBranchNodes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("StoryManagerBranchNodes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("StoryManagerBranchNodes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.StoryManagerBranchNodes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("StoryManagerBranchNodes: Removing " + sourceForm.FormKey.ToString());
+                            mod.StoryManagerBranchNodes.Remove(sourceForm.FormKey);
+                            DevLog.Log("StoryManagerBranchNodes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.StoryManagerBranchNodes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1755,18 +2016,21 @@ namespace ESLifyEverything.PluginHandles
             //var StoryManagerQuestNodesItemSet = mod.StoryManagerQuestNodes.ToHashSet();
             foreach (var sourceForm in mod.StoryManagerQuestNodes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("StoryManagerQuestNodes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("StoryManagerQuestNodes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.StoryManagerQuestNodes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("StoryManagerQuestNodes: Removing " + sourceForm.FormKey.ToString());
+                            mod.StoryManagerQuestNodes.Remove(sourceForm.FormKey);
+                            DevLog.Log("StoryManagerQuestNodes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.StoryManagerQuestNodes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1775,18 +2039,21 @@ namespace ESLifyEverything.PluginHandles
             //var StoryManagerEventNodesItemSet = mod.StoryManagerEventNodes.ToHashSet();
             foreach (var sourceForm in mod.StoryManagerEventNodes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("StoryManagerEventNodes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("StoryManagerEventNodes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.StoryManagerEventNodes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("StoryManagerEventNodes: Removing " + sourceForm.FormKey.ToString());
+                            mod.StoryManagerEventNodes.Remove(sourceForm.FormKey);
+                            DevLog.Log("StoryManagerEventNodes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.StoryManagerEventNodes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1795,18 +2062,21 @@ namespace ESLifyEverything.PluginHandles
             //var DialogBranchesItemSet = mod.DialogBranches.ToHashSet();
             foreach (var sourceForm in mod.DialogBranches.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("DialogBranches: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("DialogBranches: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.DialogBranches.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("DialogBranches: Removing " + sourceForm.FormKey.ToString());
+                            mod.DialogBranches.Remove(sourceForm.FormKey);
+                            DevLog.Log("DialogBranches: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.DialogBranches.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1815,18 +2085,21 @@ namespace ESLifyEverything.PluginHandles
             //var MusicTracksItemSet = mod.MusicTracks.ToHashSet();
             foreach (var sourceForm in mod.MusicTracks.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("MusicTracks: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("MusicTracks: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.MusicTracks.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("MusicTracks: Removing " + sourceForm.FormKey.ToString());
+                            mod.MusicTracks.Remove(sourceForm.FormKey);
+                            DevLog.Log("MusicTracks: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.MusicTracks.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1835,18 +2108,21 @@ namespace ESLifyEverything.PluginHandles
             //var DialogViewsItemSet = mod.DialogViews.ToHashSet();
             foreach (var sourceForm in mod.DialogViews.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("DialogViews: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("DialogViews: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.DialogViews.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("DialogViews: Removing " + sourceForm.FormKey.ToString());
+                            mod.DialogViews.Remove(sourceForm.FormKey);
+                            DevLog.Log("DialogViews: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.DialogViews.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1855,18 +2131,21 @@ namespace ESLifyEverything.PluginHandles
             //var WordsOfPowerItemSet = mod.WordsOfPower.ToHashSet();
             foreach (var sourceForm in mod.WordsOfPower.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("WordsOfPower: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("WordsOfPower: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.WordsOfPower.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("WordsOfPower: Removing " + sourceForm.FormKey.ToString());
+                            mod.WordsOfPower.Remove(sourceForm.FormKey);
+                            DevLog.Log("WordsOfPower: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.WordsOfPower.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1875,18 +2154,21 @@ namespace ESLifyEverything.PluginHandles
             //var ShoutsItemSet = mod.Shouts.ToHashSet();
             foreach (var sourceForm in mod.Shouts.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Shouts: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Shouts: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Shouts.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Shouts: Removing " + sourceForm.FormKey.ToString());
+                            mod.Shouts.Remove(sourceForm.FormKey);
+                            DevLog.Log("Shouts: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Shouts.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1895,18 +2177,21 @@ namespace ESLifyEverything.PluginHandles
             //var EquipTypesItemSet = mod.EquipTypes.ToHashSet();
             foreach (var sourceForm in mod.EquipTypes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("EquipTypes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("EquipTypes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.EquipTypes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("EquipTypes: Removing " + sourceForm.FormKey.ToString());
+                            mod.EquipTypes.Remove(sourceForm.FormKey);
+                            DevLog.Log("EquipTypes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.EquipTypes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1915,18 +2200,21 @@ namespace ESLifyEverything.PluginHandles
             //var RelationshipsItemSet = mod.Relationships.ToHashSet();
             foreach (var sourceForm in mod.Relationships.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Relationships: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Relationships: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Relationships.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Relationships: Removing " + sourceForm.FormKey.ToString());
+                            mod.Relationships.Remove(sourceForm.FormKey);
+                            DevLog.Log("Relationships: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Relationships.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1935,18 +2223,21 @@ namespace ESLifyEverything.PluginHandles
             //var ScenesItemSet = mod.Scenes.ToHashSet();
             foreach (var sourceForm in mod.Scenes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Scenes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Scenes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Scenes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Scenes: Removing " + sourceForm.FormKey.ToString());
+                            mod.Scenes.Remove(sourceForm.FormKey);
+                            DevLog.Log("Scenes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Scenes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1955,18 +2246,21 @@ namespace ESLifyEverything.PluginHandles
             //var AssociationTypesItemSet = mod.AssociationTypes.ToHashSet();
             foreach (var sourceForm in mod.AssociationTypes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("AssociationTypes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("AssociationTypes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.AssociationTypes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("AssociationTypes: Removing " + sourceForm.FormKey.ToString());
+                            mod.AssociationTypes.Remove(sourceForm.FormKey);
+                            DevLog.Log("AssociationTypes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.AssociationTypes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1975,18 +2269,21 @@ namespace ESLifyEverything.PluginHandles
             //var OutfitsItemSet = mod.Outfits.ToHashSet();
             foreach (var sourceForm in mod.Outfits.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Outfits: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Outfits: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Outfits.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Outfits: Removing " + sourceForm.FormKey.ToString());
+                            mod.Outfits.Remove(sourceForm.FormKey);
+                            DevLog.Log("Outfits: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Outfits.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -1995,18 +2292,21 @@ namespace ESLifyEverything.PluginHandles
             //var ArtObjectsItemSet = mod.ArtObjects.ToHashSet();
             foreach (var sourceForm in mod.ArtObjects.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ArtObjects: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ArtObjects: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ArtObjects.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ArtObjects: Removing " + sourceForm.FormKey.ToString());
+                            mod.ArtObjects.Remove(sourceForm.FormKey);
+                            DevLog.Log("ArtObjects: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ArtObjects.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2015,18 +2315,21 @@ namespace ESLifyEverything.PluginHandles
             //var MaterialObjectsItemSet = mod.MaterialObjects.ToHashSet();
             foreach (var sourceForm in mod.MaterialObjects.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("MaterialObjects: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("MaterialObjects: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.MaterialObjects.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("MaterialObjects: Removing " + sourceForm.FormKey.ToString());
+                            mod.MaterialObjects.Remove(sourceForm.FormKey);
+                            DevLog.Log("MaterialObjects: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.MaterialObjects.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2035,18 +2338,21 @@ namespace ESLifyEverything.PluginHandles
             //var MovementTypesItemSet = mod.MovementTypes.ToHashSet();
             foreach (var sourceForm in mod.MovementTypes.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("MovementTypes: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("MovementTypes: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.MovementTypes.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("MovementTypes: Removing " + sourceForm.FormKey.ToString());
+                            mod.MovementTypes.Remove(sourceForm.FormKey);
+                            DevLog.Log("MovementTypes: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.MovementTypes.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2055,18 +2361,21 @@ namespace ESLifyEverything.PluginHandles
             //var SoundDescriptorsItemSet = mod.SoundDescriptors.ToHashSet();
             foreach (var sourceForm in mod.SoundDescriptors.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("SoundDescriptors: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("SoundDescriptors: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.SoundDescriptors.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("SoundDescriptors: Removing " + sourceForm.FormKey.ToString());
+                            mod.SoundDescriptors.Remove(sourceForm.FormKey);
+                            DevLog.Log("SoundDescriptors: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.SoundDescriptors.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2075,18 +2384,21 @@ namespace ESLifyEverything.PluginHandles
             //var DualCastDataItemSet = mod.DualCastData.ToHashSet();
             foreach (var sourceForm in mod.DualCastData.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("DualCastData: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("DualCastData: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.DualCastData.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("DualCastData: Removing " + sourceForm.FormKey.ToString());
+                            mod.DualCastData.Remove(sourceForm.FormKey);
+                            DevLog.Log("DualCastData: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.DualCastData.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2095,18 +2407,21 @@ namespace ESLifyEverything.PluginHandles
             //var SoundCategoriesItemSet = mod.SoundCategories.ToHashSet();
             foreach (var sourceForm in mod.SoundCategories.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("SoundCategories: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("SoundCategories: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.SoundCategories.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("SoundCategories: Removing " + sourceForm.FormKey.ToString());
+                            mod.SoundCategories.Remove(sourceForm.FormKey);
+                            DevLog.Log("SoundCategories: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.SoundCategories.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2115,18 +2430,21 @@ namespace ESLifyEverything.PluginHandles
             //var SoundOutputModelsItemSet = mod.SoundOutputModels.ToHashSet();
             foreach (var sourceForm in mod.SoundOutputModels.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("SoundOutputModels: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("SoundOutputModels: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.SoundOutputModels.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("SoundOutputModels: Removing " + sourceForm.FormKey.ToString());
+                            mod.SoundOutputModels.Remove(sourceForm.FormKey);
+                            DevLog.Log("SoundOutputModels: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.SoundOutputModels.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2135,18 +2453,21 @@ namespace ESLifyEverything.PluginHandles
             //var CollisionLayersItemSet = mod.CollisionLayers.ToHashSet();
             foreach (var sourceForm in mod.CollisionLayers.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("CollisionLayers: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("CollisionLayers: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.CollisionLayers.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("CollisionLayers: Removing " + sourceForm.FormKey.ToString());
+                            mod.CollisionLayers.Remove(sourceForm.FormKey);
+                            DevLog.Log("CollisionLayers: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.CollisionLayers.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2155,18 +2476,21 @@ namespace ESLifyEverything.PluginHandles
             //var ColorsItemSet = mod.Colors.ToHashSet();
             foreach (var sourceForm in mod.Colors.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("Colors: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("Colors: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.Colors.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("Colors: Removing " + sourceForm.FormKey.ToString());
+                            mod.Colors.Remove(sourceForm.FormKey);
+                            DevLog.Log("Colors: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.Colors.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2175,18 +2499,21 @@ namespace ESLifyEverything.PluginHandles
             //var ReverbParametersItemSet = mod.ReverbParameters.ToHashSet();
             foreach (var sourceForm in mod.ReverbParameters.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("ReverbParameters: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("ReverbParameters: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.ReverbParameters.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("ReverbParameters: Removing " + sourceForm.FormKey.ToString());
+                            mod.ReverbParameters.Remove(sourceForm.FormKey);
+                            DevLog.Log("ReverbParameters: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.ReverbParameters.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2195,18 +2522,21 @@ namespace ESLifyEverything.PluginHandles
             //var VolumetricLightingsItemSet = mod.VolumetricLightings.ToHashSet();
             foreach (var sourceForm in mod.VolumetricLightings.ToArray())
             {
-                if (CompactedModDataD.TryGetValue(sourceForm.FormKey.ModKey.ToString(), out CompactedModData? compactedModData))
+                foreach (CompactedModData compactedModData in CompactedModDataD.Values)
                 {
-                    FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
-                    if (changed)
+                    if (sourceForm.FormKey.ModKey.ToString().Equals(compactedModData.ModName, StringComparison.OrdinalIgnoreCase))
                     {
-                        var formCopy = sourceForm.Duplicate(formKey);
-                        DevLog.Log("VolumetricLightings: Removing " + sourceForm.FormKey.ToString());
-                        mod.Remove(sourceForm.FormKey);
-                        DevLog.Log("VolumetricLightings: Duplicating to " + formCopy.FormKey.ToString());
-                        mod.VolumetricLightings.Add(formCopy);
-                        ModEdited = true;
-                        break;
+                        FormKey formKey = HandleFormKeyFix(sourceForm.FormKey, compactedModData, out bool changed);
+                        if (changed)
+                        {
+                            var formCopy = sourceForm.Duplicate(formKey);
+                            DevLog.Log("VolumetricLightings: Removing " + sourceForm.FormKey.ToString());
+                            mod.VolumetricLightings.Remove(sourceForm.FormKey);
+                            DevLog.Log("VolumetricLightings: Duplicating to " + formCopy.FormKey.ToString());
+                            mod.VolumetricLightings.Add(formCopy);
+                            ModEdited = true;
+                            break;
+                        }
                     }
                 }
             }
