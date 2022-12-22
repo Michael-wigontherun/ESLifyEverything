@@ -483,8 +483,8 @@ namespace ESLifyEverything
                             if (hexNum.Length > 6)
                             {
                                 hexNum = hexNum.Substring(hexNum.Length - 6).TrimStart('0');
-                                exactHexValueTrimmed = hexNum;
                             }
+                            exactHexValueTrimmed = hexNum;
                             string hex = "0x" + hexNum;
                             line = line.Replace(stringDecimal, hex, StringComparison.OrdinalIgnoreCase);
                         }
