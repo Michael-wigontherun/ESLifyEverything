@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ESLifyEverything.FormData;
 using ESLifyEverythingGlobalDataLibrary;
+using Noggog;
 
 namespace ESLifyEverything
 {
@@ -318,13 +319,17 @@ namespace ESLifyEverything
             List<string> changedFiles = new List<string>();// changed scripts
             foreach (string script in scripts)
             {
-                bool changed = false;
-                string[] fileLines = FormInScriptFileLineReader(File.ReadAllLines(script), out changed);
+                string[] fileLines = File.ReadAllLines(script);
+                fileLines = FormInScriptFileLineReader(fileLines, out bool changed, out bool changedImport);
+
+                if (changedImport || changed)
+                {
+                    File.WriteAllLines(script, fileLines);
+                }
                 if (changed)
                 {
                     GF.WriteLine(GF.stringLoggingData.ScriptSourceFileChanged + script, false, GF.Settings.VerboseFileLoging);
                     string newFilePath = GF.FixOuputPath(script, startFolder, GF.ChangedScriptsPath);
-                    File.WriteAllLines(script, fileLines);
                     File.WriteAllLines(newFilePath, fileLines);
                     changedFiles.Add(newFilePath);
                 }
@@ -462,8 +467,64 @@ namespace ESLifyEverything
             }
         }
 
+        enum ValueTypes
+        {
+            None,
+            Int,
+            Bool,
+            Float,
+            String
+        }
+
+        public static string SetDefaultValue(string line, out bool changedImport)
+        {
+            changedImport = false;
+            if (line.Contains(" function ", StringComparison.OrdinalIgnoreCase)) return line;
+            if (line.IsNullOrEmpty()) return line;
+            if (line.IsNullOrWhitespace()) return line;
+            if (line.Contains('=', StringComparison.OrdinalIgnoreCase)) return line;
+
+            ValueTypes valueType = ValueTypes.None;
+
+            if (line.IndexOf("int ", StringComparison.OrdinalIgnoreCase) == 0) valueType = ValueTypes.Int;
+            else if (line.IndexOf("String ", StringComparison.OrdinalIgnoreCase) == 0) valueType = ValueTypes.String;
+            else if (line.IndexOf("Bool ", StringComparison.OrdinalIgnoreCase) == 0) valueType = ValueTypes.Bool;
+            else if (line.IndexOf("Float ", StringComparison.OrdinalIgnoreCase) == 0) valueType = ValueTypes.Float;
+
+            if (valueType != ValueTypes.None)
+            {
+                string[] words = line.Split(' ');
+                int vNameIndex = 1;
+
+                if (words[vNameIndex].Equals("property", StringComparison.OrdinalIgnoreCase)) vNameIndex = 2;
+
+                StringBuilder sb = new StringBuilder();
+                for (int a = 0; a < words.Length; a++)
+                {
+                    sb.Append(words[a]);
+
+                    if(a == vNameIndex)
+                    {
+                        if(valueType == ValueTypes.Int) sb.Append(" = 0 ");
+                        else if (valueType == ValueTypes.String) sb.Append(" = \"\" ");
+                        else if (valueType == ValueTypes.Bool) sb.Append(" = false ");
+                        else if (valueType == ValueTypes.Float) sb.Append(" = 0.0 ");
+                    }
+                    else
+                    {
+                        sb.Append(' ');
+                    }
+                }
+
+                line = sb.ToString();
+                changedImport = true;
+            }
+
+            return line;
+        }
+
         //Parses Script files
-        public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed)
+        public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed, out bool changedImport)
         {
             string FixLineToHex(string line, out string? exactHexValueTrimmed)
             {
@@ -500,8 +561,19 @@ namespace ESLifyEverything
             }
 
             changed = false;
+            changedImport = false;
+            bool StartCheck = false;
             for (int i = 0; i < fileLines.Length; i++)
             {
+                if (fileLines[i].Contains(";-- Properties", StringComparison.OrdinalIgnoreCase)) StartCheck = true;
+                if (fileLines[i].Contains(";-- Variables", StringComparison.OrdinalIgnoreCase)) StartCheck = true;
+                if (fileLines[i].Contains(";-- Functions", StringComparison.OrdinalIgnoreCase)) StartCheck = false;
+                if (StartCheck)
+                {
+                    fileLines[i] = SetDefaultValue(fileLines[i], out bool changedImportValue);
+                    if (changedImportValue) changedImport = true;
+                }
+
                 if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
                 {
                     string? exactHexValueTrimmed = null;
