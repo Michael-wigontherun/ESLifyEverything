@@ -570,8 +570,12 @@ namespace ESLifyEverything
                 if (fileLines[i].Contains(";-- Functions", StringComparison.OrdinalIgnoreCase)) StartCheck = false;
                 if (StartCheck)
                 {
-                    fileLines[i] = SetDefaultValue(fileLines[i], out bool changedImportValue);
-                    if (changedImportValue) changedImport = true;
+                    if (i != (fileLines.Length - 1) && !fileLines[i + 1].Contains(" function ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        fileLines[i] = SetDefaultValue(fileLines[i], out bool changedImportValue);
+                        if (changedImportValue) changedImport = true;
+                    }
+                    
                 }
 
                 if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
