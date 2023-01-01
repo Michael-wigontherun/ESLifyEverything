@@ -59,6 +59,9 @@ namespace ESLifyEverything
         //Imports all CompactedModData and MergeCache's
         public static bool CheckEverything = false;
 
+        //Ignore found Outputted scripts and run all processes except Script ESLify CMD Argument
+        public static bool _IgnoreScripts = false;
+
         //Main method that starts all features for eslify
         //Currently there are no Console Arguments, I will be adding some eventually
         static void Main(string[] args)
@@ -66,7 +69,15 @@ namespace ESLifyEverything
             try
             {
                 HandleArgs(args);
-                if (StartUp(out HashSet<StartupError> startupError, "ESLifyEverything_Log.txt"))
+
+                bool startUp = StartUp(out HashSet<StartupError> startupError, "ESLifyEverything_Log.txt");
+
+                if (startupError.Contains(StartupError.OutputtedScriptsFound) && _IgnoreScripts)
+                {
+                    startUp = true;
+                }
+
+                if (!startupError.Contains(StartupError.InvalidStartUp) && startUp)
                 {
                     Console.WriteLine("Sucessful startup");
                     if (!startupError.Contains(StartupError.xEditLogNotFound))
@@ -166,14 +177,16 @@ namespace ESLifyEverything
                         DevLog.Pause("After Data File ESLify AutoRun Pause");
                     }
 
+                    if (!startupError.Contains(StartupError.OutputtedScriptsFound))
+                    {
+                        Console.WriteLine("\n\n\n\n");
+                        GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
+                        Task Scripts = ExtractScripts();
+                        Scripts.Wait();
+                        Scripts.Dispose();
 
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingScriptESLify);
-                    Task Scripts = ExtractScripts();
-                    Scripts.Wait();
-                    Scripts.Dispose();
-
-                    DevLog.Pause("After Script ESLify Pause");
+                        DevLog.Pause("After Script ESLify Pause");
+                    }
 
                     if (GF.Settings.RunSubPluginCompaction)
                     {
@@ -198,7 +211,7 @@ namespace ESLifyEverything
 
                         DevLog.Pause("After Startup Invalid Log Reader Pause");
                     }
-                    if (Directory.Exists(GF.Settings.OutputFolder))
+                    if (Directory.Exists(GF.Settings.DataFolderPath))
                     {
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
@@ -343,6 +356,10 @@ namespace ESLifyEverything
                         AlwaysCheckList.Add(cmd.Trim());
                     }
                 }
+                else if(arg.Equals("-IgnoreScripts", StringComparison.OrdinalIgnoreCase))
+                {
+                    _IgnoreScripts = true;
+                }
                 else
                 {
                     GF.WriteLine($"Invalid Argument exception, {arg} not known.");
@@ -355,10 +372,10 @@ namespace ESLifyEverything
         {
             Console.WriteLine("Case does not matter for any of the following.");
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
-            Console.WriteLine("-h  or -help       Prints this message output and cancels other processes");
+            Console.WriteLine("-h  or -help        Prints this message output and cancels other processes");
             Console.WriteLine();
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
-            Console.WriteLine("-c= or -check=    followed by a plugin name will check the corresponding CompactedModData on Face and Voice.");
+            Console.WriteLine("-c= or -check=      followed by a plugin name will check the corresponding CompactedModData on Face and Voice.");
             Console.WriteLine();
             Console.WriteLine("Example: -c=\"DIVERSE SKYRIM.esp\" will always check the CompactedModData associated with DIVERSE SKYRIM.esp.");
             Console.WriteLine("Or if it was a Merge it would check the merge.");
@@ -369,6 +386,10 @@ namespace ESLifyEverything
             Console.WriteLine("Example: -c=\"DIVERSE SKYRIM.esp, GIST soul trap.esp, Castle Volkihar Rebuilt.esp\"");
             Console.WriteLine("  * The second is preferred");
             Console.WriteLine("  * Spaces are not necessary after comma's.");
+            Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
+            Console.WriteLine("-IgnoreScripts      will start up all normal processes except Script ESLify. Aslong as all other processes are" +
+                              "valid.");
+            Console.WriteLine();
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
         }
     }

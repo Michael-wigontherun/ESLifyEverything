@@ -10,6 +10,7 @@ namespace ESLifyEverythingGlobalDataLibrary
     public enum StartupError
     {
         xEditLogNotFound,           //Did not find the xEdit log inside the XEditFolderPath
+        OutputtedScriptsFound,      //Found compiled scripts inside OutputFolder\Scripts
         InvalidStartUp              //Startup was not successful can not run
     }
 
@@ -252,7 +253,7 @@ namespace ESLifyEverythingGlobalDataLibrary
                 if (scripts.Any())
                 {
                     startUp = false;
-                    startupError.Add(StartupError.InvalidStartUp);
+                    startupError.Add(StartupError.OutputtedScriptsFound);
                     GF.WriteLine(String.Format(GF.stringLoggingData.ClearYourOutputFolderScripts1, GF.stringLoggingData.PotectOrigonalScripts));
                     GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts2);
                     Process ds = new Process();

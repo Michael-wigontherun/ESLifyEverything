@@ -575,7 +575,6 @@ namespace ESLifyEverything
                         fileLines[i] = SetDefaultValue(fileLines[i], out bool changedImportValue);
                         if (changedImportValue) changedImport = true;
                     }
-                    
                 }
 
                 if (fileLines[i].Contains(".esp", StringComparison.OrdinalIgnoreCase) || fileLines[i].Contains(".esm", StringComparison.OrdinalIgnoreCase))
