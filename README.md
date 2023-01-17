@@ -55,6 +55,8 @@ Releases are always on GitHub before Nexus
 
 [Jampi0n](https://www.nexusmods.com/skyrimspecialedition/users/25815700) for showing me how to use NiflySharp and allowing me to include his [NifWrapper.cs](https://github.com/Jampi0n/Skyrim-NifPatcher/blob/main/NifPatcher/NifWrapper.cs) class file.
 
+[Orvid's Champollion team](https://github.com/Orvid/Champollion) They have fixed many things in Champollion, as well as allowing me to included in the download.
+
 ## Tools used
 
 Visual Studio 2022
