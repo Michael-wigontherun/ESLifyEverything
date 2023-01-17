@@ -80,6 +80,9 @@ namespace ESLifyEverything
                 if (!startupError.Contains(StartupError.InvalidStartUp) && startUp)
                 {
                     Console.WriteLine("Sucessful startup");
+
+                    GF.ValidStartUp();
+
                     if (!startupError.Contains(StartupError.xEditLogNotFound))
                     {
                         XEditSession();

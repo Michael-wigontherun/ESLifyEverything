@@ -204,7 +204,8 @@ namespace ESLifyEverything
                     while (!p.StandardError.EndOfStream)
                     {
                         line = p.StandardError.ReadLine()!;
-                        stream.WriteLine(line);
+                        stream.WriteLine("Champollion Error: " + line);
+                        Console.WriteLine("Champollion Error: " + line);
                     }
                 }
             }
@@ -255,6 +256,7 @@ namespace ESLifyEverything
                     p.StartInfo.Arguments = $"\"{Path.GetFullPath(script)}\" -p \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -t";//files processed
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
                     p.StartInfo.CreateNoWindow = true;
                     p.Start();
 
@@ -266,6 +268,13 @@ namespace ESLifyEverything
                         {
                             stream.WriteLine(line);
                         }
+                    }
+
+                    while (!p.StandardError.EndOfStream)
+                    {
+                        line = p.StandardError.ReadLine()!;
+                        stream.WriteLine("Champollion Error: " + line);
+                        Console.WriteLine("Champollion Error: " + line);
                     }
 
                     p.WaitForExit();
@@ -312,6 +321,7 @@ namespace ESLifyEverything
 
             bool tempLogging = GF.Settings.VerboseConsoleLoging;
             GF.Settings.VerboseConsoleLoging = false;
+
             IEnumerable<string> scripts = Directory.EnumerateFiles(
                     startFolder,
                     "*.psc",
@@ -334,6 +344,7 @@ namespace ESLifyEverything
                     changedFiles.Add(newFilePath);
                 }
             }
+
             GF.Settings.VerboseConsoleLoging = tempLogging;
             
             if (File.Exists(Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe")))
@@ -352,7 +363,8 @@ namespace ESLifyEverything
                         Console.WriteLine();
                         Process p = new Process();
                         p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
-                        p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"TESV_Papyrus_Flags.flg\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
+                        p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"{GF.Settings.PapyrusFlag}\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
+                        GF.WriteLine(p.StartInfo.Arguments);
                         p.StartInfo.UseShellExecute = false;
                         p.StartInfo.RedirectStandardOutput = true;
                         p.StartInfo.RedirectStandardError = true;
@@ -419,7 +431,7 @@ namespace ESLifyEverything
             {
                 Process p = new Process();
                 p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
-                p.StartInfo.Arguments = $"\"{Path.Combine(Path.GetFullPath(GF.ChangedScriptsPath), file)}\" -q -f=\"TESV_Papyrus_Flags.flg\" -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
+                p.StartInfo.Arguments = $"\"{Path.Combine(Path.GetFullPath(GF.ChangedScriptsPath), file)}\" -q -f=\"{GF.Settings.PapyrusFlag}\" -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.RedirectStandardError = true;

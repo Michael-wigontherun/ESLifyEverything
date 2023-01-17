@@ -111,8 +111,7 @@ namespace ESLifyEverything
                         return "";
                     }// end local method
 
-                    CompactedModData? mod;
-                    if (CompactedModDataD.TryGetValue(currentPlugin, out mod))
+                    if (CompactedModDataD.TryGetValue(currentPlugin, out CompactedModData? mod))
                     {
                         for (int a = i + 1; a < fileLines.Length; a++)
                         {

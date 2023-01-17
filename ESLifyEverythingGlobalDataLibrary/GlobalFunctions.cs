@@ -111,21 +111,12 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             bool startUp = true;
 
-            IConfigurationBuilder? configurationBuilder = new ConfigurationBuilder()
+            IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("AppSettings.json")
                 .AddJsonFile(".\\Properties\\DefaultBSAs.json")
                 .AddJsonFile(".\\Properties\\IgnoredPugins.json")
-                .AddJsonFile(".\\Properties\\DefaultPlugins.json");
-
-            bool customIgnoredPlugins = false;
-
-            if (File.Exists(".\\Properties\\CustomIgnoredPugins.json"))
-            {
-                configurationBuilder.AddJsonFile(".\\Properties\\CustomIgnoredPugins.json");
-                customIgnoredPlugins = true;
-            }
-
-            IConfiguration config = configurationBuilder.AddEnvironmentVariables().Build();
+                .AddJsonFile(".\\Properties\\DefaultPlugins.json")
+                .AddEnvironmentVariables().Build();
 
             try
             {
@@ -265,16 +256,19 @@ namespace ESLifyEverythingGlobalDataLibrary
                     GF.WriteLine(GF.stringLoggingData.ClearYourOutputFolderScripts3);
                 }
             }
+            return startUp;
+        }
 
-            if (!startUp)
-            {
-                return startUp;
-            }
+        public static void ValidStartUp()
+        {
 
-            if (customIgnoredPlugins)
+            if (File.Exists(".\\Properties\\CustomIgnoredPugins.json"))
             {
-                HashSet<string> customIgnoredPluginsSet = config.GetRequiredSection("CustomIgnoredPugins").Get<HashSet<string>>();
-                foreach (string plugin in customIgnoredPluginsSet)
+                foreach (string plugin in new ConfigurationBuilder()
+                    .AddJsonFile(".\\Properties\\CustomIgnoredPugins.json")
+                    .AddEnvironmentVariables()
+                    .Build()
+                    .GetRequiredSection("CustomIgnoredPugins").Get<string[]>())
                 {
                     IgnoredPlugins.Add(plugin);
                 }
@@ -314,7 +308,7 @@ namespace ESLifyEverythingGlobalDataLibrary
                 GF.Settings.AutoRunESLify = false;
             }
 
-            if(GF.Settings.DataFolderPath.ElementAt(GF.Settings.DataFolderPath.Length - 1).Equals('\\'))
+            if (GF.Settings.DataFolderPath.ElementAt(GF.Settings.DataFolderPath.Length - 1).Equals('\\'))
             {
                 GF.Settings.DataFolderPath = GF.Settings.DataFolderPath.Remove(GF.Settings.DataFolderPath.Length - 1);
             }
@@ -335,7 +329,6 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             Directory.CreateDirectory(CompactedFormsFolder);
 
-            return startUp;
         }
 
         //Outputs logging for StartupErrors
