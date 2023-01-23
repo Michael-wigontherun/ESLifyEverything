@@ -733,7 +733,11 @@ namespace ESLifyEverything
                         Directory.CreateDirectory(newStartPath);
                         string newPath = Path.Combine(newStartPath, pathArr[pathArr.Length - 1].Replace(form.OriginalFormID, form.CompactedFormID, StringComparison.OrdinalIgnoreCase));
 
-                        File.Copy(voiceFilePath, newPath, true);
+                        //File.Copy(voiceFilePath, newPath, true);
+                        byte[] vfile = File.ReadAllBytes(voiceFilePath);
+                        File.WriteAllBytes(newPath, vfile);
+
+
                         GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
                     }
                 }
