@@ -10,14 +10,17 @@ namespace ESLifyEverythingGlobalDataLibrary
     public static class DevLog
     {
         //Pauses the program if DevLogging is set to true
-        public static void Pause(string Location)
+        public static void Pause(string Location, bool pause = true)
         {
-            if (GF.DevSettings.DevLogging)
+            if (pause)
             {
-                Console.WriteLine();
-                GF.WriteLine(Location);
-                GF.WriteLine(GF.stringLoggingData.EnterToContinue);
-                Console.ReadLine();
+                if (GF.DevSettings.DevLogging)
+                {
+                    Console.WriteLine();
+                    GF.WriteLine(Location);
+                    GF.WriteLine(GF.stringLoggingData.EnterToContinue);
+                    Console.ReadLine();
+                }
             }
         }
 

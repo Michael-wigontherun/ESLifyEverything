@@ -353,6 +353,8 @@ namespace ESLifyEverything
                 {
                     if (GF.Settings.EnableCompiler)
                     {
+                        DevLog.Pause("Before Compiler Start");
+
                         Console.WriteLine();
                         GF.WriteLine(GF.stringLoggingData.ImportantBelow);
                         GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
@@ -364,7 +366,10 @@ namespace ESLifyEverything
                         Process p = new Process();
                         p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
                         p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"{GF.Settings.PapyrusFlag}\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
-                        GF.WriteLine(p.StartInfo.Arguments);
+                        
+                        GF.WriteLine("PapyrusCompiler.exe " + p.StartInfo.Arguments);
+                        Console.WriteLine();
+
                         p.StartInfo.UseShellExecute = false;
                         p.StartInfo.RedirectStandardOutput = true;
                         p.StartInfo.RedirectStandardError = true;
@@ -380,7 +385,16 @@ namespace ESLifyEverything
                                 {
                                     stream.WriteLine(line);
                                 }
+                            }
 
+                            while (!p.StandardError.EndOfStream)
+                            {
+                                string line = p.StandardError.ReadLine()!;
+                                Console.WriteLine(line);
+                                if (!line.Equals(string.Empty))
+                                {
+                                    stream.WriteLine(line);
+                                }
                             }
                         }
                         p.WaitForExit();
@@ -442,6 +456,16 @@ namespace ESLifyEverything
                     while (!p.StandardOutput.EndOfStream)
                     {
                         string line = p.StandardOutput.ReadLine()!;
+                        Console.WriteLine(line);
+                        if (!line.Equals(string.Empty))
+                        {
+                            stream.WriteLine(line);
+                        }
+                    }
+
+                    while (!p.StandardError.EndOfStream)
+                    {
+                        string line = p.StandardError.ReadLine()!;
                         Console.WriteLine(line);
                         if (!line.Equals(string.Empty))
                         {

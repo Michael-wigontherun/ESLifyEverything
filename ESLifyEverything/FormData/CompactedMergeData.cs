@@ -128,7 +128,7 @@ namespace ESLifyEverything.FormData
                 }
             }
 
-            DevLog.Pause($"After MergedPluginFixer {MergeName} Pause.");
+            DevLog.Pause($"After MergedPluginFixer {MergeName} Pause.", !GF.DevSettings.DisableMergeFixerPauses);
 
         }
 
