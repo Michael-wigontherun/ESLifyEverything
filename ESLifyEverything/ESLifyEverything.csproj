@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ESLifyCreateJson\ESLifyCreateJson.csproj" />
     <ProjectReference Include="..\ESLifyEverythingGlobalDataLibrary\ESLifyEverythingGlobalDataLibrary.csproj" />
+    <ProjectReference Include="..\ESLifyEverythingScriptESLifyErrorLog\ESLifyEverythingScriptESLifyErrorLog.csproj" />
     <ProjectReference Include="..\ESLifySplitModInterpreter\ESLifySplitModInterpreter.csproj" />
   </ItemGroup>
 

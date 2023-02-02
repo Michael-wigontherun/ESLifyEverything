@@ -10,6 +10,7 @@
         "dependencies": {
           "ESLifyCreateJson": "1.0.0",
           "ESLifyEverythingGlobalDataLibrary": "1.0.0",
+          "ESLifyEverythingScriptESLifyErrorLog": "1.0.0",
           "ESLifySplitModInterpreter": "1.0.0",
           "Microsoft.Extensions.Configuration.Binder": "6.0.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "6.0.0",
@@ -537,6 +538,15 @@
           "ESLifyEverythingGlobalDataLibrary.dll": {}
         }
       },
+      "ESLifyEverythingScriptESLifyErrorLog/1.0.0": {
+        "dependencies": {
+          "ESLifyEverythingGlobalDataLibrary": "1.0.0",
+          "Mutagen.Bethesda.Skyrim": "0.40.0"
+        },
+        "runtime": {
+          "ESLifyEverythingScriptESLifyErrorLog.dll": {}
+        }
+      },
       "ESLifySplitModInterpreter/1.0.0": {
         "dependencies": {
           "ESLifyEverythingGlobalDataLibrary": "1.0.0"
@@ -895,6 +905,11 @@
       "sha512": ""
     },
     "ESLifyEverythingGlobalDataLibrary/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ESLifyEverythingScriptESLifyErrorLog/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -361,15 +361,14 @@ namespace ESLifyEverything
                         Console.WriteLine();
                         GF.WriteLine(GF.stringLoggingData.ScriptESLifyINeedThisDataToBeReported);
                         Console.WriteLine();
-                        GF.WriteLine(GF.stringLoggingData.ImportantBelow1);
+                        GF.WriteLine("Script ESLify Seperator " + GF.stringLoggingData.ImportantBelow1);
                         Console.WriteLine();
+
                         Process p = new Process();
                         p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
                         p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"{GF.Settings.PapyrusFlag}\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
-                        
                         GF.WriteLine("PapyrusCompiler.exe " + p.StartInfo.Arguments);
                         Console.WriteLine();
-
                         p.StartInfo.UseShellExecute = false;
                         p.StartInfo.RedirectStandardOutput = true;
                         p.StartInfo.RedirectStandardError = true;
@@ -415,7 +414,7 @@ namespace ESLifyEverything
                             CompileOneByOne();
                         }
 
-                        GF.WriteLine(GF.stringLoggingData.ImportantAbove);
+                        GF.WriteLine(GF.stringLoggingData.ImportantAbove + " Script ESLify Seperator");
                     }
                     else
                     {

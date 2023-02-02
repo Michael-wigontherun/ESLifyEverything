@@ -184,6 +184,16 @@
     "SplitDataNotFound": "SplitData.csv was not created from xEdit script \"_ESLifyModSplit_Step2.pas\"",
     "FinalizingDataHeader": "Finalizing CompactedModData and Merge caches.",
     "WhyMustYouChangeMyStuff": "Please do not change the file names of merge cache files or CompactedModData files.",
-    "ImportAllCompactedModDataTrueWarning": "ImportAllCompactedModData detected true. Disabling AutoRunESLify."
+    "ImportAllCompactedModDataTrueWarning": "ImportAllCompactedModData detected true. Disabling AutoRunESLify.",
+    "MO2SupportNotAvailable1": "MO2 Support not enabled or set MO2 mod folder does not exist",
+    "MO2SupportNotAvailable2": "MO2 is required for this to work because there is no way for me to track what scripts come from what mod.",
+    "StartedReadingESLifyLog": "Starting to read ESLifyEverything Log.",
+    "FoundProblemScript": "Found problem script: ",
+    "FoundBeginingSeperator": "Found Script ELSify Seperator. Started recording log lines.",
+    "FoundEndingSeperator": "Found endding Script ELSify Seperator. End log read.",
+    "CheckingMO2Folders": "Checking MO2 folders for scripts",
+    "ScriptFoundIn": "Script {0} found in: ",
+    "InsideBSA": "Inside BSA: ",
+    "GeneratingInFolder": "Generating in folder: "
   }
 }

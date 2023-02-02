@@ -235,6 +235,17 @@
         public string FinalizingDataHeader { get; set; } = "";
         public string WhyMustYouChangeMyStuff { get; set; } = "";
 
+        //ESLifyEverythingScriptESLifyErrorLog
+        public string MO2SupportNotAvailable1 { get; set; } = "";
+        public string MO2SupportNotAvailable2 { get; set; } = "";
+        public string StartedReadingESLifyLog { get; set; } = "";
+        public string FoundProblemScript { get; set; } = "";
+        public string FoundBeginingSeperator { get; set; } = "";
+        public string FoundEndingSeperator { get; set; } = "";
+        public string CheckingMO2Folders { get; set; } = "";
+        public string ScriptFoundIn { get; set; } = "";
+        public string InsideBSA { get; set; } = "";
+        public string GeneratingInFolder { get; set; } = "";
 
     }
 }

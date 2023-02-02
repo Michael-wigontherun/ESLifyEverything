@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FixCompactedModData", "FixC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESLifySplitModInterpreter", "ESLifySplitModInterpreter\ESLifySplitModInterpreter.csproj", "{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESLifyEverythingScriptESLifyErrorLog", "ESLifyEverythingScriptESLifyErrorLog\ESLifyEverythingScriptESLifyErrorLog.csproj", "{D276DFCD-FB75-463F-B931-2A80CFE5FEC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,12 @@ Global
 		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Personal|Any CPU.Build.0 = Release|Any CPU
 		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1151AF0E-8D8D-4648-9B4A-97B084EE6DAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D276DFCD-FB75-463F-B931-2A80CFE5FEC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D276DFCD-FB75-463F-B931-2A80CFE5FEC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D276DFCD-FB75-463F-B931-2A80CFE5FEC0}.Personal|Any CPU.ActiveCfg = Debug|Any CPU
+		{D276DFCD-FB75-463F-B931-2A80CFE5FEC0}.Personal|Any CPU.Build.0 = Debug|Any CPU
+		{D276DFCD-FB75-463F-B931-2A80CFE5FEC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D276DFCD-FB75-463F-B931-2A80CFE5FEC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
