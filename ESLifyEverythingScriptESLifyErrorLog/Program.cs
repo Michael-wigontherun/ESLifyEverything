@@ -34,7 +34,6 @@ namespace ESLifyEverythingScriptESLifyErrorLog
             Console.ReadLine();
         }
 
-        
         static bool CreateLogDataReference()
         {
             GF.WriteLine(GF.stringLoggingData.StartedReadingESLifyLog);
@@ -44,6 +43,8 @@ namespace ESLifyEverythingScriptESLifyErrorLog
                 bool reading = false;
                 while ((s = sr.ReadLine()) != null)
                 {
+                    if (s.Contains("PapyrusCompiler.exe")) continue;
+
                     if (reading)
                     {
                         log.Add(s);
@@ -56,9 +57,9 @@ namespace ESLifyEverythingScriptESLifyErrorLog
                                 line = line.Replace("Source\\Scripts", subpathID);
                             }
                             string scriptName = line.Substring(line.IndexOf(subpathID) + subpathID.Length);
-                            scriptName = scriptName.Remove('(');
-                            scriptName = scriptName.Replace(".psc", "");
-                            if(ProblemScripts.TryAdd(scriptName, new List<ScriptData>()))
+                            //scriptName = scriptName.Remove('(');
+                            scriptName = scriptName.Remove(scriptName.IndexOf(".psc"));
+                            if (ProblemScripts.TryAdd(scriptName, new List<ScriptData>()))
                             {
                                 GF.WriteLine(GF.stringLoggingData.FoundProblemScript + scriptName);
                             }
@@ -158,6 +159,7 @@ namespace ESLifyEverythingScriptESLifyErrorLog
                 gitReport.WriteLine("</details>");
 
                 gitReport.WriteLine("Failed Scripts and where to find them: ");
+                gitReport.WriteLine();
                 foreach (string scriptName in ProblemScripts.Keys)
                 {
                     gitReport.WriteLine("- " + scriptName);
