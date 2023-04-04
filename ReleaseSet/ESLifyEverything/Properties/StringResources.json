@@ -93,6 +93,8 @@
     "ClearYourOutputFolderScripts1": "You must clear your \"[output folder]\\scripts\" This needs to happen {0}",
     "ClearYourOutputFolderScripts2": "Close the explorer after clearing the scripts folder.",
     "ClearYourOutputFolderScripts3": "You still must relaunch for the new scripts to be cleared from the MO2 or Vortex redeploy mods",
+    "ScriptESLifyWhatINeed1": "If there is anything logged in between the lines \"Important <\" and \"> Important\".",
+    "ScriptESLifyWhatINeed2": "Please follow the steps in the article \"Script ESLify Problem Report Guide\".",
     "ScriptFailedCompilation": " failed compilation, This needs to be compiled with the new FormIDs.",
     "ScriptFailedCompilation2": "You have to find what mod the script \"{0}\" comes from. Then fix the script manually.",
     "ScriptFailedCompilation3": "Please also report the scripts names and mods that they originated from with a sceenshot of the error from\nthe Script ESLify section to the Bugs section on Nexus or create a new issue on GitHub.",

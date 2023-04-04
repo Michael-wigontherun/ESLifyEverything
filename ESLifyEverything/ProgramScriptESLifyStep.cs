@@ -355,15 +355,6 @@ namespace ESLifyEverything
                     {
                         DevLog.Pause("Before Compiler Start");
 
-                        Console.WriteLine();
-                        GF.WriteLine(GF.stringLoggingData.ImportantBelow);
-                        GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
-                        Console.WriteLine();
-                        GF.WriteLine(GF.stringLoggingData.ScriptESLifyINeedThisDataToBeReported);
-                        Console.WriteLine();
-                        GF.WriteLine("Script ESLify Seperator " + GF.stringLoggingData.ImportantBelow1);
-                        Console.WriteLine();
-
                         Process p = new Process();
                         p.StartInfo.FileName = Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe");
                         p.StartInfo.Arguments = $"\"{Path.GetFullPath(GF.ChangedScriptsPath)}\" -q -f=\"{GF.Settings.PapyrusFlag}\" -a -i=\"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -o=\"{Path.Combine(Path.GetFullPath(GF.Settings.OutputFolder), "Scripts")}\"";
@@ -373,6 +364,14 @@ namespace ESLifyEverything
                         p.StartInfo.RedirectStandardOutput = true;
                         p.StartInfo.RedirectStandardError = true;
                         p.StartInfo.CreateNoWindow = true;
+
+                        Console.WriteLine();
+                        GF.WriteLine(GF.stringLoggingData.ScriptESLifyWhatINeed1);
+                        GF.WriteLine(GF.stringLoggingData.ScriptESLifyWhatINeed2);
+                        Console.WriteLine();
+                        GF.WriteLine("Script ESLify Seperator " + GF.stringLoggingData.ImportantBelow1);
+                        Console.WriteLine();
+
                         p.Start();
                         using (StreamWriter stream = File.AppendText(GF.logName))
                         {

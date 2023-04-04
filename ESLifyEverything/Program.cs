@@ -208,6 +208,13 @@ namespace ESLifyEverything
                 }
                 else
                 {
+                    foreach(var startuperror in startupError)
+                    {
+                        Console.Write(startuperror + " : ");
+                        
+                    }
+                    Console.WriteLine();
+
                     if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
                     {
                         XEditSession();
@@ -230,7 +237,12 @@ namespace ESLifyEverything
             }
             #region Catch
             catch (ArgumentHelpException) { }
-            catch (MissingFileException) { }
+            catch (MissingFileException e)
+            {
+                Console.WriteLine("\n\n\n\n");
+                GF.WriteLine(e.ToString());
+                GF.WriteLine(e.Message);
+            }
             catch (AggregateException e)
             {
                 Console.WriteLine("\n\n\n\n");

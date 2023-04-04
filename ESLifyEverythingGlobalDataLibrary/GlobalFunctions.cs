@@ -124,6 +124,7 @@ namespace ESLifyEverythingGlobalDataLibrary
                 if (!version.Equals(GF.SettingsVersion))
                 {
                     UAppSettings.UpdateSettingsFile();
+                    Console.WriteLine("Settings Error");
                     startupError.Add(StartupError.InvalidStartUp);
                     return false;
                 }
@@ -131,6 +132,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             catch (Exception)
             {
                 GF.GenerateSettingsFileError();
+                Console.WriteLine("Settings Error");
                 startupError.Add(StartupError.InvalidStartUp);
                 return false;
             }
@@ -160,6 +162,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             if (!Directory.Exists(GF.Settings.DataFolderPath))
             {
                 GF.WriteLine(GF.stringLoggingData.DataFolderNotFound);
+                Console.WriteLine("Data Folder Path Error");
                 startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
             }
@@ -167,6 +170,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             if (!Directory.Exists(GF.Settings.XEditFolderPath))
             {
                 GF.WriteLine(GF.stringLoggingData.XEditLogNotFoundStartup);
+                Console.WriteLine("xEditFolderPath Error");
                 startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
                 if (File.Exists(GF.Settings.XEditFolderPath))
@@ -193,6 +197,7 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             if (!File.Exists(".\\Champollion\\Champollion.exe"))
             {
+                Console.WriteLine("Champollion Error");
                 startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
                 GF.WriteLine(GF.stringLoggingData.ChampollionMissing);
@@ -200,6 +205,7 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             if (!File.Exists(Path.Combine(GF.GetSkyrimRootFolder(), "Papyrus Compiler\\PapyrusCompiler.exe")))
             {
+                Console.WriteLine("Compiler Error");
                 startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
                 GF.WriteLine(GF.stringLoggingData.PapyrusCompilerMissing);
@@ -225,6 +231,7 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             if (!Directory.Exists(GF.Settings.OutputFolder))
             {
+                Console.WriteLine("Output folder Error");
                 startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
                 GF.WriteLine(GF.stringLoggingData.OutputFolderNotFound);

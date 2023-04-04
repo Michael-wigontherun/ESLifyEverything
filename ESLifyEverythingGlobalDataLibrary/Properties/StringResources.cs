@@ -170,6 +170,8 @@
         public string StartingScriptESLify { get; set; } = "";
         public string ScriptSourceFileChanged { get; set; } = "";
         public string NoChangedScriptsDetected { get; set; } = "";
+        public string ScriptESLifyWhatINeed1 { get; set; } = "";
+        public string ScriptESLifyWhatINeed2 { get; set; } = "";
         public string ScriptFailedCompilation { get; set; } = "";
         public string ScriptFailedCompilation2 { get; set; } = "";
         public string ScriptFailedCompilation3 { get; set; } = "";

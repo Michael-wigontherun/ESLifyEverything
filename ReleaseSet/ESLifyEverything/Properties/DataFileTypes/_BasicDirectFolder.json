@@ -1,6 +1,23 @@
 [
   {
     "Enabled": true,
+    "Name": "DAV",
+    "StartFolder": "SKSE\\Plugins\\DynamicArmorVariants",
+    "FileNameFilter": "*.json",
+    "SeparatorData": {
+      "FormKeySeparator": "|",
+      "IDIsSecond": true,
+      "ModNameAsString": false,
+      "ModNameStringCharater": "\u0022",
+      "TrimStart": true
+    },
+    "StartingLogLine": "Starting DAV Eslify",
+    "FileAtLogLine": "DAV file found at ",
+    "FileUnchangedLogLine": "DAV file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
     "Name": "SPID",
     "StartFolder": "",
     "FileNameFilter": "*_DISTR.ini",
