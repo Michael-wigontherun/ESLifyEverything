@@ -3,6 +3,7 @@ using ESLifyEverything.PluginHandles;
 using ESLifyEverythingGlobalDataLibrary;
 using ESLifyEverythingGlobalDataLibrary.Properties;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace ESLifyEverything
@@ -317,9 +318,57 @@ namespace ESLifyEverything
                 }
             }
 
+            RunMergifyBashTags();
+
             Console.WriteLine();
             GF.WriteLine(GF.stringLoggingData.EnterToExit);
             Console.ReadLine();
+        }
+
+        public static void RunMergifyBashTags()
+        {
+            if (!GF.Settings.AutoRunMergifyBashedTags)
+            {
+                GF.WriteLine("Would you like to run Mergify Bash Tags?");
+                GF.WriteLine("Press Y then Enter to run Mergify Bash Tags.");
+                string input = Console.ReadLine() ?? "";
+                GF.WriteLine(input, consoleLog: false);
+                if (!input.Equals("Y", StringComparison.OrdinalIgnoreCase)) return;
+            }
+
+            Process p = new Process();
+            p.StartInfo.FileName = "MergifyBashTags.exe";
+            p.StartInfo.Arguments = $"\"{GF.Settings.DataFolderPath}\" \"{GF.Settings.LootAppDataFolder}\" \"{GF.Settings.OutputFolder}\"";
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            using (StreamWriter stream = File.AppendText(GF.logName))
+            {
+                while (!p.StandardOutput.EndOfStream)
+                {
+                    string line = p.StandardOutput.ReadLine()!;
+                    Console.WriteLine(line);
+                    if (!line.Equals(string.Empty))
+                    {
+                        stream.WriteLine(line);
+                    }
+                }
+
+                while (!p.StandardError.EndOfStream)
+                {
+                    string line = p.StandardError.ReadLine()!;
+                    Console.WriteLine(line);
+                    if (!line.Equals(string.Empty))
+                    {
+                        stream.WriteLine(line);
+                    }
+                }
+            }
+            p.WaitForExit();
+            p.Dispose();
+
         }
 
         //Extra Startup stuff that ESLify Everything needs

@@ -13,7 +13,7 @@ namespace ESLifyEverything.FormData
     public class CompactedModData : IPluginData
     {
         [JsonInclude]
-        public bool Enabled { get; set; } = true;
+        public new bool Enabled { get; set; } = true;
         //[JsonInclude]
         //public string ModName = "";
         [JsonInclude]
@@ -21,11 +21,11 @@ namespace ESLifyEverything.FormData
         //[JsonInclude]
         //public DateTime? PluginLastModifiedValidation { get; set; }
         [JsonInclude]
-        public bool Recheck { get; set; } = true;
+        public new bool Recheck { get; set; } = true;
         [JsonInclude]
-        public bool PreviouslyESLified { get; set; } = false;
+        public new bool PreviouslyESLified { get; set; } = false;
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public bool? NotCompactedData { get; set; } = null;
+        public new bool? NotCompactedData { get; set; } = null;
 
         public CompactedModData() { }
 

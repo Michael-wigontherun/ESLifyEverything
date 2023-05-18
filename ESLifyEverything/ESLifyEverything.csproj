@@ -30,6 +30,7 @@
     <ProjectReference Include="..\ESLifyEverythingGlobalDataLibrary\ESLifyEverythingGlobalDataLibrary.csproj" />
     <ProjectReference Include="..\ESLifyEverythingScriptESLifyErrorLog\ESLifyEverythingScriptESLifyErrorLog.csproj" />
     <ProjectReference Include="..\ESLifySplitModInterpreter\ESLifySplitModInterpreter.csproj" />
+    <ProjectReference Include="..\MergifyBashTags\MergifyBashTags.csproj" />
   </ItemGroup>
 
   <ItemGroup>

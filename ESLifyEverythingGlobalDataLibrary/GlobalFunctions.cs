@@ -36,7 +36,7 @@ namespace ESLifyEverythingGlobalDataLibrary
     public static partial class GF
     {
         //readonly property to identify what settings version ESLify uses to update settings properly
-        public static readonly string SettingsVersion = "4.0.0";
+        public static readonly string SettingsVersion = "4.6.0";
 
         //readonly property to direct to where the Changed Scripts are stored
         public static readonly string ChangedScriptsPath = ".\\ChangedScripts";

@@ -5,23 +5,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using ESLifyEverythingGlobalDataLibrary.FormData;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace ESLifyEverything.FormData
 {
-    public class CompactedMergeData
+    public class CompactedMergeData : IMergeData
     {
         [JsonInclude]
-        public string MergeName { get; set; } = "";
+        public new string MergeName { get; set; } = "";
         [JsonInclude]
-        public DateTime? LastModified { get; set; }
+        public new DateTime? LastModified { get; set; }
         [JsonInclude]
-        public HashSet<CompactedModData> CompactedModDatas = new HashSet<CompactedModData>();
+        public new HashSet<CompactedModData> CompactedModDatas = new HashSet<CompactedModData>();
         [JsonInclude]
-        public int? NewRecordCount;
+        public new int? NewRecordCount;
         [JsonInclude]
-        public bool PreviouslyESLified { get; set; } = false;
+        public new bool PreviouslyESLified { get; set; } = false;
 
         public CompactedMergeData() { }
 
