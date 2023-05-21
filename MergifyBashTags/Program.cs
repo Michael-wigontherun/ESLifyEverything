@@ -9,51 +9,56 @@ namespace MergifyBashTags
 
         static void Main(string[] args)
         {
-            //args = new string[3];
-            //args[0] = @"C:\Steam\steamapps\common\Skyrim Special Edition\Data";
-            //args[1] = @"C:\Users\Micha\AppData\Local\LOOT";
-            //args[2] = @"E:\SkyrimMods\MO2\mods\ESLify Everything";
-            if (args.Length != 3)
+            try
             {
-                args = new string[2];
-                Console.WriteLine("Please input Absolute Path to Data folder, then press enter: ");
-                args[0] = Console.ReadLine() ?? "";
-                Console.WriteLine("Please input Absolute Path to Loot's metadata storage: ");
-                Console.WriteLine("   It should be located at C:\\Users\\[User]\\AppData\\Loot");
-                args[1] = Console.ReadLine() ?? "";
-                Console.WriteLine("Please Enter the folder to output the BashTags to: ");
-                args[2] = Console.ReadLine() ?? "";
-            }
-            
-            {
-                bool arg1 = !Directory.Exists(args[0]);
-                bool arg2 = !Directory.Exists(args[1]);
-                bool arg3 = !Directory.Exists(args[2]);
-                if (arg1 || arg2 || arg3)
+
+
+                //args = new string[3];
+                //args[0] = @"C:\Steam\steamapps\common\Skyrim Special Edition\Data";
+                //args[1] = @"C:\Users\Micha\AppData\Local\LOOT";
+                //args[2] = @"E:\SkyrimMods\MO2\mods\ESLify Everything";
+                if (args.Length != 3)
                 {
-                    Console.WriteLine($"Folders not found arg1: {arg1} arg2: {arg2} arg3: {arg3}");
-                    Console.ReadLine();
-                    return;
+                    args = new string[2];
+                    Console.WriteLine("Please input Absolute Path to Data folder, then press enter: ");
+                    args[0] = Console.ReadLine() ?? "";
+                    Console.WriteLine("Please input Absolute Path to Loot's metadata storage: ");
+                    Console.WriteLine("   It should be located at C:\\Users\\[User]\\AppData\\Loot");
+                    args[1] = Console.ReadLine() ?? "";
+                    Console.WriteLine("Please Enter the folder to output the BashTags to: ");
+                    args[2] = Console.ReadLine() ?? "";
                 }
+
+                {
+                    bool arg1 = !Directory.Exists(args[0]);
+                    bool arg2 = !Directory.Exists(args[1]);
+                    bool arg3 = !Directory.Exists(args[2]);
+                    if (arg1 || arg2 || arg3)
+                    {
+                        Console.WriteLine($"Folders not found arg1: {arg1} arg2: {arg2} arg3: {arg3}");
+                        Console.ReadLine();
+                        return;
+                    }
+                }
+
+                Console.WriteLine("Reading masterlist.");
+                ReadLoot(Path.Combine(args[1], @"games\Skyrim Special Edition\masterlist.yaml"));
+                Console.WriteLine("Reading userlist.");
+                ReadLoot(Path.Combine(args[1], @"games\Skyrim Special Edition\userlist.yaml"));
+                Console.WriteLine("Reading data folder Bash Tags.");
+                ReadBashTags(args[0]);
+                Console.WriteLine("Reading Merge.json's.");
+                ReadMergeJson(args[0]);
+
+                Console.WriteLine("\n\n\n\n");
+                Console.WriteLine("Reading Checking plugin headers for bashtags.");
+                CheckPluginHeaders(args[0]);
+
+                Console.WriteLine("\n\n\n\n");
+                Console.WriteLine("Outputting Bash Tags.");
+                OutputBashTagSets(args[2]);
             }
-
-            Console.WriteLine("Reading masterlist.");
-            ReadLoot(Path.Combine(args[1], @"games\Skyrim Special Edition\masterlist.yaml"));
-            Console.WriteLine("Reading userlist.");
-            ReadLoot(Path.Combine(args[1], @"games\Skyrim Special Edition\userlist.yaml"));
-            Console.WriteLine("Reading data folder Bash Tags.");
-            ReadBashTags(args[0]);
-            Console.WriteLine("Reading Merge.json's.");
-            ReadMergeJson(args[0]);
-
-            Console.WriteLine("\n\n\n\n");
-            Console.WriteLine("Reading Checking plugin headers for bashtags.");
-            CheckPluginHeaders(args[0]);
-
-            Console.WriteLine("\n\n\n\n");
-            Console.WriteLine("Outputting Bash Tags.");
-            OutputBashTagSets(args[2]);
-
+            catch (Exception ex) { Console.WriteLine(ex); }
             Console.WriteLine("Press Enter to end...");
             Console.ReadLine();
         }
