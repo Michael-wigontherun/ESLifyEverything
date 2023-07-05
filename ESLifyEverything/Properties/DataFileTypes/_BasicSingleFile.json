@@ -8,7 +8,10 @@
       "IDIsSecond": true,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ModName}}[ 0]*\\|[ 0]*{{ID}}",
+      "FormKeyMakeUp": "{{ModName}}|{{ID}}"
     },
     "StartingLogLine": "Starting AutoBody Eslify",
     "FileAtLogLine": "AutoBody file found at ",

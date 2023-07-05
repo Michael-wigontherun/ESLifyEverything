@@ -63,49 +63,55 @@ namespace ESLifyEverything.PluginHandles
                 DevLog.Log(mod.ModKey.ToString() + " was changed.");
             }
 
-            if(!ModEdited)
+            //if(!ModEdited)
+            //{
+            HashSet<string> modNames = new HashSet<string>();
+            foreach (IFormLinkGetter? link in mod.EnumerateFormLinks())
             {
-                HashSet<string> modNames = new HashSet<string>();
-                foreach (IFormLinkGetter? link in mod.EnumerateFormLinks())
+                FormKey formKey = link.FormKey;
+                if (CompactedModDataD.TryGetValue(formKey.ModKey.ToString(), out CompactedModData? modData))
                 {
-                    FormKey formKey = link.FormKey;
-                    if (CompactedModDataD.TryGetValue(formKey.ModKey.ToString(), out CompactedModData? modData))
+                    if (mod.ModKey.ToString().Equals(formKey.ModKey.ToString(), StringComparison.OrdinalIgnoreCase) && modData.FromMerge)
                     {
-                        if (mod.ModKey.ToString().Equals(formKey.ModKey.ToString()) && modData.FromMerge)
+                        continue;
+                    }
+                    else
+                    {
+                        foreach (FormHandler form in modData.CompactedModFormList)
                         {
-                            continue;
-                        }
-                        else
-                        {
-                            foreach (FormHandler form in modData.CompactedModFormList)
+                            if (formKey.IDString().Equals(form.OriginalFormID, StringComparison.OrdinalIgnoreCase))
                             {
-                                if (formKey.IDString().Equals(form.OriginalFormID))
-                                {
-                                    modNames.Add(formKey.ModKey.ToString());
-                                }
+                                modNames.Add(formKey.ModKey.ToString());
                             }
                         }
                     }
                 }
+            }
 
+            if (modNames.Any())
+            {
                 foreach (string modName in modNames)
                 {
                     DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modName);
                     mod.RemapLinks(CompactedModDataD[modName].ToDictionary());
-                    ModEdited = true;
+                    
                 }
+                ModEdited = true;
             }
-            else
-            {
-                foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
-                {
-                    if(CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
-                    {
-                        DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modData.ModName);
-                        mod.RemapLinks(modData.ToDictionary());
-                    }
-                }
-            }
+                
+            //}
+            //else
+            //{
+            //    foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
+            //    {
+            //        if(CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
+            //        {
+            //            DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modData.ModName);
+            //            mod.RemapLinks(modData.ToDictionary());
+            //            ModEdited = true;
+            //        }
+            //    }
+            //}
 
             //ModEdited = true;
             if (ModEdited)

@@ -82,35 +82,59 @@ namespace ESLifyEverything.FormData
         }
 
         //Creates the Origonal FormKey with separator data passed in
-        public string GetOriginalFileLineFormKey(Separator separator, string orgModName)
+        public string GetOriginalFileLineFormKey(Separator separator, string orgModName, string line)
         {
-            string modName = orgModName;
-            if (separator.ModNameAsString)
+            if (separator.UseRegex)
             {
-                modName = separator.ModNameStringCharater + orgModName + separator.ModNameStringCharater;
+                string formKey = separator.RegexMakeUp.Replace("{{ID}}", GetOriginalFormID());
+                formKey = formKey.Replace("{{ModName}}", orgModName.Replace(".", "\\."));
+                Regex r = new Regex(formKey, RegexOptions.IgnoreCase);
+                Match match = r.Match(line);
+                if (match.Success)
+                {
+                    return match.Value;
+                }
+                return String.Empty;
             }
+            else
+            {
+                string modName = orgModName;
+                if (separator.ModNameAsString)
+                {
+                    modName = separator.ModNameStringCharater + orgModName + separator.ModNameStringCharater;
+                }
 
-            if (separator.IDIsSecond)
-            {
-                return modName + separator.FormKeySeparator + GetOriginalFormID();
+                if (separator.IDIsSecond)
+                {
+                    return modName + separator.FormKeySeparator + GetOriginalFormID();
+                }
+                return GetOriginalFormID() + separator.FormKeySeparator + modName;
             }
-            return GetOriginalFormID() + separator.FormKeySeparator + modName;
         }
 
         //Creates the Compacted FormKey with separator data passed in
         public string GetCompactedFileLineFormKey(Separator separator)
         {
-            string modName = ModName;
-            if (separator.ModNameAsString)
+            if (separator.UseRegex)
             {
-                modName = separator.ModNameStringCharater + ModName + separator.ModNameStringCharater;
+                string formKey = separator.FormKeyMakeUp.Replace("{{ID}}", GetCompactedFormID(true));
+                formKey = formKey.Replace("{{ModName}}", ModName);
+                return formKey;
             }
+            else
+            {
+                string modName = ModName;
+                if (separator.ModNameAsString)
+                {
+                    modName = separator.ModNameStringCharater + ModName + separator.ModNameStringCharater;
+                }
 
-            if (separator.IDIsSecond)
-            {
-                return modName + separator.FormKeySeparator + GetCompactedFormID(separator.TrimStart);
+                if (separator.IDIsSecond)
+                {
+                    return modName + separator.FormKeySeparator + GetCompactedFormID(separator.TrimStart);
+                }
+                return GetCompactedFormID(separator.TrimStart) + separator.FormKeySeparator + modName;
             }
-            return GetCompactedFormID(separator.TrimStart) + separator.FormKeySeparator + modName;
         }
 
         //Creates the Mutagen FormKey related to the Origonal Form

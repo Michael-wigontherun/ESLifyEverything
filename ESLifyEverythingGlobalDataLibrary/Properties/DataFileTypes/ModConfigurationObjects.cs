@@ -15,5 +15,11 @@ namespace ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes
         public char ModNameStringCharater = '\"';
         [JsonInclude]
         public bool TrimStart = true;
+        [JsonInclude]
+        public bool UseRegex = false;
+        [JsonInclude]
+        public string RegexMakeUp = String.Empty;
+        [JsonInclude]
+        public string FormKeyMakeUp = String.Empty;
     }
 }

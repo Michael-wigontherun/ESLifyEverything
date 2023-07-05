@@ -202,6 +202,16 @@
         public string CompiledUnsuccessfully { get; set; } = "";
         public string FailedToCompileCompiler { get; set; } = "";
 
+        //OpenAnimationReplacer ESLify
+        public string StartingOARESLify { get; set; } = "";
+        public string OARFileFound { get; set; } = "";
+        public string OARFileOneLineSkip { get; set; } = "";
+        public string OARFileUnchanged { get; set; } = "";
+        public string OARErrorLine1 { get; set; } = "";
+        public string OARErrorLine2 { get; set; } = "";
+        public string OARErrorLine3 { get; set; } = "";
+        public string OARErrorLine4 { get; set; } = "";
+
         //Run FaceGenFix
         //public string EditedFaceGen { get; set; } = ""; "EditedFaceGen": FaceGen Data has been edited please run \"_ESPFEEverythingFaceGenFix.pas\" in xEdit. So you don't have the black face bug."
         //public string NoxEditEXE { get; set; } = ""; "NoxEditEXE": "No xEdit executable found, Please run \"_ESLifyEverythingFaceGenFix.pas\" in xEdit.",

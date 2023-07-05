@@ -8,6 +8,7 @@ using System.Text.Json;
 using ESLifyEverythingGlobalDataLibrary;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
 using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
 
 namespace ESLifyEverything
 {
@@ -1052,6 +1053,10 @@ namespace ESLifyEverything
             Task CustomSkills = CustomSkillsFramework();
             CustomSkills.Wait();
             CustomSkills.Dispose();
+
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
+            OARESLify();
         }
 
         //Gets the Mod Configuration files for ESLifying Data Files
@@ -1468,6 +1473,99 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.FolderNotFoundError + startSearchPath);
             }
             return await Task.FromResult(0);
+        }
+
+        private static void OARESLify()
+        {
+            IEnumerable<string> openAnimationReplacerFolders = Directory.GetDirectories(Path.Combine(GF.Settings.DataFolderPath, "Meshes"), 
+                "OpenAnimationReplacer", 
+                SearchOption.AllDirectories);
+            foreach (string openAnimationReplacerFolder in openAnimationReplacerFolders)
+            {
+                IEnumerable<string> configFiles = Directory.GetDirectories(openAnimationReplacerFolder,
+                    "config.json",
+                    SearchOption.AllDirectories);
+                foreach(string configFile in configFiles)
+                {
+                    GF.WriteLine(GF.stringLoggingData.OARFileFound + configFile);
+                    string[] fileLines = File.ReadAllLines(configFile);
+                    if(fileLines.Length == 1)
+                    {
+                        GF.WriteLine(GF.stringLoggingData.OARFileOneLineSkip);
+                        continue;
+                    }
+                    bool changed = false;
+                    for (int i = 0; i < fileLines.Length; i++)
+                    {
+                        string line = fileLines[i];
+                        foreach (var modData in CompactedModDataD)
+                        {
+                            if (!line.Contains(modData.Key, StringComparison.OrdinalIgnoreCase)) continue;
+
+                            string prevline = string.Empty;
+                            string nextLine = string.Empty;
+                            if (i != 0) prevline = fileLines[i - 1];
+                            if(fileLines.Length-1 != i) nextLine = fileLines[i + 1];
+                            bool foundThisLine = false;
+                            foreach (var formHandler in modData.Value.CompactedModFormList)
+                            {
+                                Regex regex = new Regex($"\"formID\"[ 0]*:[ 0]*\"[0]*{formHandler.GetOriginalFormID()}\"");
+                                if(!prevline.Equals(string.Empty))
+                                {
+                                    Match match = regex.Match(prevline);
+                                    if (match.Success)
+                                    {
+                                        GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i - 1].Trim());
+                                        fileLines[i - 1] = fileLines[i - 1].Replace(formHandler.GetOriginalFormID(), formHandler.GetCompactedFormID(true));
+                                        GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i - 1].Trim());
+                                        changed = true;
+                                        foundThisLine = true;
+                                    }
+                                }
+
+                                if (!line.Contains("\"formID\"", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    Match match = regex.Match(line);
+                                    if (match.Success)
+                                    {
+                                        GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i].Trim());
+                                        fileLines[i] = fileLines[i].Replace(formHandler.GetOriginalFormID(), formHandler.GetCompactedFormID(true));
+                                        GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i].Trim());
+                                        changed = true;
+                                        foundThisLine = true;
+                                    }
+                                }
+
+                                if (!nextLine.Equals(string.Empty))
+                                {
+                                    Match match = regex.Match(nextLine);
+                                    if (match.Success)
+                                    {
+                                        GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i + 1].Trim());
+                                        fileLines[i + 1] = fileLines[i + 1].Replace(formHandler.GetOriginalFormID(), formHandler.GetCompactedFormID(true));
+                                        GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i + 1].Trim());
+                                        changed = true;
+                                        foundThisLine = true;
+                                    }
+                                }
+                            }
+
+                            if (!foundThisLine)
+                            {
+                                GF.WriteLine(GF.stringLoggingData.OARErrorLine1 + modData.Key);
+                                GF.WriteLine(GF.stringLoggingData.OARErrorLine2 + i);
+                                GF.WriteLine(GF.stringLoggingData.OARErrorLine3);
+                                GF.WriteLine(GF.stringLoggingData.OARErrorLine4);
+                            }
+                        }
+                    }
+                    OuputDataFileToOutputFolder(changed, configFile, fileLines, GF.stringLoggingData.OARFileUnchanged);
+
+
+
+
+                }
+            }
         }
 
         //Region for fixing records and references inside of plugins

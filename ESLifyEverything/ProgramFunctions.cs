@@ -27,22 +27,39 @@ namespace ESLifyEverything
                                     bool lineChanged = false;
                                     if(SeparatorData != null)
                                     {
-                                        if (fileLines[i].Contains(SeparatorData.FormKeySeparator))
-                                        {
-                                            string line = fileLines[i];
+                                        string line = fileLines[i];
 
+                                        if (SeparatorData.UseRegex)
+                                        {
+                                            string orgFormKey = form.GetOriginalFileLineFormKey(SeparatorData, modData.ModName, line);
+                                            if (!(orgFormKey.Equals(String.Empty)) && line.Contains(orgFormKey))
+                                            {
+                                                GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+
+                                                fileLines[i] = line.Replace(
+                                                    orgFormKey,
+                                                    form.GetCompactedFileLineFormKey(SeparatorData),
+                                                    StringComparison.OrdinalIgnoreCase);
+
+                                                GF.WriteLine(GF.stringLoggingData.NewLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
+                                                lineChanged = true;
+                                                changed = true;
+                                            }
+                                        }
+                                        else if (fileLines[i].Contains(SeparatorData.FormKeySeparator))
+                                        {
                                             if (SeparatorData.IDIsSecond)
                                             {
                                                 line = RemoveExtraFormHex(fileLines[i], form.OriginalFormID, SeparatorData.FormKeySeparator);
                                             }
 
-                                            string orgFormKey = form.GetOriginalFileLineFormKey(SeparatorData, modData.ModName);
-                                            if (line.Contains(orgFormKey))
+                                            string orgFormKey = form.GetOriginalFileLineFormKey(SeparatorData, modData.ModName, line);
+                                            if (!(orgFormKey.Equals(String.Empty)) && line.Contains(orgFormKey))
                                             {
                                                 GF.WriteLine(GF.stringLoggingData.OldLine + fileLines[i], true, GF.Settings.VerboseFileLoging);
 
                                                 fileLines[i] = line.Replace(
-                                                    form.GetOriginalFileLineFormKey(SeparatorData, modData.ModName),
+                                                    orgFormKey,
                                                     form.GetCompactedFileLineFormKey(SeparatorData),
                                                     StringComparison.OrdinalIgnoreCase);
 

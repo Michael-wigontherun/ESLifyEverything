@@ -9,7 +9,10 @@
       "IDIsSecond": true,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ModName}}[ 0]*\\|[ 0]*{{ID}}",
+      "FormKeyMakeUp": "{{ModName}}|{{ID}}"
     },
     "StartingLogLine": "Starting DAV Eslify",
     "FileAtLogLine": "DAV file found at ",
@@ -26,7 +29,10 @@
       "IDIsSecond": false,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ID}}[ 0]*~[ 0]*{{ModName}}",
+      "FormKeyMakeUp": "{{ID}}~{{ModName}}"
     },
     "StartingLogLine": "Starting SPID Eslify",
     "FileAtLogLine": "SPID file found at ",
@@ -43,7 +49,10 @@
       "IDIsSecond": false,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ID}}[ 0]*~[ 0]*{{ModName}}",
+      "FormKeyMakeUp": "{{ID}}~{{ModName}}"
     },
     "StartingLogLine": "Starting Base Object Swapper Eslify",
     "FileAtLogLine": "BOSwap file found at ",
@@ -60,7 +69,10 @@
       "IDIsSecond": false,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ID}}[ 0]*~[ 0]*{{ModName}}",
+      "FormKeyMakeUp": "{{ID}}~{{ModName}}"
     },
     "StartingLogLine": "Starting KID Eslify",
     "FileAtLogLine": "KID file found at ",
@@ -77,7 +89,10 @@
       "IDIsSecond": false,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ID}}[ 0]*~[ 0]*{{ModName}}",
+      "FormKeyMakeUp": "{{ID}}~{{ModName}}"
     },
     "StartingLogLine": "Starting FLM Eslify",
     "FileAtLogLine": "FLM file found at ",
@@ -89,13 +104,7 @@
     "Name": "AOS",
     "StartFolder": "",
     "FileNameFilter": "*_ANIO.ini",
-    "SeparatorData": {
-      "FormKeySeparator": "~",
-      "IDIsSecond": false,
-      "ModNameAsString": false,
-      "ModNameStringCharater": "\u0022",
-      "TrimStart": true
-    },
+    "SeparatorData": null,
     "StartingLogLine": "Starting AnimObject Eslify",
     "FileAtLogLine": "AnimObject file found at ",
     "FileUnchangedLogLine": "AnimObject file unchanged: ",
@@ -111,7 +120,11 @@
       "IDIsSecond": false,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ID}}[ 0]*~[ 0]*{{ModName}}",
+      "FormKeyMakeUp": "{{ID}}~{{ModName}}"
+
     },
     "StartingLogLine": "Starting ENB Lights For Effect Shaders Eslify",
     "FileAtLogLine": "ENBLightsForEffectShaders file found at ",
@@ -128,7 +141,10 @@
       "IDIsSecond": false,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ID}}[ 0]*\\|[ 0]*{{ModName}}",
+      "FormKeyMakeUp": "{{ID}}|{{ModName}}"
     },
     "StartingLogLine": "Starting Payload Interpreter Eslify",
     "FileAtLogLine": "PayloadInterpreter file found at ",
@@ -145,7 +161,10 @@
       "IDIsSecond": true,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ModName}}[ 0]*\\|[ 0]*{{ID}}",
+      "FormKeyMakeUp": "{{ModName}}|{{ID}}"
     },
     "StartingLogLine": "Starting CoMap Eslify",
     "FileAtLogLine": "CoMap file found at ",
@@ -162,11 +181,29 @@
       "IDIsSecond": true,
       "ModNameAsString": false,
       "ModNameStringCharater": "\u0022",
-      "TrimStart": true
+      "TrimStart": true,
+      "UseRegex": true,
+      "RegexMakeUp": "{{ModName}}[ 0]*\\|[ 0]*{{ID}}",
+      "FormKeyMakeUp": "{{ModName}}|{{ID}}"
     },
     "StartingLogLine": "Starting SRD Eslify",
     "FileAtLogLine": "SRD file found at ",
     "FileUnchangedLogLine": "SRD file unchanged: ",
+    "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "I4",
+    "StartFolder": "SKSE\\Plugins\\InventoryInjector",
+    "FileNameFilter": "*.json",
+    "SeparatorData": {
+      "UseRegex": true,
+      "RegexMakeUp": "{{ModName}}[ 0]*\\|[ 0]*{{ID}}",
+      "FormKeyMakeUp": "{{ModName}}|{{ID}}"
+    },
+    "StartingLogLine": "Starting I4 Eslify",
+    "FileAtLogLine": "I4 file found at ",
+    "FileUnchangedLogLine": "I4 file unchanged: ",
     "SeachLevel": 0
   }
 ]

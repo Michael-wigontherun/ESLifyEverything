@@ -288,25 +288,36 @@ namespace ESLifyEverything
 
             if (FailedToCompile.Any())
             {
-                Console.WriteLine("\n\n\n\n");
-                GF.WriteLine(GF.stringLoggingData.ImportantBelow);
-                GF.WriteLine(GF.stringLoggingData.ImportantBelow1);
-                Console.WriteLine();
-                Directory.CreateDirectory(Path.Combine(GF.Settings.OutputFolder, GF.SourceSubPath));
-                foreach(string error in FailedToCompile)
+                try
                 {
-                    File.Copy(Path.Combine(GF.ChangedScriptsPath, error + ".psc"), Path.Combine(GF.Settings.OutputFolder, GF.SourceSubPath, error + ".psc"), true);
-                    GF.WriteLine(Path.ChangeExtension(error, null) + GF.stringLoggingData.ScriptFailedCompilation);
-                    GF.WriteLine(String.Format(GF.stringLoggingData.ScriptFailedCompilation2, error));
+                    Console.WriteLine("\n\n\n\n");
+                    GF.WriteLine(GF.stringLoggingData.ImportantBelow);
+                    GF.WriteLine(GF.stringLoggingData.ImportantBelow1);
                     Console.WriteLine();
-                    
+                    Directory.CreateDirectory(Path.Combine(GF.Settings.OutputFolder, GF.SourceSubPath));
+                    foreach (string error in FailedToCompile)
+                    {
+                        File.Copy(Path.Combine(GF.ChangedScriptsPath, error + ".psc"), Path.Combine(GF.Settings.OutputFolder, GF.SourceSubPath, error + ".psc"), true);
+                        GF.WriteLine(Path.ChangeExtension(error, null) + GF.stringLoggingData.ScriptFailedCompilation);
+                        GF.WriteLine(String.Format(GF.stringLoggingData.ScriptFailedCompilation2, error));
+                        Console.WriteLine();
+
+                    }
+                    GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
+                    Console.WriteLine();
+                    GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation4);
+                    Console.WriteLine();
+                    GF.WriteLine(GF.stringLoggingData.ImportantAbove);
+                    Console.WriteLine("\n\n\n\n");
                 }
-                GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation3);
-                Console.WriteLine();
-                GF.WriteLine(GF.stringLoggingData.ScriptFailedCompilation4);
-                Console.WriteLine();
-                GF.WriteLine(GF.stringLoggingData.ImportantAbove);
-                Console.WriteLine("\n\n\n\n");
+                catch (Exception e)
+                {
+                    GF.WriteLine(e.Message);
+                    GF.WriteLine(e.StackTrace!);
+                    GF.WriteLine(GF.stringLoggingData.EnterToContinue);
+                    Console.ReadLine();
+                }
+                
             }
 
             if (EditedMergedPluginNeedsRebuild.Any())

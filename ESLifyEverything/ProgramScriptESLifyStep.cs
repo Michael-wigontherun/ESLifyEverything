@@ -133,12 +133,14 @@ namespace ESLifyEverything
                 Console.WriteLine(GF.stringLoggingData.IgnoreAbove);
 
                 DevLog.Pause("After Script Decompilers");
+
+                Task inmScripts = ReadAndCompileScripts();
+                inmScripts.Wait();
+                inmScripts.Dispose();
             }
 
             
-            Task inmScripts = ReadAndCompileScripts();
-            inmScripts.Wait();
-            inmScripts.Dispose();
+            
             
 
             return await Task.FromResult(0);
@@ -184,6 +186,9 @@ namespace ESLifyEverything
             string line = "";
             string scriptsFolder = Path.Combine(Path.GetFullPath(startPath), "Scripts");
             DevLog.Log(scriptsFolder);
+
+            List<string> ChampollionLastFewLines = new();
+
             Process p = new Process();
             p.StartInfo.FileName = ".\\Champollion\\champollion.exe";
             p.StartInfo.Arguments = $"\"{scriptsFolder}\" -p \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\\{GF.SourceSubPath}\" -t";//files processed
@@ -200,12 +205,14 @@ namespace ESLifyEverything
                     {
                         line = p.StandardOutput.ReadLine()!;
                         stream.WriteLine(line);
+                        ChampollionLastFewLines.Add(line);
+                        if(ChampollionLastFewLines.Count >= 10) ChampollionLastFewLines.RemoveAt(0);
                     }
                     while (!p.StandardError.EndOfStream)
                     {
                         line = p.StandardError.ReadLine()!;
                         stream.WriteLine("Champollion Error: " + line);
-                        Console.WriteLine("Champollion Error: " + line);
+                        ChampollionLastFewLines.Add(line);
                     }
                 }
             }
@@ -214,6 +221,8 @@ namespace ESLifyEverything
                 while (!p.StandardOutput.EndOfStream)
                 {
                     line = p.StandardOutput.ReadLine()!;
+                    ChampollionLastFewLines.Add(line);
+                    if (ChampollionLastFewLines.Count >= 10) ChampollionLastFewLines.RemoveAt(0);
                 }
             }
             p.WaitForExit();
@@ -226,6 +235,11 @@ namespace ESLifyEverything
             else
             {
                 GF.WriteLine(GF.stringLoggingData.ChampCrash);
+                foreach(string l in ChampollionLastFewLines)
+                {
+                    GF.WriteLine(l);
+                }
+                GF.WriteLine("\n\n\n\n");
                 return await Task.FromResult(0);
 
             }

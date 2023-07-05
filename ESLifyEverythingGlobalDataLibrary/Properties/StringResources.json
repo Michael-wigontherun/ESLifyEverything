@@ -4,6 +4,15 @@
     "xEditCompactedFormFilter": "Changing FormID ["
   },
   "StringLoggingData": {
+    "StartingOARESLify": "Starting Open Animation Replacer ESLify",
+    "OARFileFound": "OAR Config found: ",
+    "OARFileOneLineSkip": "ESLify Everything does not support one line json files.\nPlease Manually varify",
+    "OARFileUnchanged": "OAR config unchanged: ",
+    "OARErrorLine1": "Could not change FormID with plugin name: ",
+    "OARErrorLine2": "It is located on line: ",
+    "OARErrorLine3": "Please report this to me in the forum: What does OAR support still need?",
+    "OARErrorLine4": "I need the config file placed inside a spoiler tag or the relevent object lines, and this error report",
+
     "LoadOrderNotDetectedError": "Load order not found. Files from BSA's can not be extracted correctly.",
     "RunOrReport": "Loadorder not found, Run from MO2 or deploy mods through Vortex.",
     "SettingsFileNotFound": "AppSettings.json not found or can not update.",
@@ -117,9 +126,9 @@
     "FixDecToHexError": "If you have placed source code in the \"ExtractedBSAModData\\Scripts\". Dont do that. Else Report this line and error.",
     "RunningChampBSA": "Running Champollion for BSA scripts.",
     "EndedChampBSA": "BSA scripts Champollion Ended.",
-    "ChampCrash": "A Script crashed Champollion.",
+    "ChampCrash": "A Script crashed Champollion.\n\n\n\n Last few lines of fromChampollion: ",
     "RunningChampLoose": "Running Champollion on loose scripts.",
-    "RunningChampFailsafe": "Attempting to Decompiling one by one this will take some time and your Security or Firewall may flag this as a virus.",
+    "RunningChampFailsafe": "Attempting to Decompiling one by one this will take some time and your Security or Firewall may flag this as a virus.\nIf it stops and sits at a number without reaching the end use task manager to close Champollion.exe and press enter in the ESLifyEverything window.",
     "EndedChampLoose": "Loose scripts Champollion Ended.",
     "CompilerIsDisabled": "Compiler is disabled. You must compile them yourself. Or enable the Compiler setting inside \"AppSettings.json\".",
     "ChangedScriptsLocated": "The changed scripts can be found inside of {0}.",
