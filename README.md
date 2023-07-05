@@ -14,7 +14,8 @@ Currently Eslifies
 - Voice Files, Internally coded
 - FaceGen data, Internally coded
 - SPID, Base Object Swapper, KID, FLM, Animated Object Swapper
-- Dynamic Animation Conditions
+- Dynamic Animation Replacer Conditions
+- Open Animation Replacer config.json
 - ENB Lights For Effect Shaders
 - AutoBody
 - Payload Interpreter
