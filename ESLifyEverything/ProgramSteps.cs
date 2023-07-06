@@ -1427,44 +1427,52 @@ namespace ESLifyEverything
                 foreach (string customSkillConfig in customSkillConfigs)
                 {
                     GF.WriteLine(GF.stringLoggingData.CustomSkillsFileAt + customSkillConfig, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                    string[] customSkillConfigFile = File.ReadAllLines(customSkillConfig);
-                    string[] newCustomSkillConfigFile = new string[customSkillConfigFile.Length];
-                    string currentModName = "";
-                    int currentModNameLine = -1;
-                    CompactedModData currentMod = new CompactedModData();
-                    bool changed = false;
-                    for (int i = 0; i < customSkillConfigFile.Length; i++)
-                    {
-                        string line = customSkillConfigFile[i];
-                        foreach (string modName in CompactedModDataD.Keys)
-                        {
-                            if (customSkillConfigFile[i].Contains(modName, StringComparison.OrdinalIgnoreCase))
-                            {
-                                currentModName = modName;
-                                currentModNameLine = i;
-                                CompactedModDataD.TryGetValue(modName, out currentMod!);
-                                GF.WriteLine("", GF.Settings.VerboseConsoleLoging, false);
-                                GF.WriteLine(GF.stringLoggingData.ModLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                            }
-                        }
-                        if (!currentModName.Equals(""))
-                        {
-                            foreach (FormHandler form in currentMod.CompactedModFormList)
-                            {
-                                if (line.Contains(form.GetOriginalFormID()))
-                                {
-                                    GF.WriteLine(GF.stringLoggingData.OldLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                                    line = line.Replace(form.GetOriginalFormID(), form.GetCompactedFormID());
-                                    customSkillConfigFile[currentModNameLine] = customSkillConfigFile[currentModNameLine].Replace(currentModName, form.ModName);
-                                    GF.WriteLine(GF.stringLoggingData.NewLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                                    currentModName = "";
-                                    changed = true;
-                                }
-                            }
-                        }
-                        newCustomSkillConfigFile[i] = line;
-                    }
-                    OuputDataFileToOutputFolder(changed, customSkillConfig, newCustomSkillConfigFile, GF.stringLoggingData.CustomSkillsFileUnchanged);
+
+                    #region OldCustSkillsFrameWork_NotWorkingWell_integration
+                    //bool changed = false;
+                    //string[] customSkillConfigFile = File.ReadAllLines(customSkillConfig);
+                    //string[] newCustomSkillConfigFile = new string[customSkillConfigFile.Length];
+                    //string currentModName = "";
+                    //int currentModNameLine = -1;
+                    //CompactedModData currentMod = new CompactedModData();
+
+                    //for (int i = 0; i < customSkillConfigFile.Length; i++)
+                    //{
+                    //    string line = customSkillConfigFile[i];
+                    //    foreach (string modName in CompactedModDataD.Keys)
+                    //    {
+                    //        if (customSkillConfigFile[i].Contains(modName, StringComparison.OrdinalIgnoreCase))
+                    //        {
+                    //            currentModName = modName;
+                    //            currentModNameLine = i;
+                    //            CompactedModDataD.TryGetValue(modName, out currentMod!);
+                    //            GF.WriteLine("", GF.Settings.VerboseConsoleLoging, false);
+                    //            GF.WriteLine(GF.stringLoggingData.ModLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    //        }
+                    //    }
+                    //    if (!currentModName.Equals(""))
+                    //    {
+                    //        foreach (FormHandler form in currentMod.CompactedModFormList)
+                    //        {
+                    //            if (line.Contains(form.GetOriginalFormID()))
+                    //            {
+                    //                GF.WriteLine(GF.stringLoggingData.OldLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    //                line = line.Replace(form.GetOriginalFormID(), form.GetCompactedFormID());
+                    //                customSkillConfigFile[currentModNameLine] = customSkillConfigFile[currentModNameLine].Replace(currentModName, form.ModName);
+                    //                GF.WriteLine(GF.stringLoggingData.NewLine + line, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                    //                currentModName = "";
+                    //                changed = true;
+                    //            }
+                    //        }
+                    //    }
+                    //    newCustomSkillConfigFile[i] = line;
+                    //}
+                    #endregion OldCustSkillsFrameWork_NotWorkingWell_integration
+                    CustomSkillsFramework customSkillsFramework = new(File.ReadAllLines(customSkillConfig));
+
+                    customSkillsFramework.UpdateFileLines();
+
+                    OuputDataFileToOutputFolder(customSkillsFramework.ChangedFile, customSkillConfig, customSkillsFramework.FileLines, GF.stringLoggingData.CustomSkillsFileUnchanged);
                 }
 
             }

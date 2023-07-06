@@ -88,7 +88,7 @@ namespace ESLifyEverything.FormData
             {
                 string formKey = separator.RegexMakeUp.Replace("{{ID}}", GetOriginalFormID());
                 formKey = formKey.Replace("{{ModName}}", orgModName.Replace(".", "\\."));
-                Regex r = new Regex(formKey, RegexOptions.IgnoreCase);
+                Regex r = new(formKey, RegexOptions.IgnoreCase);
                 Match match = r.Match(line);
                 if (match.Success)
                 {

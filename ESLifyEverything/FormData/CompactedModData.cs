@@ -17,7 +17,7 @@ namespace ESLifyEverything.FormData
         //[JsonInclude]
         //public string ModName = "";
         [JsonInclude]
-        public new HashSet<FormHandler> CompactedModFormList = new HashSet<FormHandler>();
+        public new HashSet<FormHandler> CompactedModFormList = new();
         //[JsonInclude]
         //public DateTime? PluginLastModifiedValidation { get; set; }
         [JsonInclude]
@@ -66,30 +66,28 @@ namespace ESLifyEverything.FormData
 
                 if (File.Exists(path))
                 {
-                    using (ISkyrimModDisposableGetter mod = SkyrimMod.CreateFromBinaryOverlay(path, SkyrimRelease.SkyrimSE))
-                    {
-                        ImmutableModLinkCache<ISkyrimMod, ISkyrimModGetter>? recordsDict = mod.ToImmutableLinkCache();
-                        
-                        foreach (FormHandler form in CompactedModFormList)
-                        {
-                            if (recordsDict.TryResolve(form.CreateOriginalFormKey(ModName), out IMajorRecordGetter? rec))
-                            {
-                                DevLog.Log(form + " Not Found.");
-                                return false;
-                            }
-                        }
-                        uint validMin = 0x000800;
-                        uint validMax = 0x000fff;
+                    using ISkyrimModDisposableGetter mod = SkyrimMod.CreateFromBinaryOverlay(path, SkyrimRelease.SkyrimSE);
+                    ImmutableModLinkCache<ISkyrimMod, ISkyrimModGetter>? recordsDict = mod.ToImmutableLinkCache();
 
-                        foreach (IMajorRecordGetter? form in mod.EnumerateMajorRecords())
+                    foreach (FormHandler form in CompactedModFormList)
+                    {
+                        if (recordsDict.TryResolve(form.CreateOriginalFormKey(ModName), out IMajorRecordGetter? rec))
                         {
-                            if (form.FormKey.ModKey.ToString().Equals(this.ModName))
+                            DevLog.Log(form + " Not Found.");
+                            return false;
+                        }
+                    }
+                    uint validMin = 0x000800;
+                    uint validMax = 0x000fff;
+
+                    foreach (IMajorRecordGetter? form in mod.EnumerateMajorRecords())
+                    {
+                        if (form.FormKey.ModKey.ToString().Equals(this.ModName))
+                        {
+                            if (form.FormKey.ID < validMin || form.FormKey.ID > validMax)
                             {
-                                if (form.FormKey.ID < validMin || form.FormKey.ID > validMax)
-                                {
-                                    DevLog.Log(form.FormKey.ToString() + " out of bounds.");
-                                    return false;
-                                }
+                                DevLog.Log(form.FormKey.ToString() + " out of bounds.");
+                                return false;
                             }
                         }
                     }
@@ -154,7 +152,7 @@ namespace ESLifyEverything.FormData
         //Creates a FormKey Dictionary for Remaping FormLinks inside of plugins
         public Dictionary<FormKey, FormKey> ToDictionary()
         {
-            Dictionary<FormKey, FormKey> result = new Dictionary<FormKey, FormKey>();
+            Dictionary<FormKey, FormKey> result = new();
 
             foreach (FormHandler handler in CompactedModFormList)
             {

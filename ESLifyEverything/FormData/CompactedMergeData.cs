@@ -28,10 +28,8 @@ namespace ESLifyEverything.FormData
         //Reads and caches any nessessary data from the merge.json
         public CompactedMergeData(string mergeJsonPath, out bool success)
         {
-            success = false;
             try
             {
-                success = true;
                 JSONFile = JsonSerializer.Deserialize<MergeJSON>(File.ReadAllText(mergeJsonPath))!;
                 MergeName = JSONFile.filename;
                 if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, MergeName)))
@@ -46,10 +44,12 @@ namespace ESLifyEverything.FormData
                     CompactedModDataD.TryAdd(plugin.filename, new CompactedModData(plugin.filename));
                 }
                 JSONFile = null;
+                success = true;
             }
             catch(Exception e)
             {
                 GF.WriteLine(e.Message);
+                success = false;
             }
         }
 

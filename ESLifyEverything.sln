@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESLifyEverythingScriptESLif
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MergifyBashTags", "MergifyBashTags\MergifyBashTags.csproj", "{ACE052A6-E90E-41B0-93A4-2CAF10FF7CBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{5443FF44-C990-4AE7-9A4E-3B04DC1226AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,12 @@ Global
 		{ACE052A6-E90E-41B0-93A4-2CAF10FF7CBF}.Personal|Any CPU.Build.0 = Debug|Any CPU
 		{ACE052A6-E90E-41B0-93A4-2CAF10FF7CBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACE052A6-E90E-41B0-93A4-2CAF10FF7CBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5443FF44-C990-4AE7-9A4E-3B04DC1226AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5443FF44-C990-4AE7-9A4E-3B04DC1226AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5443FF44-C990-4AE7-9A4E-3B04DC1226AB}.Personal|Any CPU.ActiveCfg = Debug|Any CPU
+		{5443FF44-C990-4AE7-9A4E-3B04DC1226AB}.Personal|Any CPU.Build.0 = Debug|Any CPU
+		{5443FF44-C990-4AE7-9A4E-3B04DC1226AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5443FF44-C990-4AE7-9A4E-3B04DC1226AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
