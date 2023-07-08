@@ -5,12 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Configurations>Debug</Configurations>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Mutagen.Bethesda.Skyrim" Version="0.40.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ESLifyCreateJson\ESLifyCreateJson.csproj" />

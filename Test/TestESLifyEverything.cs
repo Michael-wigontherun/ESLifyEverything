@@ -13,7 +13,7 @@ namespace Test
         public static void TestCustomSkillsFrameWorkReader()
         {
             ESLifyEverything.FormData.CustomSkillsFramework customSkillsFramework = new ESLifyEverything.FormData.CustomSkillsFramework(File.ReadAllLines(@"E:\SkyrimMods\MO2\mods\Ascension 2 for CSF v1 (Skyrim 1.5.97)\NetScriptFramework\Plugins\CustomSkill.ascension.config.txt"));
-            
+
             ESLifyEverything.FormData.CompactedModData compactedModData = new ESLifyEverything.FormData.CompactedModData();
             compactedModData.ModName = "Ascension CSF v1.esp";
             compactedModData.CompactedModFormList.Add(new ESLifyEverything.FormData.FormHandler("Merge.esp", "000800", "000921"));

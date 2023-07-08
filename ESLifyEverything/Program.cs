@@ -63,6 +63,9 @@ namespace ESLifyEverything
         //Ignore found Outputted scripts and run all processes except Script ESLify CMD Argument
         public static bool _IgnoreScripts = false;
 
+        //This will toggle whether to ask or attempt to run mergify bash tags
+        public static bool MergesFound = false;
+
         //Main method that starts all features for eslify
         //Currently there are no Console Arguments, I will be adding some eventually
         static void Main(string[] args)
@@ -130,6 +133,7 @@ namespace ESLifyEverything
                     GF.WriteLine(GF.stringLoggingData.ImportingAllModData);
                     ImportModData(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms"));
                     ImportModData(GF.CompactedFormsFolder);
+                    ImportMergeData();
 
                     DevLog.Pause("After CompactedForms Import Pause");
 
@@ -329,57 +333,21 @@ namespace ESLifyEverything
                 }
             }
 
-            RunMergifyBashTags();
+            if (MergesFound)
+            {
+                if (GF.Settings.AutoRunMergifyBashedTags)
+                {
+                    RunMergifyBashTags();
+                }
+                else
+                {
+                    MergifyBashTagsMenu();
+                }
+            }
 
             Console.WriteLine();
             GF.WriteLine(GF.stringLoggingData.EnterToExit);
             Console.ReadLine();
-        }
-
-        public static void RunMergifyBashTags()
-        {
-            if (!GF.Settings.AutoRunMergifyBashedTags)
-            {
-                GF.WriteLine("Would you like to run Mergify Bash Tags?");
-                GF.WriteLine("Press Y then Enter to run Mergify Bash Tags.");
-                string input = Console.ReadLine() ?? "";
-                GF.WriteLine(input, consoleLog: false);
-                if (!input.Equals("Y", StringComparison.OrdinalIgnoreCase)) return;
-            }
-
-            Process p = new Process();
-            p.StartInfo.FileName = "MergifyBashTags.exe";
-            p.StartInfo.Arguments = $"\"{GF.Settings.DataFolderPath}\" \"{GF.Settings.LootAppDataFolder}\" \"{GF.Settings.OutputFolder}\"";
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardError = true;
-            p.StartInfo.CreateNoWindow = true;
-            p.Start();
-            using (StreamWriter stream = File.AppendText(GF.logName))
-            {
-                while (!p.StandardOutput.EndOfStream)
-                {
-                    string line = p.StandardOutput.ReadLine()!;
-                    Console.WriteLine(line);
-                    if (!line.Equals(string.Empty))
-                    {
-                        stream.WriteLine(line);
-                    }
-                }
-
-                while (!p.StandardError.EndOfStream)
-                {
-                    string line = p.StandardError.ReadLine()!;
-                    Console.WriteLine(line);
-                    if (!line.Equals(string.Empty))
-                    {
-                        stream.WriteLine(line);
-                    }
-                }
-            }
-            p.WaitForExit();
-            p.Dispose();
-
         }
 
         //Extra Startup stuff that ESLify Everything needs

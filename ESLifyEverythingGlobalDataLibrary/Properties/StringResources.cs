@@ -233,6 +233,11 @@
         public string SkippingMergeCache { get; set; } = "";
         public string ImportingMergeCompactedModData { get; set; } = "";
 
+        //MergifyBashTags
+        public string AskToStartMergifyBashTags { get; set; } = "";
+        public string PressYToStartMergifyBashTags { get; set; } = "";
+        public string StartingMBT { get; set; } = "";
+
         //ESLifySplitModInterpreter
         public string ReadOrgData { get; set; } = "";
         public string ReadSplitData { get; set; } = "";

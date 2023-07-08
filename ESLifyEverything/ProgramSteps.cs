@@ -301,7 +301,7 @@ namespace ESLifyEverything
                 
             }
 
-            ImportMergeData();
+            
         }
 
         private static void ImportMergeData()
@@ -310,6 +310,9 @@ namespace ESLifyEverything
                 GF.CompactedFormsFolder,
                 "*" + GF.MergeCacheExtension,
                 SearchOption.AllDirectories);
+
+            if(compactedFormsModFiles.Any()) MergesFound = true;
+
             foreach(string file in compactedFormsModFiles)
             {
                 CompactedMergeData mergeData = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(file))!;
@@ -1698,6 +1701,54 @@ namespace ESLifyEverything
             return slectedCompactedMods;
         }
         #endregion Plugins
+
+        public static void MergifyBashTagsMenu()
+        {
+            GF.WriteLine(GF.stringLoggingData.AskToStartMergifyBashTags);
+            GF.WriteLine(GF.stringLoggingData.PressYToStartMergifyBashTags);
+            string input = Console.ReadLine() ?? "";
+            GF.WriteLine(input, consoleLog: false);
+            if (input.Equals("Y", StringComparison.OrdinalIgnoreCase)) RunMergifyBashTags();
+        }
+
+        public static void RunMergifyBashTags()
+        {
+            GF.WriteLine(GF.stringLoggingData.StartingMBT);
+            Process p = new Process();
+            p.StartInfo.FileName = "MergifyBashTags.exe";
+            p.StartInfo.Arguments = $"\"{GF.Settings.DataFolderPath}\" \"{GF.Settings.LootAppDataFolder}\" \"{GF.Settings.OutputFolder}\" -np";
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            using (StreamWriter stream = File.AppendText(GF.logName))
+            {
+                while (!p.StandardOutput.EndOfStream)
+                {
+                    string line = p.StandardOutput.ReadLine()!;
+                    Console.WriteLine(line);
+                    if (!line.Equals(string.Empty))
+                    {
+                        stream.WriteLine(line);
+                    }
+                }
+
+                while (!p.StandardError.EndOfStream)
+                {
+                    string line = p.StandardError.ReadLine()!;
+                    Console.WriteLine(line);
+                    if (!line.Equals(string.Empty))
+                    {
+                        stream.WriteLine(line);
+                    }
+                }
+            }
+            p.WaitForExit();
+            p.Dispose();
+
+        }
+
 
         private static void FinalizeData()
         {

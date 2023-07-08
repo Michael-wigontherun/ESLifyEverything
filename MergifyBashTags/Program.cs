@@ -9,6 +9,7 @@ namespace MergifyBashTags
 
         static void Main(string[] args)
         {
+            bool noPause = false;
             try
             {
                 File.CreateText("MergifyBashTagsLog.txt").Close();
@@ -16,7 +17,7 @@ namespace MergifyBashTags
                 //args[0] = @"C:\Steam\steamapps\common\Skyrim Special Edition\Data";
                 //args[1] = @"C:\Users\Micha\AppData\Local\LOOT";
                 //args[2] = @"E:\SkyrimMods\MO2\mods\ESLify Everything";
-                if (args.Length != 3)
+                if (args.Length < 3)
                 {
                     args = new string[2];
                     WriteLine("Please input Absolute Path to Data folder, then press enter: ");
@@ -28,6 +29,7 @@ namespace MergifyBashTags
                     args[2] = Console.ReadLine() ?? "";
                 }
 
+
                 {
                     bool arg1 = !Directory.Exists(args[0]);
                     bool arg2 = !Directory.Exists(args[1]);
@@ -38,6 +40,14 @@ namespace MergifyBashTags
                         WriteLine("Press Enter to end...");
                         Console.ReadLine();
                         return;
+                    }
+                    for(int i = 3; i < args.Length; i++)
+                    {
+                        string arg = args[i];
+                        if(arg.Equals("-np", StringComparison.OrdinalIgnoreCase))
+                        {
+                            noPause = true;
+                        }
                     }
                 }
 
@@ -79,8 +89,13 @@ namespace MergifyBashTags
                 OutputBashTagSets(args[2]);
             }
             catch (Exception ex) { WriteLine(ex.Message); WriteLine(ex.StackTrace); }
-            WriteLine("Press Enter to end...");
-            Console.ReadLine();
+            
+            if (!noPause)
+            {
+                WriteLine("Press Enter to end...");
+                Console.ReadLine();
+            }
+            
         }
 
         public static bool OutputBashTagSetsSwitch = true;
