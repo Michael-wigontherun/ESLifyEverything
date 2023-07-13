@@ -59,7 +59,7 @@ namespace ESLifyEverything.FormData
             int newRecordCount = 0;
             foreach(CompactedModData compactedModData in CompactedModDatas)
             {
-                newRecordCount += compactedModData.CompactedModFormList.Count();
+                newRecordCount += compactedModData.CompactedModFormList.Count;
             }
             return newRecordCount;
         }

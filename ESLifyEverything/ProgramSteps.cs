@@ -635,13 +635,12 @@ namespace ESLifyEverything
         {
             bool whileContinue = true;
             string input;
-            CompactedModData? modData;
             do
             {
                 GF.WriteLine($"{GF.stringLoggingData.SingleModInputHeader}{GF.stringLoggingData.ExamplePlugin}");
                 GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
                 input = Console.ReadLine() ?? "";
-                if (CompactedModDataD.TryGetValue(input, out modData))
+                if (CompactedModDataD.TryGetValue(input, out CompactedModData? modData))
                 {
                     modData.Write();
                     VoiceESLifyMod(modData);
@@ -672,8 +671,7 @@ namespace ESLifyEverything
         {
             foreach (string plugin in LoadOrderNoExtensions)
             {
-                BSA? bsa;
-                if (BSAData.BSAs.TryGetValue(plugin, out bsa))
+                if (BSAData.BSAs.TryGetValue(plugin, out BSA? bsa))
                 {
                     foreach (string connectedVoice in bsa.VoiceModConnections)
                     {
@@ -837,8 +835,7 @@ namespace ESLifyEverything
         {
             foreach (string plugin in LoadOrderNoExtensions)
             {
-                BSA? bsa;
-                if (BSAData.BSAs.TryGetValue(plugin, out bsa))
+                if (BSAData.BSAs.TryGetValue(plugin, out BSA? bsa))
                 {
                     foreach (string connectedFaceGen in bsa.FaceGenModConnections)
                     {
@@ -1273,6 +1270,7 @@ namespace ESLifyEverything
                 }
                 return modConMenuList.ToArray();
             }
+
             if (modConMenuList.Length <= 0)
             {
                 GF.WriteLine(GF.stringLoggingData.NoModConfigurationFilesFound);
@@ -1384,8 +1382,7 @@ namespace ESLifyEverything
                             {
                                 if (jslotFileLines[i].Contains(modName, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    CompactedModData? mod;
-                                    if (CompactedModDataD.TryGetValue(modName, out mod))
+                                    if (CompactedModDataD.TryGetValue(modName, out CompactedModData? mod))
                                     {
                                         foreach (FormHandler form in mod.CompactedModFormList)
                                         {

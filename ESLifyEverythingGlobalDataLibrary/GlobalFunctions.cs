@@ -94,7 +94,7 @@ namespace ESLifyEverythingGlobalDataLibrary
         public static bool StartUpInitialized = false;
 
         //Checks whether all AppSettings are valid and should work as intended so long as paths are directed to the correct folders
-        public static bool Startup(out HashSet<StartupError> startupError, string ProgramLogName)
+        public static bool StartUp(out HashSet<StartupError> startupError, string ProgramLogName)
         {
             startupError = new HashSet<StartupError>();
             logName = ProgramLogName;
@@ -474,7 +474,7 @@ namespace ESLifyEverythingGlobalDataLibrary
 
             foreach (string loadOrderItem in plugins)
             {
-                if (loadOrderItem.Contains("*"))
+                if (loadOrderItem.Contains('*'))
                 {
                     filteredLoadOrder.Add(loadOrderItem.Replace("*", ""));
                 }

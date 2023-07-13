@@ -12,7 +12,7 @@ namespace ESLifyEverythingScriptESLifyErrorLog
 
         static void Main(string[] args)
         {
-            bool startUp = GF.Startup(out HashSet<StartupError> startupError, "ESLifyEverythingScriptESLifyErrorLog_Log.txt");
+            bool startUp = GF.StartUp(out HashSet<StartupError> startupError, "ESLifyEverythingScriptESLifyErrorLog_Log.txt");
 
             if (!startupError.Contains(StartupError.InvalidStartUp) && startUp)
             {

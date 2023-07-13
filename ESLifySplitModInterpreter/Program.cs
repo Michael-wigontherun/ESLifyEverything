@@ -7,7 +7,7 @@ namespace ESLifySplitModInterpreter
     {
         static void Main(string[] args)
         {
-            if(GF.Startup(out var StartupError, "ESLifySplitModInterpreter.txt"))
+            if(GF.StartUp(out var StartupError, "ESLifySplitModInterpreter.txt"))
             {
                 Console.WriteLine("\n\n\n\n");
                 string orgDataFilePath = Path.Combine(GF.Settings.XEditFolderPath, "ESLifyEverything\\xEditOutput\\OriginalData.csv");

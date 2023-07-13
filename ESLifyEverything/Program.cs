@@ -66,6 +66,12 @@ namespace ESLifyEverything
         //This will toggle whether to ask or attempt to run mergify bash tags
         public static bool MergesFound = false;
 
+        //This is the switch for the -OnlyRunxEditReader argument
+        public static bool OnlyRunxEditReader = false;
+
+        //This is the switch for the -NP argument
+        public static bool NP = true;
+
         //Main method that starts all features for eslify
         //Currently there are no Console Arguments, I will be adding some eventually
         static void Main(string[] args)
@@ -73,6 +79,26 @@ namespace ESLifyEverything
             try
             {
                 HandleArgs(args);
+
+                if (OnlyRunxEditReader)
+                {
+                    GF.StartUp(out HashSet<StartupError> startupErrorlogReader, "ESLifyEverythingxEditLogReader_Log.txt");
+                    if (!startupErrorlogReader.Contains(StartupError.xEditLogNotFound))
+                    {
+                        XEditSession();
+                    }
+                    else
+                    {
+                        GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
+                    }
+
+                    if (NP)
+                    {
+                        GF.WriteLine(GF.stringLoggingData.EnterToExit);
+                        Console.ReadLine();
+                    }
+                    return;
+                }
 
                 bool startUp = StartUp(out HashSet<StartupError> startupError, "ESLifyEverything_Log.txt");
 
@@ -346,14 +372,17 @@ namespace ESLifyEverything
             }
 
             Console.WriteLine();
-            GF.WriteLine(GF.stringLoggingData.EnterToExit);
-            Console.ReadLine();
+            if (NP)
+            {
+                GF.WriteLine(GF.stringLoggingData.EnterToExit);
+                Console.ReadLine();
+            }
         }
 
         //Extra Startup stuff that ESLify Everything needs
         private static bool StartUp(out HashSet<StartupError> startupError, string ProgramLogName)
         {
-            bool startup = GF.Startup(out startupError, ProgramLogName);
+            bool startup = GF.StartUp(out startupError, ProgramLogName);
             if (startup)
             {
                 BSAData.GetBSAData();
@@ -403,6 +432,14 @@ namespace ESLifyEverything
                 {
                     _IgnoreScripts = true;
                 }
+                else if (arg.Equals("-OnlyRunxEditReader", StringComparison.OrdinalIgnoreCase))
+                {
+                    OnlyRunxEditReader = true;
+                }
+                else if (arg.Equals("-NP", StringComparison.OrdinalIgnoreCase))
+                {
+                    NP = false;
+                }
                 else
                 {
                     GF.WriteLine($"Invalid Argument exception, {arg} not known.");
@@ -430,8 +467,16 @@ namespace ESLifyEverything
             Console.WriteLine("  * The second is preferred");
             Console.WriteLine("  * Spaces are not necessary after comma's.");
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
-            Console.WriteLine("-IgnoreScripts      will start up all normal processes except Script ESLify. Aslong as all other processes are" +
-                              "valid.");
+            Console.WriteLine(       "-IgnoreScripts      will start up all normal processes except Script ESLify. Aslong as all other processes are" +
+                                "valid.");
+            Console.WriteLine();
+            Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
+            Console.WriteLine("-OnlyRunxEditReader      will only run the xEdit Reader and nothing else. ");
+            Console.WriteLine("Set another prosess of ESLify Everything with this argument to just quickly run the xEdit Log reader");
+            Console.WriteLine("Add -NP to have it close everything as well.");
+            Console.WriteLine();
+            Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
+            Console.WriteLine("-NP       This will disable the pause at the end and it will close.");
             Console.WriteLine();
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
         }
