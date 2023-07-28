@@ -12,40 +12,43 @@ namespace ESLifyEverything
     {
         //List of dictionary of all enabled and valid CompactedModData.
         //The entire program functions using this.
-        public static Dictionary<string, CompactedModData> CompactedModDataD = new Dictionary<string, CompactedModData>(StringComparer.OrdinalIgnoreCase);
+        public static Dictionary<string, CompactedModData> CompactedModDataD = new(StringComparer.OrdinalIgnoreCase);
 
         ////List of dictionary of all enabled and valid CompactedModData that has already been run over Voice and FaceGen
         //public static Dictionary<string, CompactedModData> CompactedModDataDNoFaceVoice = new Dictionary<string, CompactedModData>();
 
         //When populated it holds all plugin names parsed from your plugins.txt file from your my games folder
-        public static string[] ActiveLoadOrder = new string[0];
+        public static string[] ActiveLoadOrder = Array.Empty<string>();
 
         //When populated it holds the plugins with attached BSAs without the extention
-        public static List<string> LoadOrderNoExtensions = new List<string>();
+        public static List<string> LoadOrderNoExtensions = new ();
 
         //Populated by _BasicSingleFile.json ModConfigurations
-        public static HashSet<BasicSingleFile> BasicSingleModConfigurations = new HashSet<BasicSingleFile>();
+        public static HashSet<BasicSingleFile> BasicSingleModConfigurations = new();
 
         //Populated by _BasicDirectFolder.json ModConfigurations
-        public static HashSet<BasicDirectFolder> BasicDirectFolderModConfigurations = new HashSet<BasicDirectFolder>();
+        public static HashSet<BasicDirectFolder> BasicDirectFolderModConfigurations = new();
 
         //Populated by _BasicDataSubfolder.json ModConfigurations
-        public static HashSet<BasicDataSubfolder> BasicDataSubfolderModConfigurations = new HashSet<BasicDataSubfolder>();
+        public static HashSet<BasicDataSubfolder> BasicDataSubfolderModConfigurations = new();
 
         //Populated by _ComplexTOML.json ModConfigurations
-        public static HashSet<ComplexTOML> ComplexTOMLModConfigurations = new HashSet<ComplexTOML>();
+        public static HashSet<ComplexTOML> ComplexTOMLModConfigurations = new();
 
         //Populated by _DelimitedFormKeys.json ModConfigurations
-        public static HashSet<DelimitedFormKeys> DelimitedFormKeysModConfigurations = new HashSet<DelimitedFormKeys>();
+        public static HashSet<DelimitedFormKeys> DelimitedFormKeysModConfigurations = new();
 
         //Populated by script names that failed to compile during Script ESLify
-        public static HashSet<string> FailedToCompile = new HashSet<string>();
+        public static HashSet<string> FailedToCompile = new();
 
         //Imports any CompactedModData or MergeCache's with names matching
-        public static HashSet<string> AlwaysCheckList = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        public static HashSet<string> AlwaysCheckList = new(StringComparer.OrdinalIgnoreCase);
+
+        //Ignores any CompactedModData or MergeCache's with names matching
+        public static HashSet<string> AlwaysIgnoreList = new();
 
         //Stores what merges need to be rebuilt after a plugin that was merged into it was edited
-        public static HashSet<string> EditedMergedPluginNeedsRebuild = new HashSet<string>();
+        public static HashSet<string> EditedMergedPluginNeedsRebuild = new();
 
         //Obsolete
         ////End identifier to prompt that ESLify Everything output FaceGen data
@@ -206,7 +209,6 @@ namespace ESLifyEverything
                         GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
                         GetESLifyModConfigurationFiles();
                         ESLifyAllDataFiles();
-                        InternallyCodedDataFileConfigurations();
 
                         DevLog.Pause("After Data File ESLify AutoRun Pause");
                     }
@@ -413,19 +415,37 @@ namespace ESLifyEverything
                 else if (arg.IndexOf("-c=", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     DevLog.Log(arg);
-                    string[] importCMD = arg.Replace("-c=", "").Split(',');
+                    string[] importCMD = arg.Replace("-c=", "").Split(',', StringSplitOptions.TrimEntries);
                     foreach (string cmd in importCMD)
                     {
-                        AlwaysCheckList.Add(cmd.Trim());
+                        AlwaysCheckList.Add(cmd);
                     }
                 }
                 else if (arg.IndexOf("-check=", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     DevLog.Log(arg);
-                    string[] importCMD = arg.Replace("-check=", "").Split(',');
+                    string[] importCMD = arg.Replace("-check=", "").Split(',', StringSplitOptions.TrimEntries);
                     foreach (string cmd in importCMD)
                     {
-                        AlwaysCheckList.Add(cmd.Trim());
+                        AlwaysCheckList.Add(cmd);
+                    }
+                }
+                else if (arg.IndexOf("-IMD=", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    DevLog.Log(arg);
+                    string[] importCMD = arg.Replace("-IMD=", "").Split(',', StringSplitOptions.TrimEntries);
+                    foreach (string cmd in importCMD)
+                    {
+                        AlwaysIgnoreList.Add(cmd);
+                    }
+                }
+                else if (arg.IndexOf("-IgnoreModData=", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    DevLog.Log(arg);
+                    string[] importCMD = arg.Replace("-IgnoreModData=", "").Split(',', StringSplitOptions.TrimEntries);
+                    foreach (string cmd in importCMD)
+                    {
+                        AlwaysIgnoreList.Add(cmd);
                     }
                 }
                 else if(arg.Equals("-IgnoreScripts", StringComparison.OrdinalIgnoreCase))
@@ -466,6 +486,13 @@ namespace ESLifyEverything
             Console.WriteLine("Example: -c=\"DIVERSE SKYRIM.esp, GIST soul trap.esp, Castle Volkihar Rebuilt.esp\"");
             Console.WriteLine("  * The second is preferred");
             Console.WriteLine("  * Spaces are not necessary after comma's.");
+            Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
+            Console.WriteLine("-IMD or IgnoreModData     same aditional syntax as the -check argument.");
+            Console.WriteLine();
+            Console.WriteLine("Example: -IMD=\"LOTDPatchMerge.esp\" will ignore my LOTDPatchMerge.esp merge");
+            Console.WriteLine();
+            Console.WriteLine("It can be used for either a MergeCache or CompactedModData.");
+            Console.WriteLine("It is not recomend to use this for anything unless you know there will never be mod data for it.");
             Console.WriteLine("--------------------------------------------------------------------------------------------------------------");
             Console.WriteLine(       "-IgnoreScripts      will start up all normal processes except Script ESLify. Aslong as all other processes are" +
                                 "valid.");

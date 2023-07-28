@@ -24,118 +24,146 @@ namespace ESLifyEverything.PluginHandles
         //FormLinks are handled using RemapLinks()
         public static async Task<int> HandleSkyrimMod(string pluginName, string? customInternalOutputLocation = null)
         {
-            string path = Path.Combine(GF.Settings.DataFolderPath, pluginName);
-            if (!File.Exists(path))
+            try
             {
-                return await Task.FromResult(0);
-            }
-
-            SkyrimMod mod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
-
-            foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
-            {
-                if (!Program.ActiveLoadOrder.Contains(masterReference.Master.ToString(), StringComparer.OrdinalIgnoreCase))
+                string path = Path.Combine(GF.Settings.DataFolderPath, pluginName);
+                if (!File.Exists(path))
                 {
-                    if (CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
-                    {
-                        if (!modData.FromMerge)
-                        {
-                            GF.WriteLine(GF.stringLoggingData.MissingMaster + masterReference.Master.ToString());
-                            return await Task.FromResult(3);
-                        }
-                    }
+                    return await Task.FromResult(0);
                 }
-            }
 
-            DevLog.Log("Handling " + mod.ModKey.ToString());
-
-            bool ModEdited = false;
-
-            mod = HandleUniformFormHeaders(mod, out bool ModEditedU);
-            DevLog.Log("Finnished handling uniform keys in " + mod.ModKey.ToString());
-
-            mod = HandleSubFormHeaders(mod, out bool ModEditedS);
-            DevLog.Log("Finnished handling sub form keys in " + mod.ModKey.ToString());
-
-            if (ModEditedU || ModEditedS)
-            {
-                ModEdited = true;
-                DevLog.Log(mod.ModKey.ToString() + " was changed.");
-            }
-
-            //if(!ModEdited)
-            //{
-            HashSet<string> modNames = new HashSet<string>();
-            foreach (IFormLinkGetter? link in mod.EnumerateFormLinks())
-            {
-                FormKey formKey = link.FormKey;
-                if (CompactedModDataD.TryGetValue(formKey.ModKey.ToString(), out CompactedModData? modData))
+                SkyrimMod? mod = null;
+                try
                 {
-                    if (mod.ModKey.ToString().Equals(formKey.ModKey.ToString(), StringComparison.OrdinalIgnoreCase) && modData.FromMerge)
+                    mod = SkyrimMod.CreateFromBinary(path, SkyrimRelease.SkyrimSE);
+                }
+                catch (Exception e)
+                {
+                    GF.WriteLine(pluginName + " was not output Errored.");
+                    GF.WriteLine(e.Message);
+                    GF.WriteLine(e.StackTrace!);
+                    return await Task.FromResult(2);
+                }
+                GF.WriteLine(pluginName + " loaded.", GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+
+                foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
+                {
+                    if (!Program.ActiveLoadOrder.Contains(masterReference.Master.ToString(), StringComparer.OrdinalIgnoreCase))
                     {
-                        continue;
-                    }
-                    else
-                    {
-                        foreach (FormHandler form in modData.CompactedModFormList)
+                        if (CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
                         {
-                            if (formKey.IDString().Equals(form.OriginalFormID, StringComparison.OrdinalIgnoreCase))
+                            if (!modData.FromMerge)
                             {
-                                modNames.Add(formKey.ModKey.ToString());
+                                GF.WriteLine(GF.stringLoggingData.MissingMaster + masterReference.Master.ToString());
+                                return await Task.FromResult(3);
                             }
                         }
                     }
                 }
-            }
 
-            if (modNames.Any())
-            {
-                foreach (string modName in modNames)
-                {
-                    DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modName);
-                    mod.RemapLinks(CompactedModDataD[modName].ToDictionary());
-                    
-                }
-                ModEdited = true;
-            }
-                
-            //}
-            //else
-            //{
-            //    foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
-            //    {
-            //        if(CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
-            //        {
-            //            DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modData.ModName);
-            //            mod.RemapLinks(modData.ToDictionary());
-            //            ModEdited = true;
-            //        }
-            //    }
-            //}
+                DevLog.Log("Handling " + mod.ModKey.ToString());
 
-            //ModEdited = true;
-            if (ModEdited)
-            {
-                foreach (var rec in mod.EnumerateMajorRecords())
+                bool ModEdited = false;
+
+                mod = HandleUniformFormHeaders(mod, out bool ModEditedU);
+                DevLog.Log("Finnished handling uniform keys in " + mod.ModKey.ToString());
+
+                mod = HandleSubFormHeaders(mod, out bool ModEditedS);
+                DevLog.Log("Finnished handling sub form keys in " + mod.ModKey.ToString());
+
+                if (ModEditedU || ModEditedS)
                 {
-                    rec.IsCompressed = false;
+                    ModEdited = true;
+                    DevLog.Log(mod.ModKey.ToString() + " was changed.");
                 }
 
-                string outputPath = customInternalOutputLocation ?? GetPluginModOutputPath(pluginName);
+                //if(!ModEdited)
+                //{
+                HashSet<string> modNames = new HashSet<string>();
 
-                mod.WriteToBinary(Path.Combine(outputPath, pluginName),
-                new BinaryWriteParameters()
+                foreach (IFormLinkGetter? link in mod.EnumerateFormLinks())
                 {
-                    MastersListOrdering =
-                    new MastersListOrderingByLoadOrder(LoadOrder.GetLoadOrderListings(GameRelease.SkyrimSE, new DirectoryPath(GF.Settings.DataFolderPath)).ToLoadOrder())
-                });
+                    FormKey formKey = link.FormKey;
+                    if (CompactedModDataD.TryGetValue(formKey.ModKey.ToString(), out CompactedModData? modData))
+                    {
+                        if (mod.ModKey.ToString().Equals(formKey.ModKey.ToString(), StringComparison.OrdinalIgnoreCase) && modData.FromMerge)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            foreach (FormHandler form in modData.CompactedModFormList)
+                            {
+                                if (formKey.IDString().Equals(form.OriginalFormID, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    modNames.Add(formKey.ModKey.ToString());
+                                }
+                            }
+                        }
+                    }
+                }
 
-                GF.WriteLine(String.Format(GF.stringLoggingData.PluginOutputTo, pluginName, outputPath));
+                foreach (MasterReference master in mod.ModHeader.MasterReferences)
+                {
+                    modNames.Add(master.ToString()!);
+                }
 
-                return await Task.FromResult(1);
+                if (modNames.Any())
+                {
+                    foreach (string modName in modNames)
+                    {
+                        if(CompactedModDataD.TryGetValue(modName, out var value))
+                        {
+                            DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modName);
+                            mod.RemapLinks(value.ToDictionary());
+                            ModEdited = true;
+                        }
+                    }
+                }
+            
+                //}
+                //else
+                //{
+                //    foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
+                //    {
+                //        if(CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
+                //        {
+                //            DevLog.Log(mod.ModKey.ToString() + " attempting remapping with CompactedModData from " + modData.ModName);
+                //            mod.RemapLinks(modData.ToDictionary());
+                //            ModEdited = true;
+                //        }
+                //    }
+                //}
+
+                //ModEdited = true;
+                if (ModEdited)
+                {
+                    foreach (var rec in mod.EnumerateMajorRecords())
+                    {
+                        rec.IsCompressed = false;
+                    }
+
+                    string outputPath = customInternalOutputLocation ?? GetPluginModOutputPath(pluginName);
+
+                    mod.WriteToBinary(Path.Combine(outputPath, pluginName),
+                    new BinaryWriteParameters()
+                    {
+                        MastersListOrdering =
+                        new MastersListOrderingByLoadOrder(LoadOrder.GetLoadOrderListings(GameRelease.SkyrimSE, new DirectoryPath(GF.Settings.DataFolderPath)).ToLoadOrder())
+                    });
+
+                    GF.WriteLine(String.Format(GF.stringLoggingData.PluginOutputTo, pluginName, outputPath));
+
+                    return await Task.FromResult(1);
+                }
+            }
+            catch (Exception e)
+            {
+                GF.WriteLine(e.Message);
+                GF.WriteLine(e.StackTrace!);
             }
 
-            GF.WriteLine(mod.ModKey.ToString() + " was not output.", GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+            GF.WriteLine(pluginName + " was not output.", GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
 
             return await Task.FromResult(2);
         }

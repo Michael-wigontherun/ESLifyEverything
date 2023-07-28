@@ -101,30 +101,43 @@ namespace ESLifyEverything.FormData
             {
                 if(File.Exists(Path.Combine(GF.Settings.DataFolderPath, modData.ModName)))
                 {
-                    Task<int> handlePlugin = HandleMod.HandleSkyrimMod(modData.ModName, GF.Settings.DataFolderPath);
-                    handlePlugin.Wait();
-                    switch (handlePlugin.Result)
+                    Task<int>? handlePlugin = null;
+                    try
                     {
-                        case 0:
-                            GF.WriteLine(modData.ModName + GF.stringLoggingData.PluginNotFound);
-                            GF.WriteLine(String.Format("Please remerge the plugin: {0}", MergeName));
-                            break;
-                        case 1:
-                            GF.WriteLine(String.Format(GF.stringLoggingData.PluginFixed, modData.ModName));
-                            GF.WriteLine(String.Format("Please remerge the plugin: {0}", MergeName));
-                            Program.EditedMergedPluginNeedsRebuild.Add(MergeName);
-                            break;
-                        case 2:
-                            GF.WriteLine(modData.ModName + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseConsoleLoging);
-                            break;
-                        case 3:
-                            GF.WriteLine(modData.ModName + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseConsoleLoging);
-                            break;
-                        default:
-                            GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
-                            break;
+                        handlePlugin = HandleMod.HandleSkyrimMod(modData.ModName, GF.Settings.DataFolderPath);
+                        handlePlugin.Wait();
+                        switch (handlePlugin.Result)
+                        {
+                            case 0:
+                                GF.WriteLine(modData.ModName + GF.stringLoggingData.PluginNotFound);
+                                GF.WriteLine(String.Format("Please remerge the plugin: {0}", MergeName));
+                                break;
+                            case 1:
+                                GF.WriteLine(String.Format(GF.stringLoggingData.PluginFixed, modData.ModName));
+                                GF.WriteLine(String.Format("Please remerge the plugin: {0}", MergeName));
+                                Program.EditedMergedPluginNeedsRebuild.Add(MergeName);
+                                break;
+                            case 2:
+                                GF.WriteLine(modData.ModName + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseConsoleLoging);
+                                break;
+                            case 3:
+                                GF.WriteLine(modData.ModName + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseConsoleLoging);
+                                break;
+                            default:
+                                GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
+                                break;
+                        }
+                        handlePlugin.Dispose();
                     }
-                    handlePlugin.Dispose();
+                    catch (Exception e)
+                    {
+                        if (handlePlugin != null) handlePlugin.Dispose();
+                        GF.WriteLine("Error reading " + modData.ModName);
+                        GF.WriteLine(e.Message);
+                        if (e.StackTrace != null) GF.WriteLine(e.StackTrace);
+
+                    }
+                    
                 }
             }
 

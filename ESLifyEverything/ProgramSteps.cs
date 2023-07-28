@@ -263,7 +263,7 @@ namespace ESLifyEverything
                     }
                 }
 
-                if (modData.Enabled == true)
+                if (modData.Enabled == true && !AlwaysIgnoreList.Contains(modData.ModName, StringComparer.OrdinalIgnoreCase))
                 {
                     if (modData.PluginLastModifiedValidation is not null)
                     {
@@ -369,7 +369,7 @@ namespace ESLifyEverything
                         }
                     }
 
-                    if (mergeData.AlreadyCached())
+                    if (mergeData.AlreadyCached() && !AlwaysIgnoreList.Contains(mergeData.MergeName, StringComparer.OrdinalIgnoreCase))
                     {
                         GF.WriteLine(GF.stringLoggingData.ImportingMergeCache + file);
                         foreach (CompactedModData compactedModData in mergeData.CompactedModDatas)
@@ -389,6 +389,10 @@ namespace ESLifyEverything
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        GF.WriteLine(String.Format(GF.stringLoggingData.SkippingImport, mergeData.MergeName), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                     }
                 }
                 else
@@ -487,26 +491,38 @@ namespace ESLifyEverything
         //This does not change Forms that are not known inside the CompactedModData
         private static void RunRecompact(string pluginName)
         {
-            Task<int> handlePluginTask = HandleMod.HandleSkyrimMod(pluginName);
-            handlePluginTask.Wait();
-            switch (handlePluginTask.Result)
+            Task<int>? handlePluginTask = null;
+            try
             {
-                case 0:
-                    GF.WriteLine(pluginName + GF.stringLoggingData.PluginNotFound);
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    GF.WriteLine(pluginName + GF.stringLoggingData.PluginNotChanged);
-                    break;
-                case 3:
-                    GF.WriteLine(pluginName + GF.stringLoggingData.PluginMissingMasterFile);
-                    break;
-                default:
-                    GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
-                    break;
+                handlePluginTask = HandleMod.HandleSkyrimMod(pluginName);
+                handlePluginTask.Wait();
+                switch (handlePluginTask.Result)
+                {
+                    case 0:
+                        GF.WriteLine(pluginName + GF.stringLoggingData.PluginNotFound);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        GF.WriteLine(pluginName + GF.stringLoggingData.PluginNotChanged);
+                        break;
+                    case 3:
+                        GF.WriteLine(pluginName + GF.stringLoggingData.PluginMissingMasterFile);
+                        break;
+                    default:
+                        GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
+                        break;
+                }
+                handlePluginTask.Dispose();
             }
-            handlePluginTask.Dispose();
+            catch (Exception e)
+            {
+                if (handlePluginTask != null) handlePluginTask.Dispose();
+                GF.WriteLine("Error reading " + pluginName);
+                GF.WriteLine(e.Message);
+                if (e.StackTrace != null) GF.WriteLine(e.StackTrace);
+
+            }
         }
         #endregion Import Mod Data
 
@@ -1013,7 +1029,6 @@ namespace ESLifyEverything
                 default:
                     break;
             }
-            InternallyCodedDataFileConfigurations();
         }
 
         //Runs all Mod Configurations
@@ -1039,24 +1054,7 @@ namespace ESLifyEverything
             {
                 HandleConfigurationType(modConfiguration);
             }
-        }
-
-        //Runs the Internally coded Mod Configurations
-        private static void InternallyCodedDataFileConfigurations()
-        {
-            Console.WriteLine("\n\n\n\n");
-            GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
-            RaceMenuESLify();
-
-            Console.WriteLine("\n\n\n\n");
-            GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
-            Task CustomSkills = CustomSkillsFramework();
-            CustomSkills.Wait();
-            CustomSkills.Dispose();
-
-            Console.WriteLine("\n\n\n\n");
-            GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
-            OARESLify();
+            InternallyCodedDataFileConfigurations();
         }
 
         //Gets the Mod Configuration files for ESLifying Data Files
@@ -1268,6 +1266,7 @@ namespace ESLifyEverything
                 {
                     modConMenuList.Add(modConfiguration.Name);
                 }
+                modConMenuList.AddRange(InternallyCodedDataFileConfigurationsList);
                 return modConMenuList.ToArray();
             }
 
@@ -1301,57 +1300,99 @@ namespace ESLifyEverything
                     }
                     else
                     {
-                        RunSelectedModConfig(modConMenuList, selectedMenuItem -1);
+                        RunSelectedModConfig(modConMenuList[selectedMenuItem - 1]);
                     }
                 }
-
-
             } while (endMenu == false);
         }
 
         //Runs the selected Mod Configuration over Data Files
-        private static void RunSelectedModConfig(string[] modConMenuList, int selectedMenuItem)
+        private static void RunSelectedModConfig(string selectedMenuItem)
         {
             foreach (var modConfiguration in BasicSingleModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
-                {
-                    HandleConfigurationType(modConfiguration);
-                }
+                if (modConfiguration.Name.Equals(selectedMenuItem)) HandleConfigurationType(modConfiguration);
             }
             foreach (var modConfiguration in BasicDirectFolderModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
-                {
-                    HandleConfigurationType(modConfiguration);
-                }
+                if (modConfiguration.Name.Equals(selectedMenuItem)) HandleConfigurationType(modConfiguration);
             }
             foreach (var modConfiguration in BasicDataSubfolderModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
-                {
-                    HandleConfigurationType(modConfiguration);
-                }
+                if (modConfiguration.Name.Equals(selectedMenuItem)) HandleConfigurationType(modConfiguration);
             }
             foreach (var modConfiguration in ComplexTOMLModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
-                {
-                    HandleConfigurationType(modConfiguration);
-                }
+                if (modConfiguration.Name.Equals(selectedMenuItem)) HandleConfigurationType(modConfiguration);
             }
             foreach (var modConfiguration in DelimitedFormKeysModConfigurations)
             {
-                if (modConfiguration.Name.Equals(modConMenuList[selectedMenuItem]))
-                {
-                    HandleConfigurationType(modConfiguration);
-                }
+                if (modConfiguration.Name.Equals(selectedMenuItem)) HandleConfigurationType(modConfiguration);
             }
-
+            RunSelectedInternallyCodedDataFileConfigurations(selectedMenuItem);
         }
         #endregion ESLify Data Files
 
-        //Region for RaceMenu Eslify
+        //Region for Internally Codeded Data File Configurations
+        #region Internally Coded Data File Configurations
+        //Readonly property for the RaceMenu menu item
+        private readonly static string RaceMenuMenuItem = "RaceMenu";
+        //Readonly property for the Custom Skills menu item
+        private readonly static string CustomSkillsMenuItem = "Custom Skills";
+        //Readonly property for the Open Animation Replacer menu item
+        private readonly static string OpenAnimationReplacerMenuItem = "Open Animation Replacer";
+
+        //lamda get for the list of internally coded ESLifies
+        private static string[] InternallyCodedDataFileConfigurationsList => new string[]
+        {
+            RaceMenuMenuItem,
+            CustomSkillsMenuItem,
+            OpenAnimationReplacerMenuItem
+        };
+
+        private static void RunSelectedInternallyCodedDataFileConfigurations(string selectedMenuItem)
+        {
+            if (RaceMenuMenuItem.Equals(selectedMenuItem))
+            {
+                Console.WriteLine("\n\n\n\n");
+                GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
+                RaceMenuESLify();
+            }
+            if (CustomSkillsMenuItem.Equals(selectedMenuItem))
+            {
+                Console.WriteLine("\n\n\n\n");
+                GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
+                Task CustomSkills = CustomSkillsFramework();
+                CustomSkills.Wait();
+                CustomSkills.Dispose();
+            }
+            if (OpenAnimationReplacerMenuItem.Equals(selectedMenuItem))
+            {
+                Console.WriteLine("\n\n\n\n");
+                GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
+                OARESLify();
+            }
+        }
+
+        //Runs the Internally coded Mod Configurations
+        private static void InternallyCodedDataFileConfigurations()
+        {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
+            RaceMenuESLify();
+
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
+            Task CustomSkills = CustomSkillsFramework();
+            CustomSkills.Wait();
+            CustomSkills.Dispose();
+
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
+            OARESLify();
+        }
+
+        //method for RaceMenu Eslify
         private static void RaceMenuESLify()
         {
             if (Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, "SKSE\\Plugins\\CharGen\\Presets")))
@@ -1414,7 +1455,7 @@ namespace ESLifyEverything
             }
         }
 
-        //Region for Custom Skills Framework Eslify
+        //method for Custom Skills Framework Eslify
         private static async Task<int> CustomSkillsFramework()
         {
             string startSearchPath = Path.Combine(GF.Settings.DataFolderPath, "NetScriptFramework\\Plugins");
@@ -1576,6 +1617,8 @@ namespace ESLifyEverything
             }
         }
 
+        #endregion Internally Coded Data File Configurations
+
         //Region for fixing records and references inside of plugins
         #region Plugins
         //Starts the chack for Master file and runs what was selected in SelectCompactedModsMenu()
@@ -1588,7 +1631,7 @@ namespace ESLifyEverything
             {
                 if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, ActiveLoadOrder[i])))
                 {
-                    if (!GF.IgnoredPlugins.Contains(ActiveLoadOrder[i]))
+                    if (!GF.IgnoredPlugins.Contains(ActiveLoadOrder[i], StringComparer.OrdinalIgnoreCase))
                     {
                         GF.WriteLine(String.Format(GF.stringLoggingData.PluginCheckMod, ActiveLoadOrder[i]), GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                         if (File.Exists(Path.Combine(GF.Settings.DataFolderPath, ActiveLoadOrder[i])))
@@ -1612,27 +1655,40 @@ namespace ESLifyEverything
             //Fix and output plugins that still use uncompacted data
             foreach (string pluginToRun in runPlugins)
             {
-                Task<int> handlePluginTask = HandleMod.HandleSkyrimMod(pluginToRun);
-                handlePluginTask.Wait();
-                switch (handlePluginTask.Result)
+                Task<int>? handlePluginTask = null;
+                try
                 {
-                    case 0:
-                        GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginNotFound, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                        break;
-                    case 1:
-                        GF.WriteLine(String.Format(GF.stringLoggingData.PluginFixed, pluginToRun));
-                        break;
-                    case 2:
-                        GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
-                        break;
-                    case 3:
-                        GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginMissingMasterFile);
-                        break;
-                    default:
-                        GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
-                        break;
+                    handlePluginTask = HandleMod.HandleSkyrimMod(pluginToRun);
+                    handlePluginTask.Wait();
+                    switch (handlePluginTask.Result)
+                    {
+                        case 0:
+                            GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginNotFound, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                            break;
+                        case 1:
+                            GF.WriteLine(String.Format(GF.stringLoggingData.PluginFixed, pluginToRun));
+                            break;
+                        case 2:
+                            GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
+                            break;
+                        case 3:
+                            GF.WriteLine(pluginToRun + GF.stringLoggingData.PluginMissingMasterFile);
+                            break;
+                        default:
+                            GF.WriteLine(GF.stringLoggingData.PluginSwitchDefaultMessage);
+                            break;
+                    }
+                    handlePluginTask.Dispose();
                 }
-                handlePluginTask.Dispose();
+                catch(Exception e)
+                {
+                    if(handlePluginTask != null) handlePluginTask.Dispose();
+                    GF.WriteLine("Error reading " + pluginToRun);
+                    GF.WriteLine(e.Message);
+                    if(e.StackTrace != null) GF.WriteLine(e.StackTrace);
+
+                }
+                
             }
 
         }
@@ -1745,7 +1801,6 @@ namespace ESLifyEverything
             p.Dispose();
 
         }
-
 
         private static void FinalizeData()
         {
