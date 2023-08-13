@@ -755,7 +755,7 @@ namespace ESLifyEverything
                         File.WriteAllBytes(newPath, vfile);
 
 
-                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
+                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                     }
                 }
             }
@@ -946,7 +946,7 @@ namespace ESLifyEverything
                         string newPath = Path.Combine(newStartPath, "00" + form.CompactedFormID + ".dds");
 
                         File.Copy(FaceTintFilePath, newPath, true);
-                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
+                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
                     }
 
                     //IEnumerable<string> FaceGenFilePaths = Directory.EnumerateFiles(
@@ -968,7 +968,7 @@ namespace ESLifyEverything
 
                         OrigonalNifFile.SaveAs(newPath, true);
 
-                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath);
+                        GF.WriteLine(GF.stringLoggingData.NewPath + newPath, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseFileLoging);
 
                         //File.Copy(FaceGenFilePath, newPath, true);
                         //EditedFaceGen = true;

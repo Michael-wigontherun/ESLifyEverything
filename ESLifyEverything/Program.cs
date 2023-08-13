@@ -95,6 +95,13 @@ namespace ESLifyEverything
                         GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
                     }
 
+                    if (!startupErrorlogReader.Contains(StartupError.InvalidStartUp))
+                    {
+                        Console.WriteLine("\n\n\n\n");
+                        GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
+                        BuildMergedData();
+                    }
+
                     if (NP)
                     {
                         GF.WriteLine(GF.stringLoggingData.EnterToExit);

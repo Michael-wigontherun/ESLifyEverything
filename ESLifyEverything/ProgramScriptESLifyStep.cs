@@ -134,6 +134,13 @@ namespace ESLifyEverything
 
                 DevLog.Pause("After Script Decompilers");
 
+                IEnumerable<string> overrideSourceCode = Directory.EnumerateFiles("OverrideSourceCode\\", "*", SearchOption.TopDirectoryOnly);
+                foreach(string sourceCode in overrideSourceCode)
+                {
+                    string fileName = "ExtractedBSAModData\\Source\\Scripts\\" + Path.GetFileName(sourceCode);
+                    File.Copy(sourceCode, fileName, true);
+                }
+
                 Task inmScripts = ReadAndCompileScripts();
                 inmScripts.Wait();
                 inmScripts.Dispose();

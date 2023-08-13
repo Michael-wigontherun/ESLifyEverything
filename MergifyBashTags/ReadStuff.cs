@@ -3,6 +3,7 @@ using Mutagen.Bethesda.Skyrim;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace MergifyBashTags
@@ -113,65 +114,72 @@ namespace MergifyBashTags
 
         private static void ReadMergeJson(string DataFolderPath)
         {
-            string ExtractFileName(string line)
-            {
-                Regex lineRegex = new Regex("\"filename\": \"[^\"]*\"", RegexOptions.IgnoreCase);
-                Match? lr = lineRegex.Match(line);
-                if (lr.Success)
-                {
-                    Regex regex = new Regex("\"[^\"]*\"", RegexOptions.IgnoreCase);
-                    var r = regex.Matches(line);
-                    //Console.WriteLine(r[1].Value);
-                    return r[1].Value.Replace("\"", "");
-                }
-                return String.Empty;
-            }
+            //string ExtractFileName(string line)
+            //{
+            //    Regex lineRegex = new Regex("\"filename\": \"[^\"]*\"", RegexOptions.IgnoreCase);
+            //    Match? lr = lineRegex.Match(line);
+            //    if (lr.Success)
+            //    {
+            //        Regex regex = new Regex("\"[^\"]*\"", RegexOptions.IgnoreCase);
+            //        var r = regex.Matches(line);
+            //        //Console.WriteLine(r[1].Value);
+            //        return r[1].Value.Replace("\"", "");
+            //    }
+            //    return String.Empty;
+            //}
             //DataFolderPath = @"E:\SkyrimMods\MO2\mods\RandomThingsMerge";
             IEnumerable<string> mergefolders = Directory.GetDirectories(DataFolderPath, "merge -*", SearchOption.TopDirectoryOnly);
             foreach (string mergeFolder in mergefolders)
             {
                 string mergeJsonPath = Path.Combine(mergeFolder, "merge.json");
-                string[] mergeJson = File.ReadAllLines(mergeJsonPath);
-                bool read = false;
-                string name = "";
                 List<string> mergedList = new List<string>();
-                for (int i = 0; i < mergeJson.Length; i++)
+                MergeJson json = JsonSerializer.Deserialize<MergeJson>(File.ReadAllText(mergeJsonPath))!;
+
+                foreach(var plugin in json.plugins)
                 {
-                    string line = mergeJson[i];
-                    if (!read)
-                    {
-                        string n = ExtractFileName(line);
-                        if (!n.Equals(String.Empty)) name = n;
-                    }
-
-                    if (line.Contains("plugins", StringComparison.OrdinalIgnoreCase))
-                    {
-                        read = true;
-                        continue;
-                    }
-                    if (line.Contains(']'))
-                    {
-                        read = false;
-                        continue;
-                    }
-
-                    if (read)
-                    {
-                        string n = ExtractFileName(line);
-                        if (!n.Equals(String.Empty))
-                        {
-                            mergedList.Add(n);
-                        }
-                    }
+                    mergedList.Add(plugin.filename);
                 }
 
-                if (Merges.ContainsKey(name))
+                //string name = "";
+                //string[] mergeJson = File.ReadAllLines(mergeJsonPath);
+                //bool read = false;
+                //for (int i = 0; i < mergeJson.Length; i++)
+                //{
+                //    string line = mergeJson[i];
+                //    if (!read)
+                //    {
+                //        string n = ExtractFileName(line);
+                //        if (!n.Equals(String.Empty)) name = n;
+                //    }
+
+                //    if (line.Contains("plugins", StringComparison.OrdinalIgnoreCase))
+                //    {
+                //        read = true;
+                //        continue;
+                //    }
+                //    if (line.Contains(']'))
+                //    {
+                //        read = false;
+                //        continue;
+                //    }
+
+                //    if (read)
+                //    {
+                //        string n = ExtractFileName(line);
+                //        if (!n.Equals(String.Empty))
+                //        {
+                //            mergedList.Add(n);
+                //        }
+                //    }
+                //}
+
+                if (Merges.ContainsKey(json.filename))
                 {
-                    Merges[name] = mergedList;
+                    Merges[json.filename] = mergedList;
                 }
                 else
                 {
-                    Merges.Add(name, mergedList);
+                    Merges.Add(json.filename, mergedList);
                 }
             }
         }
