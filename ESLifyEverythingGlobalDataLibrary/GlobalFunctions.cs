@@ -85,6 +85,8 @@ namespace ESLifyEverythingGlobalDataLibrary
         //ESLify Everything's log name
         public static string logName = "log.txt";
 
+        public static bool StartupCalled { get; private set; } = false;
+
         //Obsolete
         ////Path to the face gen fix list for the xEdit script
         //public static string FaceGenFileFixPath = "";
@@ -98,6 +100,7 @@ namespace ESLifyEverythingGlobalDataLibrary
         //Checks whether all AppSettings are valid and should work as intended so long as paths are directed to the correct folders
         public static bool StartUp(out HashSet<StartupError> startupError, string ProgramLogName)
         {
+            StartupCalled = true;
             startupError = new HashSet<StartupError>();
             logName = ProgramLogName;
             File.Create(logName).Close();
@@ -485,6 +488,17 @@ namespace ESLifyEverythingGlobalDataLibrary
             }
 
             return filteredLoadOrder.ToArray();
+        }
+
+        //Outputs the List of StartupErrors
+        public static void StartUpErrorOutput(HashSet<StartupError> startupError)
+        {
+            foreach (var startuperror in startupError)
+            {
+                GF.WriteLine(startuperror + " : ");
+
+            }
+            Console.WriteLine();
         }
     }
 }

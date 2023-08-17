@@ -16,13 +16,11 @@
     "OARErrorLine2": "It is located on line: ",
     "OARErrorLine3": "Please report this to me in the forum: What does OAR support still need?",
     "OARErrorLine4": "I need the config file placed inside a spoiler tag or the relevent object lines, and this error report",
-
     "StartingOBodyNGESLify": "Starting OBodyNG ESLify",
     "OBodyNGDoesNotExist": "OBody Config does not exits, you can ignore this. Skipping..",
     "OBodyNGCantbeLoaded": "OBody could not be loaded check the validity of OBody_presetDistributionConfig.json with a online json validater to find errors.",
     "OBodyNGChanging": "Changing {0} to {1}.",
     "OBodyNGMoving": "Moving {0} to {1}.",
-
     "LoadOrderNotDetectedError": "Load order not found. Files from BSA's can not be extracted correctly.",
     "RunOrReport": "Loadorder not found, Run from MO2 or deploy mods through Vortex.",
     "SettingsFileNotFound": "AppSettings.json not found or can not update.",

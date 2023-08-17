@@ -75,8 +75,19 @@ namespace ESLifyEverything
         //This is the switch for the -NP argument
         public static bool NP = true;
 
-        public static void BuildStuff(HashSet<StartupError> startupError)
+        //Single Call for Building CompactedModData and MergeCaches
+        public static void BuildStuff(string logName, HashSet<StartupError> startupError)
         {
+            if (!GF.StartupCalled)
+            {
+                StartUp(out startupError, logName);
+                if (startupError.Contains(StartupError.InvalidStartUp))
+                {
+                    GF.StartUpErrorOutput(startupError);
+                    return;
+                }
+            }
+
             if (!startupError.Contains(StartupError.xEditLogNotFound))
             {
                 XEditSession();
@@ -96,8 +107,19 @@ namespace ESLifyEverything
             }
         }
 
-        public static void ImportData()
+        //Single Call for Importing all nessessary data from previously cached data
+        public static void ImportData(string logName)
         {
+            if (!GF.StartupCalled)
+            {
+                StartUp(out HashSet<StartupError>? startupError, logName);
+                if (startupError.Contains(StartupError.InvalidStartUp))
+                {
+                    GF.StartUpErrorOutput(startupError);
+                    return;
+                }
+            }
+
             if (File.Exists(".\\Properties\\CustomPluginOutputLocations.json"))
             {
                 HandleMod.CustomPluginOutputLocations = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(".\\Properties\\CustomPluginOutputLocations.json"))!;
@@ -132,8 +154,19 @@ namespace ESLifyEverything
             DevLog.Pause("After CompactedForms Import Pause");
         }
 
-        public static void AutoRunESLifyDataFiles(bool PausesPossible = false)
+        //Single Call for Running every ESLify Configuration, ModConfigurations and Internally coded data
+        public static void AutoRunESLifyDataFiles(string logName, bool PausesPossible = false)
         {
+            if (!GF.StartupCalled)
+            {
+                StartUp(out HashSet<StartupError>? startupError, logName);
+                if (startupError.Contains(StartupError.InvalidStartUp))
+                {
+                    GF.StartUpErrorOutput(startupError);
+                    return;
+                }
+            }
+
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(GF.stringLoggingData.StartingVoiceESLify);
             VoiceESLifyEverything();
@@ -156,8 +189,7 @@ namespace ESLifyEverything
             if (PausesPossible) DevLog.Pause("After Data File ESLify AutoRun Pause");
         }
 
-        //Main method that starts all features for eslify
-        //Currently there are no Console Arguments, I will be adding some eventually
+        //Main method that starts all features for ESLify Everything
         static void Main(string[] args)
         {
             try
@@ -168,7 +200,7 @@ namespace ESLifyEverything
                 {
                     GF.StartUp(out HashSet<StartupError> startupErrorlogReader, "ESLifyEverythingxEditLogReader_Log.txt");
 
-                    BuildStuff(startupErrorlogReader);
+                    BuildStuff(GF.logName, startupErrorlogReader);
 
                     if (NP)
                     {
@@ -186,13 +218,13 @@ namespace ESLifyEverything
 
                     GF.ValidStartUp();
 
-                    BuildStuff(startupError);
+                    BuildStuff(GF.logName, startupError);
 
                     GF.MoveCompactedModDataJsons();
 
-                    ImportData();
+                    ImportData(GF.logName);
 
-                    if (GF.Settings.AutoRunESLify) AutoRunESLifyDataFiles(true);
+                    if (GF.Settings.AutoRunESLify) AutoRunESLifyDataFiles(GF.logName, true);
                     else//Opens Menus
                     {
                         Console.WriteLine("\n\n\n\n");
@@ -244,27 +276,9 @@ namespace ESLifyEverything
                 }
                 else
                 {
-                    foreach(var startuperror in startupError)
-                    {
-                        Console.Write(startuperror + " : ");
-                        
-                    }
-                    Console.WriteLine();
+                    GF.StartUpErrorOutput(startupError);
 
-                    if (File.Exists(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName)))
-                    {
-                        XEditSession();
-
-                        DevLog.Pause("After Startup Invalid Log Reader Pause");
-                    }
-                    if (Directory.Exists(GF.Settings.DataFolderPath))
-                    {
-                        Console.WriteLine("\n\n\n\n");
-                        GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
-                        BuildMergedData();
-                        
-                        DevLog.Pause("After Startup Invalid zMerge Reader Pause");
-                    }
+                    BuildStuff(GF.logName, startupError);
                 }
                 
                 GF.EndStartUpErrorLoggig(startupError);
@@ -395,6 +409,7 @@ namespace ESLifyEverything
             return startup;
         }
 
+        //Handles the Arguments
         private static void HandleArgs(string[] args)
         {
             foreach(string arg in args)
@@ -471,6 +486,7 @@ namespace ESLifyEverything
             }
         }
 
+        //Outputs Help Menu for Console Arguments
         private static void Help()
         {
             Console.WriteLine("Case does not matter for any of the following.");
