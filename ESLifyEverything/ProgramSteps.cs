@@ -1546,7 +1546,7 @@ namespace ESLifyEverything
                     //    newCustomSkillConfigFile[i] = line;
                     //}
                     #endregion OldCustSkillsFrameWork_NotWorkingWell_integration
-                    CustomSkillsFramework customSkillsFramework = new(File.ReadAllLines(customSkillConfig));
+                    CustomSkillsFramework customSkillsFramework = new CustomSkillsFramework(File.ReadAllLines(customSkillConfig));
 
                     customSkillsFramework.UpdateFileLines();
 
@@ -1656,7 +1656,7 @@ namespace ESLifyEverything
             }
         }
 
-        public static OBodyJson? OBodyNGESLify(string potentialPath)
+        public static OBodyJson? OBodyNGESLify(string potentialPath, bool test = false)
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(GF.stringLoggingData.StartingOBodyNGESLify);
@@ -1832,7 +1832,12 @@ namespace ESLifyEverything
                 }//End ESLify Everything base
             }//End base plugin Nested List in Map
 
-            return oBodyJson;
+            if (test) return oBodyJson;
+
+            File.WriteAllText(Path.Combine(GF.Settings.OutputFolder, "SKSE\\Plugins\\OBody_presetDistributionConfig.json"), 
+                JsonSerializer.Serialize(oBodyJson, GF.JsonSerializerOptions));
+
+            return null;
         }
 
         #endregion Internally Coded Data File Configurations

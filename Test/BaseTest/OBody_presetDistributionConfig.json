@@ -1,0 +1,43 @@
+{
+    "npcFormID": {
+		"Immersive Wenches.esp": {
+			"0403197F": ["Petite Mommy"],
+			"0400C3C0": ["s4rMs' - Gaia"]
+		}
+	},
+    "npc": {},
+    "factionFemale": {},
+    "factionMale": {},
+    "npcPluginFemale": {},
+    "npcPluginMale": {},
+    "raceFemale": {},
+    "raceMale": {},
+    "blacklistedNpcs": [],
+    "blacklistedNpcsFormID": {
+		"Immersive Wenches.esp": ["0403197F", "0400C3C0"]
+	},
+    "blacklistedNpcsPluginFemale": [],
+    "blacklistedNpcsPluginMale": [],
+    "blacklistedRacesFemale": [
+        "ElderRace"
+    ],
+    "blacklistedRacesMale": [
+        "ElderRace"
+    ],
+    "blacklistedOutfitsFromORefitFormID": {
+		"Immersive Wenches.esp": ["0403197F", "0400C3C0"]
+	},
+    "blacklistedOutfitsFromORefit": [],
+    "blacklistedOutfitsFromORefitPlugin": [],
+    "outfitsForceRefitFormID": {
+		"Immersive Wenches.esp": ["0403197F", "0400C3C0"]
+	},
+    "outfitsForceRefit": [],
+    "blacklistedPresetsFromRandomDistribution": [
+        "- Zeroed Sliders -",
+        "-Zeroed Sliders-",
+        "Zeroed Sliders",
+        "HIMBO Zero for OBody"
+    ],
+    "blacklistedPresetsShowInOBodyMenu": true
+}

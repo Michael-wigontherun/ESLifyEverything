@@ -87,13 +87,73 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
             }
 
-            if (!startupError.Contains(StartupError.InvalidStartUp))
+            if (!startupError.Contains(StartupError.DataFolderNotFound))
             {
                 Console.WriteLine("\n\n\n\n");
                 GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
                 BuildMergedData();
                 DevLog.Pause("After zMerge Reader Pause");
             }
+        }
+
+        public static void ImportData()
+        {
+            if (File.Exists(".\\Properties\\CustomPluginOutputLocations.json"))
+            {
+                HandleMod.CustomPluginOutputLocations = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(".\\Properties\\CustomPluginOutputLocations.json"))!;
+            }
+
+            BSAData.GetBSAData();
+
+            Console.WriteLine("\n\n\n\n");
+            Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
+            Task<int> bsamod = LoadOrderBSAData();
+            bsamod.Wait();
+            int bsamodResult = bsamod.Result;
+            bsamod.Dispose();
+            switch (bsamodResult)
+            {
+                case 0:
+                    break;
+                case 1:
+                    throw new MissingFileException();
+                default:
+                    throw new Exception("How did you reach a default result in LoadOrderBSAData()? Please report this.");
+            }
+
+            DevLog.Pause("After BSA Proccesing Pause");
+
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.ImportingAllModData);
+            ImportModData(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms"));
+            ImportModData(GF.CompactedFormsFolder);
+            ImportMergeData();
+
+            DevLog.Pause("After CompactedForms Import Pause");
+        }
+
+        public static void AutoRunESLifyDataFiles(bool PausesPossible = false)
+        {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingVoiceESLify);
+            VoiceESLifyEverything();
+
+            if (PausesPossible) DevLog.Pause("After Voice ESLify AutoRun Pause");
+
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingFaceGenESLify);
+            FaceGenESLifyEverything();
+
+            if (PausesPossible) DevLog.Pause("After FaceGen ESLify AutoRun Pause");
+
+            //MergeDictionaries();
+
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
+            GetESLifyModConfigurationFiles();
+            ESLifyAllDataFiles();
+
+            if (PausesPossible) DevLog.Pause("After Data File ESLify AutoRun Pause");
         }
 
         //Main method that starts all features for eslify
@@ -120,11 +180,6 @@ namespace ESLifyEverything
 
                 bool startUp = StartUp(out HashSet<StartupError> startupError, "ESLifyEverything_Log.txt");
 
-                if (startupError.Contains(StartupError.OutputtedScriptsFound) && _IgnoreScripts)
-                {
-                    startUp = true;
-                }
-
                 if (!startupError.Contains(StartupError.InvalidStartUp) && startUp)
                 {
                     Console.WriteLine("Sucessful startup");
@@ -135,38 +190,10 @@ namespace ESLifyEverything
 
                     GF.MoveCompactedModDataJsons();
 
-                    if (File.Exists(".\\Properties\\CustomPluginOutputLocations.json"))
-                    {
-                        HandleMod.CustomPluginOutputLocations = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(".\\Properties\\CustomPluginOutputLocations.json"))!;
-                    }
+                    ImportData();
 
-                    Console.WriteLine("\n\n\n\n");
-                    Console.WriteLine(GF.stringLoggingData.StartBSAExtract);
-                    Task<int> bsamod = LoadOrderBSAData();
-                    bsamod.Wait();
-                    int bsamodResult = bsamod.Result;
-                    bsamod.Dispose();
-                    switch (bsamodResult)
-                    {
-                        case 0:
-                            break;
-                        case 1:
-                            throw new MissingFileException();
-                        default:
-                            throw new Exception("How did you reach a default result in LoadOrderBSAData()? Please report this.");
-                    }
-
-                    DevLog.Pause("After BSA Proccesing Pause");
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.ImportingAllModData);
-                    ImportModData(Path.Combine(GF.Settings.DataFolderPath, "CompactedForms"));
-                    ImportModData(GF.CompactedFormsFolder);
-                    ImportMergeData();
-
-                    DevLog.Pause("After CompactedForms Import Pause");
-
-                    if (!GF.Settings.AutoRunESLify)
+                    if (GF.Settings.AutoRunESLify) AutoRunESLifyDataFiles(true);
+                    else//Opens Menus
                     {
                         Console.WriteLine("\n\n\n\n");
                         GF.WriteLine(GF.stringLoggingData.StartingVoiceESLify);
@@ -187,30 +214,6 @@ namespace ESLifyEverything
                         ESLifyDataFilesMainMenu();
 
                         DevLog.Pause("After Data File ESLify Menu Pause");
-                    }
-                    //Auto Run
-                    else
-                    {
-                        Console.WriteLine("\n\n\n\n");
-                        GF.WriteLine(GF.stringLoggingData.StartingVoiceESLify);
-                        VoiceESLifyEverything();
-
-                        DevLog.Pause("After Voice ESLify AutoRun Pause");
-
-                        Console.WriteLine("\n\n\n\n");
-                        GF.WriteLine(GF.stringLoggingData.StartingFaceGenESLify);
-                        FaceGenESLifyEverything();
-
-                        DevLog.Pause("After FaceGen ESLify AutoRun Pause");
-
-                        //MergeDictionaries();
-
-                        Console.WriteLine("\n\n\n\n");
-                        GF.WriteLine(GF.stringLoggingData.StartingDataFileESLify);
-                        GetESLifyModConfigurationFiles();
-                        ESLifyAllDataFiles();
-
-                        DevLog.Pause("After Data File ESLify AutoRun Pause");
                     }
 
                     if (!startupError.Contains(StartupError.OutputtedScriptsFound))
@@ -385,9 +388,9 @@ namespace ESLifyEverything
         private static bool StartUp(out HashSet<StartupError> startupError, string ProgramLogName)
         {
             bool startup = GF.StartUp(out startupError, ProgramLogName);
-            if (startup)
+            if (startupError.Contains(StartupError.OutputtedScriptsFound) && _IgnoreScripts)
             {
-                BSAData.GetBSAData();
+                startup = true;
             }
             return startup;
         }

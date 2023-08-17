@@ -11,7 +11,9 @@ namespace ESLifyEverythingGlobalDataLibrary
     {
         xEditLogNotFound,           //Did not find the xEdit log inside the XEditFolderPath
         OutputtedScriptsFound,      //Found compiled scripts inside OutputFolder\Scripts
-        InvalidStartUp              //Startup was not successful can not run
+        InvalidStartUp,              //Startup was not successful can not run
+        DataFolderNotFound,
+        CompilerNotFound
     }
 
     //Global File Extentions
@@ -163,6 +165,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             {
                 GF.WriteLine(GF.stringLoggingData.DataFolderNotFound);
                 Console.WriteLine("Data Folder Path Error");
+                startupError.Add(StartupError.DataFolderNotFound);
                 startupError.Add(StartupError.InvalidStartUp);
                 startUp = false;
             }
@@ -207,6 +210,7 @@ namespace ESLifyEverythingGlobalDataLibrary
             {
                 Console.WriteLine("Compiler Error");
                 startupError.Add(StartupError.InvalidStartUp);
+                startupError.Add(StartupError.CompilerNotFound);
                 startUp = false;
                 GF.WriteLine(GF.stringLoggingData.PapyrusCompilerMissing);
                 GF.WriteLine(GF.stringLoggingData.PapyrusCompilerMissing2);
