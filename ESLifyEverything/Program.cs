@@ -75,6 +75,27 @@ namespace ESLifyEverything
         //This is the switch for the -NP argument
         public static bool NP = true;
 
+        public static void BuildStuff(HashSet<StartupError> startupError)
+        {
+            if (!startupError.Contains(StartupError.xEditLogNotFound))
+            {
+                XEditSession();
+                DevLog.Pause("After Log Reader Pause");
+            }
+            else
+            {
+                GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
+            }
+
+            if (!startupError.Contains(StartupError.InvalidStartUp))
+            {
+                Console.WriteLine("\n\n\n\n");
+                GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
+                BuildMergedData();
+                DevLog.Pause("After zMerge Reader Pause");
+            }
+        }
+
         //Main method that starts all features for eslify
         //Currently there are no Console Arguments, I will be adding some eventually
         static void Main(string[] args)
@@ -86,21 +107,8 @@ namespace ESLifyEverything
                 if (OnlyRunxEditReader)
                 {
                     GF.StartUp(out HashSet<StartupError> startupErrorlogReader, "ESLifyEverythingxEditLogReader_Log.txt");
-                    if (!startupErrorlogReader.Contains(StartupError.xEditLogNotFound))
-                    {
-                        XEditSession();
-                    }
-                    else
-                    {
-                        GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
-                    }
 
-                    if (!startupErrorlogReader.Contains(StartupError.InvalidStartUp))
-                    {
-                        Console.WriteLine("\n\n\n\n");
-                        GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
-                        BuildMergedData();
-                    }
+                    BuildStuff(startupErrorlogReader);
 
                     if (NP)
                     {
@@ -123,16 +131,7 @@ namespace ESLifyEverything
 
                     GF.ValidStartUp();
 
-                    if (!startupError.Contains(StartupError.xEditLogNotFound))
-                    {
-                        XEditSession();
-                    }
-                    else
-                    {
-                        GF.WriteLine(GF.stringLoggingData.SkipingSessionLogNotFound);
-                    }
-
-                    DevLog.Pause("After Log Reader Pause");
+                    BuildStuff(startupError);
 
                     GF.MoveCompactedModDataJsons();
 
@@ -158,12 +157,6 @@ namespace ESLifyEverything
                     }
 
                     DevLog.Pause("After BSA Proccesing Pause");
-
-                    Console.WriteLine("\n\n\n\n");
-                    GF.WriteLine(GF.stringLoggingData.StartingMergeCache);
-                    BuildMergedData();
-
-                    DevLog.Pause("After zMerge Reader Pause");
 
                     Console.WriteLine("\n\n\n\n");
                     GF.WriteLine(GF.stringLoggingData.ImportingAllModData);

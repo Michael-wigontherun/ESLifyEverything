@@ -1,4 +1,5 @@
 ﻿using ESLifyEverythingGlobalDataLibrary;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
@@ -301,5 +302,56 @@ namespace ESLifyEverything.FormData
 
     }
 
-    
+    public class OBodyJson
+    {
+        [JsonInclude]
+        public Dictionary<string, List<string>> npc = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> factionFemale = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> factionMale = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> npcPluginFemale = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> npcPluginMale = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> raceFemale = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> raceMale = new();
+        [JsonInclude]
+        public List<string> blacklistedNpcs = new();
+        [JsonInclude]
+        public List<string> blacklistedNpcsPluginFemale = new();
+        [JsonInclude]
+        public List<string> blacklistedNpcsPluginMale = new();
+        [JsonInclude]
+        public List<string> blacklistedRacesFemale = new();
+        [JsonInclude]
+        public List<string> blacklistedRacesMale = new();
+        [JsonInclude]
+        public List<string> blacklistedOutfitsFromORefit = new();
+        [JsonInclude]
+        public List<string> blacklistedOutfitsFromORefitPlugin = new();
+        [JsonInclude]
+        public List<string> outfitsForceRefit = new();
+        [JsonInclude]
+        public List<string> blacklistedPresetsFromRandomDistribution = new();
+        [JsonInclude]
+        public bool blacklistedPresetsShowInOBodyMenu = true;
+
+        //Contain FormIDs
+        [JsonInclude]
+        public Dictionary<string, Dictionary<string, List<string>>> npcFormID = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> blacklistedNpcsFormID = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> blacklistedOutfitsFromORefitFormID = new();
+        [JsonInclude]
+        public Dictionary<string, List<string>> outfitsForceRefitFormID = new();
+
+        public static OBodyJson? LoadOBodyJson(string path)
+        {
+            return JsonSerializer.Deserialize<OBodyJson>(File.ReadAllText(path));
+        }
+    }
 }

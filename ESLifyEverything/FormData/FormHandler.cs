@@ -112,6 +112,13 @@ namespace ESLifyEverything.FormData
             }
         }
 
+        public bool CompareOrgFormID(string comparedID)
+        {
+            if(comparedID.Length > 6) comparedID = comparedID.Substring(comparedID.Length - 6);
+            
+            return comparedID.TrimStart('0').Equals(OriginalFormID.TrimStart('0'), StringComparison.OrdinalIgnoreCase);
+        }
+
         //Creates the Compacted FormKey with separator data passed in
         public string GetCompactedFileLineFormKey(Separator separator)
         {

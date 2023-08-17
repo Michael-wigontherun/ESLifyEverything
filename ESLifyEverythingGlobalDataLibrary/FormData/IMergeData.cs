@@ -10,6 +10,8 @@ namespace ESLifyEverythingGlobalDataLibrary.FormData
     public class IMergeData
     {
         [JsonInclude]
+        public bool Enabled = true;
+        [JsonInclude]
         public string MergeName { get; set; } = "";
         [JsonInclude]
         public DateTime? LastModified { get; set; }

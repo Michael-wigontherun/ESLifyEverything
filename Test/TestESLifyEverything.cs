@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace Test
 {
@@ -23,6 +17,21 @@ namespace Test
             customSkillsFramework.UpdateFileLines();
 
             File.WriteAllText(Test.Program.TestJsonOutputPath + "customSkillsTest.json", JsonSerializer.Serialize(customSkillsFramework, Test.Program.jsonSerializerOptions));
+
+            ESLifyEverything.Program.CompactedModDataD = new();
+        }
+
+        public static void TestOBodyESLify()
+        {
+            ESLifyEverything.FormData.CompactedModData compactedModData = new ESLifyEverything.FormData.CompactedModData();
+            compactedModData.ModName = "Immersive Wenches.esp";
+            compactedModData.CompactedModFormList.Add(new ESLifyEverything.FormData.FormHandler("Merge.esp", "03197F", "000921"));
+            compactedModData.CompactedModFormList.Add(new ESLifyEverything.FormData.FormHandler("Immersive Wenches.esp", "00C3C0", "000935"));
+            ESLifyEverything.Program.CompactedModDataD.Add(compactedModData.ModName, compactedModData);
+
+            ESLifyEverything.FormData.OBodyJson? oBodyJson = ESLifyEverything.Program.OBodyNGESLify("E:\\SkyrimMods\\MO2\\mods\\OBody NG - Custom Morphs\\SKSE\\Plugins\\OBody_presetDistributionConfig.json");
+
+            Console.WriteLine(JsonSerializer.Serialize(oBodyJson, Test.Program.jsonSerializerOptions));
 
             ESLifyEverything.Program.CompactedModDataD = new();
         }

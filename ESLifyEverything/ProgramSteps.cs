@@ -195,6 +195,11 @@ namespace ESLifyEverything
                                     File.Move(potentialCompactedModDataPath, Path.Combine(GF.CompactedFormsFolder, mergeData.MergeName + GF.CompactedFormIgnoreExtension), true);
                                 }
 
+                                if(CompactedMergeData.GetCompactedMergeDataFromMergeName(mergeData.MergeName, out var s))
+                                {
+                                    mergeData.Enabled = s!.Enabled;
+                                }
+
                                 mergeData.NewRecordCount = mergeData.CoundNewRecords();
 
                                 mergeData.OutputModData(true);
@@ -316,7 +321,13 @@ namespace ESLifyEverything
             foreach(string file in compactedFormsModFiles)
             {
                 CompactedMergeData mergeData = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(file))!;
-                string pluginPath = Path.Combine(GF.Settings.DataFolderPath, mergeData.MergeName);
+
+                if (!mergeData.Enabled)
+                {
+                    Console.WriteLine(mergeData.MergeName + " is disabled by variable. Skipping..");
+                    continue;
+                }
+
                 if(mergeData.NewRecordCount != null)
                 {
                     if (mergeData.NewRecordCount >= GF.LargeMergeCount)
@@ -341,6 +352,8 @@ namespace ESLifyEverything
                     }
                     mergeData.OutputModData(false);
                 }
+
+                string pluginPath = Path.Combine(GF.Settings.DataFolderPath, mergeData.MergeName);
 
                 if (File.Exists(pluginPath) && ActiveLoadOrder.Contains(mergeData.MergeName))
                 {
@@ -1336,65 +1349,87 @@ namespace ESLifyEverything
         //Region for Internally Codeded Data File Configurations
         #region Internally Coded Data File Configurations
         //Readonly property for the RaceMenu menu item
-        private readonly static string RaceMenuMenuItem = "RaceMenu";
+        private const string RaceMenuMenuItem = "RaceMenu";
         //Readonly property for the Custom Skills menu item
-        private readonly static string CustomSkillsMenuItem = "Custom Skills";
+        private const string CustomSkillsMenuItem = "Custom Skills";
         //Readonly property for the Open Animation Replacer menu item
-        private readonly static string OpenAnimationReplacerMenuItem = "Open Animation Replacer";
+        private const string OpenAnimationReplacerMenuItem = "Open Animation Replacer";
+        //Readonly property for the OBodyNG menu item
+        private const string OBodyNG = "OBody";
 
         //lamda get for the list of internally coded ESLifies
-        private static string[] InternallyCodedDataFileConfigurationsList => new string[]
+        private readonly static string[] InternallyCodedDataFileConfigurationsList = new string[]
         {
             RaceMenuMenuItem,
             CustomSkillsMenuItem,
-            OpenAnimationReplacerMenuItem
+            OpenAnimationReplacerMenuItem,
+            OBodyNG
         };
 
         private static void RunSelectedInternallyCodedDataFileConfigurations(string selectedMenuItem)
         {
-            if (RaceMenuMenuItem.Equals(selectedMenuItem))
+            switch (selectedMenuItem)
             {
-                Console.WriteLine("\n\n\n\n");
-                GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
-                RaceMenuESLify();
+                case RaceMenuMenuItem://
+                    RaceMenuESLify();
+                    break;
+                case CustomSkillsMenuItem://
+                    Task CustomSkills = CustomSkillsFramework();
+                    CustomSkills.Wait();
+                    CustomSkills.Dispose();
+                    break;
+                case OpenAnimationReplacerMenuItem://
+                    OARESLify();
+                    break;
+                case OBodyNG://
+                    OBodyNGESLify(Path.Combine(GF.Settings.DataFolderPath, "SKSE\\Plugins\\OBody_presetDistributionConfig.json"));
+                    break;
+                default:
+                    GF.WriteLine("How did you get here: RunSelectedInternallyCodedDataFileConfigurations Switch");
+                    throw new Exception("How did you get here: RunSelectedInternallyCodedDataFileConfigurations Switch");
             }
-            if (CustomSkillsMenuItem.Equals(selectedMenuItem))
-            {
-                Console.WriteLine("\n\n\n\n");
-                GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
-                Task CustomSkills = CustomSkillsFramework();
-                CustomSkills.Wait();
-                CustomSkills.Dispose();
-            }
-            if (OpenAnimationReplacerMenuItem.Equals(selectedMenuItem))
-            {
-                Console.WriteLine("\n\n\n\n");
-                GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
-                OARESLify();
-            }
+            //if (RaceMenuMenuItem.Equals(selectedMenuItem))
+            //{
+            //    Console.WriteLine("\n\n\n\n");
+            //    GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
+            //    RaceMenuESLify();
+            //}
+            //if (CustomSkillsMenuItem.Equals(selectedMenuItem))
+            //{
+            //    Console.WriteLine("\n\n\n\n");
+            //    GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
+            //    Task CustomSkills = CustomSkillsFramework();
+            //    CustomSkills.Wait();
+            //    CustomSkills.Dispose();
+            //}
+            //if (OpenAnimationReplacerMenuItem.Equals(selectedMenuItem))
+            //{
+            //    Console.WriteLine("\n\n\n\n");
+            //    GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
+            //    OARESLify();
+            //}
+            //if (OBodyNG.Equals(selectedMenuItem))
+            //{
+            //    Console.WriteLine("\n\n\n\n");
+            //    GF.WriteLine(GF.stringLoggingData.StartingOBodyNGESLify);
+            //    OARESLify();
+            //}
         }
 
         //Runs the Internally coded Mod Configurations
         private static void InternallyCodedDataFileConfigurations()
         {
-            Console.WriteLine("\n\n\n\n");
-            GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
-            RaceMenuESLify();
-
-            Console.WriteLine("\n\n\n\n");
-            GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
-            Task CustomSkills = CustomSkillsFramework();
-            CustomSkills.Wait();
-            CustomSkills.Dispose();
-
-            Console.WriteLine("\n\n\n\n");
-            GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
-            OARESLify();
+            foreach(string dfc in InternallyCodedDataFileConfigurationsList)
+            {
+                RunSelectedInternallyCodedDataFileConfigurations(dfc);
+            }
         }
 
         //method for RaceMenu Eslify
         private static void RaceMenuESLify()
         {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingRaceMenuESLify);
             if (Directory.Exists(Path.Combine(GF.Settings.DataFolderPath, "SKSE\\Plugins\\CharGen\\Presets")))
             {
                 string FixDecimalValue(string line, string CompactedFormID)
@@ -1458,6 +1493,8 @@ namespace ESLifyEverything
         //method for Custom Skills Framework Eslify
         private static async Task<int> CustomSkillsFramework()
         {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingCustomSkillsESLify);
             string startSearchPath = Path.Combine(GF.Settings.DataFolderPath, "NetScriptFramework\\Plugins");
             if (Directory.Exists(startSearchPath))
             {
@@ -1526,6 +1563,8 @@ namespace ESLifyEverything
 
         private static void OARESLify()
         {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
             IEnumerable<string> openAnimationReplacerFolders = Directory.GetDirectories(Path.Combine(GF.Settings.DataFolderPath, "Meshes"), 
                 "OpenAnimationReplacer", 
                 SearchOption.AllDirectories);
@@ -1615,6 +1654,185 @@ namespace ESLifyEverything
 
                 }
             }
+        }
+
+        public static OBodyJson? OBodyNGESLify(string potentialPath)
+        {
+            Console.WriteLine("\n\n\n\n");
+            GF.WriteLine(GF.stringLoggingData.StartingOBodyNGESLify);
+            if (!File.Exists(potentialPath))
+            {
+                GF.WriteLine(GF.stringLoggingData.OBodyNGDoesNotExist, GF.Settings.VerboseConsoleLoging);
+                return null;
+            }
+            OBodyJson? oBodyJson = OBodyJson.LoadOBodyJson(potentialPath);
+            if(oBodyJson == null)
+            {
+                GF.WriteLine(GF.stringLoggingData.OBodyNGCantbeLoaded, GF.Settings.VerboseConsoleLoging);
+                return null;
+            }
+
+            foreach (var npcFormID in oBodyJson.npcFormID.ToArray())//base plugin Nested List in Map in Map
+            {
+                foreach(var compactedModDataKeyPair in CompactedModDataD)//ESLify Everything base
+                {
+                    if (!compactedModDataKeyPair.Key.Equals(npcFormID.Key, StringComparison.OrdinalIgnoreCase)) continue;
+                    foreach(var npcFormIDValueKeyPair in npcFormID.Value.ToArray())//FormIDs inside Json
+                    {
+                        foreach (var form in compactedModDataKeyPair.Value.CompactedModFormList)//ESLify Everything CompactedModData
+                        {
+                            if (!form.CompareOrgFormID(npcFormIDValueKeyPair.Key)) continue;
+                            GF.WriteLine(String.Format(GF.stringLoggingData.OBodyNGChanging, npcFormIDValueKeyPair.Key, form.CompactedFormID));
+
+                            oBodyJson.npcFormID[npcFormID.Key].Remove(npcFormIDValueKeyPair.Key);//Regardless remove the original key
+
+                            if (npcFormID.Key.Equals(form.ModName, StringComparison.OrdinalIgnoreCase))//If the file was not merged or the form was not split out
+                            {
+                                oBodyJson.npcFormID[npcFormID.Key].Add(form.CompactedFormID, npcFormIDValueKeyPair.Value);//Add the new FormID
+                            }//End if the file was merged or the form was split out
+                            else
+                            {
+                                if (!oBodyJson.npcFormID.ContainsKey(form.ModName))//If the new Plugin is not in the json
+                                {
+                                    oBodyJson.npcFormID.Add(form.ModName, new Dictionary<string, List<string>>());//add the new Plugin
+                                }//End if the new Plugin is not in the json
+
+                                GF.WriteLine(String.Format(GF.stringLoggingData.OBodyNGMoving, form.CompactedFormID, form.ModName));
+                                oBodyJson.npcFormID[form.ModName].Add(form.CompactedFormID, npcFormIDValueKeyPair.Value);//Add the new FormID
+                            }
+                            break;
+                        }//End ESLify Everything CompactedModData
+                    }//End FormIDs inside Json
+                }//End ESLify Everything base
+            }//End base plugin Nested List in Map in Map
+
+            foreach(var blacklistedNpcsFormID in oBodyJson.blacklistedNpcsFormID.ToArray())//base plugin Nested List in Map
+            {
+                foreach (var compactedModDataKeyPair in CompactedModDataD)//ESLify Everything base
+                {
+                    if (!compactedModDataKeyPair.Key.Equals(blacklistedNpcsFormID.Key, StringComparison.OrdinalIgnoreCase)) continue;
+                    
+                    List<string> removeList = new List<string>();
+
+                    for (int i = 0; i < blacklistedNpcsFormID.Value.Count; i++)//FormIDs inside Json
+                    {
+                        foreach (var form in compactedModDataKeyPair.Value.CompactedModFormList)//ESLify Everything CompactedModData
+                        {
+                            if (!form.CompareOrgFormID(blacklistedNpcsFormID.Value[i])) continue;
+                            GF.WriteLine(String.Format(GF.stringLoggingData.OBodyNGChanging, blacklistedNpcsFormID.Value[i], form.CompactedFormID));
+
+                            if (blacklistedNpcsFormID.Key.Equals(form.ModName, StringComparison.OrdinalIgnoreCase))//If the file was not merged or the form was not split out
+                            {
+                                blacklistedNpcsFormID.Value[i] = form.CompactedFormID;
+                            }//End if the file was not merged or the form was not split out
+                            else
+                            {
+                                removeList.Add(blacklistedNpcsFormID.Value[i]);
+                                GF.WriteLine(String.Format(GF.stringLoggingData.OBodyNGMoving, form.CompactedFormID, form.ModName));
+                                if (!oBodyJson.blacklistedNpcsFormID.ContainsKey(form.ModName))//If the new Plugin is not in the json
+                                {
+                                    oBodyJson.blacklistedNpcsFormID.Add(form.ModName, new List<string>());
+                                }//End if the new Plugin is not in the json
+                                oBodyJson.blacklistedNpcsFormID[form.ModName].Add(form.CompactedFormID);
+
+
+                            }
+                            break;
+                        }//End ESLify Everything CompactedModData
+                    }//End FormIDs inside Json
+
+                    foreach(string list in removeList)
+                    {
+                        oBodyJson.blacklistedNpcsFormID[blacklistedNpcsFormID.Key].Remove(list);
+                    }
+                }//End ESLify Everything base
+            }//End base plugin Nested List in Map
+
+            foreach (var blacklistedOutfitsFromORefitFormID in oBodyJson.blacklistedOutfitsFromORefitFormID.ToArray())//base plugin Nested List in Map
+            {
+                foreach (var compactedModDataKeyPair in CompactedModDataD)//ESLify Everything base
+                {
+                    if (!compactedModDataKeyPair.Key.Equals(blacklistedOutfitsFromORefitFormID.Key, StringComparison.OrdinalIgnoreCase)) continue;
+
+                    List<string> removeList = new List<string>();
+
+                    for (int i = 0; i < blacklistedOutfitsFromORefitFormID.Value.Count; i++)//FormIDs inside Json
+                    {
+                        foreach (var form in compactedModDataKeyPair.Value.CompactedModFormList)//ESLify Everything CompactedModData
+                        {
+                            if (!form.CompareOrgFormID(blacklistedOutfitsFromORefitFormID.Value[i])) continue;
+                            GF.WriteLine(String.Format(GF.stringLoggingData.OBodyNGChanging, blacklistedOutfitsFromORefitFormID.Value[i], form.CompactedFormID));
+
+                            if (blacklistedOutfitsFromORefitFormID.Key.Equals(form.ModName, StringComparison.OrdinalIgnoreCase))//If the file was not merged or the form was not split out
+                            {
+                                blacklistedOutfitsFromORefitFormID.Value[i] = form.CompactedFormID;
+                            }//End if the file was not merged or the form was not split out
+                            else
+                            {
+                                removeList.Add(blacklistedOutfitsFromORefitFormID.Value[i]);
+                                GF.WriteLine(String.Format(GF.stringLoggingData.OBodyNGMoving, form.CompactedFormID, form.ModName));
+                                if (!oBodyJson.blacklistedOutfitsFromORefitFormID.ContainsKey(form.ModName))//If the new Plugin is not in the json
+                                {
+                                    oBodyJson.blacklistedOutfitsFromORefitFormID.Add(form.ModName, new List<string>());
+                                }//End if the new Plugin is not in the json
+                                oBodyJson.blacklistedOutfitsFromORefitFormID[form.ModName].Add(form.CompactedFormID);
+
+
+                            }
+                            break;
+                        }//End ESLify Everything CompactedModData
+                    }//End FormIDs inside Json
+
+                    foreach (string list in removeList)
+                    {
+                        oBodyJson.blacklistedOutfitsFromORefitFormID[blacklistedOutfitsFromORefitFormID.Key].Remove(list);
+                    }
+                }//End ESLify Everything base
+            }//End base plugin Nested List in Map
+
+            foreach (var outfitsForceRefitFormID in oBodyJson.outfitsForceRefitFormID.ToArray())//base plugin Nested List in Map
+            {
+                foreach (var compactedModDataKeyPair in CompactedModDataD)//ESLify Everything base
+                {
+                    if (!compactedModDataKeyPair.Key.Equals(outfitsForceRefitFormID.Key, StringComparison.OrdinalIgnoreCase)) continue;
+
+                    List<string> removeList = new List<string>();
+
+                    for (int i = 0; i < outfitsForceRefitFormID.Value.Count; i++)//FormIDs inside Json
+                    {
+                        foreach (var form in compactedModDataKeyPair.Value.CompactedModFormList)//ESLify Everything CompactedModData
+                        {
+                            if (!form.CompareOrgFormID(outfitsForceRefitFormID.Value[i])) continue;
+                            GF.WriteLine(String.Format(GF.stringLoggingData.OBodyNGChanging, outfitsForceRefitFormID.Value[i], form.CompactedFormID));
+
+                            if (outfitsForceRefitFormID.Key.Equals(form.ModName, StringComparison.OrdinalIgnoreCase))//If the file was not merged or the form was not split out
+                            {
+                                outfitsForceRefitFormID.Value[i] = form.CompactedFormID;
+                            }//End if the file was not merged or the form was not split out
+                            else
+                            {
+                                removeList.Add(outfitsForceRefitFormID.Value[i]);
+                                GF.WriteLine(String.Format(GF.stringLoggingData.OBodyNGMoving, form.CompactedFormID, form.ModName));
+                                if (!oBodyJson.outfitsForceRefitFormID.ContainsKey(form.ModName))//If the new Plugin is not in the json
+                                {
+                                    oBodyJson.outfitsForceRefitFormID.Add(form.ModName, new List<string>());
+                                }//End if the new Plugin is not in the json
+                                oBodyJson.outfitsForceRefitFormID[form.ModName].Add(form.CompactedFormID);
+
+
+                            }
+                            break;
+                        }//End ESLify Everything CompactedModData
+                    }//End FormIDs inside Json
+
+                    foreach (string list in removeList)
+                    {
+                        oBodyJson.outfitsForceRefitFormID[outfitsForceRefitFormID.Key].Remove(list);
+                    }
+                }//End ESLify Everything base
+            }//End base plugin Nested List in Map
+
+            return oBodyJson;
         }
 
         #endregion Internally Coded Data File Configurations

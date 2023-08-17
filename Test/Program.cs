@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using ESLifyEverythingGlobalDataLibrary;
+using System.Text.Json;
 
 namespace Test
 {
@@ -11,9 +12,10 @@ namespace Test
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello, World! Test");
+            GF.GetStringResources();
             Directory.CreateDirectory(TestJsonOutputPath);
 
-            TestESLifyEverything.TestCustomSkillsFrameWorkReader();
+            TestESLifyEverything.TestOBodyESLify();
         }
     }
 }

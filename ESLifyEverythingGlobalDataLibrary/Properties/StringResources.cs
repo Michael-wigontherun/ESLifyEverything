@@ -212,6 +212,13 @@
         public string OARErrorLine3 { get; set; } = "";
         public string OARErrorLine4 { get; set; } = "";
 
+        //OBody ESLify
+        public string StartingOBodyNGESLify { get; set; } = "";
+        public string OBodyNGDoesNotExist { get; set; } = "";
+        public string OBodyNGCantbeLoaded { get; set; } = "";
+        public string OBodyNGChanging { get; set; } = "";
+        public string OBodyNGMoving { get; set; } = "";
+
         //Run FaceGenFix
         //public string EditedFaceGen { get; set; } = ""; "EditedFaceGen": FaceGen Data has been edited please run \"_ESPFEEverythingFaceGenFix.pas\" in xEdit. So you don't have the black face bug."
         //public string NoxEditEXE { get; set; } = ""; "NoxEditEXE": "No xEdit executable found, Please run \"_ESLifyEverythingFaceGenFix.pas\" in xEdit.",
@@ -232,6 +239,7 @@
         public string ImportingMergeCacheOSP { get; set; } = "";
         public string SkippingMergeCache { get; set; } = "";
         public string ImportingMergeCompactedModData { get; set; } = "";
+        public string SkippingMerge { get; set; } = "";
 
         //MergifyBashTags
         public string AskToStartMergifyBashTags { get; set; } = "";

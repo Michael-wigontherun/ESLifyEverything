@@ -174,6 +174,22 @@ namespace ESLifyEverything.FormData
             public string hash { get; set; } = String.Empty;
             public string dataFolder { get; set; } = String.Empty;
         }
+
+        //out returns the CompactedMergeData assosiated with the plugin name if true, or null if it fails
+        public static bool GetCompactedMergeDataFromMergeName(string mergeName, out CompactedMergeData? success)
+        {
+            string path = Path.Combine(GF.CompactedFormsFolder, mergeName, GF.MergeCacheExtension);
+            if (File.Exists(path))
+            {
+                success = JsonSerializer.Deserialize<CompactedMergeData>(File.ReadAllText(path))!;
+                return true;
+            }
+            else
+            {
+                success = null;
+                return false;
+            }
+        }
     }
 
 }
