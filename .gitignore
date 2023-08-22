@@ -396,7 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-ESLifyEverything-changelog.txt
+/ESLifyEverything-changelog.md
 *.lnk
 
 ReleaseSet/ESLifyEverything/Champollion/
