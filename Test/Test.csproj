@@ -17,4 +17,13 @@
     <ProjectReference Include="..\MergifyBashTags\MergifyBashTags.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="BaseTest\OBody_presetDistributionConfig.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="OBody_presetDistributionConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

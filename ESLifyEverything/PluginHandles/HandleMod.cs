@@ -13,7 +13,7 @@ namespace ESLifyEverything.PluginHandles
     public static partial class HandleMod
     {
         //Lambda get for the Program.CompactedModDataD located in the Program data
-        public static Dictionary<string, CompactedModData> CompactedModDataD => Program.CompactedModDataD;
+        public static Dictionary<string, CompactedModData> CompactedModDataD => ESLify.CompactedModDataD;
 
         //Dictionary of Plugin Names and Output Locations
         //                        \/        \/
@@ -48,7 +48,7 @@ namespace ESLifyEverything.PluginHandles
 
                 foreach (IMasterReferenceGetter masterReference in mod.ModHeader.MasterReferences.ToArray())
                 {
-                    if (!Program.ActiveLoadOrder.Contains(masterReference.Master.ToString(), StringComparer.OrdinalIgnoreCase))
+                    if (!ESLify.ActiveLoadOrder.Contains(masterReference.Master.ToString(), StringComparer.OrdinalIgnoreCase))
                     {
                         if (CompactedModDataD.TryGetValue(masterReference.Master.ToString(), out CompactedModData? modData))
                         {

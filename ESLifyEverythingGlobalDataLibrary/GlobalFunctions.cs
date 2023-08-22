@@ -500,6 +500,13 @@ namespace ESLifyEverythingGlobalDataLibrary
             }
             Console.WriteLine();
         }
+
+        public static void EnterToContinue()
+        {
+            Console.WriteLine();
+            GF.WriteLine(GF.stringLoggingData.EnterToContinue);
+            Console.ReadLine();
+        }
     }
 }
 //Obsolete

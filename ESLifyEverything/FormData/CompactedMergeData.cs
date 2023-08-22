@@ -113,7 +113,7 @@ namespace ESLifyEverything.FormData
                         case 1:
                             GF.WriteLine(String.Format(GF.stringLoggingData.PluginFixed, modData.ModName));
                             GF.WriteLine(String.Format("Please remerge the plugin: {0}", MergeName));
-                            Program.EditedMergedPluginNeedsRebuild.Add(MergeName);
+                            ESLify.EditedMergedPluginNeedsRebuild.Add(MergeName);
                             break;
                         case 2:
                             GF.WriteLine(modData.ModName + GF.stringLoggingData.PluginNotChanged, GF.Settings.VerboseConsoleLoging, GF.Settings.VerboseConsoleLoging);

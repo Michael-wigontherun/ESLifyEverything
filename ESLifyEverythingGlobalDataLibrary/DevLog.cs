@@ -18,8 +18,7 @@ namespace ESLifyEverythingGlobalDataLibrary
                 {
                     Console.WriteLine();
                     GF.WriteLine(Location);
-                    GF.WriteLine(GF.stringLoggingData.EnterToContinue);
-                    Console.ReadLine();
+                    GF.EnterToContinue();
                 }
             }
         }

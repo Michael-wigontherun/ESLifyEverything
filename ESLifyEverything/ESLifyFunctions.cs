@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace ESLifyEverything
 {
-    public static partial class Program
+    public static partial class ESLify
     {
         //Parses Data Files with a Separator
         public static string[] FormInFileLineReader(string[] fileLines, Separator? SeparatorData, out bool changed)

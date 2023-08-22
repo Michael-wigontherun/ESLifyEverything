@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace ESLifyEverything
 {
-    public static partial class Program
+    public static partial class ESLify
     {
         //Region for reading the xEdit log
         #region xEdit Log
@@ -490,8 +490,7 @@ namespace ESLifyEverything
                     GF.WriteLine(String.Format(GF.stringLoggingData.OutOfDateCMData5, modData.ModName));
                 }
 
-                GF.WriteLine(GF.stringLoggingData.EnterToContinue);
-                Console.ReadLine();
+                GF.EnterToContinue();
                 GF.WriteLine("", false, true);
                 GF.WriteLine("", false, true);
                 GF.WriteLine("");

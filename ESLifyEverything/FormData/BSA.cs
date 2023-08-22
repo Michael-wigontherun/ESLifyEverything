@@ -24,7 +24,7 @@ namespace ESLifyEverything.FormData
             }
             else
             {
-                Program.NewOrUpdatedMods = true;
+                ESLify.NewOrUpdatedMods = true;
                 GF.WriteLine(GF.stringLoggingData.BSADataImportNotFound);
             }
         }
@@ -43,7 +43,7 @@ namespace ESLifyEverything.FormData
                     BSA newBSA = new BSA(BSAName_NoExtention);
                     GF.WriteLine(BSAName_NoExtention + GF.stringLoggingData.BSACheckModReimp);
                     BSAs.Add(BSAName_NoExtention, newBSA);
-                    Program.NewOrUpdatedMods = true;
+                    ESLify.NewOrUpdatedMods = true;
                 }
             }
             else
@@ -51,7 +51,7 @@ namespace ESLifyEverything.FormData
                 GF.WriteLine(BSAName_NoExtention + GF.stringLoggingData.BSACheckNew);
                 BSA newBSA = new BSA(BSAName_NoExtention);
                 BSAs.Add(BSAName_NoExtention, newBSA);
-                Program.NewOrUpdatedMods = true;
+                ESLify.NewOrUpdatedMods = true;
                 GF.WriteLine(BSAName_NoExtention + GF.stringLoggingData.BSACheckModImp);
             }
         }

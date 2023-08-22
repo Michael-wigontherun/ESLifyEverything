@@ -11,10 +11,12 @@ using Noggog;
 
 namespace ESLifyEverything
 {
-    public static partial class Program
+    //Methods for running Script ESLify. These Methods are not Excessable
+    //Use StartScriptESLify() to use these
+    public static partial class ESLify
     {
         //Menu to AutoRun or Ask if extraction and decompile is necessary
-        private static bool ExtractScriptsMenu()
+        internal static bool ExtractScriptsMenu()
         {
             if (GF.Settings.AutoRunScriptDecompile)
             {
@@ -41,7 +43,7 @@ namespace ESLifyEverything
         }
 
         //Extracts scripts from BSA's in the order of your load order
-        private static async Task<int> ExtractScripts()
+        internal static async Task<int> ExtractScripts()
         {
             if (ExtractScriptsMenu())
             {
@@ -154,7 +156,7 @@ namespace ESLifyEverything
         }
 
         //Runs BSA Browser to extract scripts from BSA path
-        private static async Task<int> ExtractBSAScripts(string bsaPath)
+        internal static async Task<int> ExtractBSAScripts(string bsaPath)
         {
             string line = "";
             Process p = new Process();
@@ -188,7 +190,7 @@ namespace ESLifyEverything
         }
 
         //Runs Champolion on script path and outputting to the "ExtractedBSAModData\Source\Scripts" folder
-        private static async Task<int> DecompileScripts(string startPath)
+        internal static async Task<int> DecompileScripts(string startPath)
         {
             string line = "";
             string scriptsFolder = Path.Combine(Path.GetFullPath(startPath), "Scripts");
@@ -254,7 +256,7 @@ namespace ESLifyEverything
             return await Task.FromResult(1);
         }
 
-        private static async Task<int> DecompileScriptsSlow(string startPath)
+        internal static async Task<int> DecompileScriptsSlow(string startPath)
         {
             string line = "";
             string scriptsFolder = Path.Combine(Path.GetFullPath(startPath), "Scripts");
@@ -331,7 +333,7 @@ namespace ESLifyEverything
         }
 
         //Fixes script Form Keys and Compiles them if Compiler is enabled
-        private static async Task<int> ReadAndCompileScripts()
+        internal static async Task<int> ReadAndCompileScripts()
         {
             string startFolder = $"{GF.ExtractedBSAModDataPath}\\{GF.SourceSubPath}";
             if (!Directory.Exists(startFolder))
@@ -456,8 +458,8 @@ namespace ESLifyEverything
 
             return await Task.FromResult(0);
         }
-        
-        public static void CompileOneByOne()
+
+        internal static void CompileOneByOne()
         {
             GF.WriteLine(GF.stringLoggingData.AttemptOneByOneCompiler);
             foreach(string file in FailedToCompile)
@@ -507,7 +509,7 @@ namespace ESLifyEverything
         }
 
         //Clears the ChangedScripts folder from previous ESLify Everything session
-        private static void ClearChangedScripts()
+        internal static void ClearChangedScripts()
         {
             IEnumerable<string> changedSouce = Directory.EnumerateFiles(
                     GF.ChangedScriptsPath,
@@ -522,7 +524,7 @@ namespace ESLifyEverything
             }
         }
 
-        enum ValueTypes
+        internal enum ValueTypes
         {
             None,
             Int,
@@ -531,7 +533,7 @@ namespace ESLifyEverything
             String
         }
 
-        public static string SetDefaultValue(string line, out bool changedImport)
+        internal static string SetDefaultValue(string line, out bool changedImport)
         {
             changedImport = false;
             if (line.Contains(" function ", StringComparison.OrdinalIgnoreCase)) return line;
@@ -579,7 +581,7 @@ namespace ESLifyEverything
         }
 
         //Parses Script files
-        public static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed, out bool changedImport)
+        internal static string[] FormInScriptFileLineReader(string[] fileLines, out bool changed, out bool changedImport)
         {
             string FixLineToHex(string line, out string? exactHexValueTrimmed)
             {

@@ -280,7 +280,7 @@ namespace ESLifyEverything.FormData
 
         private void UpdateFileLinesNode(CustomSkillsFrameworkNodeData node)
         {
-            if (!Program.CompactedModDataD.TryGetValue(node.FileName, out CompactedModData? compactedModData)) return;
+            if (!ESLify.CompactedModDataD.TryGetValue(node.FileName, out CompactedModData? compactedModData)) return;
             foreach (var formHandler in compactedModData.CompactedModFormList)
             {
                 if (formHandler.GetOriginalFormID().Equals(node.IDString))
