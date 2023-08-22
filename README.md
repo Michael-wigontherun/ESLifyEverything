@@ -29,7 +29,8 @@ Currently Eslifies
 - CoMap MapMarker json files
 - VSU
 - Sound Record Distributor
-- Dynamic Armor Varients, in update files on the nexus page
+- Dynamic Armor Varients
+- OBody NG, Internally coded
 
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github, for any other file mod data that needs to be eslified.
 
