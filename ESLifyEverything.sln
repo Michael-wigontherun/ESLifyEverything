@@ -9,8 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESLifyEverythingGlobalDataL
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{927F0BC8-BD4B-4A0D-BF7E-2F15EA05ECEA}"
 	ProjectSection(SolutionItems) = preProject
-		ESLifyEverything-changelog.txt = ESLifyEverything-changelog.txt
 		ReleaseSetCopy.bat = ReleaseSetCopy.bat
+		ESLifyEverything-changelog.md = ESLifyEverything-changelog.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESLifyCreateJson", "ESLifyCreateJson\ESLifyCreateJson.csproj", "{82BDE186-02B2-4A07-9F54-22F6FFE5F79C}"

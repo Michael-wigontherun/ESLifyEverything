@@ -247,6 +247,13 @@ namespace ESLifyEverything
                 GF.WriteLine(GF.stringLoggingData.ReadingCompDataLog + compactedFormsModFile);
                 CompactedModData modData = JsonSerializer.Deserialize<CompactedModData>(File.ReadAllText(compactedFormsModFile))!;
                 modData.Write();
+
+                if (AlwaysIgnoreList.Contains(modData.ModName))
+                {
+                    GF.WriteLine(string.Format(GF.stringLoggingData.SkippingImport, modData.ModName + GF.CompactedFormExtension));
+                    continue;
+                }
+
                 if (!File.Exists(Path.Combine(GF.Settings.DataFolderPath, modData.ModName)))
                 {
                     GF.WriteLine(String.Format(GF.stringLoggingData.PluginNotFoundImport, compactedFormsModFile));
@@ -618,14 +625,14 @@ namespace ESLifyEverything
         //Voice Eslify Main Menu
         public static void VoiceESlIfyMenu()
         {
-            GF.WriteLine(GF.stringLoggingData.VoiceESLMenuHeader);
-            GF.WriteLine($"1. {GF.stringLoggingData.ESLEveryMod}{GF.stringLoggingData.WithCompactedForms}", true, false);//with a _ESlEverything.json attached to it inside of the CompactedForms folders.
-            GF.WriteLine($"2. {GF.stringLoggingData.SingleInputMod}{GF.stringLoggingData.WithCompactedForms}", true, false);
-            GF.WriteLine(GF.stringLoggingData.CanLoop, true, false);
-            GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
             bool whileContinue = true;
             do
             {
+                GF.WriteLine(GF.stringLoggingData.VoiceESLMenuHeader);
+                GF.WriteLine($"1. {GF.stringLoggingData.ESLEveryMod}{GF.stringLoggingData.WithCompactedForms}", true, false);//with a _ESlEverything.json attached to it inside of the CompactedForms folders.
+                GF.WriteLine($"2. {GF.stringLoggingData.SingleInputMod}{GF.stringLoggingData.WithCompactedForms}", true, false);
+                GF.WriteLine(GF.stringLoggingData.CanLoop, true, false);
+                GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
                 GF.WhileMenuSelect(2, out int selectedMenuItem, 1);
                 switch (selectedMenuItem)
                 {
@@ -701,40 +708,38 @@ namespace ESLifyEverything
             {
                 if (BSAData.BSAs.TryGetValue(plugin, out BSA? bsa))
                 {
-                    foreach (string connectedVoice in bsa.VoiceModConnections)
+                    if (bsa.VoiceModConnections.Contains(pluginName, StringComparer.OrdinalIgnoreCase))
                     {
-                        if (connectedVoice.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
+                        string line = "";
+                        GF.WriteLine(String.Format(GF.stringLoggingData.BSAContainsData, bsa.BSAName_NoExtention, pluginName));
+                        Process p = new Process();
+                        p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+                        p.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
+                        if (GF.DevSettings.DevLogging)
                         {
-                            string line = "";
-                            GF.WriteLine(String.Format(GF.stringLoggingData.BSAContainsData, bsa.BSAName_NoExtention, pluginName));
-                            Process p = new Process();
-                            p.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
-                            p.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
-                            if (GF.DevSettings.DevLogging)
+                            p.StartInfo.UseShellExecute = false;
+                            p.StartInfo.RedirectStandardOutput = true;
+                            p.StartInfo.RedirectStandardError = true;
+                            p.StartInfo.CreateNoWindow = true;
+                            p.Start();
+                            while (!p.StandardOutput.EndOfStream)
                             {
-                                p.StartInfo.UseShellExecute = false;
-                                p.StartInfo.RedirectStandardOutput = true;
-                                p.StartInfo.RedirectStandardError = true;
-                                p.StartInfo.CreateNoWindow = true;
-                                p.Start();
-                                while (!p.StandardOutput.EndOfStream)
+                                string tempLine = p.StandardOutput.ReadLine()!;
+                                if (tempLine != string.Empty)
                                 {
-                                    string tempLine = p.StandardOutput.ReadLine()!;
-                                    if (tempLine != string.Empty)
-                                    {
-                                        line = tempLine;
-                                    }
+                                    line = tempLine;
                                 }
                             }
-                            else
-                            {
-                                p.Start();
-                            }
-                            p.WaitForExit();
-                            p.Dispose();
-                            DevLog.Log(line);
                         }
+                        else
+                        {
+                            p.Start();
+                        }
+                        p.WaitForExit();
+                        p.Dispose();
+                        DevLog.Log(line);
                     }
+                    
                 }
             }
             return await Task.FromResult(0);
@@ -780,14 +785,14 @@ namespace ESLifyEverything
         //FaceGen Eslify Main Menu
         public static void FaceGenESlIfyMenu()
         {
-            GF.WriteLine(GF.stringLoggingData.FaceGenESLMenuHeader);
-            GF.WriteLine($"1. {GF.stringLoggingData.ESLEveryMod}{GF.stringLoggingData.WithCompactedForms}",true, false);//with a _ESlEverything.json attached to it inside of the CompactedForms folders.
-            GF.WriteLine($"2. {GF.stringLoggingData.SingleInputMod}{GF.stringLoggingData.WithCompactedForms}", true, false);
-            GF.WriteLine(GF.stringLoggingData.CanLoop, true, false);
-            GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
             bool whileContinue = true;
             do
             {
+                GF.WriteLine(GF.stringLoggingData.FaceGenESLMenuHeader);
+                GF.WriteLine($"1. {GF.stringLoggingData.ESLEveryMod}{GF.stringLoggingData.WithCompactedForms}", true, false);//with a _ESlEverything.json attached to it inside of the CompactedForms folders.
+                GF.WriteLine($"2. {GF.stringLoggingData.SingleInputMod}{GF.stringLoggingData.WithCompactedForms}", true, false);
+                GF.WriteLine(GF.stringLoggingData.CanLoop, true, false);
+                GF.WriteLine(GF.stringLoggingData.ExitCodeInput, true, false);
                 GF.WhileMenuSelect(2, out int selectedMenuItem, 1);
                 switch (selectedMenuItem)
                 {
@@ -865,25 +870,52 @@ namespace ESLifyEverything
             {
                 if (BSAData.BSAs.TryGetValue(plugin, out BSA? bsa))
                 {
-                    foreach (string connectedFaceGen in bsa.FaceGenModConnections)
+                    if (bsa.FaceGenModConnections.Contains(pluginName, StringComparer.OrdinalIgnoreCase))
                     {
-                        if (connectedFaceGen.Equals(pluginName, StringComparison.OrdinalIgnoreCase))
+                        string line = "";
+                        GF.WriteLine(String.Format(GF.stringLoggingData.BSAContainsData, bsa.BSAName_NoExtention, pluginName));
+                        Process m = new Process();
+                        m.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+                        m.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
+                        if (GF.DevSettings.DevLogging)
                         {
-                            string line = "";
-                            GF.WriteLine(String.Format(GF.stringLoggingData.BSAContainsData, bsa.BSAName_NoExtention, pluginName));
-                            Process m = new Process();
-                            m.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
-                            m.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + ".bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
+                            m.StartInfo.UseShellExecute = false;
+                            m.StartInfo.RedirectStandardOutput = true;
+                            m.StartInfo.RedirectStandardError = true;
+                            m.StartInfo.CreateNoWindow = true;
+                            m.Start();
+                            while (!m.StandardOutput.EndOfStream)
+                            {
+                                string tempLine = m.StandardOutput.ReadLine()!;
+                                if (tempLine != string.Empty)
+                                {
+                                    line = tempLine;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            m.Start();
+                        }
+                        m.WaitForExit();
+                        m.Dispose();
+                        DevLog.Log(line);
+                        if (bsa.HasTextureBSA)
+                        {
+                            line = "";
+                            Process t = new Process();
+                            t.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
+                            t.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + " - Textures.bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
                             if (GF.DevSettings.DevLogging)
                             {
-                                m.StartInfo.UseShellExecute = false;
-                                m.StartInfo.RedirectStandardOutput = true;
-                                m.StartInfo.RedirectStandardError = true;
-                                m.StartInfo.CreateNoWindow = true;
-                                m.Start();
-                                while (!m.StandardOutput.EndOfStream)
+                                t.StartInfo.UseShellExecute = false;
+                                t.StartInfo.RedirectStandardOutput = true;
+                                t.StartInfo.RedirectStandardError = true;
+                                t.StartInfo.CreateNoWindow = true;
+                                t.Start();
+                                while (!t.StandardOutput.EndOfStream)
                                 {
-                                    string tempLine = m.StandardOutput.ReadLine()!;
+                                    string tempLine = t.StandardOutput.ReadLine()!;
                                     if (tempLine != string.Empty)
                                     {
                                         line = tempLine;
@@ -892,43 +924,14 @@ namespace ESLifyEverything
                             }
                             else
                             {
-                                m.Start();
+                                t.Start();
                             }
-                            m.WaitForExit();
-                            m.Dispose();
+                            t.WaitForExit();
+                            t.Dispose();
                             DevLog.Log(line);
-                            if (bsa.HasTextureBSA)
-                            {
-                                line = "";
-                                Process t = new Process();
-                                t.StartInfo.FileName = ".\\BSABrowser\\bsab.exe";
-                                t.StartInfo.Arguments = $"\"{Path.GetFullPath(Path.Combine(GF.Settings.DataFolderPath, bsa.BSAName_NoExtention + " - Textures.bsa"))}\" -f \"{pluginName}\"  -e -o \"{Path.GetFullPath(GF.ExtractedBSAModDataPath)}\"";
-                                if (GF.DevSettings.DevLogging)
-                                {
-                                    t.StartInfo.UseShellExecute = false;
-                                    t.StartInfo.RedirectStandardOutput = true;
-                                    t.StartInfo.RedirectStandardError = true;
-                                    t.StartInfo.CreateNoWindow = true;
-                                    t.Start();
-                                    while (!t.StandardOutput.EndOfStream)
-                                    {
-                                        string tempLine = t.StandardOutput.ReadLine()!;
-                                        if (tempLine != string.Empty)
-                                        {
-                                            line = tempLine;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    t.Start();
-                                }
-                                t.WaitForExit();
-                                t.Dispose();
-                                DevLog.Log(line);
-                            }
                         }
                     }
+                    
                 }
             }
             return await Task.FromResult(0);
@@ -1564,7 +1567,13 @@ namespace ESLifyEverything
         {
             Console.WriteLine("\n\n\n\n");
             GF.WriteLine(GF.stringLoggingData.StartingOARESLify);
-            IEnumerable<string> openAnimationReplacerFolders = Directory.GetDirectories(Path.Combine(GF.Settings.DataFolderPath, "Meshes"), 
+            string meshesPath = Path.Combine(GF.Settings.DataFolderPath, "Meshes");
+            if (!Directory.Exists(meshesPath))
+            {
+                GF.WriteLine("Could not find Meshes folder in Data Folder...", true, true);
+                return;
+            }
+            IEnumerable<string> openAnimationReplacerFolders = Directory.GetDirectories(meshesPath, 
                 "OpenAnimationReplacer", 
                 SearchOption.AllDirectories);
             foreach (string openAnimationReplacerFolder in openAnimationReplacerFolders)

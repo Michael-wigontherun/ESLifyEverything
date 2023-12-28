@@ -192,6 +192,7 @@ namespace MergifyBashTags
                 foreach (string plugin in mergeList.Value)
                 {
                     string pluginPath = Path.Combine(DataFolderPath, plugin);
+                    if (!File.Exists(pluginPath)) continue;
                     using (ISkyrimModDisposableGetter? mod = SkyrimMod.CreateFromBinaryOverlay(pluginPath, SkyrimRelease.SkyrimSE))
                     {
                         if (mod.ModHeader.Description != null)

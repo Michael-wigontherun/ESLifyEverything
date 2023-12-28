@@ -6,7 +6,7 @@ namespace ESLifyEverything
 {
     //Main Handle for ESLifyEverything.exe, Not Excessable
     //public static partial class ESLify
-    internal static class Program
+    static class Program
     {
         //Main method that starts all base features for ESLify Everything
         static void Main(string[] args)

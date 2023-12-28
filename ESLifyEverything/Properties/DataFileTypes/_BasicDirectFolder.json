@@ -205,5 +205,20 @@
     "FileAtLogLine": "I4 file found at ",
     "FileUnchangedLogLine": "I4 file unchanged: ",
     "SeachLevel": 0
+  },
+  {
+    "Enabled": true,
+    "Name": "Desc",
+    "StartFolder": "",
+    "FileNameFilter": "*_DESC.ini",
+    "SeparatorData": {
+      "UseRegex": true,
+      "RegexMakeUp": "{{ID}}[ 0]*~[ 0]*{{ModName}}",
+      "FormKeyMakeUp": "{{ID}}~{{ModName}}"
+    },
+    "StartingLogLine": "Starting Description Framework Eslify",
+    "FileAtLogLine": "Desc file found at ",
+    "FileUnchangedLogLine": "Desc file unchanged: ",
+    "SeachLevel": 0
   }
 ]

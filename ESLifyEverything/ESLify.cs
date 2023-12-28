@@ -2,7 +2,6 @@
 using ESLifyEverything.FormData;
 using ESLifyEverything.PluginHandles;
 using ESLifyEverythingGlobalDataLibrary;
-using ESLifyEverythingGlobalDataLibrary.Properties;
 using ESLifyEverythingGlobalDataLibrary.Properties.DataFileTypes;
 using System.Text.Json;
 
@@ -260,19 +259,19 @@ namespace ESLifyEverything
     public static partial class ESLify
     {
         //End identifier to prompt that ESLify Everything output BSAs were Extracted
-        internal static bool BSANotExtracted = false;
+        public static bool BSANotExtracted { get; internal set; } = false;
 
         //identifier for ESLify Everything detected new mods and it needs to run Script ESLify
-        internal static bool NewOrUpdatedMods = false;
+        public static bool NewOrUpdatedMods { get; internal set; } = false;
 
         //Imports all CompactedModData and MergeCache's
-        internal static bool CheckEverything = false;
+        public static bool CheckEverything { get; internal set; } = false;
 
         //Ignore found Outputted scripts and run all processes except Script ESLify CMD Argument
-        internal static bool _IgnoreScripts = false;
+        public static bool _IgnoreScripts { get; internal set; } = false;
 
         //This will toggle whether to ask or attempt to run mergify bash tags
-        internal static bool MergesFound = false;
+        public static bool MergesFound { get; internal set; } = false;
 
         //Checks and outputs warnings for users. Should be run at the end of everything
         public static void EverythingEndChecks()
