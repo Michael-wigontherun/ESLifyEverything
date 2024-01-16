@@ -36,13 +36,13 @@ Currently Eslifies
 Message me via Nexus comments on this mod, or making a new issue on this mod's Github, for any other file mod data that needs to be eslified.
 
 # Directions
-Version 4.0.0+ directions: [Article](https://www.nexusmods.com/skyrimspecialedition/articles/4506)
+Version 4.0.0+ directions: [Article](https://github.com/Michael-wigontherun/ESLifyEverything/wiki/Directions)
 
-ESLify Split - Directions: [Article](https://www.nexusmods.com/skyrimspecialedition/articles/4627)
+ESLify Split - Directions: [Article](https://github.com/Michael-wigontherun/ESLifyEverything/wiki/ESLify-Split-‐-Directions)
 
-ESLify Everything zMerge Support: [Article](https://www.nexusmods.com/skyrimspecialedition/articles/4599)
+ESLify Everything zMerge Support: [Article](https://github.com/Michael-wigontherun/ESLifyEverything/wiki/ESLify-Everything-zMerge-Support-and-MergifyBashTags)
 
-Additional Features list: [Article](https://www.nexusmods.com/skyrimspecialedition/articles/4716)
+Additional Features list: [Article](https://github.com/Michael-wigontherun/ESLifyEverything/wiki/Additional-Features-list)
 
 ## Extra Notes
 
