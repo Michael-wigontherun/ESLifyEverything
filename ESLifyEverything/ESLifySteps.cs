@@ -19,6 +19,7 @@ namespace ESLifyEverything
         //Parses the xEdit log and readys it for output
         public static void XEditSession()
         {
+            Directory.CreateDirectory(GF.CompactedFormsFolder);
             XEditLogReader.ReadLog(Path.Combine(GF.Settings.XEditFolderPath, GF.Settings.XEditLogFileName));
             int xEditSessionsCount = XEditLogReader.xEditLog.xEditSessions?.Length ?? 0;
             if (xEditSessionsCount <= 0)
