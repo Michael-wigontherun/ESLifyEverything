@@ -8,6 +8,8 @@ Many plugins do not need to be regular esp. The only reason they are still a reg
 
 ESLify Everything is a .Net 6 program that reads the data outputted by xEdit when it compacts forms using the Right click->Compact FormIDs for ESL. 
 
+[ESLify, For people who actually want to understand](https://github.com/Michael-wigontherun/ESLifyEverything/wiki/ESLify,-For-people-who-actually-want-to-understand)
+
 Currently Eslifies
 
 - Recompacts plugins and updates Sub plugins
