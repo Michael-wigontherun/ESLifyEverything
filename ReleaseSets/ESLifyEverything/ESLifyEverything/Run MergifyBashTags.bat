@@ -1,1 +1,0 @@
-MergifyBashTags.exe "DataFolderPath" "LootAppDataPath" "OutputFolderPath"

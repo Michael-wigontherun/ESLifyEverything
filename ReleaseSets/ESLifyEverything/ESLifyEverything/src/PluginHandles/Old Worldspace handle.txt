@@ -1,0 +1,707 @@
+
+//var WorldspacesItemSet = mod.Worldspaces.ToHashSet();
+//foreach (var worldSpace in WorldspacesItemSet)
+//{
+//    //worldSpace.SubCells[d].Items[e].Items[f].
+//    for (int d = 0; d < worldSpace.SubCells.Count; d++)
+//    {
+//        for (int e = 0; e < worldSpace.SubCells[d].Items.Count; e++)
+//        {
+//            List<Cell> cellsS = new List<Cell>();
+//            List<Cell> cellsC = new List<Cell>();
+//            for (int f = 0; f < worldSpace.SubCells[d].Items[e].Items.Count; f++)
+//            {
+
+//                Cell? sourceForm = worldSpace.SubCells[d].Items[e].Items[f];
+//                Cell? formCopy = sourceForm.DeepCopy();
+//                bool EditedForm = false;
+//                foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                {
+//                    if (sourceForm.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                    {
+//                        foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                        {
+//                            if (sourceForm.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                            {
+
+//                                formCopy = sourceForm.Duplicate(formHandler.CreateCompactedFormKey());
+//                                EditedForm = true;
+//                                break;
+//                            }
+//                        }
+//                    }
+//                }
+
+//                for (int c = 0; c < worldSpace.SubCells[d].Items[e].Items[f].Persistent.Count; c++)
+//                {
+
+//                    var sourceFormP = formCopy.Persistent[c];
+//                    if (sourceFormP is PlacedNpc)
+//                    {
+//                        var formCopyP = (PlacedNpc)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+//                                        formCopyP = (PlacedNpc)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedNpc P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedNpc P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+//                    else if (sourceFormP is PlacedObject)
+//                    {
+//                        var formCopyP = (PlacedObject)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+//                                        formCopyP = (PlacedObject)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedObject P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedObject P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+//                    else if (sourceFormP is APlacedTrap)
+//                    {
+//                        var formCopyP = (APlacedTrap)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (APlacedTrap)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W APlacedTrap P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W APlacedTrap P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    else if (sourceFormP is PlacedMissile)
+//                    {
+//                        var formCopyP = (PlacedMissile)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (PlacedMissile)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedMissile P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedMissile P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    else if (sourceFormP is PlacedHazard)
+//                    {
+//                        var formCopyP = (PlacedHazard)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (PlacedHazard)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedHazard P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedHazard P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    else if (sourceFormP is PlacedFlame)
+//                    {
+//                        var formCopyP = (PlacedFlame)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (PlacedFlame)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedFlame P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedFlame P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    else if (sourceFormP is PlacedCone)
+//                    {
+//                        var formCopyP = (PlacedCone)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (PlacedCone)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedCone P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedCone P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    else if (sourceFormP is PlacedBeam)
+//                    {
+//                        var formCopyP = (PlacedBeam)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (PlacedBeam)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedBeam P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedBeam P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    else if (sourceFormP is PlacedBarrier)
+//                    {
+//                        var formCopyP = (PlacedBarrier)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (PlacedBarrier)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedBarrier P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedBarrier P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    else if (sourceFormP is PlacedArrow)
+//                    {
+//                        var formCopyP = (PlacedArrow)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (PlacedArrow)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedArrow P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedArrow P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    else
+//                    {
+//                        var formCopyP = (IPlaced)sourceFormP.DeepCopy();
+//                        bool EditedFormP = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormP.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormP.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyP = (IPlaced)sourceFormP.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormP = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormP)
+//                        {
+//                            DevLog.Log("Removing W PlacedArrow P " + sourceFormP.FormKey.ToString());
+//                            formCopy.Persistent.Remove(sourceFormP);
+//                            DevLog.Log("Duplicating to W PlacedArrow P " + formCopyP.FormKey.ToString());
+//                            formCopy.Persistent.Add(formCopyP);
+//                            ModEdited = true;
+//                        }
+//                    }
+//                }
+
+//                for (int c = 0; c < worldSpace.SubCells[d].Items[e].Items[f].Temporary.Count; c++)
+//                {
+
+//                    var sourceFormT = formCopy.Temporary[c];
+//                    if (sourceFormT is PlacedNpc)
+//                    {
+//                        var formCopyT = (PlacedNpc)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedNpc)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedNpc T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedNpc T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+//                    if (sourceFormT is PlacedObject)
+//                    {
+//                        var formCopyT = (PlacedObject)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedObject)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedObject T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedObject T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+//                    if (sourceFormT is APlacedTrap)
+//                    {
+//                        var formCopyT = (APlacedTrap)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (APlacedTrap)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W APlacedTrap T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W APlacedTrap T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    if (sourceFormT is PlacedMissile)
+//                    {
+//                        var formCopyT = (PlacedMissile)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedMissile)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedMissile T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedMissile T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    if (sourceFormT is PlacedHazard)
+//                    {
+//                        var formCopyT = (PlacedHazard)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedHazard)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedHazard T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedHazard T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    if (sourceFormT is PlacedFlame)
+//                    {
+//                        var formCopyT = (PlacedFlame)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedFlame)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedFlame T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedFlame T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    if (sourceFormT is PlacedCone)
+//                    {
+//                        var formCopyT = (PlacedCone)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedCone)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedCone T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedCone T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    if (sourceFormT is PlacedBeam)
+//                    {
+//                        var formCopyT = (PlacedBeam)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedBeam)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedBeam T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedBeam T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    if (sourceFormT is PlacedBarrier)
+//                    {
+//                        var formCopyT = (PlacedBarrier)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedBarrier)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedBarrier T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedBarrier T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+
+//                    if (sourceFormT is PlacedArrow)
+//                    {
+//                        var formCopyT = (PlacedArrow)sourceFormT.DeepCopy();
+//                        bool EditedFormT = false;
+//                        foreach (CompactedModData compactedModData in CompactedModDataD.Values)// iterate each compacted mod data
+//                        {
+//                            if (sourceFormT.FormKey.ModKey.Equals(compactedModData.ModName))// check if the form comes from the compacted mod
+//                            {
+//                                foreach (FormHandler formHandler in compactedModData.CompactedModFormList)// iterate compacted forms
+//                                {
+//                                    if (sourceFormT.FormKey.IDString().Equals(formHandler.OriginalFormID))// check if the mod still uses one of the origonal formIDs
+//                                    {
+
+//                                        formCopyT = (PlacedArrow)sourceFormT.Duplicate(formHandler.CreateCompactedFormKey());
+//                                        EditedFormT = true;
+//                                        EditedForm = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
+//                        if (EditedFormT)
+//                        {
+//                            DevLog.Log("Removing W PlacedArrow T " + sourceFormT.FormKey.ToString());
+//                            formCopy.Temporary.Remove(sourceFormT);
+//                            DevLog.Log("Duplicating to W PlacedArrow T " + formCopyT.FormKey.ToString());
+//                            formCopy.Temporary.Add(formCopyT);
+//                            ModEdited = true;
+//                        }
+//                    }
+//                }
+
+//                if (EditedForm)
+//                {//worldSpace.SubCells[d].Items[e].Items[f]
+//                    cellsS.Add(sourceForm);
+//                    cellsC.Add(formCopy);
+//                    ModEdited = true;
+//                }
+//            }
+//            for (int i = 0; i < cellsS.Count; i++)
+//            {
+//                DevLog.Log("Removing " + cellsS[i].FormKey.ToString());
+//                worldSpace.SubCells[d].Items[e].Items.Remove(cellsS[i]);
+//                DevLog.Log("Duplicating to " + cellsC[i].FormKey.ToString());
+//                worldSpace.SubCells[d].Items[e].Items.Add(cellsC[i]);
+//            }
+//        }
+//    }
+//}
+//WorldspacesItemSet.Clear();

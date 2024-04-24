@@ -1579,7 +1579,7 @@ namespace ESLifyEverything
                 SearchOption.AllDirectories);
             foreach (string openAnimationReplacerFolder in openAnimationReplacerFolders)
             {
-                IEnumerable<string> configFiles = Directory.GetFiles(openAnimationReplacerFolder,
+                IEnumerable<string> configFiles = Directory.GetDirectories(openAnimationReplacerFolder,
                     "config.json",
                     SearchOption.AllDirectories);
                 foreach(string configFile in configFiles)
