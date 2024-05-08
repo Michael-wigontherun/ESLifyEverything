@@ -77,7 +77,7 @@ namespace ESLifyEverything.FormData
                             return false;
                         }
                     }
-                    uint validMin = 0x000800;
+                    uint validMin = 0x000000;
                     uint validMax = 0x000fff;
 
                     foreach (IMajorRecordGetter? form in mod.EnumerateMajorRecords())
