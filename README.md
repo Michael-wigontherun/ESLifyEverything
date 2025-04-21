@@ -1,3 +1,8 @@
+# Please use [ESLifier](https://www.nexusmods.com/skyrimspecialedition/mods/145168) instead.
+Due to work related developments and a moral drop from Nexus, I stopped developing this a while back. I tried to fix some things for the new updates to skyrim but I never could never find any more joy in developing ESLify Everything. Thank you everyone who supported me and encuriged me to make and further develop this before.
+
+ESLifier has support for a lot more and it has a much better user experience then this. I am really happy someone continued the cause for streamlined large load orders.
+
 # ESLifyEverything
 
 ## Overview
